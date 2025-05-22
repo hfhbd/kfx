@@ -23,20 +23,34 @@ Code generators:
 
 ## Gradle plugin
 
-For each built-in api format, there is a specific Gradle plugin named `io.github.hfhbd.kfx.FORMAT`,
-adding `kfxFORMAT` dependency configuration:
-
 ```kotlin
 plugins {
-    id("io.github.hfhbd.kfx.wsdl") version "LATEST"
+    id("io.github.hfhbd.kfx") version "LATEST"
 }
 
-dependencies {
-    // add the code generators as dependencies
-    kfxWsdl("io.github.hfhbd.kfx:kotlin:LATEST") // for Kotlin classes only
-    kfxWsdl("io.github.hfhbd.kfx:ktor-client:LATEST") // for Ktor clients, also includes kotlin
+kfx {
+    register("myApi", OpenApi::class) {
+        files.from(file("myApi.json"))
+        dependencies {
+            compiler(kotlin())
+            compiler(kotlinxJson())
+            compiler(ktorClient())
+        }
+        sourceSets.main {
+            usingSourceSet(kotlin)
+        }
+    }
 }
 ```
+
+To generate code, you need to call register/create and configure the compilation.
+In the dependencies block, you define what code should be generated: 
+- kotlin: Kotlin classes only
+- kotlinxJson: Adds `@Serializable` annotation to Kotlin classes
+- ktorClient: Generates ktor client functions
+- ktorServer: Generates ktor server `Route` functions
+
+You also need to call `usingSourceSet` to connect the generated code to a Gradle SourceSet.
 
 ## Custom Transformer
 
