@@ -43,6 +43,15 @@ kfx {
 }
 ```
 
+To generate code, you need to call register/create and configure the compilation.
+In the dependencies block, you define what code should be generated: 
+- kotlin: Kotlin classes only
+- kotlinxJson: Adds `@Serializable` annotation to Kotlin classes
+- ktorClient: Generates ktor client functions
+- ktorServer: Generates ktor server `Route` functions
+
+You also need to call `usingSourceSet` to connect the generated code to a Gradle SourceSet.
+
 ## Custom Transformer
 
 Often, api files need some transformation, to change the Kotlin type, to add some documentation or custom types, or just
