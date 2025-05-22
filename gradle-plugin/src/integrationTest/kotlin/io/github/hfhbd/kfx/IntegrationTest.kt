@@ -19,6 +19,7 @@ class IntegrationTest {
         return GradleRunner.create()
             .withPluginClasspath()
             .withProjectDir(projectDir.toFile())
+            .forwardOutput()
             .withArguments(
                 "clean",
                 *tasks,
