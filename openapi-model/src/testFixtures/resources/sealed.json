@@ -1,0 +1,165 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Sealed",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/sealed": {
+            "post": {
+                "operationId": "createSealed",
+                "summary": "Foo Bar API",
+                "requestBody": {
+                    "description": "",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/dev.example.FooSealed"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected Error",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/dev.example.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "dev.example.FooInput": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/dev.example.FooSealed"
+                  },
+                  {
+                    "required": [
+                      "input"
+                    ],
+                    "properties": {
+                      "input": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                ],
+              "description": "Foo input sample"
+            },
+            "dev.example.FooOutput": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/dev.example.FooSealed"
+                  },
+                  {
+                    "required": [
+                      "input"
+                    ],
+                    "properties": {
+                      "input": {
+                        "type": "integer",
+                        "format": "int32"
+                      }
+                    }
+                  }
+                ],
+              "description": "Foo input sample"
+            },
+            "dev.example.FooSealed": {
+                "type": "object",
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "input": "#/components/schemas/dev.example.FooInput"
+                    }
+                },
+                "required": [
+                    "type"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "description": "Foo sealed sample"
+            },
+            "dev.example.Fault": {
+                "type": "object",
+                "required": [
+                    "httpReturnCode",
+                    "message"
+                ],
+                "properties": {
+                    "httpReturnCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "input": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "stackTrace": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Foo": {
+                "type": "mutualTLS",
+                "description": "Client Cert connected to the User Role Foo"
+            }
+        }
+    }
+}

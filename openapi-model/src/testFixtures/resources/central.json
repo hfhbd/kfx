@@ -1,0 +1,728 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Central Publisher API",
+    "version": "1.0",
+    "description": "## Documentation\n\nThis page is the SwaggerUI page for the Central Publisher API. For more information about how you might use the API, please see our [documentation page](https://central.sonatype.org/publish/publish-portal-api/).\n\n ## Authorization\n\nAs documented in the linked resource, the API can be accessed with a base64 encoded `Bearer` token of the token values separated by a `:`.\n"
+  },
+  "servers": [],
+  "tags": [
+    {
+      "name": "publishing",
+      "description": "Core Publishing Endpoints"
+    },
+    {
+      "name": "integration",
+      "description": "Manual Integration Testing Endpoints"
+    },
+    {
+      "name": "information",
+      "description": "Endpoints For Retrieving Information"
+    }
+  ],
+  "paths": {
+    "/api/v1/publisher/deployment/{deploymentId}": {
+      "delete": {
+        "operationId": "deleteDeployment",
+        "parameters": [
+          {
+            "name": "deploymentId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The deployment identifier, which was obtained by a call to `/api/v1/publisher/upload`."
+          }
+        ],
+        "tags": [
+          "publishing"
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Drop a deployment. Deployments can be dropped if they are in a `FAILED` or `VALIDATED` state.\n",
+        "responses": {
+          "204": {
+            "description": "Deployment dropped successfully."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "404": {
+            "description": "Deployment not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDeployment",
+        "parameters": [
+          {
+            "name": "deploymentId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The deployment identifier, which was obtained by a call to `/api/v1/publisher/upload`."
+          }
+        ],
+        "tags": [
+          "publishing"
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Publish a deployment. Deployments can be published if they are in a `VALIDATED` state.\n",
+        "responses": {
+          "204": {
+            "description": "Deployment published successfully."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "404": {
+            "description": "Deployment not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/deployment/{deploymentId}/download/{relativePath}": {
+      "get": {
+        "operationId": "getDeployment",
+        "parameters": [
+          {
+            "name": "deploymentId",
+            "in": "path",
+            "required": true,
+            "description": "The deployment identifier, which was obtained by a call to `/api/v1/publisher/upload`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "relativePath",
+            "in": "path",
+            "required": true,
+            "description": "The full path to a specific file from a deployment bundle.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "integration"
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Integrate a deployment bundle with a build for manual testing. For more information, see the the following [documentation](https://central.sonatype.org/publish/publish-portal-api/#manually-testing-a-deployment-bundle).\n",
+        "responses": {
+          "200": {
+            "description": "The binary content of the deployment retrieved successfully.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/deployments/download/{relativePath}": {
+      "get": {
+        "operationId": "downloadDeployment",
+        "parameters": [
+          {
+            "name": "relativePath",
+            "in": "path",
+            "required": true,
+            "description": "The full path to a specific file from a deployment bundle.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "integration"
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Integrate deployment bundles with a build for manual testing. For more information, see the the following [documentation](https://central.sonatype.org/publish/publish-portal-api/#manually-testing-a-deployment-bundle).\n",
+        "responses": {
+          "200": {
+            "description": "The binary content of the deployment retrieved successfully.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/deployments/files": {
+      "post": {
+        "operationId": "browseDeployments",
+        "tags": [
+          "information"
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Browse the content of the deployment.\n",
+        "requestBody": {
+          "description": "Request body containing the necessary parameters.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "sortField"
+                ],
+                "properties": {
+                  "page": {
+                    "type": "number",
+                    "description": "The page number.",
+                    "example": 0
+                  },
+                  "size": {
+                    "type": "number",
+                    "description": "The number of items per page.",
+                    "example": 500
+                  },
+                  "sortField": {
+                    "type": "string",
+                    "description": "The field to sort the results by.",
+                    "example": "createdTimestamp"
+                  },
+                  "sortDirection": {
+                    "type": "string",
+                    "description": "The direction of the sorting (asc or desc).",
+                    "example": "desc"
+                  },
+                  "deploymentIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Optional deployment IDs.",
+                    "example": [
+                      "bc791596-57eb-4a19-9b72-7badf59def99"
+                    ]
+                  },
+                  "pathStarting": {
+                    "type": "string",
+                    "description": "Optional starting path.",
+                    "example": "org/sonatype/nexus/"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The content of the deployment browsed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deployments": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DeploymentResponseFiles"
+                      },
+                      "example": [
+                        {
+                          "deploymentId": "bc791596-57eb-4a19-9b72-7badf59def99",
+                          "deploymentName": "test",
+                          "deploymentState": "FAILED",
+                          "deploymentType": "BUNDLE",
+                          "createTimestamp": 1679067205978,
+                          "purls": [],
+                          "deployedComponentVersions": [
+                            {
+                              "name": "manifest.json",
+                              "path": "org/sonatype/nexus/nexus-api/2.3.0",
+                              "errors": [
+                                "Component with package url: 'pkg:maven/org.sonatype.nexus/nexus-api@2.3.0' already exists",
+                                "Javadocs must be provided but not found in entries",
+                                "Namespace 'org.sonatype.nexus' is not allowed",
+                                "Sources must be provided but not found in entries"
+                              ]
+                            },
+                            {
+                              "name": "nexus-api-2.3.0.pom",
+                              "path": "org/sonatype/nexus/nexus-api/2.3.0/",
+                              "errors": []
+                            }
+                          ],
+                          "deploymentFiles": [
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar",
+                              "fileName": "nexus-api-2.3.0.jar",
+                              "fileSize": 251058,
+                              "fileTimestamp": 1679067206616
+                            },
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar.asc",
+                              "fileName": "nexus-api-2.3.0.jar.asc",
+                              "fileSize": 198,
+                              "fileTimestamp": 1679067206344
+                            },
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar.asc.md5",
+                              "fileName": "nexus-api-2.3.0.jar.asc.md5",
+                              "fileSize": 32,
+                              "fileTimestamp": 1679067206502
+                            },
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar.asc.sha1",
+                              "fileName": "nexus-api-2.3.0.jar.asc.sha1",
+                              "fileSize": 40,
+                              "fileTimestamp": 1679067206539
+                            },
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar.md5",
+                              "fileName": "nexus-api-2.3.0.jar.md5",
+                              "fileSize": 32,
+                              "fileTimestamp": 1679067206296
+                            },
+                            {
+                              "relativePath": "org/sonatype/nexus/nexus-api/2.3.0/nexus-api-2.3.0.jar.sha1",
+                              "fileName": "nexus-api-2.3.0.jar.sha1",
+                              "fileSize": 40,
+                              "fileTimestamp": 1679067206686
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "page": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "pageSize": {
+                      "type": "number",
+                      "example": 500
+                    },
+                    "pageCount": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalResultCount": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/published": {
+      "get": {
+        "operationId": "checkPublishedComponent",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": true,
+            "description": "namespace of component",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "name of component",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "description": "version of component",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "information"
+        ],
+        "description": "Check whether a component is published.",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A json object indicating whether a component is published.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "Published": {
+                      "summary": "Published status response example",
+                      "value": {
+                        "published": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated."
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/status": {
+      "post": {
+        "operationId": "checkStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "The deployment identifier, which was obtained by a call to `/api/v1/publisher/upload`.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "publishing"
+        ],
+        "description": "Retrieve status of a deployment. Polling this endpoint can be useful for determining when a deployment changes state.",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return deployment info object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "deployment": {
+                    "summary": "Deployment status reponse example",
+                    "value": {
+                      "deploymentId": "5f52bd32-9403-4e3e-8a40-7a690d985c3f",
+                      "deploymentName": "test",
+                      "deploymentState": "FAILED",
+                      "purls": [],
+                      "errors": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong authorization data (user/password or token)"
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated"
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action"
+          },
+          "404": {
+            "description": "Deployment with provided id not found"
+          },
+          "500": {
+            "description": "Return error message on getting deployment status"
+          }
+        }
+      }
+    },
+    "/api/v1/publisher/upload": {
+      "post": {
+        "operationId": "uploadComponents",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Deployment/bundle name, optional (will use attached file name if not present).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "publishingType",
+            "in": "query",
+            "required": false,
+            "description": "Whether to have the deployment stop in the `VALIDATED` state and require a user to log in and manually approve its progression, or to automatically go directly to `PUBLISHING` when validation has passed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "USER_MANAGED",
+                "AUTOMATIC"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "publishing"
+        ],
+        "description": "Upload a deployment bundle intended to be published to Maven Central.",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bundle": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The deployment identifier for created deployment.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong authorization data (user/password or token)"
+          },
+          "401": {
+            "description": "The user does not have an active session or is not authenticated"
+          },
+          "403": {
+            "description": "The user is not authorized to perform this action"
+          },
+          "500": {
+            "description": "Return error message on bundle upload"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "DeployedFileDTO": {
+        "type": "object",
+        "properties": {
+          "relativePath": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "number"
+          },
+          "fileTimestamp": {
+            "type": "number"
+          }
+        }
+      },
+      "DeployedComponentVersion": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DeploymentResponseFiles": {
+        "type": "object",
+        "properties": {
+          "deploymentId": {
+            "type": "string"
+          },
+          "deploymentName": {
+            "type": "string"
+          },
+          "deploymentState": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "VALIDATING",
+              "PUBLISHING",
+              "PUBLISHED",
+              "FAILED"
+            ]
+          },
+          "deploymentType": {
+            "type": "string",
+            "enum": [
+              "BUNDLE",
+              "SINGLE"
+            ]
+          },
+          "createTimestamp": {
+            "type": "number"
+          },
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deployedComponentVersions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeployedComponentVersion"
+            }
+          }
+        }
+      }
+    }
+  }
+}

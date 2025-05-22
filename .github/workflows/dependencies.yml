@@ -1,0 +1,20 @@
+name: Dependency review for pull requests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  dependency-submission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/actions/dependency-submission@v4
+
+      - uses: actions/dependency-review-action@v4
+        if: github.event_name == 'pull_request'

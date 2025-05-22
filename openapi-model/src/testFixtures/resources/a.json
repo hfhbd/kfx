@@ -1,0 +1,202 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "New IP",
+        "description": "IP Description",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "Com_Example_Ktor_Resources",
+            "description": "A Description"
+        }
+    ],
+    "servers": [
+        {
+            "url": "localhost"
+        }
+    ],
+    "paths": {
+        "/http/foo/bar/baz": {
+            "head": {
+                "operationId": "BazA_CsrfToken",
+                "summary": "Get the CSRF Token for BazA",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "FETCH"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The CSRF Token for BazA",
+                        "headers": {
+                            "X-CSRF-Token": {
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected Error",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "BazA",
+                "summary": "Foo Bar API",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "requestBody": {
+                    "description": "",
+                    "required": true,
+                    "content": {
+                        "application/json; charset=utf-8": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/com.example.FooInput"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "required": true,
+                        "description": "The CSRF Token fetched by executing BazA_CsrfToken first.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "B",
+                        "in": "header",
+                        "description": "some Header",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "logid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected Error",
+                        "headers": {
+                            "logid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "com.example.FooInput": {
+                "type": "object",
+                "required": [
+                    "s"
+                ],
+                "properties": {
+                    "s": {
+                        "type": "string",
+                        "description": "asdf"
+                    }
+                },
+                "description": "Foo input sample"
+            },
+            "com.example.Fault": {
+                "type": "object",
+                "required": [
+                    "httpReturnCode",
+                    "message"
+                ],
+                "properties": {
+                    "httpReturnCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "input": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "stackTrace": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Foo": {
+                "type": "mutualTLS",
+                "description": "Client Cert connected to the User Role Foo"
+            }
+        }
+    }
+}

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:KotlinCodeGenerator.kt$KotlinCodeGenerator$private fun CodeGenTree.NormalClass.generate(): TypeSpec</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, toPoetType: CodeGenTree.Type.() -> TypeName, ): CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
+    <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt$KotlinxCoreCreator$override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type</ID>
+    <ID>CyclomaticComplexMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>CyclomaticComplexMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$internal fun OpenApi.toIr(): IRTree</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun Parameter.toParameter( parentQName: IRTree.ClassName, parameters: Map&lt;String, Parameter>, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, ): Pair&lt;Parameter.Position?, IRTree.Operation.Parameter></ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun Schema.toIrDefault(): IRTree.Literal?</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun generate( path: String, operation: Swagger.Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>FunctionNaming:PackageName.kt$fun PackageName(packageName: String)</ID>
+    <ID>FunctionNaming:soapAction.kt$inline fun &lt;reified EmptyEnvelope : Any> Soap(format: XML, noinline getAction: (EmptyEnvelope) -> String)</ID>
+    <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
+    <ID>LongMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, toPoetType: CodeGenTree.Type.() -> TypeName, ): CodeBlock</ID>
+    <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.getResponse( nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, ): CodeBlock</ID>
+    <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:generate.kt$fun WSDL.toIr( getNS: (String) -> String?, import: (String) -> Schema, ): IRTree</ID>
+    <ID>LongMethod:generate.kt$internal fun OpenApi.toIr(): IRTree</ID>
+    <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>LongMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
+    <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Swagger.Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
+    <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
+    <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>LongParameterList:generate.kt$( path: String, operation: Swagger.Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, )</ID>
+    <ID>LongParameterList:generate.kt$( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, )</ID>
+    <ID>LongParameterList:generate.kt$( propertyName: String, property: Definition, required: List&lt;String>, qname: IRTree.ClassName, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, )</ID>
+    <ID>LoopWithTooManyJumpStatements:generate.kt$for</ID>
+    <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$200</ID>
+    <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$201</ID>
+    <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$202</ID>
+    <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$204</ID>
+    <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$400</ID>
+    <ID>MaxLineLength:ODataTest.kt$ODataTest$"GetIntegrationPackages('{Id}')MessageMappingDesigntimeArtifacts(Id='{ArtifactId}',Version='{ArtifactVersion}')".transform()</ID>
+    <ID>MaximumLineLength:ODataTest.kt$ODataTest$ </ID>
+    <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.wsdl.generate.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>
