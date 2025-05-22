@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  release:
+    types:  [ created ]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      packages: write
+      attestations: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Set environment for version
+        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Release maven artifacts
+        run: ./gradlew publish -Pversion=$version
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
+
+      - name: Create docs
+        run: ./gradlew :dokkaGenerate
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/dokka/html
+      - name: Deploy Documentation to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

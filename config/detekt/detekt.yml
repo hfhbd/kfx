@@ -1,0 +1,21 @@
+formatting:
+  NoWildcardImports:
+    active: false
+  Filename:
+    active: false
+  TrailingCommaOnDeclarationSite:
+    active: true
+  TrailingCommaOnCallSite:
+    active: true
+
+naming:
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Za-z][_A-Za-z0-9]*'
+
+style:
+  WildcardImport:
+    active: false
+  CollapsibleIfStatements:
+    active: true
+  DataClassShouldBeImmutable:
+    active: true

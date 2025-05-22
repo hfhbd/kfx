@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  merge_group:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: ./gradlew build integrationTest
+
+      - name: Detekt
+        run: ./gradlew :detekt
+        if: always()
+      - name: Upload SARIF to Github using the upload-sarif action
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: build/reports/detekt/detekt.sarif
+          category: detekt
+
+      - name: Delete baseline to upload suppressed code-smells to GitHub
+        run: rm detekt-baseline.xml
+      - name: Run detekt baseline
+        run: ./gradlew :detekt
+        continue-on-error: true
+      - name: Upload detekt baseline to Github
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/detekt/detekt.sarif
+          category: detektBaseline

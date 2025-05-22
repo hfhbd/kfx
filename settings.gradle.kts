@@ -1,0 +1,52 @@
+pluginManagement {
+    includeBuild("gradle/build-logic")
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("myRepos")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
+rootProject.name = "kfx"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
+include(":core")
+
+include(":creator-xmlutil")
+include(":kotlin")
+include(":kotlin-poet")
+
+include(":ktor-shared")
+include(":ktor-client")
+include(":ktor-server")
+
+include(":ktor-server-runtime")
+
+include(":validation")
+include(":contextual-date")
+
+include(":ir-packagename")
+include(":ir-odata")
+
+include(":oauth2-runtime")
+
+include(":gradle-plugin")
+
+include(":openapi-model")
+include(":openapi-fir")
+
+include(":swagger-model")
+include(":swagger-fir")
+include(":creator-kotlinxcore")
+include(":creator-kotlinxjson")
+
+include(":wsdl-model")
+include(":wsdl-fir")
+
+include(":ktor-server-soap-plugin")
