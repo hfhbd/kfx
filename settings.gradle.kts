@@ -45,6 +45,7 @@ include(":validation")
 include(":contextual-date")
 
 include(":ir-packagename")
+include(":ir-removetype")
 include(":ir-odata")
 
 include(":oauth2-runtime")
@@ -61,5 +62,8 @@ include(":creator-kotlinxjson")
 
 include(":wsdl-model")
 include(":wsdl-fir")
+
+include(":soap")
+include(":soap-runtime")
 
 include(":ktor-server-soap-plugin")

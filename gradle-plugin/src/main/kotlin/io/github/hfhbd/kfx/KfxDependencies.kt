@@ -13,7 +13,7 @@ interface KfxDependencies : Dependencies {
     fun kotlinxJson() = dependencyFactory.create("$GROUP:creator-kotlinxjson:$VERSION")
     fun kotlinxXmlutil() = dependencyFactory.create("$GROUP:creator-xmlutil:$VERSION")
 
-    fun gsb() = dependencyFactory.create("$GROUP:gsb:$VERSION")
+    fun soap() = dependencyFactory.create("$GROUP:soap:$VERSION")
     fun validation() = dependencyFactory.create("$GROUP:validation:$VERSION")
     fun removeType() = dependencyFactory.create("$GROUP:ir-removetype:$VERSION")
     fun odata() = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
