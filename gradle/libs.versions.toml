@@ -36,5 +36,5 @@ dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 licensee = { id = "app.cash.licensee", version = "1.13.0" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.16" }
-validation = { id = "app.softwork.validation", version = "0.0.13" }
+validation = { id = "app.softwork.validation", version = "0.0.15" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
