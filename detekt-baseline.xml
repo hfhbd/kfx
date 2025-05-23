@@ -22,6 +22,7 @@
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.getResponse( nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, ): CodeBlock</ID>
     <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:SoapTransformer.kt$SoapTransformer$private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation</ID>
     <ID>LongMethod:generate.kt$fun WSDL.toIr( getNS: (String) -> String?, import: (String) -> Schema, ): IRTree</ID>
     <ID>LongMethod:generate.kt$internal fun OpenApi.toIr(): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
