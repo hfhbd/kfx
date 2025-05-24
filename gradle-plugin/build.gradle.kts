@@ -4,6 +4,13 @@ plugins {
     id("publish")
 }
 
+kotlin.jvmToolchain(8)
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 dependencies {
     compileOnly(projects.wsdlFir)
     compileOnly(projects.swaggerFir)
@@ -36,20 +43,24 @@ gradlePlugin.plugins.configureEach {
     description = "kfx Gradle Plugin"
 }
 
-testing.suites.register("integrationTest", JvmTestSuite::class) {
-    useKotlinTest()
-
-    dependencies {
-        implementation(testFixtures(project()))
-        implementation(gradleTestKit())
-        implementation(testFixtures(projects.openapiModel))
+testing.suites {
+    withType(JvmTestSuite::class).configureEach {
+        useKotlinTest()
     }
 
-    gradlePlugin.testSourceSet(sources)
-    
-    targets.configureEach {
-        testTask {
-            environment("fixtureDir", project.file("src/testFixtures").path)
+    register("integrationTest", JvmTestSuite::class) {
+        dependencies {
+            implementation(testFixtures(project()))
+            implementation(gradleTestKit())
+            implementation(testFixtures(projects.openapiModel))
+        }
+
+        gradlePlugin.testSourceSet(sources)
+
+        targets.configureEach {
+            testTask {
+                environment("fixtureDir", project.file("src/testFixtures").path)
+            }
         }
     }
 }

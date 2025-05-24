@@ -1,7 +1,9 @@
 plugins {
-    id("jvmModule")
+    id("runtimeModule")
 }
 
-dependencies {
-    api(libs.serialization.json)
+kotlin.sourceSets.commonMain {
+    dependencies {
+        api(libs.serialization.json)
+    }
 }
