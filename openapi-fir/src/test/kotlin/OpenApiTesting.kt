@@ -64,9 +64,6 @@ class OpenApiTesting {
         val codeGen = codeGenCreator.create(openApi)
         val codeGenerators = ServiceLoader.load(CodeGenerator::class.java).map {
             it as KotlinPoetCodeGenerator
-        }.filterNot {
-            // Not generating classes because the central.json file has many errors
-            it is KotlinCodeGenerator
         }
 
         codeGenerators.test(codeGen)

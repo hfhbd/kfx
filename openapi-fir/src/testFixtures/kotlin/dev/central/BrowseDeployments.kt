@@ -1,4 +1,6 @@
 package dev.central
 
-// NOT GENERATED BECAUSE central.json has many errors
-object BrowseDeployments
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object BrowseDeployments

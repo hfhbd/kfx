@@ -31,12 +31,18 @@ internal fun OpenApi.toIr(): IRTree {
     val irTypes = mutableMapOf<String, IRTree.Class>()
     for ((name, type) in components.schemas) {
         when (type) {
-            is Schema.OBJECT -> irTypes[name] = type.toIr(name, irTypes)
+            is Schema.OBJECT -> {
+                val s = type.toIr(name, irTypes)
+                if (s is IRTree.Class) {
+                    irTypes[name] = s
+                }
+            }
+
             is Schema.ARRAY,
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
-            -> continue
+                -> continue
 
             is Schema.STRING -> {
                 val irType = type.toIr(null, name, irTypes)
@@ -179,12 +185,12 @@ private fun OpenApi.Operation.toIr(
         },
         fault = responses[statusCodes.fault]?.let {
             val s = (
-                it.toIr(
-                    name,
-                    componentsResponses,
-                    irTypes,
-                ) as IRTree.NormalClass?
-                )?.copy(isFault = true) ?: return@let null
+                    it.toIr(
+                        name,
+                        componentsResponses,
+                        irTypes,
+                    ) as IRTree.NormalClass?
+                    )?.copy(isFault = true) ?: return@let null
 
             val className = if (s.packageName.isEmpty()) s.name else s.packageName + "." + s.name
             irTypes[className] = s
@@ -198,7 +204,7 @@ private fun OpenApi.Operation.toIr(
                 OpenApi.Parameter.Position.Header -> null
 
                 OpenApi.Parameter.Position.Path,
-                -> it.toParameter(componentParameters, irTypes).second.copy(
+                    -> it.toParameter(componentParameters, irTypes).second.copy(
                     nullable = false,
                 )
 
@@ -483,7 +489,7 @@ private fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(t
     it.uppercaseChar()
 }
 
-private fun Schema.isUnit(): Boolean = this is Schema.OBJECT && ref == null && properties.isEmpty()
+private fun Schema.isUnit(): Boolean = this is Schema.OBJECT && ref == null && properties.isEmpty() && additionalPropertiesSchema == null
 
 private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName {
     return (ref?.removePrefix("#/components/schemas/") ?: name!!).let { name ->
@@ -504,61 +510,75 @@ private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName {
 private fun Schema.OBJECT.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
-): IRTree.Class {
+): IRTree.Type {
     val resolvedRef = asClassName(name)
     val discriminator = discriminator?.propertyName
-    return IRTree.NormalClass(
-        packageName = resolvedRef.packageName,
-        packageNameSuffix = "",
-        name = resolvedRef.name,
-        serialName = null,
-        namespace = null,
-        members = buildMap {
-            putAll(
-                properties.filterNot {
-                    if (discriminator != null) {
-                        it.key == discriminator
-                    } else {
-                        false
-                    }
-                }.toMembers(
-                    name = name,
-                    irTypes = irTypes,
-                    required = required,
-                ),
+    if (additionalPropertiesSchema != null) {
+        return IRTree.Type.MAP(
+            key = IRTree.Type.Builtin.STRING,
+            value = additionalPropertiesSchema!!.toIr(
+                parentName = resolvedRef.name,
+                name = resolvedRef.name,
+                irTypes = irTypes,
             )
+        )
+    } else {
+        return IRTree.NormalClass(
+            packageName = resolvedRef.packageName,
+            packageNameSuffix = "",
+            name = resolvedRef.name,
+            serialName = null,
+            namespace = null,
+            members = buildMap {
+                putAll(
+                    properties.filterNot {
+                        if (discriminator != null) {
+                            it.key == discriminator
+                        } else {
+                            false
+                        }
+                    }.toMembers(
+                        name = name,
+                        irTypes = irTypes,
+                        required = required,
+                    ),
+                )
 
-            for (it in allOf) {
-                val it = it as Schema.OBJECT
-                if (it.ref == null) {
-                    putAll(
-                        it.properties.toMembers(
-                            irTypes = irTypes,
-                            required = it.required,
-                        ),
-                    )
-                } else {
-                    val irClass = irTypes.findOrNull(it.ref!!) as IRTree.NormalClass?
-                    if (irClass != null) {
-                        putAll(irClass.members)
+                for (it in allOf) {
+                    val it = it as Schema.OBJECT
+                    if (it.ref == null) {
+                        putAll(
+                            it.properties.toMembers(
+                                irTypes = irTypes,
+                                required = it.required,
+                            ),
+                        )
                     } else {
-                        irTypes[it.ref!!.removePrefix("#/components/schemas/")] = it.toIr(name, irTypes)
+                        val irClass = irTypes.findOrNull(it.ref!!) as IRTree.NormalClass?
+                        if (irClass != null) {
+                            putAll(irClass.members)
+                        } else {
+                            val toIR = it.toIr(name, irTypes)
+                            if (toIR is IRTree.Class) {
+                                irTypes[it.ref!!.removePrefix("#/components/schemas/")] = toIR
+                            }
+                        }
                     }
                 }
-            }
-        },
-        documentation = description,
-        isFault = false,
-        discriminator = discriminator,
-        allOf = allOf.mapNotNull {
-            val ref = (it as Schema.OBJECT).ref
-            if (ref != null) {
-                it.asClassName(null)
-            } else {
-                null
-            }
-        }.singleOrNull(),
-    )
+            },
+            documentation = description,
+            isFault = false,
+            discriminator = discriminator,
+            allOf = allOf.mapNotNull {
+                val ref = (it as Schema.OBJECT).ref
+                if (ref != null) {
+                    it.asClassName(null)
+                } else {
+                    null
+                }
+            }.singleOrNull(),
+        )
+    }
 }
 
 private fun Map<String, Schema>.toMembers(
@@ -610,6 +630,7 @@ private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>
 
         is IRTree.Type.Builtin -> return
         is IRTree.Type.LIST -> addToIr(type.list, irTypes)
+        is IRTree.Type.MAP -> addToIr(type.value, irTypes)
     }
 }
 
@@ -620,7 +641,7 @@ private val Schema.hasNoRef: Boolean
         is Schema.INT,
         is Schema.NUMBER,
         is Schema.STRING,
-        -> false
+            -> false
 
         is Schema.OBJECT -> ref == null
     }

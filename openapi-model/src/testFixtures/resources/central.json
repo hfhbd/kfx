@@ -518,7 +518,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "type": "object",
+                  "$ref": "CheckStatus"
                 },
                 "examples": {
                   "deployment": {
@@ -646,6 +647,44 @@
       }
     },
     "schemas": {
+      "CheckStatus": {
+        "type": "object",
+        "required": [
+          "deploymentId",
+          "deploymentName",
+          "deploymentState"
+        ],
+        "properties": {
+          "deploymentId": {
+            "type": "string"
+          },
+          "deploymentName": {
+            "type": "string"
+          },
+          "deploymentState": {
+            "type": "object",
+            "$ref": "DeploymentState"
+          },
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cherryBomUrl": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "DeployedFileDTO": {
         "type": "object",
         "properties": {
@@ -690,14 +729,7 @@
             "type": "string"
           },
           "deploymentState": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "VALIDATING",
-              "PUBLISHING",
-              "PUBLISHED",
-              "FAILED"
-            ]
+            "$ref": "DeploymentState"
           },
           "deploymentType": {
             "type": "string",
@@ -722,6 +754,17 @@
             }
           }
         }
+      },
+      "DeploymentState": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "VALIDATING",
+          "VALIDATED",
+          "PUBLISHING",
+          "PUBLISHED",
+          "FAILED"
+        ]
       }
     }
   }
