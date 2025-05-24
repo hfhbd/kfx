@@ -2,6 +2,7 @@ plugins {
     `kotlin-dsl`
     id("setup")
     id("publish")
+    id("java-test-fixtures")
 }
 
 kotlin.jvmToolchain(8)
@@ -22,14 +23,12 @@ tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
 
-configurations.configureEach {
-    if (isCanBeConsumed) {
-        attributes {
-            attribute(
-                GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
-                objects.named<GradlePluginApiVersion>(GradleVersion.version("8.11").version)
-            )
-        }
+configurations.apiElements {
+    attributes {
+        attribute(
+            GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+            objects.named<GradlePluginApiVersion>(GradleVersion.version("8.11").version)
+        )
     }
 }
 
