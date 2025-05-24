@@ -2,7 +2,7 @@ package com.jira
 
 import kotlin.Boolean
 import kotlin.String
-import kotlin.Unit
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 public data class UserBean(
   public val active: Boolean? = null,
   public val applicationRoles: SimpleListWrapperApplicationRoleBean? = null,
-  public val avatarUrls: Unit? = null,
+  public val avatarUrls: Map<String, String>? = null,
   public val deleted: Boolean? = null,
   public val displayName: String? = null,
   public val emailAddress: String? = null,

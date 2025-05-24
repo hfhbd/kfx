@@ -2,7 +2,7 @@ package com.jira
 
 import kotlin.Int
 import kotlin.String
-import kotlin.Unit
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,7 +13,7 @@ public data class SimpleLinkBean(
   public val iconClass: String? = null,
   public val id: String? = null,
   public val label: String? = null,
-  public val params: Unit? = null,
+  public val params: Map<String, String>? = null,
   public val styleClass: String? = null,
   public val title: String? = null,
   public val weight: Int? = null,

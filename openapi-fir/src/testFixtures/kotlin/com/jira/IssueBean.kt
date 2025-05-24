@@ -1,8 +1,8 @@
 package com.jira
 
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,17 +11,17 @@ import kotlinx.serialization.Serializable
 public data class IssueBean(
   public val changelog: ChangelogBean? = null,
   public val editmeta: EditMetaBean? = null,
-  public val fields: Unit? = null,
+  public val fields: Map<String, Fields>? = null,
   public val fieldsToInclude: IncludedFields? = null,
   public val id: String? = null,
   public val key: String? = null,
-  public val names: Unit? = null,
+  public val names: Map<String, String>? = null,
   public val operations: OpsbarBean? = null,
   public val properties: PropertiesBean? = null,
-  public val renderedFields: Unit? = null,
-  public val schema: Unit? = null,
+  public val renderedFields: Map<String, RenderedFields>? = null,
+  public val schema: Map<String, JsonTypeBean>? = null,
   public val self: String? = null,
   public val transitionBeans: List<TransitionBean>,
   public val transitions: List<TransitionBean>,
-  public val versionedRepresentations: Unit? = null,
+  public val versionedRepresentations: Map<String, Map<String, VersionedRepresentations>>? = null,
 )
