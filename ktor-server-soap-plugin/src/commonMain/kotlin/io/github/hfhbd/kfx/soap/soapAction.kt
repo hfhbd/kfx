@@ -37,20 +37,30 @@ public fun Route.soapAction(action: String, build: Route.() -> Unit): Route {
 private class SoapRouteSelector(val action: String) : RouteSelector() {
     override suspend fun evaluate(context: RoutingResolveContext, segmentIndex: Int): RouteSelectorEvaluation {
         val call = context.call
-        if (SOAP_ACTION !in call.attributes) {
-            val stringBody = call.receiveText()
-            val format = call.application.attributes[SOAP_FORMAT]
-            val type = call.application.attributes[SOAP_ENVELOPE_TYPE]
-            val emptyEnvelope = format.decodeFromString(type, stringBody) as Any
-            val getHeader = call.application.attributes[SOAP_FUNCTION]
-            call.attributes.put(SOAP_ACTION, getHeader(emptyEnvelope))
-        }
+        val contentType = call.request.contentType()
 
-        val soapAction = context.call.attributes[SOAP_ACTION]
-        return if (soapAction == action) {
-            RouteSelectorEvaluation.Success(1.0)
-        } else {
-            RouteSelectorEvaluation.Failed
+        return when (contentType.parameter("action")) {
+            action -> RouteSelectorEvaluation.Success(1.0)
+
+            null -> {
+                if (SOAP_ACTION !in call.attributes) {
+                    val stringBody = call.receiveText()
+                    val format = call.application.attributes[SOAP_FORMAT]
+                    val type = call.application.attributes[SOAP_ENVELOPE_TYPE]
+                    val emptyEnvelope = format.decodeFromString(type, stringBody) as Any
+                    val getHeader = call.application.attributes[SOAP_FUNCTION]
+                    call.attributes.put(SOAP_ACTION, getHeader(emptyEnvelope))
+                }
+
+                val soapAction = context.call.attributes[SOAP_ACTION]
+                if (soapAction == action) {
+                    RouteSelectorEvaluation.Success(1.0)
+                } else {
+                    RouteSelectorEvaluation.Failed
+                }
+            }
+
+            else -> RouteSelectorEvaluation.Failed
         }
     }
 }
