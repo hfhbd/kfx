@@ -43,6 +43,11 @@ private fun IRTree.Type.changePackageName(packageName: String): IRTree.Type = wh
     is IRTree.Type.LIST -> copy(
         list = list.changePackageName(packageName),
     )
+
+    is IRTree.Type.MAP -> copy(
+        key = key.changePackageName(packageName),
+        value = value.changePackageName(packageName),
+    )
 }
 
 private fun IRTree.ClassName.changePackageName(packageName: String): IRTree.ClassName = copy(

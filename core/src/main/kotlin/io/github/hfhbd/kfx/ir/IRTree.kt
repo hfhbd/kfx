@@ -65,6 +65,9 @@ data class IRTree(
 
         @Serializable
         data class LIST(val list: Type) : Type
+
+        @Serializable
+        data class MAP(val key: Type, val value: Type) : Type
     }
 
     @Serializable

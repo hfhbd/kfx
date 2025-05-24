@@ -1,4 +1,3 @@
-import io.github.hfhbd.kfx.KotlinCodeGenerator
 import io.github.hfhbd.kfx.KotlinPoetCodeGenerator
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTree

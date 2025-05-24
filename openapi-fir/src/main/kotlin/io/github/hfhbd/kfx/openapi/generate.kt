@@ -42,7 +42,7 @@ internal fun OpenApi.toIr(): IRTree {
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
-                -> continue
+            -> continue
 
             is Schema.STRING -> {
                 val irType = type.toIr(null, name, irTypes)
@@ -185,12 +185,12 @@ private fun OpenApi.Operation.toIr(
         },
         fault = responses[statusCodes.fault]?.let {
             val s = (
-                    it.toIr(
-                        name,
-                        componentsResponses,
-                        irTypes,
-                    ) as IRTree.NormalClass?
-                    )?.copy(isFault = true) ?: return@let null
+                it.toIr(
+                    name,
+                    componentsResponses,
+                    irTypes,
+                ) as IRTree.NormalClass?
+                )?.copy(isFault = true) ?: return@let null
 
             val className = if (s.packageName.isEmpty()) s.name else s.packageName + "." + s.name
             irTypes[className] = s
@@ -204,7 +204,7 @@ private fun OpenApi.Operation.toIr(
                 OpenApi.Parameter.Position.Header -> null
 
                 OpenApi.Parameter.Position.Path,
-                    -> it.toParameter(componentParameters, irTypes).second.copy(
+                -> it.toParameter(componentParameters, irTypes).second.copy(
                     nullable = false,
                 )
 
@@ -520,7 +520,7 @@ private fun Schema.OBJECT.toIr(
                 parentName = resolvedRef.name,
                 name = resolvedRef.name,
                 irTypes = irTypes,
-            )
+            ),
         )
     } else {
         return IRTree.NormalClass(
@@ -641,7 +641,7 @@ private val Schema.hasNoRef: Boolean
         is Schema.INT,
         is Schema.NUMBER,
         is Schema.STRING,
-            -> false
+        -> false
 
         is Schema.OBJECT -> ref == null
     }

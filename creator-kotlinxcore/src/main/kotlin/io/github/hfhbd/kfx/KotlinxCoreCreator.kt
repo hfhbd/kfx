@@ -33,6 +33,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
         IRTree.Type.DateType.DATE -> DateType.DATE
         IRTree.Type.DateType.INSTANT -> DateType.INSTANT
         is IRTree.Type.LIST -> LIST(toCodeGen(ir.list))
+        is IRTree.Type.MAP -> MAP(toCodeGen(ir.key), toCodeGen(ir.value))
         IRTree.Type.Builtin.UNIT -> Builtin.UNIT
         IRTree.Type.Builtin.FILE -> Builtin.FILE
         IRTree.Type.Builtin.BINARY -> Builtin.BYTEARRAY

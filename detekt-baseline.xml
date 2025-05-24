@@ -27,6 +27,7 @@
     <ID>LongMethod:generate.kt$internal fun OpenApi.toIr(): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
+    <ID>LongMethod:generate.kt$private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
     <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Swagger.Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
     <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
@@ -40,7 +41,9 @@
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$204</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$400</ID>
     <ID>MaxLineLength:ODataTest.kt$ODataTest$"GetIntegrationPackages('{Id}')MessageMappingDesigntimeArtifacts(Id='{ArtifactId}',Version='{ArtifactVersion}')".transform()</ID>
+    <ID>MaxLineLength:generate.kt$private fun Schema.isUnit(): Boolean</ID>
     <ID>MaximumLineLength:ODataTest.kt$ODataTest$ </ID>
+    <ID>MaximumLineLength:generate.kt$private</ID>
     <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
