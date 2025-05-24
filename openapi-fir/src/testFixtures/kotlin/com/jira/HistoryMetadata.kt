@@ -1,7 +1,7 @@
 package com.jira
 
 import kotlin.String
-import kotlin.Unit
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ public data class HistoryMetadata(
   public val descriptionKey: String? = null,
   public val emailDescription: String? = null,
   public val emailDescriptionKey: String? = null,
-  public val extraData: Unit? = null,
+  public val extraData: Map<String, String>? = null,
   public val generator: HistoryMetadataParticipant? = null,
   public val type: String? = null,
 )

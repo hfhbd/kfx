@@ -354,6 +354,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
             is Classes.ActualClass -> when (val forClass = classes.forClass) {
                 is IRTree.Type.Builtin -> continue
                 is IRTree.Type.LIST -> continue
+                is IRTree.Type.MAP -> continue
                 is IRTree.Enum -> add(forClass)
                 is IRTree.NormalClass -> {
                     val isFault = IRTree.ClassName(forClass.packageName, forClass.name) in resolvedFaults

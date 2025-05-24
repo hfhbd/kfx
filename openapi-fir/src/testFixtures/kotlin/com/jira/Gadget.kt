@@ -2,7 +2,7 @@ package com.jira
 
 import kotlin.Long
 import kotlin.String
-import kotlin.Unit
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,5 +14,5 @@ public data class Gadget(
   public val gadgetUri: String? = null,
   public val jql: String? = null,
   public val portalId: Long? = null,
-  public val userPrefs: Unit? = null,
+  public val userPrefs: Map<String, String>? = null,
 )

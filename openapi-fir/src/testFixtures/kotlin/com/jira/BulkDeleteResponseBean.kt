@@ -1,8 +1,8 @@
 package com.jira
 
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.Map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 public data class BulkDeleteResponseBean(
   public val deletedCustomFields: List<String>,
   public val message: String? = null,
-  public val notDeletedCustomFields: Unit? = null,
+  public val notDeletedCustomFields: Map<String, String>? = null,
 )

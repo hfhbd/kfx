@@ -1,5 +1,6 @@
 package dev.central
 
+import kotlin.String
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,4 +10,7 @@ public enum class DeploymentResponseFilesDeploymentType {
   Bundle,
   @SerialName(value = "SINGLE")
   Single,
+  ;
+
+  override fun toString(): String = serializer().descriptor.getElementName(ordinal)
 }

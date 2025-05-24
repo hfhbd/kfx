@@ -42,6 +42,10 @@ class OData : IrTransformer {
         is IRTree.Type.Builtin -> this
         is IRTree.Class -> transform()
         is IRTree.Type.LIST -> list.transform()
+        is IRTree.Type.MAP -> copy(
+            key.transform(),
+            value.transform(),
+        )
     }
 
     private fun IRTree.NormalClass.transform(): IRTree.NormalClass = copy(
