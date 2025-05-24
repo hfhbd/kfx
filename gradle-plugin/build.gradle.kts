@@ -2,6 +2,14 @@ plugins {
     `kotlin-dsl`
     id("setup")
     id("publish")
+    id("java-test-fixtures")
+}
+
+kotlin.jvmToolchain(8)
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencies {
@@ -15,14 +23,12 @@ tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
 
-configurations.configureEach {
-    if (isCanBeConsumed) {
-        attributes {
-            attribute(
-                GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
-                objects.named<GradlePluginApiVersion>(GradleVersion.version("8.11").version)
-            )
-        }
+configurations.apiElements {
+    attributes {
+        attribute(
+            GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+            objects.named<GradlePluginApiVersion>(GradleVersion.version("8.11").version)
+        )
     }
 }
 
@@ -36,20 +42,24 @@ gradlePlugin.plugins.configureEach {
     description = "kfx Gradle Plugin"
 }
 
-testing.suites.register("integrationTest", JvmTestSuite::class) {
-    useKotlinTest()
-
-    dependencies {
-        implementation(testFixtures(project()))
-        implementation(gradleTestKit())
-        implementation(testFixtures(projects.openapiModel))
+testing.suites {
+    withType(JvmTestSuite::class).configureEach {
+        useKotlinTest()
     }
 
-    gradlePlugin.testSourceSet(sources)
-    
-    targets.configureEach {
-        testTask {
-            environment("fixtureDir", project.file("src/testFixtures").path)
+    register("integrationTest", JvmTestSuite::class) {
+        dependencies {
+            implementation(testFixtures(project()))
+            implementation(gradleTestKit())
+            implementation(testFixtures(projects.openapiModel))
+        }
+
+        gradlePlugin.testSourceSet(sources)
+
+        targets.configureEach {
+            testTask {
+                environment("fixtureDir", project.file("src/testFixtures").path)
+            }
         }
     }
 }

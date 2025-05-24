@@ -1,5 +1,5 @@
 plugins {
-    id("jvmModule")
+    id("compilerModule")
 }
 
 dependencies {

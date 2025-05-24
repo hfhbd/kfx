@@ -1,18 +1,10 @@
 plugins {
     id("app.cash.licensee")
     id("org.jetbrains.dokka")
-    id("app.softwork.serviceloader-compiler")
-    id("java-test-fixtures")
-    id("jvm-test-suite")
 }
 
 licensee {
     allow("Apache-2.0")
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
 }
 
 dokka {
@@ -45,8 +37,4 @@ dokka {
     dependencies {
         dokkaPlugin(versionCatalogs.named("libs").findLibrary("dokka-mermaid").get())
     }
-}
-
-testing.suites.withType(JvmTestSuite::class).configureEach {
-    useKotlinTest()
 }
