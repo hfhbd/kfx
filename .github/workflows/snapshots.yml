@@ -1,21 +1,16 @@
 name: Release
 
 on:
-  release:
-    types:  [ created ]
-
-concurrency:
-  group: release
-  cancel-in-progress: false
+  push:
+    branches: [ main ]
 
 jobs:
-  relaseMavenCentral:
-    runs-on: ubuntu-latest
+  publishMavenCentral:
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
 
-    environment:
-      name: mavenCentral
+    environment: mavenCentral
 
     steps:
       - name: Set environment for version
@@ -25,15 +20,15 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Release maven artifacts
-        run: ./gradlew publishToMavenCentral -Pversion=${{ steps.version.outputs.version }}
+        run: ./gradlew publishAllPublicationsToMavenCentralSnapshotRepository -Pversion=${{ steps.version.outputs.version }}
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralSnapshotUsername: ${{ secrets.CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralSnapshotPassword: ${{ secrets.CENTRAL_PASSWORD }}
 
-  relaseGitHub:
-    runs-on: ubuntu-latest
+  publishGitHubPackages:
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
@@ -55,28 +50,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
-
-  buildDocs:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: gradle/actions/setup-gradle@v4
-
-      - name: Create docs
-        run: ./gradlew :dokkaGenerate
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/dokka/html
-      - name: Deploy Documentation to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
