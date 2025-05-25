@@ -6,7 +6,7 @@ plugins {
 
 publishing {
     repositories {
-        maven(url = "https://maven.pkg.github.com/hfhbd/adventOfCode") {
+        maven(url = "https://maven.pkg.github.com/hfhbd/kfx") {
             name = "GitHubPackages"
             credentials(PasswordCredentials::class)
         }
