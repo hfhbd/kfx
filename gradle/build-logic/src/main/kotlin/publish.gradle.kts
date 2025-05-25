@@ -5,6 +5,16 @@ plugins {
 }
 
 publishing {
+    repositories {
+        maven(url = "https://maven.pkg.github.com/hfhbd/adventOfCode") {
+            name = "GitHubPackages"
+            credentials(PasswordCredentials::class)
+        }
+        maven(url = "https://central.sonatype.com/repository/maven-snapshots/") {
+            name = "mavenCentralSnapshot"
+            credentials(PasswordCredentials::class)
+        }
+    }
     publications.withType<MavenPublication>().configureEach {
         pom {
             name.set("io.github.hfhbd KFX")
