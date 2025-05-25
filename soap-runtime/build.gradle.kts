@@ -1,9 +1,17 @@
 plugins {
-    id("jvmModule")
+    id("runtimeModule")
 }
 
-dependencies {
-    api(libs.serialization.core)
-    api(libs.serialization.xml)
-    api(libs.datetime)
+kotlin {
+    wasmWasi {
+        nodejs()
+    }
+
+    sourceSets.commonMain {
+        dependencies {
+            api(libs.serialization.core)
+            api(libs.serialization.xml)
+            api(libs.datetime)
+        }
+    }
 }

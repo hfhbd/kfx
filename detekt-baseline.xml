@@ -16,7 +16,7 @@
     <ID>CyclomaticComplexMethod:generate.kt$private fun generate( path: String, operation: Swagger.Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>FunctionNaming:PackageName.kt$fun PackageName(packageName: String)</ID>
-    <ID>FunctionNaming:soapAction.kt$inline fun &lt;reified EmptyEnvelope : Any> Soap(format: XML, noinline getAction: (EmptyEnvelope) -> String)</ID>
+    <ID>FunctionNaming:soapAction.kt$public inline fun &lt;reified EmptyEnvelope : Any> Soap( format: XML, noinline getAction: (EmptyEnvelope) -> String, ): RouteScopedPlugin&lt;Unit></ID>
     <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
     <ID>LongMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, toPoetType: CodeGenTree.Type.() -> TypeName, ): CodeBlock</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>

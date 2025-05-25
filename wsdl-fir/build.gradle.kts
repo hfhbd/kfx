@@ -1,7 +1,5 @@
 plugins {
-    id("jvmModule")
-    id("java-test-fixtures")
-    id("app.softwork.validation")
+    id("compilerModule")
 }
 
 dependencies {
