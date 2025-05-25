@@ -1,4 +1,4 @@
-name: Release
+name: Snapshots
 
 on:
   push:
@@ -10,7 +10,8 @@ jobs:
     permissions:
       contents: read
 
-    environment: mavenCentral
+    environment:
+      name: mavenCentral
 
     steps:
       - name: Set environment for version
