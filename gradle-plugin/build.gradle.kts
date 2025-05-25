@@ -59,6 +59,7 @@ testing.suites {
         targets.configureEach {
             testTask {
                 environment("fixtureDir", project.file("src/testFixtures").path)
+                javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
             }
         }
     }
