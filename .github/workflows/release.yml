@@ -9,13 +9,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  relaseMavenCentral:
+  publishMavenCentral:
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
-    environment:
-      name: mavenCentral
+    environment: mavenCentral
 
     steps:
       - name: Set environment for version
@@ -32,7 +31,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
 
-  relaseGitHub:
+  publishGitHubPackages:
     runs-on: ubuntu-latest
     permissions:
       contents: read
