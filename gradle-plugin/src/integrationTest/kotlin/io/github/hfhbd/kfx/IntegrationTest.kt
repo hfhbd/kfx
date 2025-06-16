@@ -1,7 +1,7 @@
 package io.github.hfhbd.kfx
 
 import org.gradle.testkit.runner.*
-import java.nio.file.*
+import java.io.File
 import kotlin.io.path.*
 import kotlin.test.*
 
@@ -12,13 +12,12 @@ class IntegrationTest {
     @Test
     fun simpleWorks() {
         val projectDir = fixtureDir / "resources" / "simple"
-        build(projectDir, ":assemble")
+        build(projectDir.toFile(), ":assemble")
     }
 
-    private fun build(projectDir: Path, vararg tasks: String): BuildResult {
+    private fun build(projectDir: File, vararg tasks: String): BuildResult {
         return GradleRunner.create()
-            .withPluginClasspath()
-            .withProjectDir(projectDir.toFile())
+            .withProjectDir(projectDir)
             .forwardOutput()
             .withArguments(
                 "clean",
