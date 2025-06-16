@@ -439,7 +439,11 @@ private fun Schema.toIr(
 
 private fun Schema.BOOLEAN.toIr() = IRTree.Type.Builtin.BOOLEAN
 
-private fun Schema.ARRAY.toIr(parentName: String, suffix: String, irTypes: MutableMap<String, IRTree.Class>) = IRTree.Type.LIST(
+private fun Schema.ARRAY.toIr(
+    parentName: String,
+    suffix: String,
+    irTypes: MutableMap<String, IRTree.Class>,
+) = IRTree.Type.LIST(
     items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!),
 )
 
