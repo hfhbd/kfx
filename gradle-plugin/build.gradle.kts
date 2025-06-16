@@ -54,8 +54,6 @@ testing.suites {
             implementation(testFixtures(projects.openapiModel))
         }
 
-        gradlePlugin.testSourceSet(sources)
-
         targets.configureEach {
             testTask {
                 environment("fixtureDir", project.file("src/testFixtures").path)

@@ -12,5 +12,7 @@ kotlin.sourceSets {
 }
 
 licensee {
-    allow("MIT")
+    allowUrl("https://opensource.org/license/mit") {
+        because("MIT")
+    }
 }
