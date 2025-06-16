@@ -158,6 +158,36 @@
                     "s": {
                         "type": "string",
                         "description": "asdf"
+                    },
+                    "arr": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "byBar": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "a": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "byBaz": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "b": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "description": "Foo input sample"
