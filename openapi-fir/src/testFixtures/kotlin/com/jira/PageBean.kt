@@ -17,5 +17,5 @@ public data class PageBean(
   public val self: String? = null,
   public val startAt: Long? = null,
   public val total: Long? = null,
-  public val values: List<PageBeanItems>,
+  public val values: List<PageBeanValues>,
 )
