@@ -429,7 +429,7 @@ private fun Schema.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type = when (this) {
-    is Schema.ARRAY -> toIr(parentName!!, irTypes)
+    is Schema.ARRAY -> toIr(parentName!!, name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
     is Schema.BOOLEAN -> toIr()
     is Schema.INT -> toIr()
     is Schema.NUMBER -> toIr()
@@ -439,8 +439,12 @@ private fun Schema.toIr(
 
 private fun Schema.BOOLEAN.toIr() = IRTree.Type.Builtin.BOOLEAN
 
-private fun Schema.ARRAY.toIr(parentName: String, irTypes: MutableMap<String, IRTree.Class>) = IRTree.Type.LIST(
-    items?.toIr(null, parentName + "Items", irTypes) ?: irTypes.find(ref!!),
+private fun Schema.ARRAY.toIr(
+    parentName: String,
+    suffix: String,
+    irTypes: MutableMap<String, IRTree.Class>,
+) = IRTree.Type.LIST(
+    items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!),
 )
 
 private fun Schema.INT.toIr() = when (format) {
