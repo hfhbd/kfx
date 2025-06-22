@@ -16,7 +16,7 @@ fun Path.createIr(
     )
 
     val reader = KtXmlReader(reader())
-    var wsdl: WSDL = xml.decodeFromReader(reader)
+    var wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
     val firTransformers = wsdlTransformerFactories.map { it.create() }
     for (firTransformer in firTransformers) {
         wsdl = firTransformer(wsdl)
