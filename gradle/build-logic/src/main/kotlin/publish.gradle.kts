@@ -49,10 +49,3 @@ signing {
         sign(publishing.publications)
     }
 }
-
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
-    filePermissions {}
-    dirPermissions {}
-}

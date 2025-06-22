@@ -16,10 +16,6 @@ jobs:
       security-events: write
       packages: read
 
-    env:
-      ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
-      ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ secrets.GPR_VOCS }}
-
     steps:
       - uses: actions/checkout@v4
       - uses: gradle/actions/setup-gradle@v4
