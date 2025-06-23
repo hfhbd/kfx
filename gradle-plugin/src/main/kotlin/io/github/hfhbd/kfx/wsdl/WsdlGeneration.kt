@@ -1,8 +1,8 @@
 package io.github.hfhbd.kfx.wsdl
 
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 
