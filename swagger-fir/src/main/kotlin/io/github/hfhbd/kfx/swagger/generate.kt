@@ -1,17 +1,44 @@
 package io.github.hfhbd.kfx.swagger
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.Swagger.*
+import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.serialization.json.*
-import java.nio.file.Path
+import java.io.File
+import java.util.ServiceLoader
 import kotlin.collections.get
 import kotlin.collections.iterator
-import kotlin.io.path.*
 
-fun Path.createIr(
-    swaggerTransformers: List<SwaggerTransformer>,
+fun generate(
+    swaggerFile: File,
+    outputFolder: File,
+    codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
+    firTransformers: Iterable<SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java),
+    transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
+    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
+    codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
+) {
+    val irTree = swaggerFile.createIr(
+        firTransformers,
+    )
+    val codeGenerator = irTree.toCodeGen(
+        transformerFactories,
+        codeGenCreator,
+        codeGenTransformer,
+    )
+    for (codeGeneratorFactory in codeGenerators) {
+        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+    }
+}
+
+private fun File.createIr(
+    swaggerTransformers: Iterable<SwaggerTransformer>,
 ): IRTree {
     var swagger: Swagger = json.decodeFromString(readText())
     for (swaggerTransformer in swaggerTransformers) {
@@ -36,7 +63,7 @@ internal fun Swagger.toIr(): IRTree {
             Definition.Type.Number,
             Definition.Type.String,
             Definition.Type.Null, Definition.Type.File,
-            -> continue
+                -> continue
         }
     }
 
@@ -86,7 +113,7 @@ internal fun Swagger.toIr(): IRTree {
 
 private fun generate(
     path: String,
-    operation: Swagger.Path,
+    operation: Path,
     method: IRTree.Operation.HttpMethod,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     parameters: Map<String, Parameter>,
@@ -95,10 +122,10 @@ private fun generate(
     val statusCodes = operation.responses.keys.getStatusCodes()
 
     val name = operation.operationId ?: (
-        method.toString() + path.split("/").joinToString("") {
-            it.replaceFirstChar { it.uppercaseChar() }
-        }.replaceFirstChar { it.uppercaseChar() }
-        )
+            method.toString() + path.split("/").joinToString("") {
+                it.replaceFirstChar { it.uppercaseChar() }
+            }.replaceFirstChar { it.uppercaseChar() }
+            )
 
     return IRTree.Operation(
         packageName = "",
@@ -115,7 +142,7 @@ private fun generate(
                 Parameter.Position.Path,
                 Parameter.Position.Header,
                 null,
-                -> null
+                    -> null
             }
         }.singleOrNull()
             ?.toType(IRTree.ClassName("", name), irTypes, definitions),
@@ -142,19 +169,19 @@ private fun generate(
         fault = operation.responses[statusCodes.fault]?.schema?.let {
             val ref = it.ref
             val ir = (
-                if (ref != null) {
-                    irTypes.find(ref)
-                } else {
-                    it.toIr(
-                        null,
-                        null,
-                        irTypes,
-                        definitions,
-                    )
-                } as IRTree.NormalClass
-                ).copy(
-                isFault = true,
-            )
+                    if (ref != null) {
+                        irTypes.find(ref)
+                    } else {
+                        it.toIr(
+                            null,
+                            null,
+                            irTypes,
+                            definitions,
+                        )
+                    } as IRTree.NormalClass
+                    ).copy(
+                    isFault = true,
+                )
             irTypes[IRTree.ClassName(ir.packageName, ir.name)] = ir
             ir
         },
@@ -305,9 +332,9 @@ private val OAuth2Token = IRTree.NormalClass(
 private fun Definition.isUnit(): Boolean {
     val additionalProperties = additionalProperties
     return type == Definition.Type.Object &&
-        properties.isEmpty() &&
-        (additionalProperties == null || additionalProperties.isUnit()) &&
-        ref == null && allOf.isEmpty()
+            properties.isEmpty() &&
+            (additionalProperties == null || additionalProperties.isUnit()) &&
+            ref == null && allOf.isEmpty()
 }
 
 private fun Parameter.toParameter(

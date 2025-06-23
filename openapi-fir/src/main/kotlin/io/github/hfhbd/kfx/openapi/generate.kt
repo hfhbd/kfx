@@ -1,23 +1,50 @@
 package io.github.hfhbd.kfx.openapi
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IRTree.Literal.*
+import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.openapi.OpenApi.Components.*
+import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.*
 import kotlinx.datetime.Instant
-import java.nio.file.*
+import java.io.File
 import java.util.*
 import kotlin.collections.get
 import kotlin.collections.iterator
-import kotlin.io.path.*
 import kotlin.text.removePrefix
 import kotlin.time.Duration
 import kotlin.uuid.Uuid
 
-fun Path.createIr(
-    openapiTransformers: List<OpenApiTransformer>,
+fun generate(
+    openapiFile: File,
+    outputFolder: File,
+    firTransformers: Iterable<OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java),
+    transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
+    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
+    codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
+    codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
+) {
+    val irTree = openapiFile.createIr(
+        firTransformers,
+    )
+
+    val codeGenerator = irTree.toCodeGen(
+        transformerFactories,
+        codeGenCreator,
+        codeGenTransformer,
+    )
+    for (codeGeneratorFactory in codeGenerators) {
+        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+    }
+}
+
+private fun File.createIr(
+    openapiTransformers: Iterable<OpenApiTransformer>,
 ): IRTree {
     var openapi: OpenApi = json.decodeFromString(readText())
     for (openapiTransformer in openapiTransformers) {

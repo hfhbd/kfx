@@ -1,7 +1,7 @@
 package io.github.hfhbd.kfx.codegen
 
-import java.nio.file.Path
+import java.io.File
 
 fun interface CodeGenerator {
-    fun generate(codeGenTree: CodeGenTree, outputFolder: Path)
+    fun generate(codeGenTree: CodeGenTree, outputFolder: File)
 }

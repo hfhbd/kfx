@@ -3,12 +3,47 @@ package io.github.hfhbd.kfx.wsdl
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.ir.IRTree
 import nl.adaptivity.xmlutil.core.*
-import java.nio.file.*
 import kotlin.collections.iterator
-import kotlin.io.path.*
+import kotlin.io.path.reader
+import kotlin.io.path.readText
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenerator
+import io.github.hfhbd.kfx.ir.IrTransformer
+import io.github.hfhbd.kfx.toCodeGen
+import java.io.File
+import java.util.ServiceLoader
 
-fun Path.createIr(
-    wsdlTransformerFactories: List<WsdlTransformerFactory>,
+fun generate(
+    wsdlFile: File,
+    schemaFiles: Set<File>,
+    outputFolder: File,
+    firTransformerFactories: Iterable<WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java),
+    transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
+    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
+    codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
+    codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
+) {
+    val irTree = wsdlFile.createIr(
+        firTransformerFactories,
+    ) { filename: String ->
+        val file = schemaFiles.singleOrNull { it.name == filename } ?: error(
+            "Expected $filename in ${schemaFiles.map { it.name }}",
+        )
+        file.toPath()
+    }
+    val codeGenerator = irTree.toCodeGen(
+        transformerFactories,
+        codeGenCreator,
+        codeGenTransformer,
+    )
+    for (codeGeneratorFactory in codeGenerators) {
+        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+    }
+}
+
+internal fun Path.createIr(
+    wsdlTransformerFactories: Iterable<WsdlTransformerFactory>,
     import: (String) -> Path,
 ): IRTree {
     val xml = xml(
@@ -53,7 +88,7 @@ private sealed interface Classes {
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
-fun WSDL.toIr(
+internal fun WSDL.toIr(
     getNS: (String) -> String?,
     import: (String) -> Schema,
 ): IRTree {

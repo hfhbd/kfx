@@ -8,9 +8,9 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 
 public fun IRTree.toCodeGen(
-    transformers: List<IrTransformer>,
+    transformers: Iterable<IrTransformer>,
     codeGenCreator: CodeGenCreator,
-    codeGenTransformers: List<CodeGenTransformer>,
+    codeGenTransformers: Iterable<CodeGenTransformer>,
 ): CodeGenTree {
     var irTree = this
     for (transformer in transformers) {
