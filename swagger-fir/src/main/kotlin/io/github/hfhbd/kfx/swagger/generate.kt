@@ -12,8 +12,6 @@ import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.serialization.json.*
 import java.io.File
 import java.util.ServiceLoader
-import kotlin.collections.get
-import kotlin.collections.iterator
 
 fun generate(
     swaggerFile: File,
@@ -63,7 +61,7 @@ internal fun Swagger.toIr(): IRTree {
             Definition.Type.Number,
             Definition.Type.String,
             Definition.Type.Null, Definition.Type.File,
-                -> continue
+            -> continue
         }
     }
 
@@ -122,10 +120,10 @@ private fun generate(
     val statusCodes = operation.responses.keys.getStatusCodes()
 
     val name = operation.operationId ?: (
-            method.toString() + path.split("/").joinToString("") {
-                it.replaceFirstChar { it.uppercaseChar() }
-            }.replaceFirstChar { it.uppercaseChar() }
-            )
+        method.toString() + path.split("/").joinToString("") {
+            it.replaceFirstChar { it.uppercaseChar() }
+        }.replaceFirstChar { it.uppercaseChar() }
+        )
 
     return IRTree.Operation(
         packageName = "",
@@ -142,7 +140,7 @@ private fun generate(
                 Parameter.Position.Path,
                 Parameter.Position.Header,
                 null,
-                    -> null
+                -> null
             }
         }.singleOrNull()
             ?.toType(IRTree.ClassName("", name), irTypes, definitions),
@@ -169,19 +167,19 @@ private fun generate(
         fault = operation.responses[statusCodes.fault]?.schema?.let {
             val ref = it.ref
             val ir = (
-                    if (ref != null) {
-                        irTypes.find(ref)
-                    } else {
-                        it.toIr(
-                            null,
-                            null,
-                            irTypes,
-                            definitions,
-                        )
-                    } as IRTree.NormalClass
-                    ).copy(
-                    isFault = true,
-                )
+                if (ref != null) {
+                    irTypes.find(ref)
+                } else {
+                    it.toIr(
+                        null,
+                        null,
+                        irTypes,
+                        definitions,
+                    )
+                } as IRTree.NormalClass
+                ).copy(
+                isFault = true,
+            )
             irTypes[IRTree.ClassName(ir.packageName, ir.name)] = ir
             ir
         },
@@ -332,9 +330,9 @@ private val OAuth2Token = IRTree.NormalClass(
 private fun Definition.isUnit(): Boolean {
     val additionalProperties = additionalProperties
     return type == Definition.Type.Object &&
-            properties.isEmpty() &&
-            (additionalProperties == null || additionalProperties.isUnit()) &&
-            ref == null && allOf.isEmpty()
+        properties.isEmpty() &&
+        (additionalProperties == null || additionalProperties.isUnit()) &&
+        ref == null && allOf.isEmpty()
 }
 
 private fun Parameter.toParameter(
