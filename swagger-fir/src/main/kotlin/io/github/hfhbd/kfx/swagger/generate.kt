@@ -1,17 +1,42 @@
 package io.github.hfhbd.kfx.swagger
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.Swagger.*
+import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.serialization.json.*
-import java.nio.file.Path
-import kotlin.collections.get
-import kotlin.collections.iterator
-import kotlin.io.path.*
+import java.io.File
+import java.util.ServiceLoader
 
-fun Path.createIr(
-    swaggerTransformers: List<SwaggerTransformer>,
+fun generate(
+    swaggerFile: File,
+    outputFolder: File,
+    codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
+    firTransformers: Iterable<SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java),
+    transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
+    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
+    codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
+) {
+    val irTree = swaggerFile.createIr(
+        firTransformers,
+    )
+    val codeGenerator = irTree.toCodeGen(
+        transformerFactories,
+        codeGenCreator,
+        codeGenTransformer,
+    )
+    for (codeGeneratorFactory in codeGenerators) {
+        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+    }
+}
+
+private fun File.createIr(
+    swaggerTransformers: Iterable<SwaggerTransformer>,
 ): IRTree {
     var swagger: Swagger = json.decodeFromString(readText())
     for (swaggerTransformer in swaggerTransformers) {
@@ -86,7 +111,7 @@ internal fun Swagger.toIr(): IRTree {
 
 private fun generate(
     path: String,
-    operation: Swagger.Path,
+    operation: Path,
     method: IRTree.Operation.HttpMethod,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     parameters: Map<String, Parameter>,
