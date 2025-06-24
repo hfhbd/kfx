@@ -28,7 +28,7 @@ abstract class StoreVersion : DefaultTask() {
     }
 
     @TaskAction
-    fun action() {
+    internal fun action() {
         File(outputDirectory.get().asFile, "Version.kt").writeText(
             """
             |package io.github.hfhbd.kfx

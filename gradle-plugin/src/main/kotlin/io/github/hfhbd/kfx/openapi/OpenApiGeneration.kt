@@ -19,8 +19,8 @@ internal abstract class OpenApiGeneration : WorkAction<OpenApiGeneration.OpenApi
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
         generate(
-            openapiFile = parameters.openapiFile.asFile.get(),
-            outputFolder = parameters.outputFolder.asFile.get(),
+            openapiFile = parameters.openapiFile.asFile.get().toPath(),
+            outputFolder = parameters.outputFolder.asFile.get().toPath(),
             transformerFactories = if (packageName != null) {
                 listOf(PackageName(packageName)) + transformerFactories
             } else {

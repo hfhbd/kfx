@@ -5,11 +5,11 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
-import java.io.File
+import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
 class KtorClientGenerator : KotlinPoetCodeGenerator {
-    override fun generate(codeGenTree: CodeGenTree, outputFolder: File) {
+    override fun generate(codeGenTree: CodeGenTree, outputFolder: Path) {
         val files = generateFileSpec(codeGenTree)
         for (file in files) {
             file.writeTo(outputFolder)

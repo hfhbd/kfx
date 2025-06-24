@@ -10,12 +10,12 @@ import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.Swagger.*
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.serialization.json.*
-import java.io.File
 import java.util.ServiceLoader
+import kotlin.io.path.readText
 
 fun generate(
-    swaggerFile: File,
-    outputFolder: File,
+    swaggerFile: java.nio.file.Path,
+    outputFolder: java.nio.file.Path,
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
     firTransformers: Iterable<SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
@@ -35,7 +35,7 @@ fun generate(
     }
 }
 
-private fun File.createIr(
+private fun java.nio.file.Path.createIr(
     swaggerTransformers: Iterable<SwaggerTransformer>,
 ): IRTree {
     var swagger: Swagger = json.decodeFromString(readText())

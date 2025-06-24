@@ -15,9 +15,9 @@ internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameter
 
     override fun execute() {
         generate(
-            wsdlFile = parameters.wsdlFile.asFile.get(),
-            schemaFiles = parameters.schemaFiles.files,
-            outputFolder = parameters.outputFolder.asFile.get(),
+            wsdlFile = parameters.wsdlFile.asFile.get().toPath(),
+            schemaFiles = parameters.schemaFiles.map { it.toPath() },
+            outputFolder = parameters.outputFolder.asFile.get().toPath(),
         )
     }
 }

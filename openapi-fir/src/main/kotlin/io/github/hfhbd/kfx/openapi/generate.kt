@@ -12,17 +12,18 @@ import io.github.hfhbd.kfx.openapi.OpenApi.Components.*
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.*
 import kotlinx.datetime.Instant
-import java.io.File
+import java.nio.file.Path
 import java.util.*
 import kotlin.collections.get
 import kotlin.collections.iterator
+import kotlin.io.path.readText
 import kotlin.text.removePrefix
 import kotlin.time.Duration
 import kotlin.uuid.Uuid
 
 fun generate(
-    openapiFile: File,
-    outputFolder: File,
+    openapiFile: Path,
+    outputFolder: Path,
     firTransformers: Iterable<OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
     codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
@@ -43,7 +44,7 @@ fun generate(
     }
 }
 
-private fun File.createIr(
+private fun Path.createIr(
     openapiTransformers: Iterable<OpenApiTransformer>,
 ): IRTree {
     var openapi: OpenApi = json.decodeFromString(readText())
