@@ -19,8 +19,8 @@ internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.Swagger
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
         generate(
-            swaggerFile = parameters.swaggerFile.asFile.get(),
-            outputFolder = parameters.outputFolder.asFile.get(),
+            swaggerFile = parameters.swaggerFile.asFile.get().toPath(),
+            outputFolder = parameters.outputFolder.asFile.get().toPath(),
             transformerFactories = if (packageName != null) {
                 listOf(PackageName(packageName)) + transformerFactories
             } else {

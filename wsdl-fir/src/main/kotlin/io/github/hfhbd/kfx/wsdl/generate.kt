@@ -8,13 +8,16 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.toCodeGen
 import nl.adaptivity.xmlutil.core.*
-import java.io.File
+import java.nio.file.Path
 import java.util.ServiceLoader
+import kotlin.io.path.name
+import kotlin.io.path.readText
+import kotlin.io.path.reader
 
 fun generate(
-    wsdlFile: File,
-    schemaFiles: Set<File>,
-    outputFolder: File,
+    wsdlFile: Path,
+    schemaFiles: Iterable<Path>,
+    outputFolder: Path,
     firTransformerFactories: Iterable<WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
     codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
@@ -39,9 +42,9 @@ fun generate(
     }
 }
 
-internal fun File.createIr(
+internal fun Path.createIr(
     wsdlTransformerFactories: Iterable<WsdlTransformerFactory>,
-    import: (String) -> File,
+    import: (String) -> Path,
 ): IRTree {
     val xml = xml(
         wsdlTransformerFactories.map { it.serializerModule() },
