@@ -8,7 +8,7 @@ serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cor
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "0.91.1" }
 
-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.2" }
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.0-0.6.x-compat" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.2.0" }
 
 ktor-serialization-kotlinx-xml = { module = "io.ktor:ktor-serialization-kotlinx-xml", version.ref = "ktor" }
