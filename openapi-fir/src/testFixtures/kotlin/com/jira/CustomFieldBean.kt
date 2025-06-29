@@ -5,7 +5,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

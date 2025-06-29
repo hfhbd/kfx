@@ -48,7 +48,7 @@ fun CodeGenTree.Expression.toCodeBlock(
 
     is CodeGenTree.Expression.InstantLiteral -> CodeBlock.of(
         "%T.parse(%S)",
-        ClassName("kotlinx.datetime", "Instant"),
+        ClassName("kotlin.time", "Instant"),
         value.toString(),
     )
 
@@ -174,7 +174,7 @@ fun CodeGenTree.Type.Builtin.toPoetType(): ClassName = when (this) {
     CodeGenTree.Type.Builtin.DOUBLE -> DOUBLE
     CodeGenTree.Type.Builtin.STRING -> STRING
     CodeGenTree.Type.DateType.DATE -> ClassName("kotlinx.datetime", "LocalDate")
-    CodeGenTree.Type.DateType.INSTANT -> ClassName("kotlinx.datetime", "Instant")
+    CodeGenTree.Type.DateType.INSTANT -> ClassName("kotlin.time", "Instant")
 
     CodeGenTree.Type.Builtin.FILE -> error("This class needs special support")
     CodeGenTree.Type.Builtin.BYTEARRAY -> BYTE_ARRAY

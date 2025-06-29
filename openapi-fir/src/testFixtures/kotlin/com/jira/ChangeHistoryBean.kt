@@ -2,7 +2,7 @@ package com.jira
 
 import kotlin.String
 import kotlin.collections.List
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
