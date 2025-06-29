@@ -16,7 +16,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "simple"
+rootProject.name = "software-types"
+
+plugins {
+    id("empty")
+}
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

@@ -9,7 +9,6 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
-import org.gradle.kotlin.dsl.register
 import javax.inject.Inject
 
 abstract class Wsdl : Kfx {
@@ -31,17 +30,17 @@ abstract class Wsdl : Kfx {
         dependencies.compiler.add("$GROUP:wsdl-fir:$VERSION")
 
         val kfxWsdl = configurations.dependencyScope("kfxWsdl$serviceName") {
-            fromDependencyCollector(this@Wsdl.dependencies.compiler)
+            it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
         }
         val kfxWsdlClasspath = configurations.resolvable("kfxWsdlClasspath$serviceName") {
-            extendsFrom(kfxWsdl.get())
+            it.extendsFrom(kfxWsdl.get())
         }
         sourceSet.srcDir(
-            tasks.register("convertWsdlFiles$serviceName", ConvertWsdlFiles::class) {
-                classpath.from(kfxWsdlClasspath)
-                wsdlFiles.from(this@Wsdl.wsdlFiles)
-                schemaFiles.from(this@Wsdl.schemaFiles)
-                outputFolder.convention(project.layout.buildDirectory.dir("generated/kfx/wsdl/$serviceName"))
+            tasks.register("convertWsdlFiles$serviceName", ConvertWsdlFiles::class.java) {
+                it.classpath.from(kfxWsdlClasspath)
+                it.wsdlFiles.from(this@Wsdl.wsdlFiles)
+                it.schemaFiles.from(this@Wsdl.schemaFiles)
+                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/wsdl/$serviceName"))
             },
         )
     }

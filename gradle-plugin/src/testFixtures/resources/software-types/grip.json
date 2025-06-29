@@ -1,0 +1,209 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FOO",
+    "description": "FOO Platform",
+    "version": "unspecified"
+  },
+  "tags": [
+    {
+      "name": "TAG",
+      "description": "Some tag"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://foo.com"
+    },
+    {
+      "url": "https://bar.com"
+    }
+  ],
+  "paths": {
+    "/http/foo": {
+      "head": {
+        "operationId": "fooCSRF",
+        "summary": "Some Summary",
+        "tags": [
+          "Tag"
+        ],
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "FETCH"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The CSRF Token for Foo",
+            "headers": {
+              "X-CSRF-Token": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Unexpected Error",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/io.github.hfhbd.Fault"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "Foo",
+        "summary": "Some Foo Description",
+        "tags": [
+          "TAG"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": true,
+          "content": {
+            "application/json; charset=utf-8": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/io.github.hfhbd.Foo"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "description": "The CSRF Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-CORRELATION-ID",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {
+              "logid": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "text/csv; charset=utf-8": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/io.github.hfhbd.FooCsv"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Unexpected Error",
+            "headers": {
+              "logid": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/io.github.hfhbd.Fault"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "io.github.hfhbd.Foo": {
+        "type": "object",
+        "required": [
+          "foo"
+        ],
+        "properties": {
+          "foo": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "description": "Some sample data"
+      },
+      "io.github.hfhbd.FooCsv": {
+        "type": "object",
+        "required": [
+          "FOO"
+        ],
+        "properties": {
+          "FOO": {
+            "type": "string",
+            "minLength": 21,
+            "maxLength": 21
+          }
+        },
+        "description": "Output of the invoices sent to VW SK SAP system using RVS and CSV"
+      },
+      "io.github.hfhbd.Fault": {
+        "type": "object",
+        "required": [
+          "httpReturnCode",
+          "message"
+        ],
+        "properties": {
+          "httpReturnCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "input": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "stackTrace": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

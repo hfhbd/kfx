@@ -35,15 +35,15 @@ abstract class ConvertWsdlFiles : DefaultTask() {
     @TaskAction
     internal fun generate() {
         val workQueue = workerExecutor.classLoaderIsolation {
-            classpath.from(this@ConvertWsdlFiles.classpath)
+            it.classpath.from(this@ConvertWsdlFiles.classpath)
         }
         for (wsdlFolder in wsdlFiles) {
             for (wsdlFile in wsdlFolder.walk()) {
                 if (wsdlFile.isFile) {
                     workQueue.submit(WsdlGeneration::class.java) {
-                        this.wsdlFile.set(wsdlFile)
-                        this.schemaFiles.setFrom(this@ConvertWsdlFiles.schemaFiles)
-                        this.outputFolder.set(this@ConvertWsdlFiles.outputFolder)
+                        it.wsdlFile.set(wsdlFile)
+                        it.schemaFiles.setFrom(schemaFiles)
+                        it.outputFolder.set(outputFolder)
                     }
                 }
             }
