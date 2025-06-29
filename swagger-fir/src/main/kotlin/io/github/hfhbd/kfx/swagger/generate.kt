@@ -583,7 +583,10 @@ private fun MutableMap<String, IRTree.Member>.convertProperty(
         serialName = null,
         documentation = property.description,
         xmlType = null,
-        requirements = emptyList(),
+        requirements = listOfNotNull(
+            property.maxLength?.let { IRTree.Member.Requirement.MaxLength(it) },
+            property.minLength?.let { IRTree.Member.Requirement.MinLength(it) },
+        ),
         isOverride = false,
     )
 

@@ -665,7 +665,20 @@ private fun Map<String, Schema>.toMembers(
             serialName = null,
             documentation = property.description,
             xmlType = null,
-            requirements = emptyList(),
+            requirements = listOfNotNull(
+                if (property is Schema.STRING) {
+                    property.maxLength?.let {
+                        IRTree.Member.Requirement.MaxLength(it)
+                    }
+                } else {
+                    null
+                },
+                if (property is Schema.STRING) {
+                    property.minLength?.let { IRTree.Member.Requirement.MinLength(it) }
+                } else {
+                    null
+                },
+            ),
             isOverride = false,
         )
     }

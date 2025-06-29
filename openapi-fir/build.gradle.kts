@@ -37,7 +37,11 @@ testing.suites {
         }
     }
 
-    register("a", JvmTestSuite::class)
+    register("a", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.validation)
+        }
+    }
     register("sealed", JvmTestSuite::class)
 
     register("jira", JvmTestSuite::class) {
