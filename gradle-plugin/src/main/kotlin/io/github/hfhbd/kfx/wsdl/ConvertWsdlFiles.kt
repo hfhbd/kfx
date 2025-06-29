@@ -24,7 +24,7 @@ abstract class ConvertWsdlFiles : DefaultTask() {
     abstract val schemaFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
-    abstract val outputFolder: DirectoryProperty
+    abstract val outputDirectory: DirectoryProperty
 
     @get:Inject
     internal abstract val workerExecutor: WorkerExecutor
@@ -37,13 +37,13 @@ abstract class ConvertWsdlFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertWsdlFiles.classpath)
         }
-        for (wsdlFolder in wsdlFiles) {
-            for (wsdlFile in wsdlFolder.walk()) {
+        for (wsdlDirectory in wsdlFiles) {
+            for (wsdlFile in wsdlDirectory.walk()) {
                 if (wsdlFile.isFile) {
                     workQueue.submit(WsdlGeneration::class.java) {
                         it.wsdlFile.set(wsdlFile)
                         it.schemaFiles.setFrom(schemaFiles)
-                        it.outputFolder.set(outputFolder)
+                        it.outputDirectory.set(outputDirectory)
                     }
                 }
             }

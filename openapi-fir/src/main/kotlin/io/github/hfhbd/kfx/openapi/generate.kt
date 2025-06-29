@@ -11,26 +11,27 @@ import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.openapi.OpenApi.Components.*
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.json.decodeFromStream
+import java.io.InputStream
 import java.nio.file.Path
 import java.util.*
 import kotlin.collections.get
 import kotlin.collections.iterator
-import kotlin.io.path.readText
 import kotlin.text.removePrefix
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 fun generate(
-    openapiFile: Path,
-    outputFolder: Path,
+    openApiFile: InputStream,
+    outputDirectory: Path,
     firTransformers: Iterable<OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
     codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
     codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
 ) {
-    val irTree = openapiFile.createIr(
+    val irTree = openApiFile.createIr(
         firTransformers,
     )
 
@@ -40,14 +41,14 @@ fun generate(
         codeGenTransformer,
     )
     for (codeGeneratorFactory in codeGenerators) {
-        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+        codeGeneratorFactory.generate(codeGenerator, outputDirectory)
     }
 }
 
-private fun Path.createIr(
+private fun InputStream.createIr(
     openapiTransformers: Iterable<OpenApiTransformer>,
 ): IRTree {
-    var openapi: OpenApi = json.decodeFromString(readText())
+    var openapi = json.decodeFromStream(OpenApi.serializer(), this)
     for (openapiTransformer in openapiTransformers) {
         openapi = openapiTransformer(openapi)
     }
@@ -55,7 +56,7 @@ private fun Path.createIr(
     return irTree
 }
 
-internal fun OpenApi.toIr(): IRTree {
+private fun OpenApi.toIr(): IRTree {
     val irTypes = mutableMapOf<String, IRTree.Class>()
     for ((name, type) in components.schemas) {
         when (type) {
@@ -189,6 +190,31 @@ private fun OpenApi.Operation.toIr(
     }
 
     val name = id.toCamelCase()
+    val inputSchema = requestBody?.content?.values?.first()?.schema?.takeUnless { it.isUnit() }
+    var input = inputSchema?.toIr(
+        parentName = name,
+        name = name,
+        irTypes,
+    )
+    if (input != null && input is IRTree.Class && input.qName !in irTypes) {
+        input = when (input) {
+            is IRTree.Enum -> input.copy(name = input.name + "Request")
+            is IRTree.NormalClass -> input.copy(name = input.name + "Request")
+        }
+        irTypes[id + "Request"] = input
+    }
+    var output = responses[statusCodes.success]?.toIr(
+        name,
+        componentsResponses,
+        irTypes,
+    )
+    if (output != null && output is IRTree.Class && output.qName !in irTypes) {
+        output = when (output) {
+            is IRTree.Enum -> output.copy(name = output.name + "Response")
+            is IRTree.NormalClass -> output.copy(name = output.name + "Response")
+        }
+        irTypes[id + "Response"] = output
+    }
     return IRTree.Operation(
         packageName = "",
         name = name.replaceFirstChar { it.lowercase() },
@@ -197,17 +223,9 @@ private fun OpenApi.Operation.toIr(
         location = null,
         address = null,
         path = path.replace("{", "\${"),
-        input = requestBody?.content?.values?.first()?.schema?.takeUnless { it.isUnit() }?.toIr(
-            parentName = name,
-            name = name,
-            irTypes,
-        ),
+        input = input,
         inputContentType = requestBody?.content?.entries?.first()?.key?.let { ContentType.fromString(it) },
-        output = responses[statusCodes.success]?.toIr(
-            name,
-            componentsResponses,
-            irTypes,
-        ),
+        output = output,
         outputContentType = responses[statusCodes.success]?.content?.entries?.firstOrNull()?.key?.let {
             ContentType.fromString(it)
         },
@@ -521,7 +539,8 @@ private fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(t
     it.uppercaseChar()
 }
 
-private fun Schema.isUnit(): Boolean = this is Schema.OBJECT && ref == null && properties.isEmpty() && additionalPropertiesSchema == null
+private fun Schema.isUnit(): Boolean =
+    this is Schema.OBJECT && ref == null && properties.isEmpty() && additionalPropertiesSchema == null
 
 private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName {
     return (ref?.removePrefix("#/components/schemas/") ?: name!!).let { name ->
@@ -545,7 +564,7 @@ private fun Schema.OBJECT.toIr(
 ): IRTree.Type {
     val resolvedRef = asClassName(name)
     val discriminator = discriminator?.propertyName
-    if (additionalPropertiesSchema != null) {
+    if (additionalPropertiesSchema != null && properties.isEmpty()) {
         return IRTree.Type.MAP(
             key = IRTree.Type.Builtin.STRING,
             value = additionalPropertiesSchema!!.toIr(

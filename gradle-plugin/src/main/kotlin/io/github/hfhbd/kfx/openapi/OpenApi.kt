@@ -42,7 +42,9 @@ abstract class OpenApi : Kfx {
             tasks.register("convertOpenApiFiles$serviceName", ConvertOpenApiFiles::class.java) {
                 it.classpath.from(kfxOpenApiClasspath)
                 it.openapiFiles.from(files)
-                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/openapi/$serviceName/"))
+                it.outputDirectory.convention(
+                    it.project.layout.buildDirectory.dir("generated/kfx/openapi/$serviceName/"),
+                )
                 it.packageName.set(packageName)
             },
         )

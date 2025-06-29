@@ -7,4 +7,5 @@ dependencies {
     api(libs.datetime)
     
     testFixturesApi(testFixtures(projects.wsdlFir))
+    testFixturesApi(kotlin("test-junit5"))
 }

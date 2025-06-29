@@ -6,22 +6,48 @@ dependencies {
     api(projects.core)
     api(projects.swaggerModel)
 
-    testFixturesApi(libs.ktor.client.core)
-    testFixturesApi(libs.ktor.client.auth)
-    testFixturesApi(libs.ktor.server.core)
-    testFixturesApi(libs.ktor.server.content.negotiation)
-    testFixturesApi(libs.ktor.serialization.kotlinx.json)
-    testFixturesApi(projects.oauth2Runtime)
-    testFixturesApi(testFixtures(projects.swaggerModel))
-
-    testImplementation(projects.kotlin)
-    testImplementation(projects.ktorClient)
-    testImplementation(projects.ktorServer)
-    testImplementation(projects.creatorKotlinxjson)
-    testImplementation(projects.irPackagename)
-    testImplementation(projects.irOdata)
+    testFixturesImplementation(testFixtures(projects.core))
 }
 
-tasks.test {
-    environment("testFixtures", layout.projectDirectory.dir("src/testFixtures").asFile.path)
+testing.suites {
+    withType(JvmTestSuite::class) {
+        useKotlinTest()
+
+        dependencies {
+            implementation(testFixtures(project()))
+
+            implementation(projects.kotlin)
+            implementation(projects.creatorKotlinxjson)
+            implementation(projects.ktorClient)
+            implementation(projects.ktorServer)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.server.core)
+            implementation(projects.oauth2Runtime)
+
+            implementation(testFixtures(projects.swaggerModel))
+        }
+        targets.configureEach {
+            tasks.check {
+                dependsOn(testTask)
+            }
+            testTask {
+                outputs.dir("build/kfx-tests/${this@withType.name}")
+            }
+        }
+    }
+
+    register("leanix", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.irPackagename)
+            implementation(projects.oauth2Runtime)
+        }
+    }
+    register("sapci", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.irPackagename)
+            implementation(projects.irOdata)
+        }
+    }
 }

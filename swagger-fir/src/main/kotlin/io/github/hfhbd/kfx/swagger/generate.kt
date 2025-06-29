@@ -10,12 +10,12 @@ import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.Swagger.*
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.serialization.json.*
+import java.io.InputStream
 import java.util.ServiceLoader
-import kotlin.io.path.readText
 
 fun generate(
-    swaggerFile: java.nio.file.Path,
-    outputFolder: java.nio.file.Path,
+    swaggerFile: InputStream,
+    outputDirectory: java.nio.file.Path,
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
     firTransformers: Iterable<SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
@@ -31,14 +31,14 @@ fun generate(
         codeGenTransformer,
     )
     for (codeGeneratorFactory in codeGenerators) {
-        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+        codeGeneratorFactory.generate(codeGenerator, outputDirectory)
     }
 }
 
-private fun java.nio.file.Path.createIr(
+private fun InputStream.createIr(
     swaggerTransformers: Iterable<SwaggerTransformer>,
 ): IRTree {
-    var swagger: Swagger = json.decodeFromString(readText())
+    var swagger = json.decodeFromStream(Swagger.serializer(), this)
     for (swaggerTransformer in swaggerTransformers) {
         swagger = swaggerTransformer(swagger)
     }
@@ -46,7 +46,7 @@ private fun java.nio.file.Path.createIr(
     return irTree
 }
 
-internal fun Swagger.toIr(): IRTree {
+private fun Swagger.toIr(): IRTree {
     val irTypes = mutableMapOf<IRTree.ClassName, IRTree.Class>()
     for ((fullName, type) in definitions) {
         when (type.type) {

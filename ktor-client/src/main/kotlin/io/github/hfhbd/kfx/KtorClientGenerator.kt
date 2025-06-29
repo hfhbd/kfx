@@ -9,10 +9,10 @@ import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
 class KtorClientGenerator : KotlinPoetCodeGenerator {
-    override fun generate(codeGenTree: CodeGenTree, outputFolder: Path) {
+    override fun generate(codeGenTree: CodeGenTree, outputDirectory: Path) {
         val files = generateFileSpec(codeGenTree)
         for (file in files) {
-            file.writeTo(outputFolder)
+            file.writeTo(outputDirectory)
         }
     }
 
