@@ -1,10 +1,10 @@
 package io.github.hfhbd.kfx.ir
 
 import io.github.hfhbd.kfx.ContentType
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 import kotlin.time.Duration
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @Serializable

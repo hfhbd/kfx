@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(libs.ktor.client.core)
-    implementation(libs.datetime)
     implementation(libs.serialization.json)
 }
 

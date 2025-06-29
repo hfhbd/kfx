@@ -1,8 +1,8 @@
 package io.github.hfhbd.kfx.soap
 
-import kotlinx.datetime.*
 import kotlinx.serialization.*
 import nl.adaptivity.xmlutil.serialization.*
+import kotlin.time.Instant
 import kotlin.uuid.*
 
 @Serializable

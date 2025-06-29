@@ -7,6 +7,9 @@ plugins {
 
 kotlin {
     jvmToolchain(8)
+    compilerOptions {
+        optIn.add("kotlin.time.ExperimentalTime")
+    }
 
     jvm()
     js {
