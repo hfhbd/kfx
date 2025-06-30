@@ -39,15 +39,15 @@ abstract class ConvertSwaggerFiles : DefaultTask() {
     @TaskAction
     internal fun generate() {
         val workQueue = workerExecutor.classLoaderIsolation {
-            classpath.from(this@ConvertSwaggerFiles.classpath)
+            it.classpath.from(this@ConvertSwaggerFiles.classpath)
         }
         for (swaggerFolder in swaggerFiles) {
             for (swaggerFile in swaggerFolder.walk()) {
                 if (swaggerFile.isFile) {
                     workQueue.submit(SwaggerGeneration::class.java) {
-                        this.packageName.set(this@ConvertSwaggerFiles.packageName)
-                        this.swaggerFile.set(swaggerFile)
-                        this.outputFolder.set(this@ConvertSwaggerFiles.outputFolder)
+                        it.packageName.set(packageName)
+                        it.swaggerFile.set(swaggerFile)
+                        it.outputFolder.set(outputFolder)
                     }
                 }
             }

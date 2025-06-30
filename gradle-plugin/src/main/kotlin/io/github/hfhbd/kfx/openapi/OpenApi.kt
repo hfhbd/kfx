@@ -10,7 +10,6 @@ import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
-import org.gradle.kotlin.dsl.register
 import javax.inject.Inject
 
 abstract class OpenApi : Kfx {
@@ -34,17 +33,17 @@ abstract class OpenApi : Kfx {
         dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
 
         val kfxOpenApi = configurations.dependencyScope("kfxOpenApi$serviceName") {
-            fromDependencyCollector(this@OpenApi.dependencies.compiler)
+            it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
         }
         val kfxOpenApiClasspath = configurations.resolvable("kfxOpenApiClasspath$serviceName") {
-            extendsFrom(kfxOpenApi.get())
+            it.extendsFrom(kfxOpenApi.get())
         }
         sourceSet.srcDir(
-            tasks.register<ConvertOpenApiFiles>("convertOpenApiFiles$serviceName") {
-                classpath.from(kfxOpenApiClasspath)
-                openapiFiles.from(this@OpenApi.files)
-                outputFolder.convention(project.layout.buildDirectory.dir("generated/kfx/openapi/$serviceName/"))
-                packageName.set(this@OpenApi.packageName)
+            tasks.register("convertOpenApiFiles$serviceName", ConvertOpenApiFiles::class.java) {
+                it.classpath.from(kfxOpenApiClasspath)
+                it.openapiFiles.from(files)
+                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/openapi/$serviceName/"))
+                it.packageName.set(packageName)
             },
         )
     }

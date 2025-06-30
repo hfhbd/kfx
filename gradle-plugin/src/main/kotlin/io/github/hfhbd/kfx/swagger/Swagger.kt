@@ -10,7 +10,6 @@ import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
-import org.gradle.kotlin.dsl.register
 import javax.inject.Inject
 
 abstract class Swagger : Kfx {
@@ -34,17 +33,17 @@ abstract class Swagger : Kfx {
         dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
 
         val kfxSwagger = configurations.dependencyScope("kfxSwagger$serviceName") {
-            fromDependencyCollector(this@Swagger.dependencies.compiler)
+            it.fromDependencyCollector(this@Swagger.dependencies.compiler)
         }
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
-            extendsFrom(kfxSwagger.get())
+            it.extendsFrom(kfxSwagger.get())
         }
         sourceSet.srcDir(
-            tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class) {
-                classpath.from(kfxSwaggerClasspath)
-                swaggerFiles.from(this@Swagger.files)
-                outputFolder.convention(project.layout.buildDirectory.dir("generated/kfx/swagger/$serviceName"))
-                packageName.convention(this@Swagger.packageName)
+            tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {
+                it.classpath.from(kfxSwaggerClasspath)
+                it.swaggerFiles.from(files)
+                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/swagger/$serviceName"))
+                it.packageName.convention(packageName)
             },
         )
     }

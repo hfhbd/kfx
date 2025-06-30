@@ -1,5 +1,6 @@
 plugins {
-    `kotlin-dsl`
+    id("java-gradle-plugin")
+    kotlin("jvm")
     id("setup")
     id("publish")
     id("java-test-fixtures")
@@ -42,6 +43,15 @@ gradlePlugin.plugins.configureEach {
     description = "kfx Gradle Plugin"
 }
 
+gradlePlugin.plugins.register("kfx") {
+    id = "io.github.hfhbd.kfx"
+    implementationClass = "io.github.hfhbd.kfx.KfxPlugin"
+}
+gradlePlugin.plugins.register("software-types") {
+    id = "io.github.hfhbd.kfx.software-types"
+    implementationClass = "io.github.hfhbd.kfx.KfxSettingsPlugin"
+}
+
 testing.suites {
     withType(JvmTestSuite::class).configureEach {
         useKotlinTest()
@@ -53,6 +63,8 @@ testing.suites {
             implementation(gradleTestKit())
             implementation(testFixtures(projects.openapiModel))
         }
+
+        gradlePlugin.testSourceSets(sources)
 
         targets.configureEach {
             testTask {
