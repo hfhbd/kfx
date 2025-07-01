@@ -667,14 +667,14 @@ private fun Map<String, Schema>.toMembers(
             xmlType = null,
             requirements = listOfNotNull(
                 if (property is Schema.STRING) {
-                    property.maxLength?.let {
-                        IRTree.Member.Requirement.MaxLength(it)
-                    }
+                    property.minLength?.let { IRTree.Member.Requirement.MinLength(it) }
                 } else {
                     null
                 },
                 if (property is Schema.STRING) {
-                    property.minLength?.let { IRTree.Member.Requirement.MinLength(it) }
+                    property.maxLength?.let {
+                        IRTree.Member.Requirement.MaxLength(it)
+                    }
                 } else {
                     null
                 },
