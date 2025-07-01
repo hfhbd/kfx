@@ -38,15 +38,14 @@ fun generate(
 private fun InputStream.createIr(
     swaggerTransformers: Iterable<SwaggerTransformer>,
 ): IRTree {
-    var swagger = json.decodeFromStream(Swagger.serializer(), this)
-    for (swaggerTransformer in swaggerTransformers) {
-        swagger = swaggerTransformer(swagger)
-    }
-    val irTree = swagger.toIr()
+    val swagger = json.decodeFromStream(Swagger.serializer(), this)
+    val irTree = swagger.toIr(swaggerTransformers)
     return irTree
 }
 
-private fun Swagger.toIr(): IRTree {
+private fun Swagger.toIr(
+    swaggerTransformers: Iterable<SwaggerTransformer>,
+): IRTree {
     val irTypes = mutableMapOf<IRTree.ClassName, IRTree.Class>()
     for ((fullName, type) in definitions) {
         when (type.type) {
@@ -102,11 +101,15 @@ private fun Swagger.toIr(): IRTree {
         }
     }
 
-    return IRTree(
+    var ir = IRTree(
         irTypes.values.toSet(),
         irOperations,
         auth = setOfNotNull(securityDefinitions?.toAuth()),
     )
+    for (swaggerTransformer in swaggerTransformers) {
+        ir = swaggerTransformer(this, ir)
+    }
+    return ir
 }
 
 private fun generate(
