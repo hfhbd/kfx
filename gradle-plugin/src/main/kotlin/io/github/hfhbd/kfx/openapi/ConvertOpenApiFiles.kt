@@ -37,8 +37,8 @@ abstract class ConvertOpenApiFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertOpenApiFiles.classpath)
         }
-        for (outputDirectory in openapiFiles) {
-            for (openapiFile in outputDirectory.walk()) {
+        for (openapiDirectory in openapiFiles) {
+            for (openapiFile in openapiDirectory.walk()) {
                 if (openapiFile.isFile) {
                     workQueue.submit(OpenApiGeneration::class.java) {
                         it.openapiFile.set(openapiFile)
