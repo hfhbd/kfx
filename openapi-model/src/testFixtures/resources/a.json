@@ -157,7 +157,9 @@
                 "properties": {
                     "s": {
                         "type": "string",
-                        "description": "asdf"
+                        "description": "asdf",
+                        "minLength": 2,
+                        "maxLength": 5
                     },
                     "arr": {
                         "type": "array",

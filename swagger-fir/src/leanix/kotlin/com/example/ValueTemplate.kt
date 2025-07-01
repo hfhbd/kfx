@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.SerialName
@@ -14,10 +16,14 @@ public data class ValueTemplate(
   /**
    * An EL expression that evaluates to a single value. Use 'map' to evaluate to whole json object
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val expr: String? = null,
   /**
    * If this regex does not match on the evaluated 'expr' then this value template is ignored. Can not be used with 'map'
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val regexMatch: String? = null,
   /**
    * Allows to modify the evaluated 'expr'. Can not be used with 'map'
@@ -34,5 +40,7 @@ public data class ValueTemplate(
   /**
    * An EL expression that evaluates to an arbitrary data object.
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val `object`: String? = null,
 )

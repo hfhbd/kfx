@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.SerialName
@@ -22,5 +24,7 @@ public data class SubscriptionDeletionScope(
   /**
    * An EL expression to describe the advanced filter settings.
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val advanced: String? = null,
 )

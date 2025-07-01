@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
@@ -19,6 +21,8 @@ public data class PatchTemplate(
   /**
    * Defines the operation that is used. Data can be added or updated
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val op: String? = null,
   /**
    * A list of expressions for multiple values, e.g. for multi select fields

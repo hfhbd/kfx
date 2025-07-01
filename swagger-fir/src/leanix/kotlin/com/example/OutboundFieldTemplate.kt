@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
@@ -16,6 +18,8 @@ public data class OutboundFieldTemplate(
   /**
    * Either 'list' or 'selectFirst'. Defines if the field should be written as a list or as a single element.
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val mode: String? = null,
   /**
    * A list of expressions for multiple values, e.g. for multi select fields
