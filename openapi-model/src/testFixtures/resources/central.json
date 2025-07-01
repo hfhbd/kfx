@@ -518,8 +518,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "$ref": "CheckStatus"
+                  "$ref": "#/components/schemas/CheckStatus"
                 },
                 "examples": {
                   "deployment": {
@@ -662,8 +661,7 @@
             "type": "string"
           },
           "deploymentState": {
-            "type": "object",
-            "$ref": "DeploymentState"
+            "$ref": "#/components/schemas/DeploymentState"
           },
           "purls": {
             "type": "array",
@@ -716,6 +714,12 @@
             "items": {
               "type": "string"
             }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -729,7 +733,7 @@
             "type": "string"
           },
           "deploymentState": {
-            "$ref": "DeploymentState"
+            "$ref": "#/components/schemas/DeploymentState"
           },
           "deploymentType": {
             "type": "string",

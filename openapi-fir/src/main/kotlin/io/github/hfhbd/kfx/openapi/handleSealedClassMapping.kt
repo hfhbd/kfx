@@ -32,7 +32,7 @@ private fun handleSealedClassMapping(
     )
 }
 
-private val IRTree.NormalClass.qName: String
+internal val IRTree.Class.qName: String
     get() = if (packageName.isEmpty()) {
         name
     } else {

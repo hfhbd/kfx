@@ -6,19 +6,48 @@ dependencies {
     api(projects.core)
     api(projects.openapiModel)
 
-    testFixturesApi(libs.ktor.client.core)
-    testFixturesApi(libs.ktor.client.auth)
-    testFixturesApi(libs.ktor.server.core)
-    testFixturesApi(projects.oauth2Runtime)
-    testFixturesApi(testFixtures(projects.openapiModel))
-
-    testImplementation(projects.ktorServer)
-    testImplementation(projects.kotlin)
-    testImplementation(projects.creatorKotlinxjson)
-    testImplementation(projects.irPackagename)
-    testImplementation(projects.ktorClient)
+    testFixturesImplementation(testFixtures(projects.core))
 }
 
-tasks.test {
-    environment("testFixtures", layout.projectDirectory.dir("src/testFixtures").asFile.path)
+testing.suites {
+    withType(JvmTestSuite::class) {
+        useKotlinTest()
+
+        dependencies {
+            implementation(testFixtures(project()))
+
+            implementation(projects.kotlin)
+            implementation(projects.creatorKotlinxjson)
+            implementation(projects.ktorClient)
+            implementation(projects.ktorServer)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.server.core)
+            implementation(projects.oauth2Runtime)
+            implementation(testFixtures(projects.openapiModel))
+        }
+        targets.configureEach {
+            tasks.check {
+                dependsOn(testTask)
+            }
+            testTask {
+                outputs.dir("build/kfx-tests/${this@withType.name}")
+            }
+        }
+    }
+
+    register("a", JvmTestSuite::class)
+    register("sealed", JvmTestSuite::class)
+
+    register("jira", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.irPackagename)
+        }
+    }
+    register("central", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.irPackagename)
+        }
+    }
 }

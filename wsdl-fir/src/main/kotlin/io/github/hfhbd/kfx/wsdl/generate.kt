@@ -8,16 +8,14 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.toCodeGen
 import nl.adaptivity.xmlutil.core.*
+import java.io.InputStream
 import java.nio.file.Path
 import java.util.ServiceLoader
-import kotlin.io.path.name
-import kotlin.io.path.readText
-import kotlin.io.path.reader
 
 fun generate(
-    wsdlFile: Path,
-    schemaFiles: Iterable<Path>,
-    outputFolder: Path,
+    wsdlFile: InputStream,
+    import: (String) -> InputStream,
+    outputDirectory: Path,
     firTransformerFactories: Iterable<WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
     codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
@@ -26,31 +24,27 @@ fun generate(
 ) {
     val irTree = wsdlFile.createIr(
         firTransformerFactories,
-    ) { filename: String ->
-        val file = schemaFiles.singleOrNull { it.name == filename } ?: error(
-            "Expected $filename in ${schemaFiles.map { it.name }}",
-        )
-        file
-    }
+        import,
+    )
     val codeGenerator = irTree.toCodeGen(
         transformerFactories,
         codeGenCreator,
         codeGenTransformer,
     )
     for (codeGeneratorFactory in codeGenerators) {
-        codeGeneratorFactory.generate(codeGenerator, outputFolder)
+        codeGeneratorFactory.generate(codeGenerator, outputDirectory)
     }
 }
 
-internal fun Path.createIr(
+private fun InputStream.createIr(
     wsdlTransformerFactories: Iterable<WsdlTransformerFactory>,
-    import: (String) -> Path,
+    import: (String) -> InputStream,
 ): IRTree {
     val xml = xml(
         wsdlTransformerFactories.map { it.serializerModule() },
     )
 
-    val reader = KtXmlReader(reader())
+    val reader = KtXmlReader(this)
     var wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
     val firTransformers = wsdlTransformerFactories.map { it.create() }
     for (firTransformer in firTransformers) {
@@ -59,7 +53,7 @@ internal fun Path.createIr(
     return wsdl.toIr({ prefix ->
         reader.getNamespaceURI(prefix)
     }) {
-        var schema = xml.decodeFromString(Schema.serializer(), import(it).readText())
+        var schema = xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
         for (firTransformer in firTransformers) {
             schema = firTransformer(schema)
         }
@@ -88,7 +82,7 @@ private sealed interface Classes {
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
-internal fun WSDL.toIr(
+private fun WSDL.toIr(
     getNS: (String) -> String?,
     import: (String) -> Schema,
 ): IRTree {
@@ -570,7 +564,7 @@ private fun List<Element>.mapToIr(
                 },
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
-                requirements = listOf(),
+                requirements = emptyList(),
                 isOverride = false,
             )
     }
@@ -596,7 +590,7 @@ private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Cl
         namespace = schema.targetNamespace,
         documentation = annotation?.documentation(),
         xmlType = IRTree.XmlType.Attribute,
-        requirements = listOf(),
+        requirements = emptyList(),
         isOverride = false,
     )
 }

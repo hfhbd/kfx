@@ -20,7 +20,7 @@ abstract class ConvertOpenApiFiles : DefaultTask() {
     abstract val openapiFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
-    abstract val outputFolder: DirectoryProperty
+    abstract val outputDirectory: DirectoryProperty
 
     @get:Input
     @get:Optional
@@ -37,13 +37,13 @@ abstract class ConvertOpenApiFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertOpenApiFiles.classpath)
         }
-        for (openapiFolder in openapiFiles) {
-            for (openapiFile in openapiFolder.walk()) {
+        for (openapiDirectory in openapiFiles) {
+            for (openapiFile in openapiDirectory.walk()) {
                 if (openapiFile.isFile) {
                     workQueue.submit(OpenApiGeneration::class.java) {
                         it.openapiFile.set(openapiFile)
                         it.packageName.set(packageName)
-                        it.outputFolder.set(outputFolder)
+                        it.outputDirectory.set(outputDirectory)
                     }
                 }
             }

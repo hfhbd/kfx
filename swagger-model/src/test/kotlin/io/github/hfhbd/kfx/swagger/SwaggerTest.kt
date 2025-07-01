@@ -14,7 +14,7 @@ class SwaggerTest {
 
     @Test
     fun decodeSapCISwagger() {
-        val text = SwaggerTest::class.java.getResourceAsStream("/IntegrationContent.json")!!.bufferedReader().readText()
+        val text = SwaggerTest::class.java.getResourceAsStream("/sapci.json")!!.bufferedReader().readText()
         json.decodeFromString(Swagger.serializer(), text)
     }
 }

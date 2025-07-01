@@ -95,17 +95,17 @@
                   },
                   {
                     "required": [
-                      "input"
+                      "output"
                     ],
                     "properties": {
-                      "input": {
+                      "output": {
                         "type": "integer",
                         "format": "int32"
                       }
                     }
                   }
                 ],
-              "description": "Foo input sample"
+              "description": "Foo output sample"
             },
             "dev.example.FooSealed": {
                 "type": "object",

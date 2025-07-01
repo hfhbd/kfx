@@ -42,7 +42,9 @@ abstract class Swagger : Kfx {
             tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {
                 it.classpath.from(kfxSwaggerClasspath)
                 it.swaggerFiles.from(files)
-                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/swagger/$serviceName"))
+                it.outputDirectory.convention(
+                    it.project.layout.buildDirectory.dir("generated/kfx/swagger/$serviceName"),
+                )
                 it.packageName.convention(packageName)
             },
         )

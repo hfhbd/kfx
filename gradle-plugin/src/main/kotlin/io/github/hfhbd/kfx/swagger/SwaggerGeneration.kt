@@ -11,21 +11,23 @@ internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.Swagger
     interface SwaggerParameters : WorkParameters {
         val packageName: Property<String>
         val swaggerFile: RegularFileProperty
-        val outputFolder: DirectoryProperty
+        val outputDirectory: DirectoryProperty
     }
 
     override fun execute() {
         val packageName = parameters.packageName.orNull
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
-        generate(
-            swaggerFile = parameters.swaggerFile.asFile.get().toPath(),
-            outputFolder = parameters.outputFolder.asFile.get().toPath(),
-            transformerFactories = if (packageName != null) {
-                listOf(PackageName(packageName)) + transformerFactories
-            } else {
-                transformerFactories
-            },
-        )
+        parameters.swaggerFile.asFile.get().inputStream().use {
+            generate(
+                swaggerFile = it,
+                outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
+                transformerFactories = if (packageName != null) {
+                    listOf(PackageName(packageName)) + transformerFactories
+                } else {
+                    transformerFactories
+                },
+            )
+        }
     }
 }

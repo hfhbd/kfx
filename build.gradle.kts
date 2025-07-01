@@ -24,6 +24,13 @@ detekt {
         exclude("**/generated/**")
         exclude("**/build/**")
         exclude("**/testFixtures/**")
+
+        exclude("**/leanix/**")
+        exclude("**/sapci/**")
+        exclude("**/a/**")
+        exclude("**/central/**")
+        exclude("**/jira/**")
+        exclude("**/sealed/**")
     })
     parallel = true
     autoCorrect = true

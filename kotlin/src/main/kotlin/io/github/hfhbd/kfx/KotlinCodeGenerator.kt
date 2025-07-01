@@ -9,10 +9,10 @@ import kotlin.collections.iterator
 
 @ServiceLoader(CodeGenerator::class)
 class KotlinCodeGenerator : KotlinPoetCodeGenerator {
-    override fun generate(codeGenTree: CodeGenTree, outputFolder: Path) {
+    override fun generate(codeGenTree: CodeGenTree, outputDirectory: Path) {
         val files = generateFileSpec(codeGenTree)
         for (file in files) {
-            file.writeTo(outputFolder)
+            file.writeTo(outputDirectory)
         }
     }
 

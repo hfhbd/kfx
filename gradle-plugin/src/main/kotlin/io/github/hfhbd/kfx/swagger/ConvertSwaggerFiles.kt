@@ -24,7 +24,7 @@ abstract class ConvertSwaggerFiles : DefaultTask() {
     abstract val packageName: Property<String>
 
     @get:OutputDirectory
-    abstract val outputFolder: DirectoryProperty
+    abstract val outputDirectory: DirectoryProperty
 
     @get:Inject
     internal abstract val workerExecutor: WorkerExecutor
@@ -33,7 +33,7 @@ abstract class ConvertSwaggerFiles : DefaultTask() {
     internal abstract val classpath: ConfigurableFileCollection
 
     init {
-        outputFolder.convention(project.layout.buildDirectory.dir("generated/kfx/swagger"))
+        outputDirectory.convention(project.layout.buildDirectory.dir("generated/kfx/swagger"))
     }
 
     @TaskAction
@@ -41,13 +41,13 @@ abstract class ConvertSwaggerFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertSwaggerFiles.classpath)
         }
-        for (swaggerFolder in swaggerFiles) {
-            for (swaggerFile in swaggerFolder.walk()) {
+        for (swaggerDirectory in swaggerFiles) {
+            for (swaggerFile in swaggerDirectory.walk()) {
                 if (swaggerFile.isFile) {
                     workQueue.submit(SwaggerGeneration::class.java) {
                         it.packageName.set(packageName)
                         it.swaggerFile.set(swaggerFile)
-                        it.outputFolder.set(outputFolder)
+                        it.outputDirectory.set(outputDirectory)
                     }
                 }
             }

@@ -40,7 +40,7 @@ abstract class Wsdl : Kfx {
                 it.classpath.from(kfxWsdlClasspath)
                 it.wsdlFiles.from(this@Wsdl.wsdlFiles)
                 it.schemaFiles.from(this@Wsdl.schemaFiles)
-                it.outputFolder.convention(it.project.layout.buildDirectory.dir("generated/kfx/wsdl/$serviceName"))
+                it.outputDirectory.convention(it.project.layout.buildDirectory.dir("generated/kfx/wsdl/$serviceName"))
             },
         )
     }

@@ -11,21 +11,23 @@ internal abstract class OpenApiGeneration : WorkAction<OpenApiGeneration.OpenApi
     interface OpenApiParameters : WorkParameters {
         val openapiFile: RegularFileProperty
         val packageName: Property<String>
-        val outputFolder: DirectoryProperty
+        val outputDirectory: DirectoryProperty
     }
 
     override fun execute() {
         val packageName = parameters.packageName.orNull
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
-        generate(
-            openapiFile = parameters.openapiFile.asFile.get().toPath(),
-            outputFolder = parameters.outputFolder.asFile.get().toPath(),
-            transformerFactories = if (packageName != null) {
-                listOf(PackageName(packageName)) + transformerFactories
-            } else {
-                transformerFactories
-            },
-        )
+        parameters.openapiFile.asFile.get().inputStream().use {
+            generate(
+                openApiFile = it,
+                outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
+                transformerFactories = if (packageName != null) {
+                    listOf(PackageName(packageName)) + transformerFactories
+                } else {
+                    transformerFactories
+                },
+            )
+        }
     }
 }
