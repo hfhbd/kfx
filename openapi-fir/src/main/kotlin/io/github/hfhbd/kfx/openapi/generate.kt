@@ -48,15 +48,14 @@ fun generate(
 private fun InputStream.createIr(
     openapiTransformers: Iterable<OpenApiTransformer>,
 ): IRTree {
-    var openapi = json.decodeFromStream(OpenApi.serializer(), this)
-    for (openapiTransformer in openapiTransformers) {
-        openapi = openapiTransformer(openapi)
-    }
-    val irTree = openapi.toIr()
+    val openapi = json.decodeFromStream(OpenApi.serializer(), this)
+    val irTree = openapi.toIr(openapiTransformers)
     return irTree
 }
 
-private fun OpenApi.toIr(): IRTree {
+private fun OpenApi.toIr(
+    openapiTransformers: Iterable<OpenApiTransformer>,
+): IRTree {
     val irTypes = mutableMapOf<String, IRTree.Class>()
     for ((name, type) in components.schemas) {
         when (type) {
@@ -159,7 +158,7 @@ private fun OpenApi.toIr(): IRTree {
         }
     }
 
-    val irTree = IRTree(
+    var irTree = IRTree(
         irTypes.values.toSet(),
         irOperations,
         auth = components.securitySchemes.flatMapTo(mutableSetOf()) {
@@ -167,7 +166,11 @@ private fun OpenApi.toIr(): IRTree {
         },
     )
 
-    return handleSealedClassMapping(irTree, this)
+    irTree = handleSealedClassMapping(irTree, this)
+    for (openapiTransformer in openapiTransformers) {
+        irTree = openapiTransformer(this, irTree)
+    }
+    return irTree
 }
 
 private fun OpenApi.Operation.toIr(

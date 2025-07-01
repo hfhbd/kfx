@@ -45,20 +45,17 @@ private fun InputStream.createIr(
     )
 
     val reader = KtXmlReader(this)
-    var wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
-    val firTransformers = wsdlTransformerFactories.map { it.create() }
-    for (firTransformer in firTransformers) {
-        wsdl = firTransformer(wsdl)
-    }
-    return wsdl.toIr({ prefix ->
+    val wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
+    var irTree = wsdl.toIr({ prefix ->
         reader.getNamespaceURI(prefix)
     }) {
-        var schema = xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
-        for (firTransformer in firTransformers) {
-            schema = firTransformer(schema)
-        }
-        schema
+        xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
     }
+    val firTransformers = wsdlTransformerFactories.map { it.create() }
+    for (firTransformer in firTransformers) {
+        irTree = firTransformer(wsdl, irTree)
+    }
+    return irTree
 }
 
 private val String.packageName: String
