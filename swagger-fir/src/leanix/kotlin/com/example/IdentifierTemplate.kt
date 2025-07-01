@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.String
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -17,5 +19,7 @@ public data class IdentifierTemplate(
   /**
    * An internal identifier of the Fact Sheet assigned by LeanIX
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val `internal`: String? = null,
 )

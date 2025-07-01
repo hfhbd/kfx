@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -37,6 +39,8 @@ public data class VariableInboundProcessor(
   /**
    * An EL expression which targets a content property with a list. Processing will be done for each element in the list.
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public override val forEach: String? = null,
   /**
    * A list of variables. Each variable consists of a key and a value. Both fields can contain EL expressions. The expression in key must be evaluated to a single element while the expression in value will be evaluated to a list. The EL expressions are evaluated after a processor has run for a data object and the values will be provided in the next run of the running synchronization.

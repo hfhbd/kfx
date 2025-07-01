@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
@@ -73,5 +75,7 @@ public data class OutboundProcessor(
   /**
    * An EL expression to describe which factSheet fields from the data model are selected
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val multipleFields: String? = null,
 )

@@ -42,6 +42,7 @@ testing.suites {
         dependencies {
             implementation(projects.irPackagename)
             implementation(projects.oauth2Runtime)
+            implementation(projects.validation)
         }
     }
     register("sapci", JvmTestSuite::class) {

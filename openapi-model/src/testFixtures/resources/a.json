@@ -158,6 +158,7 @@
                     "s": {
                         "type": "string",
                         "description": "asdf",
+                        "minLength": 2,
                         "maxLength": 5
                     },
                     "arr": {

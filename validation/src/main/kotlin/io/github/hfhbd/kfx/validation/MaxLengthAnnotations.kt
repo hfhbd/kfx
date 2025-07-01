@@ -35,6 +35,15 @@ class MaxLengthAnnotations : CodeGenTransformer {
                     addAll(codeGenMember.annotations)
                     for (requirement in irMember.requirements) {
                         when (requirement) {
+                            is IRTree.Member.Requirement.MinLength -> add(
+                                CodeGenTree.Annotation(
+                                    "app.softwork.validation",
+                                    listOf("MinLength"),
+                                    mapOf(
+                                        "inclusive" to IntLiteral(requirement.inclusive),
+                                    ),
+                                ),
+                            )
                             is IRTree.Member.Requirement.MaxLength ->
                                 add(
                                     CodeGenTree.Annotation(
@@ -45,16 +54,6 @@ class MaxLengthAnnotations : CodeGenTransformer {
                                         ),
                                     ),
                                 )
-
-                            is IRTree.Member.Requirement.MinLength -> add(
-                                CodeGenTree.Annotation(
-                                    "app.softwork.validation",
-                                    listOf("MinLength"),
-                                    mapOf(
-                                        "inclusive" to IntLiteral(requirement.inclusive),
-                                    ),
-                                ),
-                            )
                         }
                     }
                 },

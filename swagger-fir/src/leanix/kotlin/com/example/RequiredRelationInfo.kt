@@ -1,5 +1,7 @@
 package com.example
 
+import app.softwork.validation.MaxLength
+import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
@@ -28,13 +30,19 @@ public data class RequiredRelationInfo(
   /**
    * An EL expression to describe which relation fields from the data model are selected
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val multipleFields: String? = null,
   /**
    * An EL expression to describe which relation type to filter for
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val multipleFilters: String? = null,
   /**
    * An EL expression to describe which factSheet fields on the target factSheet are selected
    */
+  @MinLength(inclusive = 0)
+  @MaxLength(inclusive = 500)
   public val multipleTargetFields: String? = null,
 )
