@@ -58,21 +58,22 @@ private fun InputStream.createIr(
     return irTree
 }
 
-private val String.packageName: String
-    get() {
-        val parts = removePrefix("urn:").removePrefix("http://").split("/")
-        val host = parts[0].split(".").reversed()
-        return (host + parts.drop(1)).joinToString(".") {
-            val s = it.lowercase()
-                .replace("-", "_")
-                .replace(".", "")
-            if (s.toIntOrNull() != null) {
-                "v$s"
-            } else {
-                s
-            }
+private val String.packageName: String get() = namespaceAsPackageName(this)
+
+public fun namespaceAsPackageName(namespace: String): String {
+    val parts = namespace.removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
+    val host = parts[0].split(".").reversed()
+    return (host + parts.drop(1)).joinToString(".") {
+        val s = it.lowercase()
+            .replace("-", "_")
+            .replace(".", "")
+        if (s.toIntOrNull() != null) {
+            "v$s"
+        } else {
+            s
         }
     }
+}
 
 private sealed interface Classes {
     data class TypeAlias(val actual: IRTree.ClassName) : Classes
