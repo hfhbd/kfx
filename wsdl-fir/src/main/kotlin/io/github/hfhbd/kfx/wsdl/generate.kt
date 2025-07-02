@@ -61,7 +61,7 @@ private fun InputStream.createIr(
 private val String.packageName: String get() = namespaceAsPackageName(this)
 
 public fun namespaceAsPackageName(namespace: String): String {
-    val parts = namespace.removePrefix("urn:").removePrefix("http://").split("/")
+    val parts = namespace.removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
     val host = parts[0].split(".").reversed()
     return (host + parts.drop(1)).joinToString(".") {
         val s = it.lowercase()
