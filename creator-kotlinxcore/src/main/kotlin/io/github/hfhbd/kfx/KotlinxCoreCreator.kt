@@ -12,9 +12,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
         type = toCodeGen(ir.type),
         nullable = ir.nullable,
         documentation = ir.documentation,
-        annotations = if (
-            ir.serialName != null
-        ) {
+        annotations = if (ir.serialName != null) {
             listOf(serialName(ir.serialName!!))
         } else {
             emptyList()
