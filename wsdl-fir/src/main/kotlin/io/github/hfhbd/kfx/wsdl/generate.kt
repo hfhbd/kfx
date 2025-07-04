@@ -243,7 +243,7 @@ private fun toIr(
                         is Choice -> it.element
                         is Element -> it
                     }
-                }?.mapToIr(qname, schema, irTypes) ?: emptyMap(),
+                }?.mapToIr(qname, schema, wsdlTransformers, irTypes) ?: emptyMap(),
                 isFault = false,
                 allOf = null,
                 discriminator = null,
@@ -276,7 +276,7 @@ private fun toIr(
                                 is Choice -> it.element
                                 is Element -> it
                             }
-                        }.mapToIr(typeAlias, schema, irTypes)
+                        }.mapToIr(typeAlias, schema, wsdlTransformers, irTypes)
                     } else {
                         emptyMap()
                     },
@@ -347,7 +347,7 @@ private fun toIr(
                             is Choice -> it.element
                             is Element -> it
                         }
-                    }?.mapToIr(qName, schema, irTypes) ?: emptyMap()
+                    }?.mapToIr(qName, schema, wsdlTransformers, irTypes) ?: emptyMap()
                 } else {
                     emptyMap()
                 },
@@ -424,15 +424,16 @@ private fun IRTree.Member.resolve(from: Map<IRTree.ClassName, Classes>): IRTree.
 private fun List<Element>.mapToIr(
     prefix: IRTree.ClassName,
     schema: Schema,
+    wsdlTransformers: Collection<WsdlTransformer>,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
 ): Map<String, IRTree.Member> {
     return associate {
         val extension = it.complexType?.simpleContent?.extension
         val ref = (it.type ?: it.ref ?: it.name!!).split(":")
         val ns: String?
-        fun createCustomWrapper(type: IRTree.Type): IRTree.NormalClass {
+        fun createCustomWrapper(type: IRTree.Type): IRTree.Class {
             val qname = IRTree.ClassName(schema.targetNamespace.packageName, prefix.name + ref[0])
-            val classe = IRTree.NormalClass(
+            var classe: IRTree.Class = IRTree.NormalClass(
                 packageName = qname.packageName,
                 packageNameSuffix = "",
                 name = qname.name,
@@ -447,7 +448,7 @@ private fun List<Element>.mapToIr(
                                 is Choice -> it.element
                                 is Element -> it
                             }
-                        }?.mapToIr(qname, schema, topLevel)
+                        }?.mapToIr(qname, schema, wsdlTransformers, topLevel)
                         if (elements != null) {
                             putAll(elements)
                         }
@@ -479,6 +480,9 @@ private fun List<Element>.mapToIr(
                 discriminator = null,
             )
             if (qname !in topLevel) {
+                for (wsdlTransformer in wsdlTransformers) {
+                    classe = wsdlTransformer(it, classe)
+                }
                 topLevel[qname] = Classes.ActualClass(classe)
             }
             return classe
@@ -533,7 +537,7 @@ private fun List<Element>.mapToIr(
         } else {
             ns = null
             val qname = IRTree.ClassName(schema.targetNamespace.packageName, ref[0])
-            val classe = IRTree.NormalClass(
+            var classe: IRTree.Class = IRTree.NormalClass(
                 packageName = qname.packageName,
                 packageNameSuffix = "",
                 name = qname.name,
@@ -545,12 +549,15 @@ private fun List<Element>.mapToIr(
                         is Choice -> it.element
                         is Element -> it
                     }
-                }?.mapToIr(qname, schema, topLevel) ?: emptyMap(),
+                }?.mapToIr(qname, schema, wsdlTransformers, topLevel) ?: emptyMap(),
                 documentation = it.annotation?.documentation(),
                 allOf = null,
                 discriminator = null,
             )
             if (qname !in topLevel) {
+                for (wsdlTransformer in wsdlTransformers) {
+                    classe = wsdlTransformer(it, classe)
+                }
                 topLevel[qname] = Classes.ActualClass(classe)
             }
             classe
