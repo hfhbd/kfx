@@ -559,24 +559,24 @@ private fun List<Element>.mapToIr(
         val elementName = (it.name ?: it.ref!!.split(":")[1])
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-                IRTree.Member(
-                    type = if (it.maxOccurs == "unbounded") {
-                        IRTree.Type.LIST(type)
-                    } else {
-                        type
-                    },
-                    nullable = it.nillable == true || it.minOccurs == "0",
-                    serialName = elementName,
-                    namespace = if (it.ref == null) {
-                        schema.targetNamespace
-                    } else {
-                        (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
-                    },
-                    documentation = it.annotation?.documentation(),
-                    xmlType = IRTree.XmlType.Element,
-                    requirements = emptyList(),
-                    isOverride = false,
-                )
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = if (it.ref == null) {
+                    schema.targetNamespace
+                } else {
+                    (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
+                },
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+            )
     }
 }
 

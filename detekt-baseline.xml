@@ -14,7 +14,7 @@
     <ID>CyclomaticComplexMethod:generate.kt$private fun Parameter.toParameter( parentQName: IRTree.ClassName, parameters: Map&lt;String, Parameter>, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, ): Pair&lt;Parameter.Position?, IRTree.Operation.Parameter></ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun Schema.toIrDefault(): IRTree.Literal?</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
-    <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>FunctionNaming:PackageName.kt$fun PackageName(packageName: String)</ID>
     <ID>FunctionNaming:soapAction.kt$public inline fun &lt;reified EmptyEnvelope : Any> Soap( format: XML, noinline getAction: (EmptyEnvelope) -> String, ): RouteScopedPlugin&lt;Unit></ID>
     <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
@@ -28,10 +28,10 @@
     <ID>LongMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
     <ID>LongMethod:generate.kt$private fun Swagger.toIr( swaggerTransformers: Iterable&lt;SwaggerTransformer>, ): IRTree</ID>
-    <ID>LongMethod:generate.kt$private fun WSDL.toIr( getNS: (String) -> String?, import: (String) -> Schema, ): IRTree</ID>
+    <ID>LongMethod:generate.kt$private fun WSDL.toIr( getNS: (String) -> String?, wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
-    <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LongParameterList:generate.kt$( openApiFile: InputStream, outputDirectory: Path, firTransformers: Iterable&lt;OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
     <ID>LongParameterList:generate.kt$( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, )</ID>
     <ID>LongParameterList:generate.kt$( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, )</ID>
@@ -48,7 +48,7 @@
     <ID>MaxLineLength:WsdlGeneration.kt$WsdlGeneration$val</ID>
     <ID>MaximumLineLength:ODataTest.kt$ODataTest$ </ID>
     <ID>MaximumLineLength:WsdlGeneration.kt$WsdlGeneration$ </ID>
-    <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.generate.kt</ID>
