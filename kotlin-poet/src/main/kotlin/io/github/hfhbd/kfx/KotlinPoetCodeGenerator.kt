@@ -23,7 +23,7 @@ fun CodeGenTree.Expression.ConstExpression.toCodeBlock(): CodeBlock = when (this
     )
 
     is CodeGenTree.Expression.ByteLiteral -> CodeBlock.of("%L", value)
-    is CodeGenTree.Expression.CharLiteral -> CodeBlock.of("%L", value)
+    is CodeGenTree.Expression.CharLiteral -> CodeBlock.of("'%L'", value)
     is CodeGenTree.Expression.ShortLiteral -> CodeBlock.of("%L", value)
 }
 
