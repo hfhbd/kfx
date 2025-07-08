@@ -21,6 +21,9 @@ data class CodeGenTree(
             data object STRING : Builtin
 
             @Serializable
+            data object CHAR : Builtin
+
+            @Serializable
             data object CHARARRAY : Builtin
 
             @Serializable
@@ -31,6 +34,12 @@ data class CodeGenTree(
 
             @Serializable
             data object BOOLEAN : Builtin
+
+            @Serializable
+            data object BYTE : Builtin
+
+            @Serializable
+            data object SHORT : Builtin
 
             @Serializable
             data object INT : Builtin
@@ -251,7 +260,16 @@ data class CodeGenTree(
         sealed interface Invokable : Expression
 
         @Serializable
+        data class CharLiteral(val value: Char) : ConstExpression
+
+        @Serializable
         data class StringLiteral(val value: String) : ConstExpression
+
+        @Serializable
+        data class ByteLiteral(val value: Byte) : ConstExpression
+
+        @Serializable
+        data class ShortLiteral(val value: Short) : ConstExpression
 
         @Serializable
         data class IntLiteral(val value: Int) : ConstExpression
