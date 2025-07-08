@@ -348,6 +348,12 @@ public data class OpenApi(
 
                 @Serializable
                 enum class Format {
+                    @SerialName("int8")
+                    Int8,
+
+                    @SerialName("int16")
+                    Int16,
+
                     @SerialName("int32")
                     Int32,
 
@@ -386,6 +392,9 @@ public data class OpenApi(
 
                     @SerialName("double")
                     Double,
+
+                    @SerialName("decimal")
+                    Decimal,
                 }
             }
 

@@ -453,6 +453,8 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
     is Schema.INT -> when (format) {
         Schema.INT.Format.Int32 -> default?.let { INT(it.toInt()) }
         Schema.INT.Format.Int64 -> default?.let { LONG(it) }
+        Schema.INT.Format.Int8 -> default?.let { BYTE(it.toByte()) }
+        Schema.INT.Format.Int16 -> default?.let { SHORT(it.toShort()) }
     }
 
     is Schema.BOOLEAN -> default?.let { BOOLEAN(it) }
@@ -461,6 +463,7 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
     is Schema.NUMBER -> when (format) {
         Schema.NUMBER.Format.Float -> default?.let { FLOAT(it.toFloat()) }
         Schema.NUMBER.Format.Double -> default?.let { DOUBLE(it) }
+        Schema.NUMBER.Format.Decimal -> default?.let { DOUBLE(it) }
     }
 }
 
@@ -499,11 +502,14 @@ private fun Schema.ARRAY.toIr(
 private fun Schema.INT.toIr() = when (format) {
     Schema.INT.Format.Int32 -> IRTree.Type.Builtin.INT
     Schema.INT.Format.Int64 -> IRTree.Type.Builtin.LONG
+    Schema.INT.Format.Int8 -> IRTree.Type.Builtin.BYTE
+    Schema.INT.Format.Int16 -> IRTree.Type.Builtin.SHORT
 }
 
 private fun Schema.NUMBER.toIr() = when (format) {
     Schema.NUMBER.Format.Double -> IRTree.Type.Builtin.DOUBLE
     Schema.NUMBER.Format.Float -> IRTree.Type.Builtin.FLOAT
+    Schema.NUMBER.Format.Decimal -> IRTree.Type.Builtin.DOUBLE
 }
 
 private fun Schema.STRING.toIr(

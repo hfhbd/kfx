@@ -39,6 +39,9 @@ interface KotlinxCoreCreator : CodeGenCreator {
         IRTree.Type.Builtin.FLOAT -> Builtin.FLOAT
         IRTree.Type.Builtin.UUID -> Builtin.UUID
         IRTree.Type.Builtin.DURATION -> Builtin.DURATION
+        IRTree.Type.Builtin.BYTE -> Builtin.BYTE
+        IRTree.Type.Builtin.CHAR -> Builtin.CHAR
+        IRTree.Type.Builtin.SHORT -> Builtin.SHORT
     }
 
     override fun toCodeGen(ir: IRTree.Class): CodeGenTree.Class = when (ir) {
@@ -142,6 +145,9 @@ interface KotlinxCoreCreator : CodeGenCreator {
         is IRTree.Literal.DURATION -> DurationLiteral(value)
         is IRTree.Literal.FLOAT -> FloatLiteral(value)
         is IRTree.Literal.INSTANT -> InstantLiteral(value)
+        is IRTree.Literal.BYTE -> ByteLiteral(value)
+        is IRTree.Literal.CHAR -> CharLiteral(value)
+        is IRTree.Literal.SHORT -> ShortLiteral(value)
     }
 
     override fun toCodeGen(ir: IRTree.ClassName): CodeGenTree.ClassName = CodeGenTree.ClassName(

@@ -18,6 +18,9 @@ data class IRTree(
         @Serializable
         sealed interface Builtin : Type {
             @Serializable
+            data object CHAR : Builtin
+
+            @Serializable
             data object STRING : Builtin
 
             @Serializable
@@ -28,6 +31,12 @@ data class IRTree(
 
             @Serializable
             data object BOOLEAN : Builtin
+
+            @Serializable
+            data object BYTE : Builtin
+
+            @Serializable
+            data object SHORT : Builtin
 
             @Serializable
             data object INT : Builtin
@@ -186,7 +195,16 @@ data class IRTree(
     @Serializable
     sealed interface Literal {
         @Serializable
+        data class CHAR(val value: Char) : Literal
+
+        @Serializable
         data class STRING(val value: String) : Literal
+
+        @Serializable
+        data class BYTE(val value: Byte) : Literal
+
+        @Serializable
+        data class SHORT(val value: Short) : Literal
 
         @Serializable
         data class INT(val value: Int) : Literal
@@ -210,9 +228,7 @@ data class IRTree(
         data class INSTANT(val value: Instant) : Literal
 
         @Serializable
-        data class UUID(
-            val value: Uuid,
-        ) : Literal
+        data class UUID(val value: Uuid) : Literal
 
         @Serializable
         data class BOOLEAN(val value: Boolean) : Literal

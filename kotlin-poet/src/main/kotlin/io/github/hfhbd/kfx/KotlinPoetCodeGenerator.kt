@@ -21,6 +21,10 @@ fun CodeGenTree.Expression.ConstExpression.toCodeBlock(): CodeBlock = when (this
         "%M",
         MemberName(qualifiedName.toKotlinPoet() as ClassName, member),
     )
+
+    is CodeGenTree.Expression.ByteLiteral -> CodeBlock.of("%L", value)
+    is CodeGenTree.Expression.CharLiteral -> CodeBlock.of("'%L'", value)
+    is CodeGenTree.Expression.ShortLiteral -> CodeBlock.of("%L", value)
 }
 
 fun CodeGenTree.Expression.toCodeBlock(
@@ -183,6 +187,9 @@ fun CodeGenTree.Type.Builtin.toPoetType(): ClassName = when (this) {
     CodeGenTree.Type.Builtin.DURATION -> ClassName("kotlin.time", "Duration")
     CodeGenTree.Type.Builtin.UUID -> ClassName("kotlin.uuid", "Uuid")
     CodeGenTree.Type.Builtin.CHARARRAY -> CHAR_ARRAY
+    CodeGenTree.Type.Builtin.BYTE -> BYTE
+    CodeGenTree.Type.Builtin.CHAR -> CHAR
+    CodeGenTree.Type.Builtin.SHORT -> SHORT
 }
 
 fun CodeGenTree.ClassName.toKotlinPoet(): TypeName = ClassName(packageName, names).let {
