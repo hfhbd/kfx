@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class FooInputArr(
-  public val byBar: List<FooInputArrByBar> = emptyList(),
+  public val byBar: List<FooInputArrByBar>,
   public val byBaz: List<FooInputArrByBaz> = emptyList(),
 )
