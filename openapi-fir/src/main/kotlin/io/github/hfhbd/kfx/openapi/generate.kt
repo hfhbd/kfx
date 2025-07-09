@@ -666,7 +666,6 @@ private fun Map<String, Schema>.toMembers(
         IRTree.Member(
             type = type,
             nullable = when {
-                type is IRTree.Type.LIST -> false
                 required != null -> propertyName !in required
                 else -> true
             },

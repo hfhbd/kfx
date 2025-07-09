@@ -4,6 +4,7 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +18,7 @@ public data class UserAnonymizationValidationBean(
   public val email: String? = null,
   public val errors: Map<String, ErrorCollection>? = null,
   public val expand: String? = null,
-  public val operations: List<String>,
+  public val operations: List<String> = emptyList(),
   public val success: Boolean? = null,
   public val userKey: String? = null,
   public val userName: String? = null,

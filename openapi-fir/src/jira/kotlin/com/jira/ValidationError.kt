@@ -2,6 +2,7 @@ package com.jira
 
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,5 +11,5 @@ import kotlinx.serialization.Serializable
 public data class ValidationError(
   public val error: String? = null,
   public val `field`: String? = null,
-  public val params: List<String>,
+  public val params: List<String> = emptyList(),
 )

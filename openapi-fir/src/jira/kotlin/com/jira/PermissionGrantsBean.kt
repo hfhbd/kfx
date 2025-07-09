@@ -2,6 +2,7 @@ package com.jira
 
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,5 +10,5 @@ import kotlinx.serialization.Serializable
 @SerialName(value = "PermissionGrantsBean")
 public data class PermissionGrantsBean(
   public val expand: String? = null,
-  public val permissions: List<PermissionGrantBean>,
+  public val permissions: List<PermissionGrantBean> = emptyList(),
 )

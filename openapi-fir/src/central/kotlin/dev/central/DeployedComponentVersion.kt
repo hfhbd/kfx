@@ -2,6 +2,7 @@ package dev.central
 
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,6 +11,6 @@ import kotlinx.serialization.Serializable
 public data class DeployedComponentVersion(
   public val name: String? = null,
   public val path: String? = null,
-  public val errors: List<String>,
-  public val warnings: List<String>,
+  public val errors: List<String> = emptyList(),
+  public val warnings: List<String> = emptyList(),
 )

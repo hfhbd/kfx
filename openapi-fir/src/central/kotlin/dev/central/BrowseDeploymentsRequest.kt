@@ -3,6 +3,7 @@ package dev.central
 import kotlin.Double
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -28,7 +29,7 @@ public data class BrowseDeploymentsRequest(
   /**
    * Optional deployment IDs.
    */
-  public val deploymentIds: List<String>,
+  public val deploymentIds: List<String> = emptyList(),
   /**
    * Optional starting path.
    */

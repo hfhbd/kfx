@@ -5,6 +5,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,12 +19,12 @@ public data class CustomFieldBean(
   public val isLocked: Boolean? = null,
   public val isManaged: Boolean? = null,
   public val isTrusted: Boolean? = null,
-  public val issueTypeIds: List<String>,
+  public val issueTypeIds: List<String> = emptyList(),
   public val issuesWithValue: Long? = null,
   public val lastValueUpdate: Instant? = null,
   public val name: String? = null,
   public val numericId: Long? = null,
-  public val projectIds: List<Long>,
+  public val projectIds: List<Long> = emptyList(),
   public val projectsCount: Int? = null,
   public val screensCount: Int? = null,
   public val searcherKey: String? = null,

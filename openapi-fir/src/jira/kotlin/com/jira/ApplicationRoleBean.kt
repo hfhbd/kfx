@@ -4,15 +4,16 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "ApplicationRoleBean")
 public data class ApplicationRoleBean(
-  public val defaultGroups: List<String>,
+  public val defaultGroups: List<String> = emptyList(),
   public val defined: Boolean? = null,
-  public val groups: List<String>,
+  public val groups: List<String> = emptyList(),
   public val hasUnlimitedSeats: Boolean? = null,
   public val key: String? = null,
   public val name: String? = null,

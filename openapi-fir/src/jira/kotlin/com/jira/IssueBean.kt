@@ -3,6 +3,7 @@ package com.jira
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,7 +22,7 @@ public data class IssueBean(
   public val renderedFields: Map<String, RenderedFields>? = null,
   public val schema: Map<String, JsonTypeBean>? = null,
   public val self: String? = null,
-  public val transitionBeans: List<TransitionBean>,
-  public val transitions: List<TransitionBean>,
+  public val transitionBeans: List<TransitionBean> = emptyList(),
+  public val transitions: List<TransitionBean> = emptyList(),
   public val versionedRepresentations: Map<String, Map<String, VersionedRepresentations>>? = null,
 )
