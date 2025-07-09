@@ -1,11 +1,12 @@
 package com.jira
 
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "TransitionsMetaBean")
 public data class TransitionsMetaBean(
-  public val transitions: List<TransitionBean>,
+  public val transitions: List<TransitionBean> = emptyList(),
 )

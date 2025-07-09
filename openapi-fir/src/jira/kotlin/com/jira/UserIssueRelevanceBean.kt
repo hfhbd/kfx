@@ -5,6 +5,7 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +16,7 @@ public data class UserIssueRelevanceBean(
   public val displayName: String? = null,
   public val emailAddress: String? = null,
   public val highestIssueInvolvementRank: Int? = null,
-  public val issueInvolvements: List<IssueInvolvementBean>,
+  public val issueInvolvements: List<IssueInvolvementBean> = emptyList(),
   public val key: String? = null,
   public val latestCommentCreationTime: Long? = null,
   public val name: String? = null,

@@ -4,13 +4,14 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "CustomFieldOptionBean")
 public data class CustomFieldOptionBean(
-  public val childrenIds: List<Long>,
+  public val childrenIds: List<Long> = emptyList(),
   public val disabled: Boolean? = null,
   public val id: Long? = null,
   public val self: String? = null,

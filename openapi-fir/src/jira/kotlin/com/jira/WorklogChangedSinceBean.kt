@@ -4,6 +4,7 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,5 +17,5 @@ public data class WorklogChangedSinceBean(
   public val self: String? = null,
   public val since: Long? = null,
   public val until: Long? = null,
-  public val values: List<WorklogChangeBean>,
+  public val values: List<WorklogChangeBean> = emptyList(),
 )

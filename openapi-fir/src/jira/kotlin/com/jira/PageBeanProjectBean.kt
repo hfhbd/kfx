@@ -5,6 +5,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,5 +18,5 @@ public data class PageBeanProjectBean(
   public val self: String? = null,
   public val startAt: Long? = null,
   public val total: Long? = null,
-  public val values: List<ProjectBean>,
+  public val values: List<ProjectBean> = emptyList(),
 )

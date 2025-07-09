@@ -3,6 +3,7 @@ package com.jira
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +11,7 @@ import kotlinx.serialization.Serializable
 @SerialName(value = "UserWriteBean")
 public data class UserWriteBean(
   public val active: Boolean? = null,
-  public val applicationKeys: List<String>,
+  public val applicationKeys: List<String> = emptyList(),
   public val displayName: String? = null,
   public val emailAddress: String? = null,
   public val key: String? = null,

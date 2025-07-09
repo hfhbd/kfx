@@ -3,6 +3,7 @@ package com.jira
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,7 +19,7 @@ public data class FilterBean(
   public val owner: UserBean? = null,
   public val searchUrl: String? = null,
   public val self: String? = null,
-  public val sharePermissions: List<FilterPermissionBean>,
+  public val sharePermissions: List<FilterPermissionBean> = emptyList(),
   public val sharedUsers: UserBeanListWrapper? = null,
   public val viewUrl: String? = null,
 )
