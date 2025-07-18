@@ -18,8 +18,9 @@ API formats:
 
 Code generators:
 
-- Kotlin using Kotlinx.serialization
+- Kotlin classes using Kotlinx.serialization
 - Ktor client functions
+- Ktor server functions
 
 ## Gradle plugin
 
