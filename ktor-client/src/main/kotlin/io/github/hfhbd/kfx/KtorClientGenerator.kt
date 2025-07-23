@@ -262,6 +262,13 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     .addMember("%T::class", fault.toKtorPoetType(read = true)).build(),
             )
         }
+        if (deprecated) {
+            function.addAnnotation(
+                AnnotationSpec.builder(ClassName("kotlin", "Deprecated"))
+                    .addMember("message = %S", "")
+                    .build(),
+            )
+        }
         function.addModifiers(KModifier.SUSPEND)
         function.receiver(ClassName("io.ktor.client", "HttpClient"))
 

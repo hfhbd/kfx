@@ -297,6 +297,7 @@ private fun OpenApi.Operation.toIr(
         },
         success = statusCodes.success?.toIntOrNull(),
         nullableOutput = if ("404" in responses.keys) 404 else null,
+        deprecated = deprecated,
         headers = parameters.mapNotNull {
             when (it.position) {
                 OpenApi.Parameter.Position.Query -> null
@@ -352,6 +353,7 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
                                 nullable = false,
                                 documentation = null,
                                 defaultValue = null,
+                                deprecated = false,
                             ),
                             IRTree.Operation.Parameter(
                                 name = "clientSecret",
@@ -360,6 +362,7 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
                                 nullable = false,
                                 documentation = null,
                                 defaultValue = null,
+                                deprecated = false,
                             ),
                         ),
                         address = null,
@@ -373,6 +376,7 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
                         success = 200,
                         nullableOutput = null,
                         headers = emptyList(),
+                        deprecated = false,
                     ),
                     grantType = IRTree.Auth.OAuth2.GrantType.ClientCredentials,
                 ),
@@ -408,6 +412,7 @@ private val OAuth2Token = IRTree.NormalClass(
     isFault = false,
     discriminator = null,
     allOf = null,
+    deprecated = false,
 )
 
 private fun OpenApi.Parameter.toParameter(
@@ -425,6 +430,7 @@ private fun OpenApi.Parameter.toParameter(
             documentation = found.description,
             serialName = null,
             defaultValue = found.schema!!.toIrDefault(),
+            deprecated = deprecated,
         )
     } else {
         return null to IRTree.Operation.Parameter(
@@ -434,6 +440,7 @@ private fun OpenApi.Parameter.toParameter(
             documentation = description,
             serialName = null,
             defaultValue = schema!!.toIrDefault(),
+            deprecated = deprecated,
         )
     }
 }
@@ -523,6 +530,7 @@ private fun Schema.STRING.toIr(
         packageName = "",
         packageNameSuffix = "",
         documentation = description,
+        deprecated = deprecated,
         values = enum.filterNotNull().map {
             IRTree.Enum.Value(it.lowercase().toCamelCase().replaceFirstChar { it.uppercaseChar() }, null, it)
         },
@@ -629,6 +637,7 @@ private fun Schema.OBJECT.toIr(
             documentation = description,
             isFault = false,
             discriminator = discriminator,
+            deprecated = deprecated,
             allOf = allOf.mapNotNull {
                 val ref = (it as Schema.OBJECT).ref
                 if (ref != null) {
@@ -688,6 +697,7 @@ private fun Map<String, Schema>.toMembers(
                 },
             ),
             isOverride = false,
+            deprecated = property.deprecated,
         )
     }
 }

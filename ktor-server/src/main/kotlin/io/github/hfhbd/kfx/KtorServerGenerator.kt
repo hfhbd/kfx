@@ -62,6 +62,14 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         if (documentation != null && documentation.isNotBlank()) {
             function.addKdoc(documentation.toKdoc())
         }
+        if (deprecated) {
+            function.addAnnotation(
+                AnnotationSpec.builder(ClassName("kotlin", "Deprecated"))
+                    .addMember("message = %S", "")
+                    .build(),
+            )
+        }
+
         function.receiver(ClassName("io.ktor.server.routing", "Route"))
 
         val inputWrapperType = inputWrapperType

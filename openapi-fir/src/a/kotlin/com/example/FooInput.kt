@@ -2,6 +2,7 @@ package com.example
 
 import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
+import kotlin.Deprecated
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
@@ -15,6 +16,7 @@ public data class FooInput(
   /**
    * asdf
    */
+  @Deprecated(message = "")
   @MinLength(inclusive = 2)
   @MaxLength(inclusive = 5)
   public val s: String,

@@ -159,7 +159,8 @@
                         "type": "string",
                         "description": "asdf",
                         "minLength": 2,
-                        "maxLength": 5
+                        "maxLength": 5,
+                        "deprecated": true
                     },
                     "arr": {
                         "type": "array",

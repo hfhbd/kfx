@@ -37,6 +37,9 @@ class KotlinxJsonCreator : KotlinxCoreCreator {
             if (ir.serialName != null) {
                 add(serialName(ir.serialName!!))
             }
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
         },
         types = emptyList(),
         functions = emptyList(),
