@@ -85,6 +85,7 @@ data class IRTree(
         val packageNameSuffix: String
         val name: String
         val documentation: String?
+        val deprecated: Boolean
     }
 
     @Serializable
@@ -99,6 +100,7 @@ data class IRTree(
         val isFault: Boolean,
         val discriminator: String?,
         val allOf: ClassName?,
+        override val deprecated: Boolean,
     ) : Class
 
     @Serializable
@@ -120,6 +122,7 @@ data class IRTree(
         val xmlType: XmlType?,
         val requirements: List<Requirement>,
         val isOverride: Boolean,
+        val deprecated: Boolean,
     ) {
         @Serializable
         sealed interface Requirement {
@@ -143,6 +146,7 @@ data class IRTree(
         override val name: String,
         val values: List<Value>,
         override val documentation: String?,
+        override val deprecated: Boolean,
     ) : Class {
         @Serializable
         data class Value(
@@ -175,6 +179,8 @@ data class IRTree(
         val outputContentType: ContentType?,
         val nullableOutput: Int?,
         val fault: NormalClass?,
+
+        val deprecated: Boolean,
     ) {
         @Serializable
         enum class HttpMethod {
@@ -189,6 +195,7 @@ data class IRTree(
             val nullable: Boolean,
             val documentation: String?,
             val defaultValue: Literal?,
+            val deprecated: Boolean,
         )
     }
 

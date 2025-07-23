@@ -133,6 +133,7 @@ private fun WSDL.toIr(
                 headers = emptyList(),
                 inputContentType = ContentType.ApplicationSoapXml,
                 outputContentType = ContentType.ApplicationSoapXml,
+                deprecated = false,
             ),
         )
     }
@@ -198,6 +199,7 @@ private fun toIr(
                     IRTree.Enum.Value(name, null, null)
                 },
                 documentation = null,
+                deprecated = false,
             )
             for (wsdlTransformer in wsdlTransformers) {
                 irClass = wsdlTransformer(simpleType, irClass)
@@ -247,6 +249,7 @@ private fun toIr(
                 isFault = false,
                 allOf = null,
                 discriminator = null,
+                deprecated = false,
             )
             for (wsdlTransformer in wsdlTransformers) {
                 irClass = wsdlTransformer(element, irClass)
@@ -284,6 +287,7 @@ private fun toIr(
                     isFault = false,
                     allOf = null,
                     discriminator = null,
+                    deprecated = false,
                 )
                 for (wsdlTransformer in wsdlTransformers) {
                     irClass = wsdlTransformer(complexType, irClass)
@@ -315,6 +319,7 @@ private fun toIr(
                                 xmlType = IRTree.XmlType.Value,
                                 requirements = emptyList(),
                                 isOverride = false,
+                                deprecated = false,
                             ),
                         )
                         for (it in complexType.simpleContent!!.extension.attributes) {
@@ -329,6 +334,7 @@ private fun toIr(
                 isFault = false,
                 allOf = null,
                 discriminator = null,
+                deprecated = false,
             )
             for (wsdlTransformer in wsdlTransformers) {
                 irClass = wsdlTransformer(complexType, irClass)
@@ -355,6 +361,7 @@ private fun toIr(
                 isFault = false,
                 allOf = null,
                 discriminator = null,
+                deprecated = false,
             )
             for (wsdlTransformer in wsdlTransformers) {
                 irClass = wsdlTransformer(complexType, irClass)
@@ -472,12 +479,14 @@ private fun List<Element>.mapToIr(
                             xmlType = IRTree.XmlType.Value,
                             requirements = emptyList(),
                             isOverride = false,
+                            deprecated = false,
                         ),
                     )
                 },
                 documentation = it.annotation?.documentation(),
                 allOf = null,
                 discriminator = null,
+                deprecated = false,
             )
             if (qname !in topLevel) {
                 for (wsdlTransformer in wsdlTransformers) {
@@ -553,6 +562,7 @@ private fun List<Element>.mapToIr(
                 documentation = it.annotation?.documentation(),
                 allOf = null,
                 discriminator = null,
+                deprecated = false,
             )
             if (qname !in topLevel) {
                 for (wsdlTransformer in wsdlTransformers) {
@@ -583,6 +593,7 @@ private fun List<Element>.mapToIr(
                 xmlType = IRTree.XmlType.Element,
                 requirements = emptyList(),
                 isOverride = false,
+                deprecated = false,
             )
     }
 }
@@ -609,6 +620,7 @@ private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Cl
         xmlType = IRTree.XmlType.Attribute,
         requirements = emptyList(),
         isOverride = false,
+        deprecated = false,
     )
 }
 
