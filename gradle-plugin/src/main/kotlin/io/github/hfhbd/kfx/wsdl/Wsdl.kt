@@ -2,21 +2,16 @@ package io.github.hfhbd.kfx.wsdl
 
 import io.github.hfhbd.kfx.GROUP
 import io.github.hfhbd.kfx.Kfx
-import io.github.hfhbd.kfx.KfxDependencies
 import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
 import javax.inject.Inject
 
 abstract class Wsdl : Kfx {
     abstract val wsdlFiles: ConfigurableFileCollection
     abstract val schemaFiles: ConfigurableFileCollection
-
-    @get:Nested
-    abstract override val dependencies: KfxDependencies
 
     @get:Inject
     internal abstract val configurations: ConfigurationContainer

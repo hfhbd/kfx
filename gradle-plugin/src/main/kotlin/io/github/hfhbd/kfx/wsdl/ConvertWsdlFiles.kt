@@ -37,15 +37,11 @@ abstract class ConvertWsdlFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertWsdlFiles.classpath)
         }
-        for (wsdlDirectory in wsdlFiles) {
-            for (wsdlFile in wsdlDirectory.walk()) {
-                if (wsdlFile.isFile) {
-                    workQueue.submit(WsdlGeneration::class.java) {
-                        it.wsdlFile.set(wsdlFile)
-                        it.schemaFiles.setFrom(schemaFiles)
-                        it.outputDirectory.set(outputDirectory)
-                    }
-                }
+        for (wsdlFile in wsdlFiles.asFileTree.files) {
+            workQueue.submit(WsdlGeneration::class.java) {
+                it.wsdlFile.set(wsdlFile)
+                it.schemaFiles.setFrom(schemaFiles)
+                it.outputDirectory.set(outputDirectory)
             }
         }
     }
