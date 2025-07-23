@@ -50,6 +50,9 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     )
                 }
             }
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
         },
     )
 
@@ -59,17 +62,22 @@ class XmlUtilCreator : KotlinxCoreCreator {
         members = ir.members.map { toCodeGen(it.value, it.key) },
         documentation = ir.documentation,
         isFault = ir.isFault,
-        annotations = listOf(
-            CodeGenTree.Annotation("kotlinx.serialization", listOf("Serializable"), emptyMap()),
-            CodeGenTree.Annotation(
-                "nl.adaptivity.xmlutil.serialization",
-                listOf("XmlSerialName"),
-                mapOf(
-                    "value" to StringLiteral(ir.name),
-                    "namespace" to StringLiteral(ir.namespace!!),
+        annotations = buildList {
+            add(SERIALIZABLE)
+            add(
+                CodeGenTree.Annotation(
+                    "nl.adaptivity.xmlutil.serialization",
+                    listOf("XmlSerialName"),
+                    mapOf(
+                        "value" to StringLiteral(ir.name),
+                        "namespace" to StringLiteral(ir.namespace!!),
+                    ),
                 ),
-            ),
-        ),
+            )
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
+        },
         types = emptyList(),
         functions = emptyList(),
         superInterfaces = listOfNotNull(ir.allOf?.let { toCodeGen(it) }),

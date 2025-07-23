@@ -9,15 +9,26 @@ data class Swagger(
     @SerialName("swagger")
     val version: String,
     val info: Info,
+    val host: String? = null,
     val basePath: String? = null,
-    val tags: List<Tag> = emptyList(),
     val schemes: List<Schema> = emptyList(),
-    val securityDefinitions: Map<String, SecurityDefinition>? = null,
-    val security: List<Map<String, List<String>>> = emptyList(),
+    val consumes: List<String> = emptyList(),
+    val produces: List<String> = emptyList(),
     val paths: Map<String, Paths>,
     val definitions: Map<String, Definition>,
     val parameters: Map<String, Parameter> = emptyMap(),
+    val responses: Map<String, Path.Response> = emptyMap(),
+    val securityDefinitions: Map<String, SecurityDefinition>? = null,
+    val security: List<Map<String, List<String>>> = emptyList(),
+    val tags: List<Tag> = emptyList(),
+    val externalDocs: ExternalDocs? = null,
 ) {
+    @Serializable
+    public data class ExternalDocs(
+        val description: String? = null,
+        val url: String,
+    )
+
     @Serializable
     public data class Info(
         val title: String,
@@ -108,13 +119,70 @@ data class Swagger(
         val consumes: List<String> = emptyList(),
         val parameters: List<Parameter> = emptyList(),
         val responses: Map<String, Response>,
+        val deprecated: Boolean = false,
     ) {
         @Serializable
         data class Response(
             val description: String? = null,
             val schema: Definition? = null,
+            val headers: Map<String, Header> = emptyMap(),
             val examples: JsonElement? = null,
         )
+    }
+
+    @Serializable
+    data class Header(
+        val description: String? = null,
+        val type: Type,
+        val format: String? = null,
+        val items: Definition? = null,
+        val collectionFormat: CollectionFormat = CollectionFormat.Csv,
+        val default: JsonElement? = null,
+        val maximum: Int? = null,
+        val exclusiveMaximum: Boolean? = null,
+        val minimum: Int? = null,
+        val exclusiveMinimum: Boolean? = null,
+        val maxLength: Int? = null,
+        val minLength: Int? = null,
+        val pattern: String? = null,
+        val maxItems: Int? = null,
+        val minItems: Int? = null,
+        val uniqueItems: Int? = null,
+        val enum: Set<String> = emptySet(),
+        val multipleOf: Int? = null,
+    ) {
+        @Serializable
+        enum class Type {
+            @SerialName("string")
+            String,
+
+            @SerialName("number")
+            Number,
+
+            @SerialName("integer")
+            Integer,
+
+            @SerialName("boolean")
+            Boolean,
+
+            @SerialName("array")
+            Array,
+        }
+
+        @Serializable
+        enum class CollectionFormat {
+            @SerialName("csv")
+            Csv,
+
+            @SerialName("ssv")
+            Ssv,
+
+            @SerialName("tsv")
+            Tsv,
+
+            @SerialName("pipes")
+            Pipes,
+        }
     }
 
     @Serializable

@@ -6,6 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
+import kotlin.Deprecated
 import kotlin.Int
 import kotlin.String
 import kotlin.Unit
@@ -14,6 +15,7 @@ import kotlin.Unit
  * Find users with all specified permissions
  * Returns a list of active users that match the search string and have all specified permissions for the project or issue. This resource can be accessed by users with ADMINISTER_PROJECT permission for the project or global ADMIN or SYSADMIN rights. This endpoint can cause serious performance issues and will be removed in Jira 9.0.
  */
+@Deprecated(message = "")
 public suspend fun HttpClient.findUsersWithAllPermissions(
   projectKey: String? = null,
   issueKey: String? = null,

@@ -234,6 +234,7 @@ private fun generate(
             }
             s
         },
+        deprecated = operation.deprecated,
         queryParameters = operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> null
@@ -280,6 +281,7 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
                         false,
                         null,
                         defaultValue = null,
+                        deprecated = false,
                     ),
                     IRTree.Operation.Parameter(
                         "clientSecret",
@@ -288,6 +290,7 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
                         false,
                         null,
                         defaultValue = null,
+                        deprecated = false,
                     ),
                 ),
                 address = null,
@@ -301,6 +304,7 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
                 headers = emptyList(),
                 inputContentType = null,
                 outputContentType = ContentType.ApplicationJson,
+                deprecated = false,
             ),
             grantType = IRTree.Auth.OAuth2.GrantType.ClientCredentials,
         )
@@ -328,6 +332,7 @@ private val OAuth2Token = IRTree.NormalClass(
     isFault = false,
     allOf = null,
     discriminator = null,
+    deprecated = false,
 )
 
 private fun Definition.isUnit(): Boolean {
@@ -369,6 +374,7 @@ private fun Parameter.toParameter(
         },
         documentation = found.description,
         defaultValue = defaultValue() ?: found.defaultValue(),
+        deprecated = false,
     )
 } else {
     val required = required
@@ -395,6 +401,7 @@ private fun Parameter.toParameter(
         documentation = description,
         serialName = null,
         defaultValue = defaultValue(),
+        deprecated = false,
     )
 }
 
@@ -460,6 +467,7 @@ private fun Definition.stringToIr(
         packageName = qname.packageName,
         packageNameSuffix = "",
         documentation = description,
+        deprecated = false,
         values = enum.map {
             IRTree.Enum.Value(it.lowercase().toCamelCase().replaceFirstChar { it.uppercaseChar() }, null, it)
         },
@@ -550,6 +558,7 @@ private fun Definition.objectToIr(
             it.ref?.toIRTreeClassName()
         }.singleOrNull(),
         discriminator = discriminator,
+        deprecated = false,
     )
     if (ref == null) {
         irTypes[qname] = type
@@ -591,6 +600,7 @@ private fun MutableMap<String, IRTree.Member>.convertProperty(
             property.maxLength?.let { IRTree.Member.Requirement.MaxLength(it) },
         ),
         isOverride = false,
+        deprecated = false,
     )
 
     val existing = this[propertyName]

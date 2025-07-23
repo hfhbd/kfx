@@ -12,10 +12,13 @@ interface KotlinxCoreCreator : CodeGenCreator {
         type = toCodeGen(ir.type),
         nullable = ir.nullable,
         documentation = ir.documentation,
-        annotations = if (ir.serialName != null) {
-            listOf(serialName(ir.serialName!!))
-        } else {
-            emptyList()
+        annotations = buildList {
+            if (ir.serialName != null) {
+                add(serialName(ir.serialName!!))
+            }
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
         },
         overrideable = ir.isOverride,
     )
@@ -64,7 +67,13 @@ interface KotlinxCoreCreator : CodeGenCreator {
             )
         },
         documentation = ir.documentation,
-        annotations = listOf(SERIALIZABLE),
+        annotations = buildList {
+            add(SERIALIZABLE)
+
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
+        },
     )
 
     override fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass = CodeGenTree.NormalClass(
@@ -81,6 +90,9 @@ interface KotlinxCoreCreator : CodeGenCreator {
             val irSerialName = ir.serialName
             if (irSerialName != null) {
                 add(serialName(irSerialName))
+            }
+            if (ir.deprecated) {
+                add(DEPRECATED)
             }
         },
         types = emptyList(),
@@ -121,6 +133,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
             faultWrapper = null,
             success = ir.success,
             headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
+            deprecated = ir.deprecated,
         )
     }
 
@@ -184,4 +197,10 @@ fun serialName(value: String) = CodeGenTree.Annotation(
     "kotlinx.serialization",
     listOf("SerialName"),
     mapOf("value" to StringLiteral(value)),
+)
+
+val DEPRECATED = CodeGenTree.Annotation(
+    "kotlin",
+    listOf("Deprecated"),
+    mapOf("message" to StringLiteral("")),
 )

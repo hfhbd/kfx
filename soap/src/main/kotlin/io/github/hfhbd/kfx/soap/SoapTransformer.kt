@@ -113,6 +113,7 @@ class SoapTransformer : CodeGenTransformer {
             nullableOutput = null,
             success = 200,
             headers = emptyList(),
+            deprecated = false,
         )
     }
 }

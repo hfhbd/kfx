@@ -219,6 +219,7 @@ data class CodeGenTree(
         val outputMember: Expression?,
 
         val faultWrapper: Type?,
+        val deprecated: Boolean,
     ) {
         @Serializable
         enum class HttpMethod {
@@ -233,6 +234,7 @@ data class CodeGenTree(
             val nullable: Boolean,
             val documentation: String?,
             val defaultValue: Expression?,
+            val annotations: List<Annotation> = emptyList(),
         )
     }
 
