@@ -66,7 +66,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             function.addAnnotation(
                 AnnotationSpec.builder(ClassName("kotlin", "Deprecated"))
                     .addMember("message = %S", "")
-                    .build()
+                    .build(),
             )
         }
 
