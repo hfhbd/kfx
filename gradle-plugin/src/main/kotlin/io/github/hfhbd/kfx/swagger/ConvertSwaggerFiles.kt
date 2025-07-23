@@ -41,15 +41,11 @@ abstract class ConvertSwaggerFiles : DefaultTask() {
         val workQueue = workerExecutor.classLoaderIsolation {
             it.classpath.from(this@ConvertSwaggerFiles.classpath)
         }
-        for (swaggerDirectory in swaggerFiles) {
-            for (swaggerFile in swaggerDirectory.walk()) {
-                if (swaggerFile.isFile) {
-                    workQueue.submit(SwaggerGeneration::class.java) {
-                        it.packageName.set(packageName)
-                        it.swaggerFile.set(swaggerFile)
-                        it.outputDirectory.set(outputDirectory)
-                    }
-                }
+        for (swaggerFile in swaggerFiles.asFileTree.files) {
+            workQueue.submit(SwaggerGeneration::class.java) {
+                it.packageName.set(packageName)
+                it.swaggerFile.set(swaggerFile)
+                it.outputDirectory.set(outputDirectory)
             }
         }
     }
