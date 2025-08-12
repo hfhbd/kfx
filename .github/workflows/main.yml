@@ -16,7 +16,7 @@ jobs:
       actions: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
