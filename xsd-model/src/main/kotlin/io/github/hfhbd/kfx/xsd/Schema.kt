@@ -24,13 +24,6 @@ data class Documentation(
 }
 
 @Serializable
-data class Types(
-    @XmlElement
-    @XmlSerialName("schema", XSD)
-    val schemas: List<Schema>,
-)
-
-@Serializable
 @XmlSerialName("Schema", XSD)
 data class Schema(
     val elementFormDefault: String? = null,

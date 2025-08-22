@@ -9,8 +9,8 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.util.ServiceLoader
 
-internal abstract class OpenApiGeneration : WorkAction<OpenApiGeneration.OpenApiParameters> {
-    interface OpenApiParameters : WorkParameters {
+internal abstract class OpenApiGeneration : WorkAction<OpenApiGeneration.Parameters> {
+    interface Parameters : WorkParameters {
         val openapiFile: RegularFileProperty
         val packageName: Property<String>
         val outputDirectory: DirectoryProperty

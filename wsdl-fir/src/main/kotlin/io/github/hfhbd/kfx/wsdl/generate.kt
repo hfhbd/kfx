@@ -93,7 +93,7 @@ private fun WSDL.toIr(
             schema.toIr(
                 xsdTransformers = xsdTransformers,
                 irTypes = irTypes,
-                import = import
+                import = import,
             )
         }
     }
