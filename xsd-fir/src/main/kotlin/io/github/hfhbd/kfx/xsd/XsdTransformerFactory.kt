@@ -1,7 +1,8 @@
-package io.github.hfhbd.kfx.wsdl
+package io.github.hfhbd.kfx.xsd
 
 import kotlinx.serialization.modules.SerializersModule
 
-interface WsdlTransformerFactory {
+interface XsdTransformerFactory {
+    fun create(): XsdTransformer
     fun serializerModule(): SerializersModule
 }
