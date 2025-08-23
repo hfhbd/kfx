@@ -162,6 +162,12 @@
                         "maxLength": 5,
                         "deprecated": true
                     },
+                    "enum": {
+                        "type": "string",
+                        "enum": [
+                            "A", "B.B"
+                        ]
+                    },
                     "arr": {
                         "type": "array",
                         "items": {

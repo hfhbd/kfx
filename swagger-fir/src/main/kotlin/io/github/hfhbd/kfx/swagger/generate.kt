@@ -469,17 +469,13 @@ private fun Definition.stringToIr(
         documentation = description,
         deprecated = false,
         values = enum.map {
-            IRTree.Enum.Value(it.lowercase().toCamelCase().replaceFirstChar { it.uppercaseChar() }, null, it)
+            IRTree.Enum.Value(it, null, it)
         },
     )
     irTypes[qname] = enum
     enum
 } else {
     IRTree.Type.Builtin.STRING
-}
-
-private fun String.toCamelCase(): String = "_[a-zA-Z]".toRegex().replace(this) {
-    it.value.replace("_", "").uppercase()
 }
 
 private fun String.toIRTreeClassName(): IRTree.ClassName {

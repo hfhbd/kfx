@@ -9,15 +9,13 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IRTree.Literal.*
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.openapi.OpenApi.Components.*
+import io.github.hfhbd.kfx.toCamelCase
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 import java.nio.file.Path
 import java.util.*
-import kotlin.collections.get
-import kotlin.collections.iterator
-import kotlin.text.removePrefix
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -524,15 +522,16 @@ private fun Schema.STRING.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type = if (enum.isNotEmpty()) {
-    val name = (parentName?.toCamelCase() ?: "") + name!!.toCamelCase()
+    val name = (parentName ?: "") + name!!.toCamelCase()
+    val className = name.asClassName()
     val enum = IRTree.Enum(
-        name = name,
-        packageName = "",
+        name = className.name,
+        packageName = className.packageName,
         packageNameSuffix = "",
         documentation = description,
         deprecated = deprecated,
         values = enum.filterNotNull().map {
-            IRTree.Enum.Value(it.lowercase().toCamelCase().replaceFirstChar { it.uppercaseChar() }, null, it)
+            IRTree.Enum.Value(it, null, it)
         },
     )
     irTypes[enum.name] = enum
@@ -550,28 +549,24 @@ private fun Schema.STRING.toIr(
     }
 }
 
-private fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(this) {
-    it.value.replace("_", "").replace("-", "").replace("/", "").uppercase(Locale.ROOT)
-}.replaceFirstChar {
-    it.uppercaseChar()
-}
-
 private fun Schema.isUnit(): Boolean =
     this is Schema.OBJECT && ref == null && properties.isEmpty() && additionalPropertiesSchema == null
 
 private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName {
-    return (ref?.removePrefix("#/components/schemas/") ?: name!!).let { name ->
-        if ("." in name) {
-            val qName = name.split(".")
-            IRTree.ClassName(
-                qName.dropLast(1).joinToString(".") {
-                    it.lowercase()
-                },
-                qName.last().replaceFirstChar { it.uppercaseChar() },
-            )
-        } else {
-            IRTree.ClassName("", name.toCamelCase())
-        }
+    return (ref?.removePrefix("#/components/schemas/") ?: name!!).asClassName()
+}
+
+private fun String.asClassName(): IRTree.ClassName {
+    return if ("." in this) {
+        val qName = split(".")
+        IRTree.ClassName(
+            qName.dropLast(1).joinToString(".") {
+                it.lowercase()
+            },
+            qName.last().replaceFirstChar { it.uppercaseChar() },
+        )
+    } else {
+        IRTree.ClassName("", toCamelCase())
     }
 }
 

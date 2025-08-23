@@ -20,5 +20,6 @@ public data class FooInput(
   @MinLength(inclusive = 2)
   @MaxLength(inclusive = 5)
   public val s: String,
+  public val `enum`: FooInputEnum? = null,
   public val arr: List<FooInputArr> = emptyList(),
 )
