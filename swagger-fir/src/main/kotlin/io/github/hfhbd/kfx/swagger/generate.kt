@@ -478,10 +478,6 @@ private fun Definition.stringToIr(
     IRTree.Type.Builtin.STRING
 }
 
-private fun String.toCamelCase(): String = "_[a-zA-Z]".toRegex().replace(this) {
-    it.value.replace("_", "").uppercase()
-}
-
 private fun String.toIRTreeClassName(): IRTree.ClassName {
     val (packageName, name) = removePrefix("#/definitions/").let { name ->
         if ("." in name) {
