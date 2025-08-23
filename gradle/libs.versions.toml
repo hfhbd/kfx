@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.10"
+kotlin = "2.2.20-RC"
 ktor = "3.2.3"
 serialization = "1.9.0"
 
@@ -35,7 +35,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 licensee = { id = "app.cash.licensee", version = "1.13.0" }
-serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.18" }
+serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.19" }
 validation = { id = "app.softwork.validation", version = "0.0.15" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
