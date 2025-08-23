@@ -74,7 +74,7 @@ jobs:
 
       - name: Create docs
         run: ./gradlew :dokkaGenerate
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: build/dokka/html
       - name: Deploy Documentation to GitHub Pages
