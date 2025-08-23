@@ -469,7 +469,7 @@ private fun Definition.stringToIr(
         documentation = description,
         deprecated = false,
         values = enum.map {
-            IRTree.Enum.Value(it.lowercase().toCamelCase().replaceFirstChar { it.uppercaseChar() }, null, it)
+            IRTree.Enum.Value(it, null, it)
         },
     )
     irTypes[qname] = enum
