@@ -21,7 +21,7 @@ jobs:
       - name: Set environment for version
         uses: hfhbd/actions/setup-version@main
         id: version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Release maven artifacts
@@ -45,7 +45,7 @@ jobs:
       - name: Set environment for version
         uses: hfhbd/actions/setup-version@main
         id: version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Release maven artifacts

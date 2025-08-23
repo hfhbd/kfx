@@ -1,12 +1,12 @@
 [versions]
 kotlin = "2.2.20-RC"
-ktor = "3.2.2"
+ktor = "3.2.3"
 serialization = "1.9.0"
 
 [libraries]
 serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
-serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "0.91.1" }
+serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "0.91.2" }
 
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.1" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.2.0" }
@@ -39,4 +39,4 @@ serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.19"
 validation = { id = "app.softwork.validation", version = "0.0.15" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
-develocity = { id = "com.gradle.develocity", version = "4.1" }
+develocity = { id = "com.gradle.develocity", version = "4.1.1" }
