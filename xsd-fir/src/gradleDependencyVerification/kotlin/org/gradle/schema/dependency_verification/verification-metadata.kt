@@ -1,13 +1,25 @@
 package org.gradle.schema.dependency_verification
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@SerialName(value = "verification-metadataType")
+@XmlSerialName(
+  value = "verification-metadata",
+  namespace = "https://schema.gradle.org/dependency-verification",
+)
 public data class `verification-metadata`(
-  @SerialName(value = "configuration")
+  @XmlElement
+  @XmlSerialName(
+    value = "configuration",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val configuration: configuration,
-  @SerialName(value = "components")
+  @XmlElement
+  @XmlSerialName(
+    value = "components",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val components: components,
 )

@@ -17,7 +17,7 @@ testing.suites {
             implementation(testFixtures(project()))
 
             implementation(projects.kotlin)
-            implementation(projects.creatorKotlinxjson)
+            implementation(projects.creatorXmlutil)
             implementation(projects.validation)
             implementation(projects.contextualDate)
 

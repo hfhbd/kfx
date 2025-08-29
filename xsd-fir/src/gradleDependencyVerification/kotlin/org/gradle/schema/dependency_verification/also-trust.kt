@@ -1,8 +1,11 @@
 package org.gradle.schema.dependency_verification
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@SerialName(value = "also-trustType")
+@XmlSerialName(
+  value = "also-trust",
+  namespace = "https://schema.gradle.org/dependency-verification",
+)
 public data object `also-trust`

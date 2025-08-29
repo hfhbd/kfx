@@ -2,24 +2,56 @@ package org.gradle.schema.dependency_verification
 
 import kotlin.Boolean
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@SerialName(value = "configurationType")
+@XmlSerialName(
+  value = "configuration",
+  namespace = "https://schema.gradle.org/dependency-verification",
+)
 public data class configuration(
-  @SerialName(value = "verify-metadata")
+  @XmlElement
+  @XmlSerialName(
+    value = "verify-metadata",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `verify-metadata`: Boolean,
-  @SerialName(value = "verify-signatures")
+  @XmlElement
+  @XmlSerialName(
+    value = "verify-signatures",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `verify-signatures`: Boolean,
-  @SerialName(value = "keyring-format")
+  @XmlElement
+  @XmlSerialName(
+    value = "keyring-format",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `keyring-format`: String? = null,
-  @SerialName(value = "key-servers")
+  @XmlElement
+  @XmlSerialName(
+    value = "key-servers",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `key-servers`: `key-servers`? = null,
-  @SerialName(value = "trusted-artifacts")
+  @XmlElement
+  @XmlSerialName(
+    value = "trusted-artifacts",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `trusted-artifacts`: `trusted-artifacts`? = null,
-  @SerialName(value = "ignored-keys")
+  @XmlElement
+  @XmlSerialName(
+    value = "ignored-keys",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `ignored-keys`: `ignored-keys`? = null,
-  @SerialName(value = "trusted-keys")
+  @XmlElement
+  @XmlSerialName(
+    value = "trusted-keys",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `trusted-keys`: `trusted-keys`? = null,
 )
