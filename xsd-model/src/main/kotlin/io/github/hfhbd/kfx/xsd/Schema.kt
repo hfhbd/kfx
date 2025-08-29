@@ -9,22 +9,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import nl.adaptivity.xmlutil.serialization.XmlValue
 
 const val XSD = "http://www.w3.org/2001/XMLSchema"
-const val ISO = "http://purl.oclc.org/dsdl/schematron"
 
 @Serializable
-data class Documentation(
-    @XmlValue
-    val values: List<@Polymorphic Any>,
-) {
-    companion object {
-        fun serializerModule() = SerializersModule {
-            polymorphic(Any::class, String::class, String.serializer())
-        }
-    }
-}
-
-@Serializable
-@XmlSerialName("Schema", XSD)
+@XmlSerialName("schema", XSD)
 data class Schema(
     val elementFormDefault: String? = null,
     val targetNamespace: String,
@@ -66,11 +53,11 @@ data class SimpleType(
     val name: String? = null,
 
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation")
     val annotation: Annotation? = null,
 
     @XmlElement
-    @XmlSerialName("restriction", XSD)
+    @XmlSerialName("restriction")
     val restriction: Restriction,
 )
 
@@ -82,7 +69,7 @@ data class Restriction(
     val pattern: List<Pattern> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("enumeration", XSD)
+    @XmlSerialName("enumeration")
     val enumeration: List<Enumeration> = emptyList(),
 
     @XmlElement
@@ -154,6 +141,9 @@ data class ComplexType(
     @XmlSerialName("sequence", XSD)
     val sequence: Sequence? = null,
 
+    @XmlSerialName("choice", XSD)
+    val choice: Choice? = null,
+
     @XmlElement
     @XmlSerialName("simpleContent", XSD)
     val simpleContent: SimpleContent? = null,
@@ -165,6 +155,8 @@ data class ComplexType(
     @XmlElement
     @XmlSerialName("complexContent", XSD)
     val complexContent: ComplexContent? = null,
+
+    val mixed: Boolean = false,
 )
 
 @Serializable
@@ -184,6 +176,7 @@ data class SimpleContent(
 @Serializable
 data class Extension(
     val base: String,
+
     @XmlElement
     @XmlSerialName("attribute", XSD)
     val attributes: List<Attribute> = emptyList(),
@@ -207,15 +200,10 @@ data class Attribute(
 @Serializable
 data class Sequence(
     @XmlElement
-    @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
 
-    @XmlSerialName("minOccurs", XSD)
     val minOccurs: String? = null,
-
-    @XmlSerialName("maxOccurs", XSD)
     val maxOccurs: String? = null,
-
     val elements: List<Elements>,
 )
 
@@ -227,6 +215,9 @@ sealed interface Elements
 data class Choice(
     @XmlSerialName("element", XSD)
     val element: Element,
+
+    val minOccurs: String? = null,
+    val maxOccurs: String? = null,
 ) : Elements
 
 @XmlSerialName("element", XSD)
@@ -265,6 +256,18 @@ data class Annotation(
 )
 
 @Serializable
+data class Documentation(
+    @XmlValue
+    val values: List<@Polymorphic Any>,
+) {
+    companion object {
+        fun serializerModule() = SerializersModule {
+            polymorphic(Any::class, String::class, String.serializer())
+        }
+    }
+}
+
+@Serializable
 data class AppInfo(
     @XmlValue
     val appInfo: List<@Polymorphic Any>,
@@ -272,46 +275,15 @@ data class AppInfo(
     companion object {
         fun serializerModule() = SerializersModule {
             polymorphic(Any::class, String::class, String.serializer())
-            polymorphic(Any::class, NS::class, NS.serializer())
             polymorphic(Any::class, Pattern::class, Pattern.serializer())
         }
     }
 }
 
 @Serializable
-@XmlSerialName("pattern", ISO)
+@XmlSerialName("pattern", XSD)
 data class Pattern(
-    val name: String? = null,
-    @XmlElement
-    @XmlSerialName("rule", ISO)
-    val rule: Rule? = null,
-
     val value: String? = null,
-)
-
-@Serializable
-data class Rule(
-    val context: String,
-
-    @XmlElement
-    @XmlSerialName("assert", ISO)
-    val assert: Assert,
-)
-
-@Serializable
-data class Assert(
-    @XmlElement(false)
-    val test: String,
-
-    @XmlValue
-    val description: String,
-)
-
-@Serializable
-@XmlSerialName("ns", ISO)
-data class NS(
-    val prefix: String,
-    val uri: String,
 )
 
 @Serializable

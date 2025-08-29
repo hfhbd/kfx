@@ -175,18 +175,14 @@ private fun Schema.toIr(
     for (element in elements) {
         val elementType = element.type
         if (elementType != null) {
-            val ns: String
-            val type: String
-            if (":" in elementType) {
-                ns = elementType.split(":").component1()
-                type = elementType.split(":").component2()
+            val type = if (":" in elementType) {
+                elementType.split(":").component2()
             } else {
-                ns = targetNamespace
-                type = elementType
+                elementType
             }
 
             val typeAlias = IRTree.ClassName(targetNamespace.packageName, element.name!!)
-            val resolved = IRTree.ClassName(namespace(ns), type.remove(suffix = true))
+            val resolved = IRTree.ClassName(namespace(), type.remove(suffix = true))
             if (resolved != typeAlias) {
                 irTypes[typeAlias] = Classes.TypeAlias(resolved)
             }
@@ -225,7 +221,7 @@ private fun Schema.toIr(
         val sequence = complexType.sequence
         if (sequence != null && sequence.elements.size == 1 && (sequence.elements[0] as Element).name == null) {
             val element = sequence.elements[0] as Element
-            val (ns, name) = element.ref!!.split(":")
+            val name = element.ref!!.split(":")[1]
             val typeAlias = IRTree.ClassName(targetNamespace.packageName, complexTypeName.remove())
             if (element.maxOccurs == "unbounded") {
                 var irClass: IRTree.Class = IRTree.NormalClass(
@@ -255,7 +251,7 @@ private fun Schema.toIr(
                 }
                 irTypes[typeAlias] = Classes.ActualClass(irClass)
             } else {
-                val resolved = IRTree.ClassName(namespace(ns), name)
+                val resolved = IRTree.ClassName(namespace(), name)
                 if (resolved != typeAlias) {
                     irTypes[typeAlias] = Classes.TypeAlias(resolved)
                 }
@@ -345,9 +341,8 @@ private fun String.trimDocumentation(): String {
     }.trim()
 }
 
-private fun Schema.namespace(ns: String): String {
-    return (annotation?.appInfo?.appInfo?.filterIsInstance<NS>())?.singleOrNull { it.prefix == ns }?.uri?.packageName
-        ?: targetNamespace.packageName
+private fun Schema.namespace(): String {
+    return targetNamespace.packageName
 }
 
 private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> = buildSet {
@@ -464,7 +459,7 @@ private fun List<Element>.mapToIr(
                     }
                 }
             } else {
-                val namespace = schema.namespace(ns)
+                val namespace = schema.namespace()
                 val qname = IRTree.ClassName(namespace, name.remove())
                 topLevel.find(qname).let {
                     if (extension != null && extension.attributes.isNotEmpty()) {
@@ -475,7 +470,6 @@ private fun List<Element>.mapToIr(
                 }
             }
         } else if (it.simpleType != null) {
-            ns = null
             it.simpleType!!.resolve(schema, topLevel).let {
                 if (extension != null && extension.attributes.isNotEmpty()) {
                     createCustomWrapper(it)
@@ -490,7 +484,6 @@ private fun List<Element>.mapToIr(
                 ),
             ) != null
         ) {
-            ns = null
             topLevel.find(IRTree.ClassName(schema.targetNamespace.packageName, ref[0].remove())).let {
                 if (extension != null && extension.attributes.isNotEmpty()) {
                     createCustomWrapper(it)
@@ -499,7 +492,6 @@ private fun List<Element>.mapToIr(
                 }
             }
         } else {
-            ns = null
             val qname = IRTree.ClassName(schema.targetNamespace.packageName, ref[0])
             var classe: IRTree.Class = IRTree.NormalClass(
                 packageName = qname.packageName,
@@ -539,14 +531,22 @@ private fun List<Element>.mapToIr(
                 },
                 nullable = it.nillable == true || it.minOccurs == "0",
                 serialName = elementName,
-                namespace = if (it.ref == null) {
-                    schema.targetNamespace
-                } else {
-                    (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
-                },
+                namespace = schema.targetNamespace,
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
+                requirements = buildList {
+                    val restrictions = it.simpleType?.restriction
+                    if (restrictions != null) {
+                        val maxLength = restrictions.maxLength
+                        if (maxLength != null) {
+                            add(IRTree.Member.Requirement.MaxLength(maxLength.value))
+                        }
+                        val minList = restrictions.minLength
+                        if (minList != null) {
+                           add(IRTree.Member.Requirement.MinLength(minList.value))
+                        }
+                    }
+                },
                 isOverride = false,
                 deprecated = false,
             )
@@ -561,7 +561,7 @@ private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Cl
     val type = if (ns == "xsd" || ns == "ns" || ns == "xs") {
         ":$name".toBuiltin()!!
     } else {
-        val namespace = schema.namespace(ns)
+        val namespace = schema.namespace()
         val qname = IRTree.ClassName(namespace, name.remove())
         topLevel.find(qname)
     }

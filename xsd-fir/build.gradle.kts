@@ -6,17 +6,32 @@ dependencies {
     api(projects.core)
     api(projects.wsdlModel)
 
-    testFixturesApi(libs.ktor.client.core)
-    testFixturesApi(projects.ktorServerSoapPlugin)
-    testFixturesApi(libs.ktor.server.core)
-
-    testImplementation(projects.validation)
-    testImplementation(projects.ktorClient)
-    testImplementation(projects.ktorServer)
-    testImplementation(projects.kotlin)
-    testImplementation(projects.contextualDate)
+    testFixturesImplementation(testFixtures(projects.core))
 }
 
-tasks.test {
-    environment("testFixtures", layout.projectDirectory.dir("src/testFixtures").asFile.path)
+testing.suites {
+    withType(JvmTestSuite::class) {
+        useKotlinTest()
+
+        dependencies {
+            implementation(testFixtures(project()))
+
+            implementation(projects.kotlin)
+            implementation(projects.creatorKotlinxjson)
+            implementation(projects.validation)
+            implementation(projects.contextualDate)
+
+            implementation(testFixtures(projects.xsdModel))
+        }
+        targets.configureEach {
+            tasks.check {
+                dependsOn(testTask)
+            }
+            testTask {
+                outputs.dir("build/kfx-tests/${this@withType.name}")
+            }
+        }
+    }
+
+    register("gradleDependencyVerification", JvmTestSuite::class)
 }
