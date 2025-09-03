@@ -5,7 +5,13 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "trust",
+  value = "trusting",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data object trust
+public data class Trusting(
+  val group: String? = null,
+  val name: String? = null,
+  val version: String? = null,
+  val regex: String? = null,
+  val file: String? = null,
+)

@@ -5,7 +5,10 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "trusting",
+  value = "ignored-keyType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data object trusting
+public data class IgnoredKey(
+  val id: String,
+  val reason: String? = null,
+)

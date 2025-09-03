@@ -5,7 +5,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "coordinates",
+  value = "artifact",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data object coordinates
+public sealed interface Artifact {
+  val name: String
+}

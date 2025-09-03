@@ -8,14 +8,20 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "md5",
+  value = "trusted-key",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class md5(
+public data class TrustedKey(
   @XmlElement
   @XmlSerialName(
-    value = "also-trust",
+    value = "trusting",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `also-trust`: List<`also-trust`> = emptyList(),
+  public val trusting: List<Trusting> = emptyList(),
+  val id: String,
+  val group: String? = null,
+  val name: String? = null,
+  val version: String? = null,
+  val file: String? = null,
+  val regex: String? = null,
 )

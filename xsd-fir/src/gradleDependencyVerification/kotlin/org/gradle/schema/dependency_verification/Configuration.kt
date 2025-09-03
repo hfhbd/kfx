@@ -11,47 +11,47 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   value = "configuration",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class configuration(
+public data class Configuration(
   @XmlElement
   @XmlSerialName(
     value = "verify-metadata",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `verify-metadata`: Boolean,
+  public val verifyMetadata: Boolean,
   @XmlElement
   @XmlSerialName(
     value = "verify-signatures",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `verify-signatures`: Boolean,
+  public val verifySignatures: Boolean,
   @XmlElement
   @XmlSerialName(
     value = "keyring-format",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `keyring-format`: String? = null,
+  public val keyringFormat: String? = null,
   @XmlElement
   @XmlSerialName(
     value = "key-servers",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `key-servers`: `key-servers`? = null,
+  public val keyServers: KeyServers? = null,
   @XmlElement
   @XmlSerialName(
     value = "trusted-artifacts",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `trusted-artifacts`: `trusted-artifacts`? = null,
+  public val trustedArtifacts: TrustedArtifacts? = null,
   @XmlElement
   @XmlSerialName(
     value = "ignored-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `ignored-keys`: `ignored-keys`? = null,
+  public val gnoredKeys: IgnoredKeys? = null,
   @XmlElement
   @XmlSerialName(
     value = "trusted-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `trusted-keys`: `trusted-keys`? = null,
+  public val trustedKeys: TrustedKeys? = null,
 )

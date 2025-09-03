@@ -8,14 +8,14 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "trusted-keys",
+  value = "trusted-artifactsType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class `trusted-keys`(
+public data class TrustedArtifacts(
   @XmlElement
   @XmlSerialName(
-    value = "trusted-key",
+    value = "trustType",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `trusted-key`: List<`trusted-key`> = emptyList(),
+  public val trust: List<Trust> = emptyList(),
 )

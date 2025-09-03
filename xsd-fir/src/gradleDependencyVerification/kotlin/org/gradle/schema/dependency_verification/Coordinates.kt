@@ -5,7 +5,13 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "artifact",
+  value = "coordinatesType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data object artifact
+public data class Coordinates(
+  val group: String? = null,
+  val name: String? = null,
+  val version: String? = null,
+  val regex: String? = null,
+  val file: String? = null,
+)

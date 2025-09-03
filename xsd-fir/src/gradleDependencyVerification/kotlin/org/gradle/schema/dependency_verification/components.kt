@@ -8,14 +8,14 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "components",
+  value = "componentsType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class components(
+public data class Components(
   @XmlElement
   @XmlSerialName(
     value = "component",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val component: List<component> = emptyList(),
+  public val component: List<Component> = emptyList(),
 )

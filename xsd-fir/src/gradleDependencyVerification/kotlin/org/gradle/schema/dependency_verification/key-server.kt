@@ -8,4 +8,6 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   value = "key-server",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data object `key-server`
+public data class KeyServer(
+  val uri: String? = null,
+)

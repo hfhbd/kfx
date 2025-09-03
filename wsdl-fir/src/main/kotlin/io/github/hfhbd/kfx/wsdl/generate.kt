@@ -8,7 +8,6 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.toCodeGen
 import io.github.hfhbd.kfx.xsd.Classes
-import io.github.hfhbd.kfx.xsd.NS
 import io.github.hfhbd.kfx.xsd.Schema
 import io.github.hfhbd.kfx.xsd.XsdTransformer
 import io.github.hfhbd.kfx.xsd.XsdTransformerFactory
@@ -52,16 +51,23 @@ private fun InputStream.createIr(
     val xml = xml(
         wsdlTransformerFactories.map { it.serializerModule() },
     )
+    val wsdlTransformers = wsdlTransformerFactories.map {
+        it.create()
+    }
 
     val reader = KtXmlReader(this)
     val wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
-    val irTree = wsdl.toIr(
-        { prefix ->
+    val irTree = wsdl.toIr({ prefix ->
             reader.getNamespaceURI(prefix)
         },
         xsdTransformerFactories.map { it.create() },
     ) {
-        xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
+        var imported = xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
+        for (wsdlTransformer in wsdlTransformers) {
+            imported = wsdlTransformer(imported, it)
+        }
+
+        imported
     }
     return irTree
 }
@@ -98,12 +104,10 @@ private fun WSDL.toIr(
         }
     }
 
-    val namespaces = allNamespaces()
-
     for (message in messages) {
         val (ns, name) = message.part.element.split(":")
         val typeAlias = IRTree.ClassName(targetNamespace.packageName, message.name)
-        val namespace = namespaces[ns] ?: getNS(ns)
+        val namespace = getNS(ns)
         val resolved = IRTree.ClassName(namespace?.packageName ?: targetNamespace.packageName, name)
         if (resolved != typeAlias) {
             irTypes[typeAlias] = Classes.TypeAlias(resolved)
@@ -212,23 +216,7 @@ private fun Map<IRTree.ClassName, Classes>.findOrNull(qname: IRTree.ClassName): 
     null -> null
 }
 
-private fun WSDL.allNamespaces(): Map<String, String> = types.flatMap {
-    val s = it.schemas.flatMap {
-        (it.annotation?.appInfo?.appInfo?.filterIsInstance<NS>())?.map {
-            it.prefix to it.uri
-        } ?: emptyList()
-    }
-    s
-}.associate { it }
-
 private fun Type.resolve(definitions: WSDL): IRTree.ClassName {
-    val (namespace, name) = message.split(":")
-
-    val found = definitions.allNamespaces()[namespace]
-
-    return if (found != null) {
-        IRTree.ClassName(found.packageName, name)
-    } else {
-        IRTree.ClassName(definitions.targetNamespace.packageName, name)
-    }
+    val name = message.split(":")[1]
+    return IRTree.ClassName(definitions.targetNamespace.packageName, name)
 }

@@ -9,17 +9,17 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   value = "verification-metadata",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class `verification-metadata`(
+public data class VerificationMetadata(
   @XmlElement
   @XmlSerialName(
     value = "configuration",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val configuration: configuration,
+  public val configuration: Configuration,
   @XmlElement
   @XmlSerialName(
     value = "components",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val components: components,
+  public val components: Components,
 )

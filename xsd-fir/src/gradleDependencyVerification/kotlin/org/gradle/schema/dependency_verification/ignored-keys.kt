@@ -8,14 +8,14 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "ignored-keys",
+  value = "ignored-keysType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class `ignored-keys`(
+public data class IgnoredKeys(
   @XmlElement
   @XmlSerialName(
     value = "ignored-key",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `ignored-key`: List<`ignored-key`> = emptyList(),
+  public val ignoredKey: List<IgnoredKey> = emptyList(),
 )

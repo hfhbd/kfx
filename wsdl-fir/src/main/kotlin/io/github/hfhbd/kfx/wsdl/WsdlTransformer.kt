@@ -1,0 +1,7 @@
+package io.github.hfhbd.kfx.wsdl
+
+import io.github.hfhbd.kfx.xsd.Schema
+
+interface WsdlTransformer {
+    operator fun invoke(schema: Schema, targetNamespace: String): Schema
+}
