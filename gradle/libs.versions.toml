@@ -37,6 +37,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 licensee = { id = "app.cash.licensee", version = "1.13.0" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.19" }
 validation = { id = "app.softwork.validation", version = "0.0.15" }
-mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
+mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
 develocity = { id = "com.gradle.develocity", version = "4.1.1" }
