@@ -56,7 +56,7 @@ fun CodeGenTree.Expression.toCodeBlock(
         value.toString(),
     )
 
-    is CodeGenTree.Expression.CallMember -> CodeBlock.of(member.name)
+    is CodeGenTree.Expression.CallMember -> CodeBlock.of("%N", member.name)
     is CodeGenTree.Expression.Create -> {
         val block = CodeBlock.builder()
         block.add("%T(", normalClass.toPoetType())
@@ -116,7 +116,7 @@ fun CodeGenTree.Expression.toCodeBlock(
         add(")")
     }.build()
 
-    is CodeGenTree.Expression.CallStatic -> CodeBlock.of("%T.", type.toPoetType())
+    is CodeGenTree.Expression.CallStatic -> CodeBlock.of("%T", type.toPoetType())
     is CodeGenTree.Expression.CallFunction -> CodeBlock.Builder().apply {
         if (function.packageName != null) {
             add("%M", MemberName(function.packageName!!, function.name, isExtension = true))
