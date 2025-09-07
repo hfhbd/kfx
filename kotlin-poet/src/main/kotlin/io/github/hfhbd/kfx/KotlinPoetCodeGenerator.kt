@@ -82,6 +82,11 @@ fun CodeGenTree.Expression.toCodeBlock(
         lhs.toCodeBlock(nameAllocator, toPoetType),
         rhs.toCodeBlock(nameAllocator, toPoetType),
     )
+    is CodeGenTree.Expression.Plus -> CodeBlock.of(
+        "%L + %L",
+        lhs.toCodeBlock(nameAllocator, toPoetType),
+        rhs.toCodeBlock(nameAllocator, toPoetType),
+    )
 
     CodeGenTree.Expression.NullLiteral -> CodeBlock.of("null")
     is CodeGenTree.Expression.ListOf -> CodeBlock.Builder().apply {

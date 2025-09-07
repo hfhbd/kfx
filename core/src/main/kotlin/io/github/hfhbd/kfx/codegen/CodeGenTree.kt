@@ -251,6 +251,9 @@ data class CodeGenTree(
         data class Chain(val lhs: Expression, val rhs: Expression) : Expression
 
         @Serializable
+        data class Plus(val lhs: Expression, val rhs: Expression) : Expression
+
+        @Serializable
         data class CallMember(val member: Member) : Expression
 
         @Serializable
