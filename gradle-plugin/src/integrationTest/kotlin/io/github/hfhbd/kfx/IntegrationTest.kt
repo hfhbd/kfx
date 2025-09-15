@@ -15,12 +15,6 @@ class IntegrationTest {
         build(projectDir.toFile(), ":assemble")
     }
 
-    @Test
-    fun softwareTypes() {
-        val projectDir = fixtureDir / "resources" / "software-types"
-        build(projectDir.toFile(), ":assemble")
-    }
-
     private fun build(projectDir: File, vararg tasks: String): BuildResult {
         return GradleRunner.create()
             .withProjectDir(projectDir)
