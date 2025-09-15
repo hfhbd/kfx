@@ -121,12 +121,12 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             )
         }
 
-        val address = address
-        if (address != null) {
+        val soapAddress = soapAddress
+        if (soapAddress != null) {
             function.beginControlFlow(
                 "%M(%S)",
                 MemberName("io.github.hfhbd.kfx.soap", "soapAction", isExtension = true),
-                address,
+                soapAddress,
             )
         }
 
@@ -177,7 +177,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         if (path != null) {
             function.endControlFlow()
         }
-        if (address != null) {
+        if (soapAddress != null) {
             function.endControlFlow()
         }
 

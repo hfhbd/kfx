@@ -168,8 +168,7 @@ data class IRTree(
         val headers: List<Parameter>,
         val queryParameters: List<Parameter>,
 
-        val location: String?,
-        val address: String?,
+        val soapAddress: String?,
 
         val success: Int?,
 
