@@ -203,7 +203,8 @@ data class CodeGenTree(
         val queryParameters: List<Parameter>,
         val headers: List<Parameter>,
 
-        val soapAddress: String?,
+        val location: String?,
+        val address: String?,
 
         val input: Type?,
         val output: Type?,
