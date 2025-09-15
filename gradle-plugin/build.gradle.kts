@@ -47,10 +47,6 @@ gradlePlugin.plugins.register("kfx") {
     id = "io.github.hfhbd.kfx"
     implementationClass = "io.github.hfhbd.kfx.KfxPlugin"
 }
-gradlePlugin.plugins.register("software-types") {
-    id = "io.github.hfhbd.kfx.software-types"
-    implementationClass = "io.github.hfhbd.kfx.KfxSettingsPlugin"
-}
 
 testing.suites {
     withType(JvmTestSuite::class).configureEach {
