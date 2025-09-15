@@ -14,18 +14,6 @@ class SoapTransformer : CodeGenTransformer {
         },
     )
 
-    private val envelopeHeader = CodeGenTree.NormalClass(
-        packageName = "io.github.hfhbd.kfx.soap",
-        names = listOf("Header"),
-        annotations = emptyList(),
-        documentation = null,
-        types = emptyList(),
-        isFault = false,
-        members = emptyList(),
-        functions = emptyList(),
-        isSealed = false,
-    )
-
     private val envelopeBody = CodeGenTree.NormalClass(
         packageName = "io.github.hfhbd.kfx.soap",
         names = listOf("Body"),
@@ -55,8 +43,7 @@ class SoapTransformer : CodeGenTransformer {
             packageName = packageName,
             name = name,
             documentation = documentation,
-            location = location,
-            address = address,
+            soapAddress = soapAddress,
             input = input!!,
             output = output!!,
             fault = fault!!,
@@ -69,13 +56,7 @@ class SoapTransformer : CodeGenTransformer {
             inputWrapper = CodeGenTree.Expression.Create(
                 envelope(input!!),
                 listOf(
-                    "header" to CodeGenTree.Expression.Create(
-                        envelopeHeader,
-                        listOf(
-                            "to" to CodeGenTree.Expression.StringLiteral(location!!),
-                            "action" to CodeGenTree.Expression.StringLiteral(address!!),
-                        ),
-                    ),
+                    "header" to CodeGenTree.Expression.NullLiteral,
                     "body" to CodeGenTree.Expression.Create(
                         envelopeBody,
                         listOf(
