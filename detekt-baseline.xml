@@ -22,6 +22,7 @@
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.getResponse( nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, ): CodeBlock</ID>
     <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:SoapTransformer.kt$SoapTransformer$private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
