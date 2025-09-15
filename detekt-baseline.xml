@@ -44,8 +44,10 @@
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$204</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$400</ID>
     <ID>MaxLineLength:ODataTest.kt$ODataTest$"GetIntegrationPackages('{Id}')MessageMappingDesigntimeArtifacts(Id='{ArtifactId}',Version='{ArtifactVersion}')".transform()</ID>
-    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Header type="MyHeader">&lt;value to="to" />&lt;/Header>&lt;Body>&lt;Fault>&lt;faultcode>soap:Server&lt;/faultcode>&lt;faultstring>Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>
-    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Header type="MyHeader">&lt;value to="to" />&lt;/Header>&lt;Body>&lt;Pair first="foo" second="42" />&lt;/Body>&lt;/Envelope>"""</ID>
+    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Fault>&lt;faultcode>soap:Server&lt;/faultcode>&lt;faultstring>Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>
+    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Pair first="foo" second="42" />&lt;/Body>&lt;/Envelope>"""</ID>
+    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Header>&lt;to>to&lt;/to>&lt;/Header>&lt;Body>&lt;Fault>&lt;faultcode>soap:Server&lt;/faultcode>&lt;faultstring>Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>
+    <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Header>&lt;to>to&lt;/to>&lt;/Header>&lt;Body>&lt;Pair first="foo" second="42" />&lt;/Body>&lt;/Envelope>"""</ID>
     <ID>MaxLineLength:WsdlGeneration.kt$WsdlGeneration$val</ID>
     <ID>MaximumLineLength:ODataTest.kt$ODataTest$ </ID>
     <ID>MaximumLineLength:SerializationTest.kt$SerializationTest$ </ID>
