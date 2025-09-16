@@ -39,4 +39,4 @@ serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.20"
 validation = { id = "app.softwork.validation", version = "0.0.15" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
-develocity = { id = "com.gradle.develocity", version = "4.1.1" }
+develocity = { id = "com.gradle.develocity", version = "4.2" }
