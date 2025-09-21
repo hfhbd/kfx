@@ -38,14 +38,11 @@ sourceSets.main {
     kotlin.srcDir(storeVersion)
 }
 
-gradlePlugin.plugins.configureEach {
-    displayName = "kfx Gradle Plugin"
-    description = "kfx Gradle Plugin"
-}
-
 gradlePlugin.plugins.register("kfx") {
     id = "io.github.hfhbd.kfx"
     implementationClass = "io.github.hfhbd.kfx.KfxPlugin"
+    displayName = "kfx Gradle Plugin"
+    description = "kfx Gradle Plugin"
 }
 
 testing.suites {
@@ -64,7 +61,6 @@ testing.suites {
 
         targets.configureEach {
             testTask {
-                environment("fixtureDir", project.file("src/testFixtures").path)
                 javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
             }
         }
