@@ -11,7 +11,11 @@ import io.github.hfhbd.kfx.xsd.Classes
 import io.github.hfhbd.kfx.xsd.Schema
 import io.github.hfhbd.kfx.xsd.XsdTransformer
 import io.github.hfhbd.kfx.xsd.XsdTransformerFactory
+import io.github.hfhbd.kfx.xsd.find
+import io.github.hfhbd.kfx.xsd.packageName
+import io.github.hfhbd.kfx.xsd.resolve
 import io.github.hfhbd.kfx.xsd.toIr
+import io.github.hfhbd.kfx.xsd.trimDocumentation
 import nl.adaptivity.xmlutil.core.*
 import java.io.InputStream
 import java.nio.file.Path
@@ -57,7 +61,8 @@ private fun InputStream.createIr(
 
     val reader = KtXmlReader(this)
     val wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
-    val irTree = wsdl.toIr({ prefix ->
+    val irTree = wsdl.toIr(
+        { prefix ->
             reader.getNamespaceURI(prefix)
         },
         xsdTransformerFactories.map { it.create() },
@@ -70,21 +75,6 @@ private fun InputStream.createIr(
         imported
     }
     return irTree
-}
-
-private val String.packageName: String get() {
-    val parts = removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
-    val host = parts[0].split(".").reversed()
-    return (host + parts.drop(1)).joinToString(".") {
-        val s = it.lowercase()
-            .replace("-", "_")
-            .replace(".", "")
-        if (s.toIntOrNull() != null) {
-            "v$s"
-        } else {
-            s
-        }
-    }
 }
 
 private fun WSDL.toIr(
@@ -156,13 +146,6 @@ private fun WSDL.toIr(
     return irTree
 }
 
-private fun String.trimDocumentation(): String {
-    val docs = split("\n")
-    return docs.joinToString(" ") {
-        it.trim()
-    }.trim()
-}
-
 private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.ClassName>): Set<IRTree.Class> = buildSet {
     val resolvedFaults = faults.mapTo(mutableSetOf()) {
         val found = find(it) as IRTree.NormalClass
@@ -190,30 +173,6 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
             }
         }
     }
-}
-
-private fun IRTree.Member.resolve(from: Map<IRTree.ClassName, Classes>): IRTree.Member {
-    val type = type
-    if (type !is IRTree.NormalClass) {
-        return this
-    }
-    val qName = IRTree.ClassName(type.packageName, type.name)
-    val resolved = from.find(qName)
-    return copy(type = resolved)
-}
-
-private fun Map<IRTree.ClassName, Classes>.find(qname: IRTree.ClassName): IRTree.Type =
-    findOrNull(qname)
-        ?: error("$qname not found in $keys")
-
-private fun Map<IRTree.ClassName, Classes>.findOrNull(qname: IRTree.ClassName): IRTree.Type? = when (
-    val value = get(
-        qname,
-    )
-) {
-    is Classes.TypeAlias -> find(value.actual)
-    is Classes.ActualClass -> value.forClass
-    null -> null
 }
 
 private fun Type.resolve(definitions: WSDL): IRTree.ClassName {

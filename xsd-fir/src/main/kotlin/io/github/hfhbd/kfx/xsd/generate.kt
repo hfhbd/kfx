@@ -51,7 +51,7 @@ private fun InputStream.createIr(
     return irTree
 }
 
-private val String.packageName: String
+val String.packageName: String
     get() {
         val parts = removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
         val host = parts[0].split(".").reversed()
@@ -334,7 +334,7 @@ private fun Annotation.documentation(): String? {
     }?.joinToString("")?.trim()
 }
 
-private fun String.trimDocumentation(): String {
+fun String.trimDocumentation(): String {
     val docs = split("\n")
     return docs.joinToString(" ") {
         it.trim()
@@ -368,7 +368,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
     }
 }
 
-private fun IRTree.Member.resolve(from: Map<IRTree.ClassName, Classes>): IRTree.Member {
+fun IRTree.Member.resolve(from: Map<IRTree.ClassName, Classes>): IRTree.Member {
     val type = type
     if (type !is IRTree.NormalClass) {
         return this
@@ -543,7 +543,7 @@ private fun List<Element>.mapToIr(
                         }
                         val minList = restrictions.minLength
                         if (minList != null) {
-                           add(IRTree.Member.Requirement.MinLength(minList.value))
+                            add(IRTree.Member.Requirement.MinLength(minList.value))
                         }
                     }
                 },
@@ -579,7 +579,7 @@ private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Cl
     )
 }
 
-private fun Map<IRTree.ClassName, Classes>.find(qname: IRTree.ClassName): IRTree.Type =
+fun Map<IRTree.ClassName, Classes>.find(qname: IRTree.ClassName): IRTree.Type =
     findOrNull(qname)
         ?: error("$qname not found in $keys")
 
