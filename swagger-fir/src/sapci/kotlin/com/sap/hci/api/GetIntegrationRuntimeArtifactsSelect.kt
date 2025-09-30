@@ -15,9 +15,9 @@ public enum class GetIntegrationRuntimeArtifactsSelect {
   @SerialName(value = "Type")
   Type,
   @SerialName(value = "DeployedBy")
-  Deployedby,
+  DeployedBy,
   @SerialName(value = "DeployedOn")
-  Deployedon,
+  DeployedOn,
   @SerialName(value = "Status")
   Status,
   ;

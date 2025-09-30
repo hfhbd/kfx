@@ -19,13 +19,13 @@ public enum class GetServiceEndpointsSelect {
   @SerialName(value = "Description")
   Description,
   @SerialName(value = "LastUpdated")
-  Lastupdated,
+  LastUpdated,
   @SerialName(value = "Protocol")
   Protocol,
   @SerialName(value = "EntryPoints")
-  Entrypoints,
+  EntryPoints,
   @SerialName(value = "ApiDefinitions")
-  Apidefinitions,
+  ApiDefinitions,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

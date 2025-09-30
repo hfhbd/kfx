@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 public enum class GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurationsSelect {
   @SerialName(value = "ParameterKey")
-  Parameterkey,
+  ParameterKey,
   @SerialName(value = "ParameterValue")
-  Parametervalue,
+  ParameterValue,
   @SerialName(value = "DataType")
-  Datatype,
+  DataType,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

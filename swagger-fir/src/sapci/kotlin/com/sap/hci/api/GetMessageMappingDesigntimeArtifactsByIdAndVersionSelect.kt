@@ -11,7 +11,7 @@ public enum class GetMessageMappingDesigntimeArtifactsByIdAndVersionSelect {
   @SerialName(value = "Version")
   Version,
   @SerialName(value = "PackageId")
-  Packageid,
+  PackageId,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

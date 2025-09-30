@@ -9,9 +9,9 @@ public enum class GetIntegrationDesigntimeArtifactsByIdAndVersionResourcesSelect
   @SerialName(value = "Name")
   Name,
   @SerialName(value = "ResourceType")
-  Resourcetype,
+  ResourceType,
   @SerialName(value = "ReferencedResourceType")
-  Referencedresourcetype,
+  ReferencedResourceType,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

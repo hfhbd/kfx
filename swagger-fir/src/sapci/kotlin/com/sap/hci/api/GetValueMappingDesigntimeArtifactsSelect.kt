@@ -11,13 +11,13 @@ public enum class GetValueMappingDesigntimeArtifactsSelect {
   @SerialName(value = "Version")
   Version,
   @SerialName(value = "PackageId")
-  Packageid,
+  PackageId,
   @SerialName(value = "Name")
   Name,
   @SerialName(value = "Description")
   Description,
   @SerialName(value = "ArtifactContent")
-  Artifactcontent,
+  ArtifactContent,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

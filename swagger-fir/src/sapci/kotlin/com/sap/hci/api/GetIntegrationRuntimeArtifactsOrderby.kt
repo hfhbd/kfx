@@ -9,31 +9,31 @@ public enum class GetIntegrationRuntimeArtifactsOrderby {
   @SerialName(value = "Id")
   Id,
   @SerialName(value = "Id desc")
-  `Id desc`,
+  IdDesc,
   @SerialName(value = "Version")
   Version,
   @SerialName(value = "Version desc")
-  `Version desc`,
+  VersionDesc,
   @SerialName(value = "Name")
   Name,
   @SerialName(value = "Name desc")
-  `Name desc`,
+  NameDesc,
   @SerialName(value = "Type")
   Type,
   @SerialName(value = "Type desc")
-  `Type desc`,
+  TypeDesc,
   @SerialName(value = "DeployedBy")
-  Deployedby,
+  DeployedBy,
   @SerialName(value = "DeployedBy desc")
-  `Deployedby desc`,
+  DeployedByDesc,
   @SerialName(value = "DeployedOn")
-  Deployedon,
+  DeployedOn,
   @SerialName(value = "DeployedOn desc")
-  `Deployedon desc`,
+  DeployedOnDesc,
   @SerialName(value = "Status")
   Status,
   @SerialName(value = "Status desc")
-  `Status desc`,
+  StatusDesc,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

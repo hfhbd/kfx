@@ -230,6 +230,12 @@
                         "nullable": true
                     }
                 }
+            },
+            "com.example.TestEnum": {
+                "type": "string",
+                "enum": [
+                    "A", "B.B"
+                ]
             }
         },
         "securitySchemes": {

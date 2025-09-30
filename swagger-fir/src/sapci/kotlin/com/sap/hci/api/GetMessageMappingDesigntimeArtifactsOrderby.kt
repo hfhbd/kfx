@@ -9,7 +9,7 @@ public enum class GetMessageMappingDesigntimeArtifactsOrderby {
   @SerialName(value = "Name")
   Name,
   @SerialName(value = "Name desc")
-  `Name desc`,
+  NameDesc,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 public enum class GetServiceEndpointsExpand {
   @SerialName(value = "EntryPoints")
-  Entrypoints,
+  EntryPoints,
   @SerialName(value = "ApiDefinitions")
-  Apidefinitions,
+  ApiDefinitions,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)
