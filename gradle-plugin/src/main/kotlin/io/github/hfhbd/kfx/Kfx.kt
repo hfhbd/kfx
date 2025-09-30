@@ -4,13 +4,11 @@ import org.gradle.api.Action
 import org.gradle.api.Named
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.tasks.Nested
-import org.gradle.declarative.dsl.model.annotations.Configuring
 
 interface Kfx : Named {
     @get:Nested
     val dependencies: KfxDependencies
 
-    @Configuring
     fun dependencies(action: Action<KfxDependencies>) {
         action.execute(dependencies)
     }

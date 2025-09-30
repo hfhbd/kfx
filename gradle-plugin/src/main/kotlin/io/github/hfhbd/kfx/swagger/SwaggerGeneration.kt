@@ -2,9 +2,11 @@ package io.github.hfhbd.kfx.swagger
 
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.ir.PackageName
-import org.gradle.api.file.*
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.workers.*
+import org.gradle.workers.WorkAction
+import org.gradle.workers.WorkParameters
 import java.util.ServiceLoader
 
 internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.SwaggerParameters> {
