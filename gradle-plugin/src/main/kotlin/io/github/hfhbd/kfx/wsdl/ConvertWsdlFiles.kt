@@ -1,10 +1,19 @@
 package io.github.hfhbd.kfx.wsdl
 
-import org.gradle.api.*
-import org.gradle.api.file.*
-import org.gradle.api.tasks.*
-import org.gradle.workers.*
-import javax.inject.*
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.IgnoreEmptyDirectories
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.SkipWhenEmpty
+import org.gradle.api.tasks.TaskAction
+import org.gradle.workers.WorkerExecutor
+import javax.inject.Inject
 
 @CacheableTask
 abstract class ConvertWsdlFiles : DefaultTask() {

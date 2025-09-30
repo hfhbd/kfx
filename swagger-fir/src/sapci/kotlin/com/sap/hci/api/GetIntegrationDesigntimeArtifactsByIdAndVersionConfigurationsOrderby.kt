@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 public enum class GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurationsOrderby {
   @SerialName(value = "ParameterKey")
-  Parameterkey,
+  ParameterKey,
   @SerialName(value = "ParameterKey desc")
-  `Parameterkey desc`,
+  ParameterKeyDesc,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)

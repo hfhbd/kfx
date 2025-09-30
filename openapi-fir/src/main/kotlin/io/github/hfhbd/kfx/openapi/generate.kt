@@ -9,6 +9,7 @@ import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IRTree.Literal.*
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.openapi.OpenApi.Components.*
+import io.github.hfhbd.kfx.operationIdToCamelCase
 import io.github.hfhbd.kfx.toCamelCase
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.LocalDate
@@ -71,8 +72,7 @@ private fun OpenApi.toIr(
             -> continue
 
             is Schema.STRING -> {
-                val irType = type.toIr(null, name, irTypes)
-                when (irType) {
+                when (val irType = type.toIr(null, name, irTypes)) {
                     is IRTree.Enum -> irTypes[name] = irType
                     else -> continue
                 }
@@ -190,8 +190,8 @@ private fun OpenApi.Operation.toIr(
         else -> "$summary\n$description"
     }
 
-    val name = id.toCamelCase()
-    val inputSchema = requestBody?.content?.values?.first()?.schema?.takeUnless { it.isUnit() }
+    val name = id.operationIdToCamelCase()
+    val inputSchema = requestBody?.content?.entries?.firstOrNull()?.value?.schema?.takeUnless { it.isUnit() }
     var input = inputSchema?.toIr(
         parentName = name,
         name = name,
@@ -522,7 +522,9 @@ private fun Schema.STRING.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type = if (enum.isNotEmpty()) {
-    val name = (parentName ?: "") + name!!.toCamelCase()
+    val name = (parentName ?: "") + name!!.toCamelCase().replaceFirstChar {
+        it.uppercaseChar()
+    }
     val className = name.asClassName()
     val enum = IRTree.Enum(
         name = className.name,
@@ -566,7 +568,7 @@ private fun String.asClassName(): IRTree.ClassName {
             qName.last().replaceFirstChar { it.uppercaseChar() },
         )
     } else {
-        IRTree.ClassName("", toCamelCase())
+        IRTree.ClassName("", replaceFirstChar { it.uppercaseChar() })
     }
 }
 

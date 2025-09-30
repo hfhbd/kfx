@@ -9,15 +9,15 @@ public enum class GetIntegrationDesigntimeArtifactsByIdAndVersionResourcesOrderb
   @SerialName(value = "Name")
   Name,
   @SerialName(value = "Name desc")
-  `Name desc`,
+  NameDesc,
   @SerialName(value = "ResourceType")
-  Resourcetype,
+  ResourceType,
   @SerialName(value = "ResourceType desc")
-  `Resourcetype desc`,
+  ResourceTypeDesc,
   @SerialName(value = "Name,ResourceType")
-  `Name,resourcetype`,
+  `Name,ResourceType`,
   @SerialName(value = "Name desc,ResourceType desc")
-  `Name desc,resourcetype desc`,
+  `NameDesc,ResourceTypeDesc`,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)
