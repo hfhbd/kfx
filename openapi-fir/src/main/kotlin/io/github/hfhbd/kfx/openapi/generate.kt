@@ -191,7 +191,7 @@ private fun OpenApi.Operation.toIr(
     }
 
     val name = id.toCamelCase()
-    val inputSchema = requestBody?.content?.values?.first()?.schema?.takeUnless { it.isUnit() }
+    val inputSchema = requestBody?.content?.entries?.firstOrNull()?.value?.schema?.takeUnless { it.isUnit() }
     var input = inputSchema?.toIr(
         parentName = name,
         name = name,
