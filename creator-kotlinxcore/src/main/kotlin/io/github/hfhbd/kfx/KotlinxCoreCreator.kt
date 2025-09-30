@@ -57,7 +57,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
         names = listOf(ir.name),
         values = ir.values.map {
             CodeGenTree.Enum.Value(
-                name = it.value,
+                name = it.value.toPascalCaseEnumValue(),
                 documentation = it.documentation,
                 annotations = listOf(serialName(it.serialName ?: it.value)),
             )
