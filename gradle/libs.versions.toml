@@ -25,7 +25,7 @@ ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negoti
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-server-double-receive = { module = "io.ktor:ktor-server-double-receive", version.ref = "ktor" }
 
-logback = { module = "ch.qos.logback:logback-classic", version = "1.5.18" }
+logback = { module = "ch.qos.logback:logback-classic", version = "1.5.19" }
 
 dokka-mermaid = { module = "com.glureau:html-mermaid-dokka-plugin", version = "0.6.0" }
 
