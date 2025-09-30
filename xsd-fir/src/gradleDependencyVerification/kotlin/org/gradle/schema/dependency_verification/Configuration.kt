@@ -47,7 +47,7 @@ public data class Configuration(
     value = "ignored-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val gnoredKeys: IgnoredKeys? = null,
+  public val ignoredKeys: IgnoredKeys? = null,
   @XmlElement
   @XmlSerialName(
     value = "trusted-keys",
