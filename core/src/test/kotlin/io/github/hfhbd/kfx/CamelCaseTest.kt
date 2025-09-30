@@ -15,6 +15,16 @@ class CamelCaseTest {
     }
 
     @Test
+    fun toCamelCaseEnumValue() {
+        assertEquals("Foobar", "foobar".toPascalCaseEnumValue())
+        assertEquals("FooBar", "FooBar".toPascalCaseEnumValue())
+        assertEquals("FooBar", "foo.Bar".toPascalCaseEnumValue())
+        assertEquals("FooBar", "Foo.Bar".toPascalCaseEnumValue())
+        assertEquals("FooBar", "FOO_BAR".toPascalCaseEnumValue())
+        assertEquals("FooBar", "Foo Bar".toPascalCaseEnumValue())
+    }
+
+    @Test
     fun operationIdToCamelCase() {
         assertEquals("foobar", "foobar".operationIdToCamelCase())
         assertEquals("fooBar", "fooBar".operationIdToCamelCase())
