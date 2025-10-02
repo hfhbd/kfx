@@ -22,7 +22,7 @@ jobs:
         uses: hfhbd/actions/setup-version@main
         id: version
       - uses: actions/checkout@v5
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Release maven artifacts
         run: ./gradlew publishAllPublicationsToMavenCentralSnapshotRepository -Pversion=${{ steps.version.outputs.version }}
@@ -46,7 +46,7 @@ jobs:
         uses: hfhbd/actions/setup-version@main
         id: version
       - uses: actions/checkout@v5
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Release maven artifacts
         run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pversion=${{ steps.version.outputs.version }}
