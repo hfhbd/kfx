@@ -1,11 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        targetNamespace="https://schema.gradle.org/dependency-verification"
         elementFormDefault="qualified"
+        targetNamespace="https://schema.gradle.org/dependency-verification"
         xmlns="https://schema.gradle.org/dependency-verification"
 >
     <xs:complexType name="coordinatesType">
+        <xs:attribute name="group" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="version" type="xs:string"/>
+        <xs:attribute name="regex" type="xs:boolean"/>
         <xs:attribute name="file" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="trustType">
@@ -21,6 +25,7 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="ignored-keyType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="ignored-keysType">
@@ -32,6 +37,11 @@
         <xs:sequence>
             <xs:element name="trusting" type="trustingType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="group" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="version" type="xs:string"/>
+        <xs:attribute name="file" type="xs:string"/>
         <xs:attribute name="regex" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="trustingType">
@@ -75,24 +85,32 @@
         <xs:sequence>
             <xs:element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="origin" type="xs:string"/>
         <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="sha1Type" mixed="true">
         <xs:sequence>
             <xs:element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="origin" type="xs:string"/>
         <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="sha256Type" mixed="true">
         <xs:sequence>
             <xs:element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="origin" type="xs:string"/>
         <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="sha512Type" mixed="true">
         <xs:sequence>
             <xs:element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="origin" type="xs:string"/>
         <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="pgpType">
@@ -112,6 +130,8 @@
         <xs:sequence>
             <xs:element name="artifact" type="artifactType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="group" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="version" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="also-trustType">
