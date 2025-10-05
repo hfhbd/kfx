@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://schema.gradle.org/dependency-verification">
+    <element name="verification-metadata" type="verification-metadataType" />
+    <complexType name="coordinatesType" mixed="false">
+        <attribute name="file" type="string" use="optional" />
+    </complexType>
+    <complexType name="trustType" mixed="false">
+        <complexContent>
+            <extension base="coordinatesType">
+                <attribute name="reason" type="string" use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="trusted-artifactsType" mixed="false">
+        <sequence>
+            <element name="trust" type="trustType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <complexType name="ignored-keyType" mixed="false">
+        <attribute name="reason" type="string" use="optional" />
+    </complexType>
+    <complexType name="ignored-keysType" mixed="false">
+        <sequence>
+            <element name="ignored-key" type="ignored-keyType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <complexType name="trusted-keyType" mixed="true">
+        <sequence>
+            <element name="trusting" type="trustingType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="regex" type="string" use="optional" />
+    </complexType>
+    <complexType name="trustingType" mixed="false">
+        <complexContent>
+            <extension base="coordinatesType" />
+        </complexContent>
+    </complexType>
+    <complexType name="trusted-keysType" mixed="false">
+        <sequence>
+            <element name="trusted-key" type="trusted-keyType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <complexType name="key-serversType" mixed="false">
+        <sequence>
+            <element name="key-server" type="key-serverType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="enabled" type="boolean" use="optional" />
+    </complexType>
+    <complexType name="key-serverType" mixed="false">
+        <attribute name="uri" type="string" use="optional" />
+    </complexType>
+    <complexType name="configurationType" mixed="false">
+        <sequence>
+            <element name="verify-metadata" type="boolean" />
+            <element name="verify-signatures" type="boolean" />
+            <element name="keyring-format" minOccurs="0">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="armored" />
+                        <enumeration value="binary" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="key-servers" type="key-serversType" minOccurs="0" />
+            <element name="trusted-artifacts" type="trusted-artifactsType" minOccurs="0" />
+            <element name="ignored-keys" type="ignored-keysType" minOccurs="0" />
+            <element name="trusted-keys" type="trusted-keysType" minOccurs="0" />
+        </sequence>
+    </complexType>
+    <complexType name="md5Type" mixed="true">
+        <sequence>
+            <element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="reason" type="string" use="optional" />
+    </complexType>
+    <complexType name="sha1Type" mixed="true">
+        <sequence>
+            <element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="reason" type="string" use="optional" />
+    </complexType>
+    <complexType name="sha256Type" mixed="true">
+        <sequence>
+            <element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="reason" type="string" use="optional" />
+    </complexType>
+    <complexType name="sha512Type" mixed="true">
+        <sequence>
+            <element name="also-trust" type="also-trustType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="reason" type="string" use="optional" />
+    </complexType>
+    <complexType name="pgpType" mixed="false">
+        <simpleContent>
+            <extension base="string">
+                <attribute name="value" type="string" use="required" />
+            </extension>
+        </simpleContent>
+    </complexType>
+    <complexType name="artifactType" mixed="false">
+        <choice minOccurs="0" maxOccurs="unbounded">
+            <element name="sha512" type="sha512Type" />
+        </choice>
+        <attribute name="name" type="string" use="required" />
+    </complexType>
+    <complexType name="componentType" mixed="false">
+        <sequence>
+            <element name="artifact" type="artifactType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="version" type="string" use="required" />
+    </complexType>
+    <complexType name="also-trustType" mixed="false">
+        <attribute name="value" type="string" use="optional" />
+    </complexType>
+    <complexType name="componentsType" mixed="false">
+        <sequence>
+            <element name="component" type="componentType" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <complexType name="verification-metadataType" mixed="false">
+        <sequence>
+            <element name="configuration" type="configurationType" />
+            <element name="components" type="componentsType" />
+        </sequence>
+    </complexType>
+</schema>
