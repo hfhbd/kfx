@@ -122,6 +122,11 @@
     </xs:complexType>
     <xs:complexType name="artifactType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="ignored-keys" type="ignored-keysType"/>
+            <xs:element name="pgp" type="pgpType"/>
+            <xs:element name="md5" type="md5Type"/>
+            <xs:element name="sha1" type="sha1Type"/>
+            <xs:element name="sha256" type="sha256Type"/>
             <xs:element name="sha512" type="sha512Type"/>
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required"/>
