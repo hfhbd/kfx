@@ -97,10 +97,8 @@ data class CodeGenTree(
         val documentation: String?
         val annotations: List<Annotation>
 
-        val qualifiedName: String get() = if (packageName == "") {
-            names.joinToString(
-                ".",
-            )
+        val qualifiedName: String get() = if (packageName.isEmpty()) {
+            names.joinToString(".")
         } else {
             "$packageName.${names.joinToString(".")}"
         }
@@ -173,10 +171,8 @@ data class CodeGenTree(
         val names: List<String>,
         val runtimeTypes: List<Type> = emptyList(),
     ) {
-        val qualifiedName: String get() = if (packageName == "") {
-            names.joinToString(
-                ".",
-            )
+        val qualifiedName: String get() = if (packageName.isEmpty()) {
+            names.joinToString(".")
         } else {
             "$packageName.${names.joinToString(".")}"
         }
