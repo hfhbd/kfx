@@ -172,7 +172,15 @@ data class CodeGenTree(
         val packageName: String,
         val names: List<String>,
         val runtimeTypes: List<Type> = emptyList(),
-    )
+    ) {
+        val qualifiedName: String get() = if (packageName == "") {
+            names.joinToString(
+                ".",
+            )
+        } else {
+            "$packageName.${names.joinToString(".")}"
+        }
+    }
 
     @Serializable
     data class Enum(
