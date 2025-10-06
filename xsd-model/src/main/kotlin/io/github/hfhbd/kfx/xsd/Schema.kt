@@ -20,27 +20,27 @@ data class Schema(
     val attributeFormDefault: String? = null,
 
     @XmlElement
-    @XmlSerialName("import", XSD)
+    @SerialName("import")
     val imports: List<Import> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 
     @XmlElement
-    @XmlSerialName("element", XSD)
+    @SerialName("element")
     val elements: List<Element> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("complexType", XSD)
+    @SerialName("complexType")
     val complexTypes: List<ComplexType> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("simpleType", XSD)
+    @SerialName("simpleType")
     val simpleType: List<SimpleType> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("include", XSD)
+    @SerialName("include")
     val include: Include? = null,
 )
 
@@ -56,11 +56,11 @@ data class SimpleType(
     val name: String? = null,
 
     @XmlElement
-    @XmlSerialName("annotation")
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 
     @XmlElement
-    @XmlSerialName("restriction", XSD)
+    @SerialName("restriction")
     val restriction: Restriction,
 )
 
@@ -69,11 +69,11 @@ data class SimpleType(
 data class Restriction(
     val base: String,
     @XmlElement
-    @XmlSerialName("pattern", XSD)
+    @SerialName("pattern")
     val pattern: List<Pattern> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("enumeration", XSD)
+    @SerialName("enumeration")
     val enumeration: List<Enumeration> = emptyList(),
 
     @XmlElement
@@ -102,7 +102,7 @@ data class Restriction(
 @XmlSerialName("enumeration", XSD)
 data class Enumeration(
     val value: String,
-    @XmlSerialName("annotation", XSD)
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 )
 
@@ -112,26 +112,26 @@ data class ComplexType(
     val name: String,
 
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 
     @XmlElement
-    @XmlSerialName("sequence", XSD)
+    @SerialName("sequence")
     val sequence: Sequence? = null,
 
-    @XmlSerialName("choice", XSD)
+    @SerialName("choice")
     val choice: Choice? = null,
 
     @XmlElement
-    @XmlSerialName("simpleContent", XSD)
+    @SerialName("simpleContent")
     val simpleContent: SimpleContent? = null,
 
     @XmlElement
-    @XmlSerialName("attribute", XSD)
+    @SerialName("attribute")
     val attributes: List<Attribute> = listOf(),
 
     @XmlElement
-    @XmlSerialName("complexContent", XSD)
+    @SerialName("complexContent")
     val complexContent: ComplexContent? = null,
 
     val mixed: Boolean = false,
@@ -141,7 +141,7 @@ data class ComplexType(
 @XmlSerialName("complexContent", XSD)
 data class ComplexContent(
     @XmlElement
-    @XmlSerialName("extension", XSD)
+    @SerialName("extension")
     val extension: Extension,
 )
 
@@ -149,7 +149,7 @@ data class ComplexContent(
 @XmlSerialName("simpleContent", XSD)
 data class SimpleContent(
     @XmlElement
-    @XmlSerialName("extension", XSD)
+    @SerialName("extension")
     val extension: Extension,
 )
 
@@ -159,11 +159,11 @@ data class Extension(
     val base: String,
 
     @XmlElement
-    @XmlSerialName("attribute", XSD)
+    @SerialName("attribute")
     val attributes: List<Attribute> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("sequence", XSD)
+    @SerialName("sequence")
     val sequence: Sequence?,
 )
 
@@ -172,12 +172,13 @@ data class Extension(
 data class Attribute(
     val name: String,
     val type: String? = null,
+
     @XmlElement(false)
-    @XmlSerialName("use", XSD)
+    @SerialName("use")
     val use: Use = Use.Optional,
 
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 )
 
@@ -207,7 +208,7 @@ sealed interface Elements
 @Serializable
 @XmlSerialName("choice", XSD)
 data class Choice(
-    @XmlSerialName("element", XSD)
+    @SerialName("element")
     val element: List<Element>,
 
     val minOccurs: String = "1",
@@ -220,7 +221,7 @@ data class Element(
     val name: String,
     val type: String? = null,
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @SerialName("annotation")
     val annotation: Annotation? = null,
 
     val minOccurs: String = "1",
@@ -232,11 +233,11 @@ data class Element(
     val ref: String? = null,
 
     @XmlElement
-    @XmlSerialName("complexType", XSD)
+    @SerialName("complexType")
     val complexType: ComplexType? = null,
 
     @XmlElement
-    @XmlSerialName("simpleType", XSD)
+    @SerialName("simpleType")
     val simpleType: SimpleType? = null,
 ) : Elements
 
@@ -244,11 +245,11 @@ data class Element(
 @XmlSerialName("annotation", XSD)
 data class Annotation(
     @XmlElement
-    @XmlSerialName("appinfo", XSD)
+    @SerialName("appinfo")
     val appInfo: AppInfo? = null,
 
     @XmlElement
-    @XmlSerialName("documentation", XSD)
+    @SerialName("documentation")
     val documentation: Documentation? = null,
 )
 
