@@ -10,8 +10,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 )
 data class Sha256(
     val also: List<Also> = emptyList(),
-    override val name: String,
+    val value: String,
     val origin: String? = null,
-    val reason: String? = null
+    val reason: String? = null,
+    override val name: String,
 ) : Artifact {
 }

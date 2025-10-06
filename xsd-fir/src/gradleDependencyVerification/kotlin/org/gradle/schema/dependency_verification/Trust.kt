@@ -9,10 +9,10 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class Trust(
-  val group: String? = null,
-  val name: String? = null,
-  val version: String? = null,
-  val regex: String? = null,
-  val file: String? = null,
+  override val group: String? = null,
+  override val name: String? = null,
+  override val version: String? = null,
+  override val regex: String? = null,
+  override val file: String? = null,
   val reason: String? = null,
-)
+): Coordinates

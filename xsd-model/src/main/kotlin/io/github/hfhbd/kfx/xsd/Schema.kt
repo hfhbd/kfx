@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.xsd
 
 import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
@@ -28,15 +29,15 @@ data class Schema(
 
     @XmlElement
     @XmlSerialName("element", XSD)
-    val elements: List<Element>,
+    val elements: List<Element> = emptyList(),
 
     @XmlElement
     @XmlSerialName("complexType", XSD)
-    val complexTypes: List<ComplexType>,
+    val complexTypes: List<ComplexType> = emptyList(),
 
     @XmlElement
     @XmlSerialName("simpleType", XSD)
-    val simpleType: List<SimpleType>,
+    val simpleType: List<SimpleType> = emptyList(),
 
     @XmlElement
     @XmlSerialName("include", XSD)
@@ -44,11 +45,13 @@ data class Schema(
 )
 
 @Serializable
+@XmlSerialName("include", XSD)
 data class Include(
     val schemaLocation: String,
 )
 
 @Serializable
+@XmlSerialName("simpleType", XSD)
 data class SimpleType(
     val name: String? = null,
 
@@ -57,11 +60,12 @@ data class SimpleType(
     val annotation: Annotation? = null,
 
     @XmlElement
-    @XmlSerialName("restriction")
+    @XmlSerialName("restriction", XSD)
     val restriction: Restriction,
 )
 
 @Serializable
+@XmlSerialName("restriction", XSD)
 data class Restriction(
     val base: String,
     @XmlElement
@@ -69,60 +73,33 @@ data class Restriction(
     val pattern: List<Pattern> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("enumeration")
+    @XmlSerialName("enumeration", XSD)
     val enumeration: List<Enumeration> = emptyList(),
 
     @XmlElement
-    @XmlSerialName("minLength", XSD)
-    val minLength: MinLength? = null,
+    val minLength: Int? = null,
 
     @XmlElement
-    @XmlSerialName("maxLength", XSD)
-    val maxLength: MaxLength? = null,
+    val maxLength: Int? = null,
 
     @XmlElement
-    @XmlSerialName("minInclusive", XSD)
-    val minInclusive: MinInclusive? = null,
+    val minInclusive: Int? = null,
 
     @XmlElement
-    @XmlSerialName("maxInclusive", XSD)
-    val maxInclusive: MaxInclusive? = null,
+    val maxInclusive: Int? = null,
 
     @XmlElement
-    @XmlSerialName("fractionDigits", XSD)
-    val fractionDigits: FractionDigits? = null,
+    val fractionDigits: Int? = null,
 
     @XmlElement
-    @XmlSerialName("totalDigits", XSD)
-    val totalDigits: TotalDigits? = null,
+    val totalDigits: Int? = null,
 
     @XmlElement
-    @XmlSerialName("length", XSD)
-    val length: Length? = null,
-) {
-    @Serializable
-    data class MinLength(val value: Int)
-
-    @Serializable
-    data class MaxLength(val value: Int)
-
-    @Serializable
-    data class MinInclusive(val value: Int)
-
-    @Serializable
-    data class MaxInclusive(val value: Int)
-
-    @Serializable
-    data class FractionDigits(val value: Int)
-
-    @Serializable
-    data class TotalDigits(val value: Int)
-
-    @Serializable
-    data class Length(val value: Int)
-}
+    val length: Int? = null,
+)
 
 @Serializable
+@XmlSerialName("enumeration", XSD)
 data class Enumeration(
     val value: String,
     @XmlSerialName("annotation", XSD)
@@ -130,8 +107,9 @@ data class Enumeration(
 )
 
 @Serializable
+@XmlSerialName("complexType", XSD)
 data class ComplexType(
-    val name: String? = null,
+    val name: String,
 
     @XmlElement
     @XmlSerialName("annotation", XSD)
@@ -150,7 +128,7 @@ data class ComplexType(
 
     @XmlElement
     @XmlSerialName("attribute", XSD)
-    val attribute: Attribute? = null,
+    val attributes: List<Attribute> = listOf(),
 
     @XmlElement
     @XmlSerialName("complexContent", XSD)
@@ -160,6 +138,7 @@ data class ComplexType(
 )
 
 @Serializable
+@XmlSerialName("complexContent", XSD)
 data class ComplexContent(
     @XmlElement
     @XmlSerialName("extension", XSD)
@@ -167,6 +146,7 @@ data class ComplexContent(
 )
 
 @Serializable
+@XmlSerialName("simpleContent", XSD)
 data class SimpleContent(
     @XmlElement
     @XmlSerialName("extension", XSD)
@@ -174,6 +154,7 @@ data class SimpleContent(
 )
 
 @Serializable
+@XmlSerialName("extension", XSD)
 data class Extension(
     val base: String,
 
@@ -187,10 +168,13 @@ data class Extension(
 )
 
 @Serializable
+@XmlSerialName("attribute", XSD)
 data class Attribute(
     val name: String,
     val type: String? = null,
-    val use: String? = null,
+    @XmlElement(false)
+    @XmlSerialName("use", XSD)
+    val use: Use = Use.Optional,
 
     @XmlElement
     @XmlSerialName("annotation", XSD)
@@ -198,40 +182,52 @@ data class Attribute(
 )
 
 @Serializable
+@XmlSerialName("use", XSD)
+enum class Use {
+    @SerialName("optional")
+    Optional,
+    @SerialName("required")
+    Required,
+}
+
+@Serializable
+@XmlSerialName("sequence", XSD)
 data class Sequence(
     @XmlElement
     val annotation: Annotation? = null,
 
-    val minOccurs: String? = null,
-    val maxOccurs: String? = null,
+    val minOccurs: String = "1",
+    val maxOccurs: String = "1",
     val elements: List<Elements>,
 )
 
 @Serializable
 sealed interface Elements
 
-@XmlSerialName("choice", XSD)
 @Serializable
+@XmlSerialName("choice", XSD)
 data class Choice(
     @XmlSerialName("element", XSD)
-    val element: Element,
+    val element: List<Element>,
 
-    val minOccurs: String? = null,
-    val maxOccurs: String? = null,
+    val minOccurs: String = "1",
+    val maxOccurs: String = "1",
 ) : Elements
 
-@XmlSerialName("element", XSD)
 @Serializable
+@XmlSerialName("element", XSD)
 data class Element(
-    val name: String? = null,
+    val name: String,
     val type: String? = null,
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
 
-    val minOccurs: String? = null,
-    val maxOccurs: String? = null,
-    val nillable: Boolean? = null,
+    val minOccurs: String = "1",
+    val maxOccurs: String = "1",
+    val nillable: Boolean = false,
+    val abstract: Boolean = false,
+    val default: String? = null,
 
     val ref: String? = null,
 
@@ -245,6 +241,7 @@ data class Element(
 ) : Elements
 
 @Serializable
+@XmlSerialName("annotation", XSD)
 data class Annotation(
     @XmlElement
     @XmlSerialName("appinfo", XSD)
@@ -256,6 +253,7 @@ data class Annotation(
 )
 
 @Serializable
+@XmlSerialName("documentation", XSD)
 data class Documentation(
     @XmlValue
     val values: List<@Polymorphic Any>,
@@ -268,6 +266,7 @@ data class Documentation(
 }
 
 @Serializable
+@XmlSerialName("appinfo", XSD)
 data class AppInfo(
     @XmlValue
     val appInfo: List<@Polymorphic Any>,
@@ -287,6 +286,7 @@ data class Pattern(
 )
 
 @Serializable
+@XmlSerialName("import", XSD)
 data class Import(
     val namespace: String,
     val schemaLocation: String? = null,

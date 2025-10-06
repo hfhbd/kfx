@@ -29,7 +29,7 @@ public data class Configuration(
     value = "keyring-format",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val keyringFormat: String? = null,
+  public val keyringFormat: KeyringFormat? = null,
   @XmlElement
   @XmlSerialName(
     value = "key-servers",
