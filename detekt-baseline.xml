@@ -45,7 +45,6 @@
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$202</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$204</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$400</ID>
-    <ID>MatchingDeclarationName:ConvertWsdlFiles.kt$ConvertXsdFiles : DefaultTask</ID>
     <ID>MaxLineLength:ODataTest.kt$ODataTest$"GetIntegrationPackages('{Id}')MessageMappingDesigntimeArtifacts(Id='{ArtifactId}',Version='{ArtifactVersion}')".transform()</ID>
     <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Fault>&lt;faultcode>soap:Server&lt;/faultcode>&lt;faultstring>Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>
     <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Pair first="foo" second="42" />&lt;/Body>&lt;/Envelope>"""</ID>

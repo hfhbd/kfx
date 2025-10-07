@@ -5,5 +5,3 @@ plugins {
 dependencies {
     api(projects.creatorKotlinxcore)
 }
-
-objects.named<Configuration>("")
