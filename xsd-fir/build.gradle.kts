@@ -10,7 +10,8 @@ dependencies {
 }
 
 testing.suites {
-    withType(JvmTestSuite::class) {
+    withType(JvmTestSuite::class).configureEach {
+        val testSuiteName = name
         useKotlinTest()
 
         dependencies {
@@ -28,7 +29,7 @@ testing.suites {
                 dependsOn(testTask)
             }
             testTask {
-                outputs.dir("build/kfx-tests/${this@withType.name}")
+                outputs.dir("build/kfx-tests/${testSuiteName}")
             }
         }
     }
