@@ -14,7 +14,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 public data class TrustedArtifacts(
   @XmlElement
   @XmlSerialName(
-    value = "trustType",
+    value = "trust",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
   public val trust: List<Trust> = emptyList(),
