@@ -8,7 +8,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "key-servers",
+  value = "key-serversType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class KeyServers(
@@ -17,6 +17,6 @@ public data class KeyServers(
     value = "key-server",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val keyServer: List<KeyServer> = emptyList(),
-  val enabled: Boolean? = null,
+  public val `key-server`: List<KeyServer> = emptyList(),
+  public val enabled: Boolean? = null,
 )
