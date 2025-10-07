@@ -17,7 +17,7 @@ public data class Sha1(
     value = "also-trust",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val alsoTrust: List<AlsoTrust> = emptyList(),
+  public val `also-trust`: List<AlsoTrust> = emptyList(),
   public val value: String,
   public val origin: String? = null,
   public val reason: String? = null,
