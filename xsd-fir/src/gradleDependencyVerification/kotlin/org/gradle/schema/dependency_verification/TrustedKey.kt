@@ -8,7 +8,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "trusted-key",
+  value = "trusted-keyType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class TrustedKey(
