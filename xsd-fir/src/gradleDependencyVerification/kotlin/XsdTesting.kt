@@ -10,6 +10,9 @@ class XsdTesting {
 
     @Test
     fun decode() {
-        XML.decodeFromString(VerificationMetadata.serializer(), XsdTesting::class.java.getResource("/verification-metadata.xml")!!.readText())
+        XML.decodeFromString(
+            VerificationMetadata.serializer(),
+            XsdTesting::class.java.getResource("/verification-metadata.xml")!!.readText()
+        )
     }
 }

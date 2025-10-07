@@ -187,6 +187,7 @@ data class Attribute(
 enum class Use {
     @SerialName("optional")
     Optional,
+
     @SerialName("required")
     Required,
 }

@@ -1,10 +1,11 @@
-package io.github.hfhbd.kfx
+package io.github.hfhbd.kfx.creator
 
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.*
 import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.kfx.toPascalCaseEnumValue
 
 interface KotlinxCoreCreator : CodeGenCreator {
     override fun toCodeGen(ir: IRTree.Member, name: String): CodeGenTree.Member = CodeGenTree.Member(

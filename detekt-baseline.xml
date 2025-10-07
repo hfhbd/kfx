@@ -23,13 +23,13 @@
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.getResponse( nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, ): CodeBlock</ID>
     <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:SoapTransformer.kt$SoapTransformer$private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation</ID>
+    <ID>LongMethod:generate.kt$fun createCustomWrapper(type: IRTree.Type): IRTree.Class</ID>
     <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
     <ID>LongMethod:generate.kt$private fun Schema.toIr( xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LongMethod:generate.kt$private fun Swagger.toIr( swaggerTransformers: Iterable&lt;SwaggerTransformer>, ): IRTree</ID>
-    <ID>LongMethod:generate.kt$private fun WSDL.toIr( getNS: (String) -> String?, xsdTransformers: List&lt;XsdTransformer>, import: (String) -> Schema, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
     <ID>LongParameterList:generate.kt$( openApiFile: InputStream, outputDirectory: Path, firTransformers: Iterable&lt;OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>

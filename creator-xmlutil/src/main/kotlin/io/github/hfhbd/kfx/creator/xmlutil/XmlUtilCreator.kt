@@ -1,9 +1,12 @@
-package io.github.hfhbd.kfx
+package io.github.hfhbd.kfx.creator.xmlutil
 
 import app.softwork.serviceloader.*
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
+import io.github.hfhbd.kfx.creator.DEPRECATED
+import io.github.hfhbd.kfx.creator.KotlinxCoreCreator
+import io.github.hfhbd.kfx.creator.SERIALIZABLE
 import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenCreator::class)
@@ -69,7 +72,7 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     "nl.adaptivity.xmlutil.serialization",
                     listOf("XmlSerialName"),
                     mapOf(
-                        "value" to StringLiteral(ir.name),
+                        "value" to StringLiteral(ir.serialName!!),
                         "namespace" to StringLiteral(ir.namespace!!),
                     ),
                 ),

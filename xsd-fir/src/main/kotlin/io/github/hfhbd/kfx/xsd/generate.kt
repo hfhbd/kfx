@@ -6,6 +6,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.toCodeGen
+import io.github.hfhbd.kfx.toPascalCase
 import nl.adaptivity.xmlutil.core.*
 import java.io.InputStream
 import java.nio.file.Path
@@ -76,6 +77,11 @@ private fun Schema.toIr(
     xsdTransformers: Collection<XsdTransformer>,
     import: (String) -> Schema,
 ): IRTree {
+    require(elements.isEmpty() || elements.size == 1) {
+        "kfx only supports 1 root element."
+    }
+    val rootElement = elements.singleOrNull()
+
     val irTypes = mutableMapOf<IRTree.ClassName, Classes>()
 
     toIr(
@@ -84,12 +90,23 @@ private fun Schema.toIr(
         import = import,
     )
 
-    val irTree = IRTree(
+    if (rootElement != null && rootElement.type != null) {
+        val rootQName = IRTree.ClassName(targetNamespace.packageName, rootElement.type!!.remove().toPascalCase())
+        val foundIrClass = irTypes.find(rootQName) as? IRTree.NormalClass
+        if (foundIrClass != null) {
+            irTypes[rootQName] = Classes.ActualClass(
+                foundIrClass.copy(
+                    serialName = rootElement.name,
+                ),
+            )
+        }
+    }
+
+    return IRTree(
         classes = irTypes.resolveMembers(),
         operations = emptySet(),
         auth = emptySet(),
     )
-    return irTree
 }
 
 fun Schema.toIr(
@@ -149,7 +166,7 @@ private fun Schema.toIr(
             var irClass: IRTree.Class = IRTree.Enum(
                 packageName = targetNamespace.packageName,
                 packageNameSuffix = "",
-                name = simpleTypeName!!,
+                name = simpleTypeName!!.toPascalCase(),
                 values = simpleType.restriction.enumeration.map {
                     val v = it.value.replace(".", "_")
                     val name = if (v.first().digitToIntOrNull() != null) {
@@ -167,8 +184,9 @@ private fun Schema.toIr(
             }
             irTypes[IRTree.ClassName(packageName, simpleTypeName)] = Classes.ActualClass(irClass)
         } else {
-            val typeAlias = IRTree.ClassName(targetNamespace.packageName, simpleType.name!!.remove())
-            val resolved = simpleType.toBuiltin()!!
+            val typeAlias = IRTree.ClassName(targetNamespace.packageName, simpleType.name!!.remove().toPascalCase())
+            val resolved =
+                (if (simpleType.restriction.enumeration.isEmpty()) simpleType.restriction.base.toBuiltin() else null)!!
             irTypes[typeAlias] = Classes.ActualClass(resolved)
         }
     }
@@ -193,16 +211,23 @@ private fun Schema.toIr(
             var irClass: IRTree.Class = IRTree.NormalClass(
                 packageName = targetNamespace.packageName,
                 packageNameSuffix = "",
-                name = elementName.remove(),
+                name = elementName.remove().toPascalCase(),
                 serialName = elementName,
                 namespace = targetNamespace,
                 documentation = element.annotation?.documentation(),
-                members = element.complexType?.sequence?.elements?.flatMap {
-                    when (it) {
-                        is Choice -> it.element
-                        is Element -> listOf(it)
-                    }
-                }?.mapToIr(qname, this, xsdTransformers, irTypes) ?: emptyMap(),
+                members = (
+                    element.complexType?.sequence?.elements?.flatMap {
+                        when (it) {
+                            is Choice -> it.element.map { it.copy(nillable = true) }
+                            is Element -> listOf(it)
+                        }
+                    }?.mapToIr(qname, this, xsdTransformers, irTypes)
+                        ?: emptyMap()
+                    ) + (
+                    element.complexType?.attributes?.map {
+                        it.mapToIr(this@toIr, irTypes)
+                    } ?: emptyList()
+                    ),
                 isFault = false,
                 allOf = null,
                 discriminator = null,
@@ -217,26 +242,28 @@ private fun Schema.toIr(
 
     for (complexType in complexTypes) {
         val complexTypeName = complexType.name
-        val qName = IRTree.ClassName(targetNamespace.packageName, complexTypeName.remove())
+        val qName = IRTree.ClassName(targetNamespace.packageName, complexTypeName.remove().toPascalCase())
         val sequence = complexType.sequence
         if (sequence != null && sequence.elements.size == 1) {
             val element = sequence.elements[0] as Element
             val name = element.ref?.split(":")[1]
-            val typeAlias = IRTree.ClassName(targetNamespace.packageName, complexTypeName.remove())
+            val typeAlias = IRTree.ClassName(targetNamespace.packageName, complexTypeName.remove().toPascalCase())
             if (element.maxOccurs == "unbounded") {
                 var irClass: IRTree.Class = IRTree.NormalClass(
                     packageName = typeAlias.packageName,
                     packageNameSuffix = "",
-                    name = typeAlias.name.remove(),
+                    name = typeAlias.name.remove().toPascalCase(),
                     namespace = targetNamespace,
                     serialName = complexType.name,
                     members = if (includeMembers) {
                         sequence.elements.flatMap {
                             when (it) {
-                                is Choice -> it.element
+                                is Choice -> it.element.map { it.copy(nillable = true) }
                                 is Element -> listOf(it)
                             }
-                        }.mapToIr(typeAlias, this, xsdTransformers, irTypes)
+                        }.mapToIr(typeAlias, this, xsdTransformers, irTypes) + complexType.attributes.map {
+                            it.mapToIr(this@toIr, irTypes)
+                        }
                     } else {
                         emptyMap()
                     },
@@ -260,7 +287,7 @@ private fun Schema.toIr(
             var irClass: IRTree.Class = IRTree.NormalClass(
                 packageName = targetNamespace.packageName,
                 packageNameSuffix = "",
-                name = complexTypeName.remove(),
+                name = complexTypeName.remove().toPascalCase(),
                 namespace = targetNamespace,
                 serialName = complexType.name,
                 members = if (includeMembers) {
@@ -301,16 +328,21 @@ private fun Schema.toIr(
             var irClass: IRTree.Class = IRTree.NormalClass(
                 packageName = targetNamespace.packageName,
                 packageNameSuffix = "",
-                name = complexTypeName.remove(),
+                name = complexTypeName.remove().toPascalCase(),
                 namespace = targetNamespace,
                 serialName = complexType.name,
                 members = if (includeMembers) {
-                    sequence?.elements?.flatMap {
-                        when (it) {
-                            is Choice -> it.element
-                            is Element -> listOf(it)
+                    (
+                        sequence?.elements?.flatMap {
+                            when (it) {
+                                is Choice -> it.element.map { it.copy(nillable = true) }
+                                is Element -> listOf(it)
+                            }
+                        }?.mapToIr(qName, this, xsdTransformers, irTypes) ?: emptyMap()
+                        ) +
+                        complexType.attributes.map {
+                            it.mapToIr(this@toIr, irTypes)
                         }
-                    }?.mapToIr(qName, this, xsdTransformers, irTypes) ?: emptyMap()
                 } else {
                     emptyMap()
                 },
@@ -384,30 +416,34 @@ private fun List<Element>.mapToIr(
     xsdTransformers: Collection<XsdTransformer>,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
 ): Map<String, IRTree.Member> {
-    return associate {
-        val extension = it.complexType?.simpleContent?.extension
-        val ref = (it.type ?: it.ref ?: it.name).split(":")
+    return associate { element ->
+        val extension = element.complexType?.simpleContent?.extension
+        val ref = (element.type ?: element.ref ?: element.name).split(":")
         val ns: String?
         fun createCustomWrapper(type: IRTree.Type): IRTree.Class {
             val qname = IRTree.ClassName(schema.targetNamespace.packageName, prefix.name + ref[0])
             var classe: IRTree.Class = IRTree.NormalClass(
                 packageName = qname.packageName,
                 packageNameSuffix = "",
-                name = qname.name,
+                name = qname.name.toPascalCase(),
                 serialName = ref[0],
                 namespace = schema.targetNamespace,
                 isFault = false,
                 members = buildMap {
-                    val complexType = it.complexType
+                    val complexType = element.complexType
                     if (complexType != null) {
-                        val elements = complexType.sequence?.elements?.map {
+                        val elements = complexType.sequence?.elements?.flatMap {
                             when (it) {
-                                is Choice -> it.element.single()
-                                is Element -> it
+                                is Choice -> it.element.map { it.copy(nillable = true) }
+                                is Element -> listOf(it)
                             }
                         }?.mapToIr(qname, schema, xsdTransformers, topLevel)
                         if (elements != null) {
                             putAll(elements)
+                        }
+                        complexType.attributes.forEach {
+                            val s = it.mapToIr(schema, topLevel)
+                            put(s.first, s.second)
                         }
 
                         val simpleType = complexType.simpleContent
@@ -433,14 +469,14 @@ private fun List<Element>.mapToIr(
                         ),
                     )
                 },
-                documentation = it.annotation?.documentation(),
+                documentation = element.annotation?.documentation(),
                 allOf = null,
                 discriminator = null,
                 deprecated = false,
             )
             if (qname !in topLevel) {
                 for (xsdTransformer in xsdTransformers) {
-                    classe = xsdTransformer(it, classe)
+                    classe = xsdTransformer(element, classe)
                 }
                 topLevel[qname] = Classes.ActualClass(classe)
             }
@@ -460,7 +496,7 @@ private fun List<Element>.mapToIr(
                 }
             } else {
                 val namespace = schema.namespace()
-                val qname = IRTree.ClassName(namespace, name.remove())
+                val qname = IRTree.ClassName(namespace, name.remove().toPascalCase())
                 topLevel.find(qname).let {
                     if (extension != null && extension.attributes.isNotEmpty()) {
                         createCustomWrapper(it)
@@ -469,22 +505,49 @@ private fun List<Element>.mapToIr(
                     }
                 }
             }
-        } else if (it.simpleType != null) {
-            it.simpleType!!.resolve(schema, topLevel).let {
+        } else if (element.simpleType != null) {
+            val simpleType = element.simpleType!!
+            val resolveBuiltin = simpleType.resolve()?.let {
                 if (extension != null && extension.attributes.isNotEmpty()) {
                     createCustomWrapper(it)
                 } else {
                     it
                 }
             }
+            if (resolveBuiltin == null) {
+                val qname = IRTree.ClassName(schema.targetNamespace.packageName, element.name.remove().toPascalCase())
+                var irClass: IRTree.Class = IRTree.Enum(
+                    packageName = qname.packageName,
+                    packageNameSuffix = "",
+                    name = qname.name,
+                    values = simpleType.restriction.enumeration.map {
+                        val v = it.value.replace(".", "_")
+                        val name = if (v.first().digitToIntOrNull() != null) {
+                            "v$v"
+                        } else {
+                            v
+                        }
+                        IRTree.Enum.Value(name, null, null)
+                    },
+                    documentation = null,
+                    deprecated = false,
+                )
+                for (xsdTransformer in xsdTransformers) {
+                    irClass = xsdTransformer(simpleType, irClass)
+                }
+                topLevel[qname] = Classes.ActualClass(irClass)
+                irClass
+            } else {
+                resolveBuiltin
+            }
         } else if (ref.size == 1 && topLevel.findOrNull(
                 IRTree.ClassName(
                     schema.targetNamespace.packageName,
-                    ref[0].remove(),
+                    ref[0].remove().toPascalCase(),
                 ),
             ) != null
         ) {
-            topLevel.find(IRTree.ClassName(schema.targetNamespace.packageName, ref[0].remove())).let {
+            topLevel.find(IRTree.ClassName(schema.targetNamespace.packageName, ref[0].remove().toPascalCase())).let {
                 if (extension != null && extension.attributes.isNotEmpty()) {
                     createCustomWrapper(it)
                 } else {
@@ -496,46 +559,53 @@ private fun List<Element>.mapToIr(
             var classe: IRTree.Class = IRTree.NormalClass(
                 packageName = qname.packageName,
                 packageNameSuffix = "",
-                name = qname.name,
+                name = qname.name.toPascalCase(),
                 serialName = ref[0],
                 namespace = schema.targetNamespace,
                 isFault = false,
-                members = it.complexType?.sequence?.elements?.flatMap {
-                    when (it) {
-                        is Choice -> it.element
-                        is Element -> listOf(it)
-                    }
-                }?.mapToIr(qname, schema, xsdTransformers, topLevel) ?: emptyMap(),
-                documentation = it.annotation?.documentation(),
+                members = (
+                    element.complexType?.sequence?.elements?.flatMap {
+                        when (it) {
+                            is Choice -> it.element.map { it.copy(nillable = true) }
+                            is Element -> listOf(it)
+                        }
+                    }?.mapToIr(qname, schema, xsdTransformers, topLevel)
+                        ?: emptyMap()
+                    ) + (
+                    element.complexType?.attributes?.map {
+                        it.mapToIr(schema, topLevel)
+                    } ?: emptyList()
+                    ),
+                documentation = element.annotation?.documentation(),
                 allOf = null,
                 discriminator = null,
                 deprecated = false,
             )
             if (qname !in topLevel) {
                 for (xsdTransformer in xsdTransformers) {
-                    classe = xsdTransformer(it, classe)
+                    classe = xsdTransformer(element, classe)
                 }
                 topLevel[qname] = Classes.ActualClass(classe)
             }
             classe
         }
 
-        val elementName = it.name
+        val elementName = element.name
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
             IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
+                type = if (element.maxOccurs == "unbounded") {
                     IRTree.Type.LIST(type)
                 } else {
                     type
                 },
-                nullable = it.nillable || it.minOccurs == "0",
+                nullable = element.nillable || element.minOccurs == "0",
                 serialName = elementName,
                 namespace = schema.targetNamespace,
-                documentation = it.annotation?.documentation(),
+                documentation = element.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
                 requirements = buildList {
-                    val restrictions = it.simpleType?.restriction
+                    val restrictions = element.simpleType?.restriction
                     if (restrictions != null) {
                         val maxLength = restrictions.maxLength
                         if (maxLength != null) {
@@ -562,7 +632,7 @@ private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Cl
         ":$name".toBuiltin()!!
     } else {
         val namespace = schema.namespace()
-        val qname = IRTree.ClassName(namespace, name.remove())
+        val qname = IRTree.ClassName(namespace, name.remove().toPascalCase())
         topLevel.find(qname)
     }
 
@@ -593,10 +663,11 @@ private fun Map<IRTree.ClassName, Classes>.findOrNull(qname: IRTree.ClassName): 
     null -> null
 }
 
-private fun SimpleType.toBuiltin(): IRTree.Type.Builtin? = restriction.base.toBuiltin()
-
-private fun SimpleType.resolve(schema: Schema, irTypes: Map<IRTree.ClassName, Classes>): IRTree.Type = toBuiltin()
-    ?: irTypes.find(IRTree.ClassName(schema.targetNamespace.packageName, restriction.base.remove()))
+private fun SimpleType.resolve(): IRTree.Type? = if (restriction.enumeration.isEmpty()) {
+    restriction.base.toBuiltin()
+} else {
+    null
+}
 
 private fun String.toBuiltin(): IRTree.Type.Builtin? = when {
     endsWith(":string", ignoreCase = true) -> IRTree.Type.Builtin.STRING

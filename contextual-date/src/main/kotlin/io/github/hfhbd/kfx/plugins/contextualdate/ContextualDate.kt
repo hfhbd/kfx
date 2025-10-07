@@ -1,4 +1,4 @@
-package io.github.hfhbd.kfx
+package io.github.hfhbd.kfx.plugins.contextualdate
 
 import app.softwork.serviceloader.*
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
