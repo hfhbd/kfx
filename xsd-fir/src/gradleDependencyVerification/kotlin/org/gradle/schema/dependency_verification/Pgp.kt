@@ -12,5 +12,5 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 )
 public data class Pgp(
   @SerialName(value = "value")
-  public val value: String,
+  public val `value`: String,
 )
