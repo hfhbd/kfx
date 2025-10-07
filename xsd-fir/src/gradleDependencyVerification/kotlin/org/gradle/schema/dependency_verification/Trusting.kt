@@ -5,7 +5,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "trusting",
+  value = "trustingType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class Trusting(
