@@ -17,5 +17,5 @@ public data class IgnoredKeys(
     value = "ignored-key",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val ignoredKey: List<IgnoredKey> = emptyList(),
+  public val `ignored-key`: List<IgnoredKey> = emptyList(),
 )
