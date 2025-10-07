@@ -5,19 +5,13 @@
         targetNamespace="https://schema.gradle.org/dependency-verification"
         xmlns="https://schema.gradle.org/dependency-verification"
 >
-    <xs:complexType name="coordinatesType">
+    <xs:complexType name="trustType">
         <xs:attribute name="group" type="xs:string"/>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="version" type="xs:string"/>
         <xs:attribute name="regex" type="xs:boolean"/>
         <xs:attribute name="file" type="xs:string"/>
-    </xs:complexType>
-    <xs:complexType name="trustType">
-        <xs:complexContent>
-            <xs:extension base="coordinatesType">
-                <xs:attribute name="reason" type="xs:string"/>
-            </xs:extension>
-        </xs:complexContent>
+        <xs:attribute name="reason" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="trusted-artifactsType">
         <xs:sequence>
@@ -45,9 +39,11 @@
         <xs:attribute name="regex" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="trustingType">
-        <xs:complexContent>
-            <xs:extension base="coordinatesType"/>
-        </xs:complexContent>
+        <xs:attribute name="group" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="version" type="xs:string"/>
+        <xs:attribute name="regex" type="xs:boolean"/>
+        <xs:attribute name="file" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="trusted-keysType">
         <xs:sequence>
@@ -122,12 +118,12 @@
     </xs:complexType>
     <xs:complexType name="artifactType">
         <xs:sequence>
-            <xs:element name="ignored-keys" type="ignored-keysType"/>
-            <xs:element name="pgp" type="pgpType"/>
-            <xs:element name="md5" type="md5Type"/>
-            <xs:element name="sha1" type="sha1Type"/>
-            <xs:element name="sha256" type="sha256Type"/>
-            <xs:element name="sha512" type="sha512Type"/>
+            <xs:element name="ignored-keys" type="ignored-keysType" nillable="true"/>
+            <xs:element name="pgp" type="pgpType" nillable="true"/>
+            <xs:element name="md5" type="md5Type" nillable="true"/>
+            <xs:element name="sha1" type="sha1Type" nillable="true"/>
+            <xs:element name="sha256" type="sha256Type" nillable="true"/>
+            <xs:element name="sha512" type="sha512Type" nillable="true"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
