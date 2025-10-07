@@ -5,8 +5,13 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-    value = "also",
+    value = "sha1Type",
     namespace = "https://schema.gradle.org/dependency-verification",
 )
-data class Also(val value: String? = null) {
+data class Sha1(
+    val alsoTrust: List<AlsoTrust> = emptyList(),
+    val value: String,
+    val origin: String? = null,
+    val reason: String? = null,
+) {
 }

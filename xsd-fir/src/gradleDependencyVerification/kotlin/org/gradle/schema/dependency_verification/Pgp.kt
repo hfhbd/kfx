@@ -5,13 +5,9 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-    value = "sha256Type",
+    value = "pgpType",
     namespace = "https://schema.gradle.org/dependency-verification",
 )
-data class Sha256(
-    val alsoTrust: List<AlsoTrust> = emptyList(),
+data class Pgp(
     val value: String,
-    val origin: String? = null,
-    val reason: String? = null,
-) {
-}
+)

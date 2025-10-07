@@ -18,5 +18,5 @@ public data class KeyServers(
     namespace = "https://schema.gradle.org/dependency-verification",
   )
   public val keyServer: List<KeyServer> = emptyList(),
-  val enabled: Boolean,
+  val enabled: Boolean? = null,
 )

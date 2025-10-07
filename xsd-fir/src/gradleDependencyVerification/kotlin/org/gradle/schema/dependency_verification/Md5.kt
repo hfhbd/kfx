@@ -5,10 +5,10 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-    value = "sha256Type",
+    value = "md5Type",
     namespace = "https://schema.gradle.org/dependency-verification",
 )
-data class Sha256(
+data class Md5(
     val alsoTrust: List<AlsoTrust> = emptyList(),
     val value: String,
     val origin: String? = null,

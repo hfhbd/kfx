@@ -5,13 +5,8 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-    value = "sha256Type",
+    value = "also-trustType",
     namespace = "https://schema.gradle.org/dependency-verification",
 )
-data class Sha256(
-    val alsoTrust: List<AlsoTrust> = emptyList(),
-    val value: String,
-    val origin: String? = null,
-    val reason: String? = null,
-) {
+data class AlsoTrust(val value: String? = null) {
 }
