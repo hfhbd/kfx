@@ -9,8 +9,8 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.util.ServiceLoader
 
-internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.SwaggerParameters> {
-    interface SwaggerParameters : WorkParameters {
+internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.Parameters> {
+    interface Parameters : WorkParameters {
         val packageName: Property<String>
         val swaggerFile: RegularFileProperty
         val outputDirectory: DirectoryProperty

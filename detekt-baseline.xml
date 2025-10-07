@@ -8,13 +8,13 @@
     <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt$KotlinxCoreCreator$override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type</ID>
     <ID>CyclomaticComplexMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>CyclomaticComplexMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
-    <ID>CyclomaticComplexMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun Parameter.toParameter( parentQName: IRTree.ClassName, parameters: Map&lt;String, Parameter>, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, ): Pair&lt;Parameter.Position?, IRTree.Operation.Parameter></ID>
+    <ID>CyclomaticComplexMethod:generate.kt$private fun Schema.toIr( xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun Schema.toIrDefault(): IRTree.Literal?</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
-    <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>FunctionNaming:PackageName.kt$fun PackageName(packageName: String)</ID>
     <ID>FunctionNaming:soapAction.kt$public inline fun &lt;reified EmptyEnvelope : Any> Soap( format: XML, noinline getAction: (EmptyEnvelope) -> String, ): RouteScopedPlugin&lt;Unit></ID>
     <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
@@ -23,21 +23,22 @@
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.getResponse( nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, ): CodeBlock</ID>
     <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:SoapTransformer.kt$SoapTransformer$private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation</ID>
-    <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>LongMethod:generate.kt$fun createCustomWrapper(type: IRTree.Type): IRTree.Class</ID>
+    <ID>LongMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
+    <ID>LongMethod:generate.kt$private fun Schema.toIr( xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LongMethod:generate.kt$private fun Swagger.toIr( swaggerTransformers: Iterable&lt;SwaggerTransformer>, ): IRTree</ID>
-    <ID>LongMethod:generate.kt$private fun WSDL.toIr( getNS: (String) -> String?, wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
-    <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LongParameterList:generate.kt$( openApiFile: InputStream, outputDirectory: Path, firTransformers: Iterable&lt;OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
     <ID>LongParameterList:generate.kt$( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, )</ID>
     <ID>LongParameterList:generate.kt$( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, )</ID>
     <ID>LongParameterList:generate.kt$( propertyName: String, property: Definition, required: List&lt;String>, qname: IRTree.ClassName, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, )</ID>
     <ID>LongParameterList:generate.kt$( swaggerFile: InputStream, outputDirectory: java.nio.file.Path, codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), firTransformers: Iterable&lt;SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), )</ID>
-    <ID>LongParameterList:generate.kt$( wsdlFile: InputStream, import: (String) -> InputStream, outputDirectory: Path, firTransformerFactories: Iterable&lt;WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
+    <ID>LongParameterList:generate.kt$( wsdlFile: InputStream, import: (String) -> InputStream, outputDirectory: Path, wsdlTransformerFactories: Iterable&lt;WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java), xsdTransformerFactories: Iterable&lt;XsdTransformerFactory> = ServiceLoader.load(XsdTransformerFactory::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
+    <ID>LongParameterList:generate.kt$( xsdFile: InputStream, import: (String) -> InputStream, outputDirectory: Path, xsdTransformerFactories: Iterable&lt;XsdTransformerFactory> = ServiceLoader.load(XsdTransformerFactory::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
     <ID>LoopWithTooManyJumpStatements:generate.kt$for</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$200</ID>
     <ID>MagicNumber:KtorServerGenerator.kt$KtorServerGenerator$201</ID>
@@ -53,10 +54,11 @@
     <ID>MaximumLineLength:ODataTest.kt$ODataTest$ </ID>
     <ID>MaximumLineLength:SerializationTest.kt$SerializationTest$ </ID>
     <ID>MaximumLineLength:WsdlGeneration.kt$WsdlGeneration$ </ID>
-    <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>NestedBlockDepth:XsdGeneration.kt$XsdGeneration$override fun execute()</ID>
+    <ID>NestedBlockDepth:generate.kt$private fun Schema.toIr( xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.generate.kt</ID>
-    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.wsdl.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.xsd.generate.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

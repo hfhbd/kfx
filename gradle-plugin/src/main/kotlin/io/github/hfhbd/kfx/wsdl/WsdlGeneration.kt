@@ -7,8 +7,8 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.io.InputStream
 
-internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameters> {
-    interface WsdlParameters : WorkParameters {
+internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.Parameters> {
+    interface Parameters : WorkParameters {
         val wsdlFile: RegularFileProperty
         val schemaFiles: ConfigurableFileCollection
         val outputDirectory: DirectoryProperty
