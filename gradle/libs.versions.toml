@@ -34,7 +34,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
-licensee = { id = "app.cash.licensee", version = "1.13.0" }
+licensee = { id = "app.cash.licensee", version = "1.14.0" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.21" }
 validation = { id = "app.softwork.validation", version = "0.0.15" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
