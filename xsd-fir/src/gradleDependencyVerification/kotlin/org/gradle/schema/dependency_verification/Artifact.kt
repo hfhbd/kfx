@@ -17,7 +17,7 @@ public data class Artifact(
     value = "ignored-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val ignoredKeys: IgnoredKeys? = null,
+  public val `ignored-keys`: IgnoredKeys? = null,
   @XmlElement
   @XmlSerialName(
     value = "pgp",
