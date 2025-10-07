@@ -16,13 +16,13 @@ public data class Configuration(
     value = "verify-metadata",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `verify-metadata`: Boolean? = null,
+  public val `verify-metadata`: Boolean,
   @XmlElement
   @XmlSerialName(
     value = "verify-signatures",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `verify-signatures`: Boolean? = null,
+  public val `verify-signatures`: Boolean,
   @XmlElement
   @XmlSerialName(
     value = "keyring-format",
