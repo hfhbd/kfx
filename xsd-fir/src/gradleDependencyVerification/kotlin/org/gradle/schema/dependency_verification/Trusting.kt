@@ -12,6 +12,6 @@ public data class Trusting(
   override val group: String? = null,
   override val name: String? = null,
   override val version: String? = null,
-  override val regex: String? = null,
+  override val regex: Boolean? = null,
   override val file: String? = null,
 ) : Coordinates

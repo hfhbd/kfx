@@ -1,14 +1,13 @@
 package org.gradle.schema.dependency_verification
 
 import kotlin.Boolean
-import kotlin.String
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "configuration",
+  value = "configurationType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class Configuration(
@@ -29,29 +28,29 @@ public data class Configuration(
     value = "keyring-format",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val keyringFormat: KeyringFormat? = null,
+  public val `keyring-format`: KeyringFormat? = null,
   @XmlElement
   @XmlSerialName(
     value = "key-servers",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val keyServers: KeyServers? = null,
+  public val `key-servers`: KeyServers? = null,
   @XmlElement
   @XmlSerialName(
     value = "trusted-artifacts",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val trustedArtifacts: TrustedArtifacts? = null,
+  public val `trusted-artifacts`: TrustedArtifacts? = null,
   @XmlElement
   @XmlSerialName(
     value = "ignored-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val ignoredKeys: IgnoredKeys? = null,
+  public val `ignored-keys`: IgnoredKeys? = null,
   @XmlElement
   @XmlSerialName(
     value = "trusted-keys",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val trustedKeys: TrustedKeys? = null,
+  public val `trusted-keys`: TrustedKeys? = null,
 )

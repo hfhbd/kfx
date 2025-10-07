@@ -1,5 +1,7 @@
 package org.gradle.schema.dependency_verification
 
+import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
@@ -9,5 +11,6 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class KeyServer(
-  val uri: String? = null,
+  @SerialName(value = "uri")
+  public val uri: String? = null,
 )

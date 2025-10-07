@@ -1,17 +1,24 @@
 package org.gradle.schema.dependency_verification
 
+import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-    value = "sha512Type",
-    namespace = "https://schema.gradle.org/dependency-verification",
+  value = "sha512Type",
+  namespace = "https://schema.gradle.org/dependency-verification",
 )
-data class Sha512(
-    val alsoTrust: List<AlsoTrust> = emptyList(),
-    val value: String,
-    val origin: String? = null,
-    val reason: String? = null,
-) {
-}
+public data class Sha512(
+  @XmlElement
+  @XmlSerialName(
+    value = "also-trust",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
+  public val alsoTrust: List<AlsoTrust> = emptyList(),
+  public val value: String,
+  public val origin: String? = null,
+  public val reason: String? = null,
+)
