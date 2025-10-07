@@ -7,7 +7,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "key-server",
+  value = "key-serverType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
 public data class KeyServer(
