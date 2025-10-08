@@ -6,13 +6,27 @@ import com.squareup.kotlinpoet.MemberName
 
 fun ContentType.toKtor(): CodeBlock = when (this) {
     ContentType.ApplicationSoapXml -> CodeBlock.of(
-        "%T(%S, %S)",
-        ClassName(
-            "io.ktor.http",
-            "ContentType",
+        "%M",
+        MemberName(
+            ClassName(
+                "io.ktor.http",
+                "ContentType",
+                "Application",
+            ),
+            "Soap",
         ),
-        "application",
-        "soap+xml",
+    )
+
+    ContentType.ApplicationXml -> CodeBlock.of(
+        "%M",
+        MemberName(
+            ClassName(
+                "io.ktor.http",
+                "ContentType",
+                "Application",
+            ),
+            "Xml",
+        ),
     )
 
     ContentType.ApplicationJson -> CodeBlock.of(
@@ -24,6 +38,30 @@ fun ContentType.toKtor(): CodeBlock = when (this) {
                 "Application",
             ),
             "Json",
+        ),
+    )
+
+    ContentType.ApplicationProblemJson -> CodeBlock.of(
+        "%M",
+        MemberName(
+            ClassName(
+                "io.ktor.http",
+                "ContentType",
+                "Application",
+            ),
+            "ProblemJson",
+        ),
+    )
+
+    ContentType.ApplicationProblemXml -> CodeBlock.of(
+        "%M",
+        MemberName(
+            ClassName(
+                "io.ktor.http",
+                "ContentType",
+                "Application",
+            ),
+            "ProblemXml",
         ),
     )
 
@@ -95,7 +133,19 @@ fun ContentType.toKtor(): CodeBlock = when (this) {
                 "ContentType",
                 "Text",
             ),
-            "Plain",
+            "CSV",
+        ),
+    )
+
+    ContentType.TextXml -> CodeBlock.of(
+        "%M",
+        MemberName(
+            ClassName(
+                "io.ktor.http",
+                "ContentType",
+                "Text",
+            ),
+            "Xml",
         ),
     )
 
@@ -111,12 +161,16 @@ fun ContentType.toKtor(): CodeBlock = when (this) {
 
 fun ContentType.supportedBySerialization() = when (this) {
     ContentType.ApplicationSoapXml -> true
+    ContentType.ApplicationXml -> true
     ContentType.ApplicationJson -> true
+    ContentType.ApplicationProblemJson -> true
+    ContentType.ApplicationProblemXml -> true
     ContentType.FormUrlEncoded -> false
     ContentType.MultipartFormData -> false
     ContentType.OctetStream -> false
     ContentType.TextPlain -> true
     ContentType.ApplicationZip -> false
     ContentType.TextCsv -> true
+    ContentType.TextXml -> true
     is ContentType.Custom -> false
 }

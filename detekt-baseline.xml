@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>CyclomaticComplexMethod:ContentType.kt$ContentType.Companion$fun fromString(contentType: String): ContentType?</ID>
     <ID>CyclomaticComplexMethod:KotlinCodeGenerator.kt$KotlinCodeGenerator$private fun CodeGenTree.NormalClass.generate(): TypeSpec</ID>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, toPoetType: CodeGenTree.Type.() -> TypeName, ): CodeBlock</ID>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
