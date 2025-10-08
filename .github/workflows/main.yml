@@ -30,7 +30,7 @@ jobs:
         run: ./gradlew :detekt
         if: always()
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: build/reports/detekt/detekt.sarif
@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew :detekt
         continue-on-error: true
       - name: Upload detekt baseline to Github
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           category: detektBaseline
