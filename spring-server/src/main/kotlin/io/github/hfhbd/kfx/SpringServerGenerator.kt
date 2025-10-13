@@ -85,7 +85,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                 ParameterSpec.builder(
                     name = "input",
                     type = input.toSpringPoetType(read = true),
-                ).addAnnotation(requestBody).build()
+                ).addAnnotation(requestBody).build(),
             )
         }
 
@@ -104,7 +104,8 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
             ).apply {
                 val requestMethod = ClassName(
                     "org.springframework.web.bind.annotation",
-                    "RequestMethod")
+                    "RequestMethod",
+                )
 
                 val methodMapping = MemberName(
                     requestMethod,
@@ -174,7 +175,7 @@ fun CodeGenTree.Type.toSpringPoetType(
 ): TypeName = when (this) {
     CodeGenTree.Type.Builtin.FILE,
     CodeGenTree.Type.Builtin.BYTEARRAY,
-        -> if (read) {
+    -> if (read) {
         ClassName("java.io", "InputStream")
     } else {
         ClassName("org.springframework.web.servlet.mvc.method.annotation", "StreamingResponseBody")
