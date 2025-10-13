@@ -26,10 +26,7 @@ tasks.validatePlugins {
 
 configurations.apiElements {
     attributes {
-        attribute(
-            GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
-            objects.named<GradlePluginApiVersion>(GradleVersion.version("8.11").version)
-        )
+        attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("8.11"))
     }
 }
 

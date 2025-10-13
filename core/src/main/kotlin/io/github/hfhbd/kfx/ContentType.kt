@@ -5,46 +5,72 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface ContentType {
     @Serializable
-    data object ApplicationSoapXml : ContentType
+    data object ApplicationSoapXml : ContentType {
+        override fun toString(): String = "application/soap+xml"
+    }
 
     @Serializable
-    data object ApplicationXml : ContentType
+    data object ApplicationXml : ContentType {
+        override fun toString(): String = "application/xml"
+    }
 
     @Serializable
-    data object ApplicationJson : ContentType
+    data object ApplicationJson : ContentType {
+        override fun toString(): String = "application/json"
+    }
 
     @Serializable
-    data object ApplicationProblemJson : ContentType
+    data object ApplicationProblemJson : ContentType {
+        override fun toString(): String = "application/problem+json"
+    }
 
     @Serializable
-    data object ApplicationProblemXml : ContentType
+    data object ApplicationProblemXml : ContentType {
+        override fun toString(): String = "application/problem+xml"
+    }
 
     @Serializable
-    data object ApplicationZip : ContentType
+    data object ApplicationZip : ContentType {
+        override fun toString(): String = "application/zip"
+    }
 
     @Serializable
-    data object FormUrlEncoded : ContentType
+    data object FormUrlEncoded : ContentType {
+        override fun toString(): String = "application/x-www-form-urlencoded"
+    }
 
     @Serializable
-    data object MultipartFormData : ContentType
+    data object MultipartFormData : ContentType {
+        override fun toString(): String = "multipart/form-data"
+    }
 
     @Serializable
-    data object OctetStream : ContentType
+    data object OctetStream : ContentType {
+        override fun toString(): String = "application/octet-stream"
+    }
 
     @Serializable
-    data object TextPlain : ContentType
+    data object TextPlain : ContentType {
+        override fun toString(): String = "text/plain"
+    }
 
     @Serializable
-    data object TextCsv : ContentType
+    data object TextCsv : ContentType {
+        override fun toString(): String = "text/csv"
+    }
 
     @Serializable
-    data object TextXml : ContentType
+    data object TextXml : ContentType {
+        override fun toString(): String = "text/xml"
+    }
 
     @Serializable
     data class Custom(val contentType: String) : ContentType {
         init {
             require(contentType.isNotBlank())
         }
+
+        override fun toString() = contentType
     }
 
     companion object {

@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(libs.plugins.kotlin.jvm.dep)
     implementation(libs.plugins.kotlin.serialization.dep)
+    implementation(libs.plugins.kotlin.spring.dep)
     implementation(libs.plugins.dokka.dep)
     implementation(libs.plugins.licensee.dep)
     implementation(libs.plugins.serviceloader.dep)

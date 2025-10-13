@@ -25,6 +25,8 @@ include(":ktor-shared")
 include(":ktor-client")
 include(":ktor-server")
 
+include(":spring-server")
+
 include(":ktor-server-runtime")
 
 include(":validation")

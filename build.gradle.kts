@@ -28,6 +28,7 @@ detekt {
         exclude("**/leanix/**")
         exclude("**/sapci/**")
         exclude("**/a/**")
+        exclude("**/test/**")
         exclude("**/central/**")
         exclude("**/jira/**")
         exclude("**/sealed/**")

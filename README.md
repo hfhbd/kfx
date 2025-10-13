@@ -21,6 +21,7 @@ Code generators:
 - Kotlin classes using Kotlinx.serialization
 - Ktor client functions
 - Ktor server functions
+- Spring server functions
 
 ## Gradle plugin
 
