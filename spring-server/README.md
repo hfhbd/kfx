@@ -1,3 +1,3 @@
-# Module ktor-server
+# Module spring-server
 
-This module generates the Ktor server functions.
+This module generates the Spring server functions.
