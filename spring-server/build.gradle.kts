@@ -9,8 +9,9 @@ dependencies {
     testImplementation(platform(libs.spring.bom))
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
+    testImplementation(libs.serialization.json)
 }
 
 tasks.compileTestJava {

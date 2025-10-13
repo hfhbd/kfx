@@ -66,15 +66,26 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         val input = input
         val inputContentType = inputContentType
 
+        val requestBody = AnnotationSpec.builder(
+            ClassName(
+                "org.springframework.web.bind.annotation",
+                "RequestBody",
+            ),
+        ).build()
+
         if (inputWrapperType != null) {
             function.addParameter(
-                name = "input",
-                type = inputWrapperType.toSpringPoetType(read = true),
+                ParameterSpec.builder(
+                    name = "input",
+                    type = inputWrapperType.toSpringPoetType(read = true),
+                ).addAnnotation(requestBody).build(),
             )
         } else if (input != null) {
             function.addParameter(
-                name = "input",
-                type = input.toSpringPoetType(read = true),
+                ParameterSpec.builder(
+                    name = "input",
+                    type = input.toSpringPoetType(read = true),
+                ).addAnnotation(requestBody).build()
             )
         }
 
@@ -83,33 +94,45 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         )
 
         val path = path
-        val methodMapping: ClassName = when (method) {
-            CodeGenTree.Operation.HttpMethod.Head ->
-                ClassName("org.springframework.web.bind.annotation", "RequestMapping")
-
-            CodeGenTree.Operation.HttpMethod.Get ->
-                ClassName("org.springframework.web.bind.annotation", "GetMapping")
-
-            CodeGenTree.Operation.HttpMethod.Post ->
-                ClassName("org.springframework.web.bind.annotation", "PostMapping")
-
-            CodeGenTree.Operation.HttpMethod.Put ->
-                ClassName("org.springframework.web.bind.annotation", "PutMapping")
-
-            CodeGenTree.Operation.HttpMethod.Patch ->
-                ClassName("org.springframework.web.bind.annotation", "PatchMapping")
-
-            CodeGenTree.Operation.HttpMethod.Delete ->
-                ClassName("org.springframework.web.bind.annotation", "DeleteMapping")
-        }
 
         function.addAnnotation(
             AnnotationSpec.builder(
-                methodMapping,
+                ClassName("org.springframework.web.bind.annotation", "RequestMapping"),
             ).addMember(
                 "name = %S",
                 name,
             ).apply {
+                val requestMethod = ClassName(
+                    "org.springframework.web.bind.annotation",
+                    "RequestMethod")
+
+                val methodMapping = MemberName(
+                    requestMethod,
+                    when (method) {
+                        CodeGenTree.Operation.HttpMethod.Head ->
+                            "HEAD"
+
+                        CodeGenTree.Operation.HttpMethod.Get ->
+                            "GET"
+
+                        CodeGenTree.Operation.HttpMethod.Post ->
+                            "POST"
+
+                        CodeGenTree.Operation.HttpMethod.Put ->
+                            "PUT"
+
+                        CodeGenTree.Operation.HttpMethod.Patch ->
+                            "PATCH"
+
+                        CodeGenTree.Operation.HttpMethod.Delete ->
+                            "DELETE"
+                    },
+                )
+                addMember(
+                    "method = [%M]",
+                    methodMapping,
+                )
+
                 if (path != null) {
                     addMember("path = [%S]", path)
                 }
@@ -151,10 +174,11 @@ fun CodeGenTree.Type.toSpringPoetType(
 ): TypeName = when (this) {
     CodeGenTree.Type.Builtin.FILE,
     CodeGenTree.Type.Builtin.BYTEARRAY,
-    -> if (read) {
+        -> if (read) {
         ClassName("java.io", "InputStream")
     } else {
         ClassName("org.springframework.web.servlet.mvc.method.annotation", "StreamingResponseBody")
     }
+
     else -> toPoetType()
 }

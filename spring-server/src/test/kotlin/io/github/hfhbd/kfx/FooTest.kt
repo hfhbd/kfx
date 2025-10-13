@@ -16,23 +16,14 @@ internal class FooTest(@Autowired private val mockMvc: MockMvc) {
 
     @Test
     @Throws(Exception::class)
-    fun shouldReturnDefaultHelloWorld() {
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/hello"))
+    fun bazA() {
+        val result = mockMvc.perform(MockMvcRequestBuilders.post("/http/foo/bar/baz")
+            .content("""{ "s": "ff" }""")
+            .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.request().asyncStarted())
             .andReturn()
         mockMvc.perform(asyncDispatch(result))
-            .andExpect(status().isCreated())
-            .andExpect(MockMvcResultMatchers.content().string("Hello World!"))
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun shouldReturnCustomHello() {
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/hello").param("name", "You"))
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-        mockMvc.perform(asyncDispatch(result))
-            .andExpect(status().isCreated())
-            .andExpect(MockMvcResultMatchers.content().string("Hello You!"))
+            .andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string("bazA"))
     }
 }
