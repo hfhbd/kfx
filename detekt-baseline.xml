@@ -60,6 +60,7 @@
     <ID>MaximumLineLength:SerializationTest.kt$SerializationTest$ </ID>
     <ID>MaximumLineLength:WsdlGeneration.kt$WsdlGeneration$ </ID>
     <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>TooManyFunctions:KfxDependencies.kt$KfxDependencies : Dependencies</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
     <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.generate.kt</ID>
