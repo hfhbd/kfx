@@ -3,5 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(projects.xsdModel)
+    api(libs.serialization.core)
+    api(libs.serialization.xml)
 }
