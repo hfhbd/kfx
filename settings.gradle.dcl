@@ -48,8 +48,6 @@ include(":swagger-fir")
 include(":creator-kotlinxcore")
 include(":creator-kotlinxjson")
 
-include(":xsd-model")
-include(":xsd-fir")
 include(":wsdl-model")
 include(":wsdl-fir")
 

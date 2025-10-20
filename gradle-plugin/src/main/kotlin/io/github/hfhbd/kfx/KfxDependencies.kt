@@ -1,21 +1,24 @@
 package io.github.hfhbd.kfx
 
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.dsl.Dependencies
 import org.gradle.api.artifacts.dsl.DependencyCollector
 
 interface KfxDependencies : Dependencies {
     val compiler: DependencyCollector
 
-    fun kotlin() = dependencyFactory.create("$GROUP:kotlin:$VERSION")
-    fun ktorClient() = dependencyFactory.create("$GROUP:ktor-client:$VERSION")
-    fun ktorServer() = dependencyFactory.create("$GROUP:ktor-server:$VERSION")
+    fun kotlin(): ExternalModuleDependency = dependencyFactory.create("$GROUP:kotlin:$VERSION")
+    fun ktorClient(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-client:$VERSION")
+    fun ktorServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-server:$VERSION")
 
-    fun kotlinxJson() = dependencyFactory.create("$GROUP:creator-kotlinxjson:$VERSION")
-    fun kotlinxXmlutil() = dependencyFactory.create("$GROUP:creator-xmlutil:$VERSION")
+    fun springServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:spring-server:$VERSION")
 
-    fun soap() = dependencyFactory.create("$GROUP:soap:$VERSION")
-    fun validation() = dependencyFactory.create("$GROUP:validation:$VERSION")
-    fun removeType() = dependencyFactory.create("$GROUP:ir-removetype:$VERSION")
-    fun odata() = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
-    fun contextualDate() = dependencyFactory.create("$GROUP:contextual-date:$VERSION")
+    fun kotlinxJson(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-kotlinxjson:$VERSION")
+    fun kotlinxXmlutil(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-xmlutil:$VERSION")
+
+    fun soap(): ExternalModuleDependency = dependencyFactory.create("$GROUP:soap:$VERSION")
+    fun validation(): ExternalModuleDependency = dependencyFactory.create("$GROUP:validation:$VERSION")
+    fun removeType(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-removetype:$VERSION")
+    fun odata(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
+    fun contextualDate(): ExternalModuleDependency = dependencyFactory.create("$GROUP:contextual-date:$VERSION")
 }

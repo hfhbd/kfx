@@ -10,6 +10,7 @@ fun xml(
 ): XML = XML(
     serializersModule = SerializersModule {
         include(Documentation.serializerModule())
+        include(AppInfo.serializerModule())
         for (transformer in transformerSerializers) {
             include(transformer)
         }

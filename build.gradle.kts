@@ -32,7 +32,6 @@ detekt {
         exclude("**/central/**")
         exclude("**/jira/**")
         exclude("**/sealed/**")
-        exclude("**/gradleDependencyVerification/**")
     })
     parallel = true
     autoCorrect = true
