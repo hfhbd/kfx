@@ -1,7 +1,8 @@
 package io.github.hfhbd.kfx.openapi
 
 import io.github.hfhbd.kfx.ir.IrTransformer
-import io.github.hfhbd.kfx.ir.PackageName
+import io.github.hfhbd.kfx.openapi.fir.generate
+import io.github.hfhbd.kfx.plugins.packagename.PackageName
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property

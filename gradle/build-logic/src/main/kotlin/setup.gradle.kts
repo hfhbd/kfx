@@ -31,6 +31,9 @@ dokka {
             register("ktor") {
                 url("https://api.ktor.io/")
             }
+            register("gradle") {
+                url("https://docs.gradle.org/current/kotlin-dsl")
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package io.github.hfhbd.kfx
 
+import io.github.hfhbd.kfx.kotlin.ktor.server.toKtorServer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
