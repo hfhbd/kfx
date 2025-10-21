@@ -396,7 +396,7 @@ data class ComplexType(
 
     @XmlElement
     @XmlSerialName("attribute", XSD)
-    val attribute: Attribute? = null,
+    val attributes: List<Attribute> = emptyList(),
 
     @XmlElement
     @XmlSerialName("complexContent", XSD)
@@ -434,6 +434,8 @@ data class Attribute(
     val name: String,
     val type: String? = null,
     val use: String? = null,
+
+    val default: String? = null,
 
     @XmlElement
     @XmlSerialName("annotation", XSD)

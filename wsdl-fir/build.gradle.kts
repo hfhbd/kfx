@@ -9,6 +9,7 @@ dependencies {
     testFixturesApi(libs.ktor.client.core)
     testFixturesApi(projects.ktorServerSoapPlugin)
     testFixturesApi(libs.ktor.server.core)
+    testFixturesApi(testFixtures(projects.core))
 
     testImplementation(projects.validation)
     testImplementation(projects.ktorClient)
@@ -17,6 +18,36 @@ dependencies {
     testImplementation(projects.contextualDate)
 }
 
-tasks.test {
-    environment("testFixtures", layout.projectDirectory.dir("src/testFixtures").asFile.path)
+testing.suites {
+    withType(JvmTestSuite::class) {
+        useKotlinTest()
+
+        dependencies {
+            implementation(testFixtures(project()))
+
+            implementation(projects.kotlin)
+            implementation(projects.creatorXmlutil)
+            implementation(projects.ktorClient)
+            implementation(projects.ktorServer)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.server.core)
+
+            implementation(testFixtures(projects.wsdlModel))
+        }
+        targets.configureEach {
+            tasks.check {
+                dependsOn(testTask)
+            }
+            testTask {
+                outputs.dir("build/kfx-tests/${this@withType.name}")
+            }
+        }
+    }
+
+    register("FooService", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.validation)
+        }
+    }
 }

@@ -32,6 +32,7 @@ detekt {
         exclude("**/central/**")
         exclude("**/jira/**")
         exclude("**/sealed/**")
+        exclude("**/FooService/**")
     })
     parallel = true
     autoCorrect = true
