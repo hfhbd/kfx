@@ -3,7 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:ContentType.kt$ContentType.Companion$fun fromString(contentType: String): ContentType?</ID>
-    <ID>CyclomaticComplexMethod:KotlinCodeGenerator.kt$KotlinCodeGenerator$private fun CodeGenTree.NormalClass.generate(): TypeSpec</ID>
+    <ID>CyclomaticComplexMethod:KotlinClassesGenerator.kt$KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generate(): TypeSpec</ID>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, toPoetType: CodeGenTree.Type.() -> TypeName, ): CodeBlock</ID>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
     <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt$KotlinxCoreCreator$override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type</ID>
@@ -62,8 +62,8 @@
     <ID>NestedBlockDepth:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>TooManyFunctions:KfxDependencies.kt$KfxDependencies : Dependencies</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt$KtorClientGenerator : KotlinPoetCodeGenerator</ID>
-    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.generate.kt</ID>
-    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.generate.kt</ID>
-    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.wsdl.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.openapi.fir.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.swagger.fir.generate.kt</ID>
+    <ID>TooManyFunctions:generate.kt$io.github.hfhbd.kfx.wsdl.fir.generate.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -3,6 +3,7 @@ package io.github.hfhbd.kfx
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeName
 import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.kotlin.toPoetType
 
 fun CodeGenTree.Type.toKtorPoetType(
     read: Boolean,

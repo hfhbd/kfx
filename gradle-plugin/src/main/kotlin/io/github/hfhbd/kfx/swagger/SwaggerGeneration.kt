@@ -1,7 +1,8 @@
 package io.github.hfhbd.kfx.swagger
 
 import io.github.hfhbd.kfx.ir.IrTransformer
-import io.github.hfhbd.kfx.ir.PackageName
+import io.github.hfhbd.kfx.plugins.packagename.PackageName
+import io.github.hfhbd.kfx.swagger.fir.generate
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property

@@ -1,5 +1,5 @@
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.toCodeBlock
+import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

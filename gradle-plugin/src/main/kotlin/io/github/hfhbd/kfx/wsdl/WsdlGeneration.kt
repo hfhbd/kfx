@@ -1,5 +1,6 @@
 package io.github.hfhbd.kfx.wsdl
 
+import io.github.hfhbd.kfx.wsdl.fir.generate
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
