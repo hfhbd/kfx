@@ -1,4 +1,4 @@
-import io.github.hfhbd.kfx.openapi.generate
+import io.github.hfhbd.kfx.openapi.fir.generate
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
 import kotlin.io.path.deleteRecursively
