@@ -2,6 +2,7 @@
 <wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://example.com/foo"
+                  xmlns:bar="http://example.com/bar"
                   xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
                   xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
@@ -70,7 +71,7 @@
         <wsdl:part element="bar:Bar" name="CreateFooResponse"/>
     </wsdl:message>
     <wsdl:message name="Fault">
-        <wsdl:part element="foo:Fault" name="Fault"/>
+        <wsdl:part element="tns:Fault" name="Fault"/>
     </wsdl:message>
     
     <wsdl:portType name="FooServicePortType">
