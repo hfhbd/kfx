@@ -638,9 +638,7 @@ private fun Map<IRTree.ClassName, Classes>.find(qname: IRTree.ClassName): IRTree
         ?: error("$qname not found in $keys")
 
 private fun Map<IRTree.ClassName, Classes>.findOrNull(qname: IRTree.ClassName): IRTree.Type? = when (
-    val value = get(
-        qname,
-    )
+    val value = get(qname)
 ) {
     is Classes.TypeAlias -> find(value.actual)
     is Classes.ActualClass -> value.forClass

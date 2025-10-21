@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://example.com/foo"
+                  xmlns:bar="http://example.com/bar"
+                  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:wsp="http://www.w3.org/ns/ws-policy" 
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                  name="FooService"
+                  targetNamespace="http://example.com/foo">
+    <wsdl:types>
+        <xsd:schema
+                xmlns:bar="http://example.com/bar" elementFormDefault="qualified" targetNamespace="http://example.com/bar">
+            <xsd:annotation>
+                <xsd:appinfo>
+                    <iso:ns prefix="bar" uri="http://example.com/bar"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:element name="Bar" type="bar:BarType"/>
+            <xsd:complexType name="BarType">
+                <xsd:annotation>
+                    <xsd:documentation>Bar details</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ValidFrom" type="xsd:date">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                            </xsd:appinfo>
+                            <xsd:documentation>Valid From</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+        
+        <xsd:schema xmlns:bar="http://example.com/bar"
+                    xmlns:tns="http://example.com/foo"
+                    elementFormDefault="qualified"
+                    targetNamespace="http://example.com/foo">
+            <xsd:annotation>
+                <xsd:appinfo>
+                    <iso:ns prefix="tns" uri="http://example.com/foo"/>
+                    <iso:ns prefix="bar" uri="http://example.com/bar"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:import namespace="http://example.com/bar"/>
+            <xsd:element name="Foo" type="tns:FooType"/>
+            <xsd:element name="Fault" type="tns:FaultType"/>
+            <xsd:complexType name="FooType">
+                <xsd:sequence>
+                    <xsd:element name="Bar" type="bar:BarType"/>
+                    <xsd:element name="Foo" type="xsd:integer"/>
+                </xsd:sequence>
+                <xsd:attribute name="Baz" type="xsd:boolean" default="false"/>
+            </xsd:complexType>
+            <xsd:complexType name="FaultType">
+                <xsd:sequence>
+                    <xsd:element name="message" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    
+    <wsdl:message name="CreateFooMessage">
+        <wsdl:part element="tns:Foo" name="CreateFoo"/>
+    </wsdl:message>
+    <wsdl:message name="CreateFooResponseMessage">
+        <wsdl:part element="bar:Bar" name="CreateFooResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Fault">
+        <wsdl:part element="tns:Fault" name="Fault"/>
+    </wsdl:message>
+    
+    <wsdl:portType name="FooServicePortType">
+        <wsdl:operation name="CreateFoo">
+            <wsdl:documentation>Create Foo</wsdl:documentation>
+            <wsdl:input message="tns:CreateFooMessage" name="CreateFoo"/>
+            <wsdl:output message="tns:CreateFooResponseMessage" name="CreateFooResponse"/>
+            <wsdl:fault message="tns:Fault" name="Fault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="FooServiceBinding"
+                  type="tns:FooServicePortType">
+        <wsdl:documentation>SOAP over HTTP</wsdl:documentation>
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="CreateFoo">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="CreateFoo">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateFooResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault name="Fault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="FooService">
+        <wsdl:port binding="tns:FooServiceBinding"
+                   name="FooServicePort">
+            <wsaw:UsingAddressing wsdl:required="true"/>
+            <wsp:Policy>
+                <wsam:Addressing>
+                    <wsp:Policy/>
+                </wsam:Addressing>
+            </wsp:Policy>
+            <soap:address location="ws://example.com/FooService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
