@@ -1,11 +1,11 @@
-package io.github.hfhbd.kfx.soap
+package io.github.hfhbd.kfx.soap11
 
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@XmlSerialName("Body", "http://schemas.xmlsoap.org/soap/envelope/")
+@XmlSerialName("Body", NAMESPACE)
 public data class Body<T>(
     @XmlElement
     val body: T,

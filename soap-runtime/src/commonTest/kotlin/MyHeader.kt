@@ -1,4 +1,4 @@
-import io.github.hfhbd.kfx.soap.Header
+import io.github.hfhbd.kfx.soap11.Header
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement

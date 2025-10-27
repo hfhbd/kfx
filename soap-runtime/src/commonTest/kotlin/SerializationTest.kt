@@ -1,7 +1,7 @@
-import io.github.hfhbd.kfx.soap.Body
-import io.github.hfhbd.kfx.soap.Envelope
-import io.github.hfhbd.kfx.soap.Fault
-import io.github.hfhbd.kfx.soap.Header
+import io.github.hfhbd.kfx.soap11.Body
+import io.github.hfhbd.kfx.soap11.Envelope
+import io.github.hfhbd.kfx.soap11.Fault
+import io.github.hfhbd.kfx.soap11.Header
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
@@ -45,12 +45,37 @@ class SerializationTest {
 
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Fault><faultcode>soap:Server</faultcode><faultstring>Some Error</faultstring></Fault></Body></Envelope>""",
+            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
             faultMessageXml,
         )
         assertEquals(
             expected = faultMessage,
             actual = xml.decodeFromString(Envelope.serializer(Fault.serializer()), faultMessageXml),
+        )
+    }
+
+    @Test
+    fun faultExample() {
+        val xml = XML
+
+        val faultMessage = Envelope(
+            header = null,
+            body = Body(Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error")),
+        )
+
+        assertEquals(
+            expected = faultMessage,
+            actual = xml.decodeFromString(Envelope.serializer(Fault.serializer()),
+                // language=xml
+                """<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>Server Error</faultstring>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>"""),
         )
     }
 
@@ -95,7 +120,7 @@ class SerializationTest {
 
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Fault><faultcode>soap:Server</faultcode><faultstring>Some Error</faultstring></Fault></Body></Envelope>""",
+            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
             faultMessageXml,
         )
         assertEquals(
