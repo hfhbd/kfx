@@ -1,18 +1,15 @@
 package server
 
-import org.springframework.web.bind.`annotation`.RequestMapping
-import org.springframework.web.bind.`annotation`.RequestMethod.HEAD
-import org.springframework.web.bind.`annotation`.ResponseStatus
+import org.springframework.web.reactive.function.server.CoRouterFunctionDsl
+import org.springframework.web.reactive.function.server.ServerRequest
+import org.springframework.web.reactive.function.server.buildAndAwait
 
-public interface BazACsrfToken {
-  /**
-   * Get the CSRF Token for BazA
-   */
-  @RequestMapping(
-    name = "bazACsrfToken",
-    method = [HEAD],
-    path = ["/http/foo/bar/baz"],
-  )
-  @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
-  public suspend fun bazACsrfToken()
+/**
+ * Get the CSRF Token for BazA
+ */
+fun CoRouterFunctionDsl.bazACsrfToken(action: suspend ServerRequest.() -> Unit) {
+  HEAD(pattern = """/http/foo/bar/baz""") { request ->
+    request.action()
+    ok().buildAndAwait()
+  }
 }

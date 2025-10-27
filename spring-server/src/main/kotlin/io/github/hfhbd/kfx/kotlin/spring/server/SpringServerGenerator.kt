@@ -31,7 +31,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         },
         fileName = name.replaceFirstChar { it.uppercaseChar() },
     ).apply {
-        addType(generateInterfaceSpec())
+        addFunction(generateInterfaceSpec())
     }.build()
 
     private fun Int?.toHttpCode(): MemberName {
@@ -46,15 +46,15 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         }
     }
 
-    private fun CodeGenTree.Operation.generateInterfaceSpec(): TypeSpec {
-        val interfaceSpec = TypeSpec.interfaceBuilder(name.replaceFirstChar { it.uppercaseChar() })
-
+    private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec {
         val function = FunSpec.builder(name)
-        function.addModifiers(KModifier.ABSTRACT)
-        function.addModifiers(KModifier.SUSPEND)
+
+        function.receiver(
+            ClassName("org.springframework.web.reactive.function.server", "CoRouterFunctionDsl")
+        )
 
         val documentation = documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             function.addKdoc(documentation.toKdoc())
         }
         if (deprecated) {
@@ -65,38 +65,45 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
             )
         }
 
-        val inputWrapperType = inputWrapperType
-        val input = input
+
         val inputContentType = inputContentType
 
-        val requestBody = AnnotationSpec.builder(
-            ClassName(
-                "org.springframework.web.bind.annotation",
-                "RequestBody",
-            ),
-        ).build()
+        function.addParameter(
+            "action",
+            LambdaTypeName.get(
+                receiver = ClassName("org.springframework.web.reactive.function.server", "ServerRequest"),
+                parameters = buildList {
+                    val inputWrapperType = inputWrapperType
+                    val input = input
+                    if (inputWrapperType != null) {
 
-        if (inputWrapperType != null) {
-            function.addParameter(
-                ParameterSpec.builder(
-                    name = "input",
-                    type = inputWrapperType.toSpringPoetType(read = true),
-                ).addAnnotation(requestBody).build(),
+                        add(
+                            ParameterSpec.builder(
+                                name = "input",
+                                type = inputWrapperType.toSpringPoetType(read = true),
+                            ).build(),
+                        )
+                    } else if (input != null) {
+                        add(
+                            ParameterSpec.builder(
+                                name = "input",
+                                type = input.toSpringPoetType(read = true),
+                            ).build(),
+                        )
+                    }
+                },
+                returnType = outputWrapperType?.toSpringPoetType(read = false) ?: output?.toSpringPoetType(read = false)
+                ?: UNIT,
             )
-        } else if (input != null) {
-            function.addParameter(
-                ParameterSpec.builder(
-                    name = "input",
-                    type = input.toSpringPoetType(read = true),
-                ).addAnnotation(requestBody).build(),
-            )
-        }
-
-        function.returns(
-            outputWrapperType?.toSpringPoetType(read = false) ?: output?.toSpringPoetType(read = false) ?: UNIT,
         )
 
         val path = path
+        if (path != null) {
+            function.beginControlFlow("path(pattern = %S).nest", path)
+        }
+        if (inputContentType != null) {
+            function.beginControlFlow("contentType(%S)", inputContentType)
+        }
 
         function.addAnnotation(
             AnnotationSpec.builder(
@@ -137,10 +144,6 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                     methodMapping,
                 )
 
-                if (path != null) {
-                    addMember("path = [%S]", path)
-                }
-
                 if (inputContentType != null) {
                     addMember(
                         "consumes = [%S]",
@@ -167,9 +170,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                 .build(),
         )
 
-        interfaceSpec.addFunction(function.build())
-        val type = interfaceSpec.build()
-        return type
+        return function.build()
     }
 }
 
@@ -178,7 +179,7 @@ fun CodeGenTree.Type.toSpringPoetType(
 ): TypeName = when (this) {
     CodeGenTree.Type.Builtin.FILE,
     CodeGenTree.Type.Builtin.BYTEARRAY,
-    -> if (read) {
+        -> if (read) {
         ClassName("java.io", "InputStream")
     } else {
         ClassName("org.springframework.web.servlet.mvc.method.annotation", "StreamingResponseBody")

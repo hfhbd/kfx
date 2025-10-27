@@ -1,15 +1,20 @@
 package io.github.hfhbd.kfx
 
-import com.example.FooInput
+import org.springframework.context.annotation.Bean
 import org.springframework.web.bind.annotation.RestController
-import server.BazA
-import server.BazACsrfToken
+import org.springframework.web.reactive.function.server.coRouter
+import server.bazA
+import server.bazACsrfToken
 
 @RestController
-class FooController : BazA, BazACsrfToken {
-    override suspend fun bazA(input: FooInput): String {
-        return "bazA"
+class FooController {
+    @Bean
+    fun router() = coRouter {
+        bazA {
+            "bazA"
+        }
+        bazACsrfToken {
+            error("token error")
+        }
     }
-
-    override suspend fun bazACsrfToken() {}
 }

@@ -4,26 +4,30 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.http.MediaType
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class FooTest(@Autowired private val mockMvc: MockMvc) {
+internal class FooTest(@Autowired private val webClient: WebTestClient) {
 
     @Test
-    @Throws(Exception::class)
     fun bazA() {
-        val result = mockMvc.perform(MockMvcRequestBuilders.post("/http/foo/bar/baz")
-            .content("""{ "s": "ff" }""")
-            .contentType("application/json"))
-            .andExpect(MockMvcResultMatchers.request().asyncStarted())
-            .andReturn()
-        mockMvc.perform(asyncDispatch(result))
-            .andExpect(status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string("bazA"))
+        webClient
+            .post().uri("/http/foo/bar/baz")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("""{ "s": "ff" }""")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody<String>().isEqualTo("bazA")
+    }
+
+    @Test
+    fun error() {
+        webClient
+            .head().uri("/http/foo/bar/baz")
+            .exchange()
+            .expectStatus().is5xxServerError
     }
 }
