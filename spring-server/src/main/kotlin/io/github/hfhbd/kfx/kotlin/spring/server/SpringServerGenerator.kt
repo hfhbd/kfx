@@ -2,6 +2,9 @@ package io.github.hfhbd.kfx.kotlin.spring.server
 
 import app.softwork.serviceloader.*
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.MemberName.Companion.member
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
@@ -31,30 +34,104 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         },
         fileName = name.replaceFirstChar { it.uppercaseChar() },
     ).apply {
-        addType(generateInterfaceSpec())
+        addFunction(generateInterfaceSpec())
     }.build()
 
-    private fun Int?.toHttpCode(): MemberName {
-        val className = ClassName("org.springframework.http", "HttpStatus")
-        return when (this) {
-            null, 200 -> MemberName(className, "OK")
-            201 -> MemberName(className, "CREATED")
-            202 -> MemberName(className, "ACCEPTED")
-            204 -> MemberName(className, "NO_CONTENT")
-            400 -> MemberName(className, "BAD_REQUEST")
-            else -> error("Not yet supported: $this")
-        }
+    private fun Int?.toHttpCode(): CodeBlock = when (this) {
+        null, 200 -> CodeBlock.of("ok()")
+        201 -> CodeBlock.of("created(location)")
+        202 -> CodeBlock.of("accepted()")
+        204 -> CodeBlock.of("noContent()")
+        400 -> CodeBlock.of("badRequest()")
+        404 -> CodeBlock.of("notFound()")
+        else -> error("Not yet supported: $this")
     }
 
-    private fun CodeGenTree.Operation.generateInterfaceSpec(): TypeSpec {
-        val interfaceSpec = TypeSpec.interfaceBuilder(name.replaceFirstChar { it.uppercaseChar() })
+    private fun ContentType.toMediaType(): CodeBlock = when (this) {
+        ContentType.ApplicationJson -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("APPLICATION_JSON"),
+        )
 
+        ContentType.ApplicationProblemJson -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("APPLICATION_PROBLEM_JSON"),
+        )
+
+        ContentType.ApplicationProblemXml -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("APPLICATION_PROBLEM_XML"),
+        )
+
+        ContentType.ApplicationSoapXml -> CodeBlock.of(
+            "%T(%S, %S)",
+            ClassName("org.springframework.http", "MediaType"),
+            "application",
+            "soap+xml",
+        )
+
+        ContentType.ApplicationXml -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("APPLICATION_XML"),
+        )
+
+        ContentType.ApplicationZip -> CodeBlock.of(
+            "%T(%S, %S)",
+            ClassName("org.springframework.http", "MediaType"),
+            "application",
+            "zip",
+        )
+
+        is ContentType.Custom -> CodeBlock.of(
+            "%M(%S)",
+            ClassName("org.springframework.http", "MediaType").member("parseMediaType"),
+            contentType,
+        )
+
+        ContentType.FormUrlEncoded -> CodeBlock.of(
+            "%T(%S, %S)",
+            ClassName("org.springframework.http", "MediaType"),
+            "application",
+            "x-www-form-urlencoded",
+        )
+
+        ContentType.MultipartFormData -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("MULTIPART_FORM_DATA"),
+        )
+
+        ContentType.OctetStream -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("APPLICATION_OCTET_STREAM"),
+        )
+
+        ContentType.TextCsv -> CodeBlock.of(
+            "%T(%S, %S)",
+            ClassName("org.springframework.http", "MediaType"),
+            "text",
+            "csv",
+        )
+
+        ContentType.TextPlain -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("TEXT_PLAIN"),
+        )
+
+        ContentType.TextXml -> CodeBlock.of(
+            "%M",
+            ClassName("org.springframework.http", "MediaType").member("TEXT_XML"),
+        )
+    }
+
+    private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec {
         val function = FunSpec.builder(name)
-        function.addModifiers(KModifier.ABSTRACT)
-        function.addModifiers(KModifier.SUSPEND)
+
+        function.receiver(
+            ClassName("org.springframework.web.reactive.function.server", "CoRouterFunctionDsl"),
+        )
 
         val documentation = documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             function.addKdoc(documentation.toKdoc())
         }
         if (deprecated) {
@@ -65,115 +142,170 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
             )
         }
 
+        val inputContentType = inputContentType
         val inputWrapperType = inputWrapperType
         val input = input
-        val inputContentType = inputContentType
 
-        val requestBody = AnnotationSpec.builder(
-            ClassName(
-                "org.springframework.web.bind.annotation",
-                "RequestBody",
-            ),
-        ).build()
+        val returnType = outputWrapperType?.toSpringPoetType(read = false) ?: output?.toSpringPoetType(read = false)
 
-        if (inputWrapperType != null) {
-            function.addParameter(
-                ParameterSpec.builder(
-                    name = "input",
-                    type = inputWrapperType.toSpringPoetType(read = true),
-                ).addAnnotation(requestBody).build(),
-            )
-        } else if (input != null) {
-            function.addParameter(
-                ParameterSpec.builder(
-                    name = "input",
-                    type = input.toSpringPoetType(read = true),
-                ).addAnnotation(requestBody).build(),
-            )
-        }
-
-        function.returns(
-            outputWrapperType?.toSpringPoetType(read = false) ?: output?.toSpringPoetType(read = false) ?: UNIT,
+        function.addParameter(
+            "action",
+            LambdaTypeName.get(
+                receiver = ClassName("org.springframework.web.reactive.function.server", "ServerRequest"),
+                parameters = buildList {
+                    if (inputWrapperType != null) {
+                        add(
+                            ParameterSpec.builder(
+                                name = "input",
+                                type = inputWrapperType.toSpringPoetType(read = true),
+                            ).build(),
+                        )
+                    } else if (input != null) {
+                        add(
+                            ParameterSpec.builder(
+                                name = "input",
+                                type = input.toSpringPoetType(read = true),
+                            ).build(),
+                        )
+                    }
+                },
+                returnType = when {
+                    success == 201 && returnType != null -> ClassName(
+                        "kotlin",
+                        "Pair",
+                    ).parameterizedBy(
+                        returnType,
+                        ClassName("java.net", "URI"),
+                    )
+                    returnType != null -> returnType
+                    else -> UNIT
+                },
+            ).copy(suspending = true),
         )
 
         val path = path
+        if (path != null) {
+            function.beginControlFlow("path(pattern = %P).nest", path)
+        }
+        if (inputContentType != null) {
+            function.beginControlFlow("contentType(%L).nest", inputContentType.toMediaType())
+        }
+        val outputContentType = outputContentType
+        if (outputContentType != null) {
+            function.beginControlFlow("accept(%L).nest", outputContentType.toMediaType())
+        }
 
-        function.addAnnotation(
-            AnnotationSpec.builder(
-                ClassName("org.springframework.web.bind.annotation", "RequestMapping"),
-            ).addMember(
-                "name = %S",
-                name,
-            ).apply {
-                val requestMethod = ClassName(
-                    "org.springframework.web.bind.annotation",
-                    "RequestMethod",
-                )
-
-                val methodMapping = MemberName(
-                    requestMethod,
-                    when (method) {
-                        CodeGenTree.Operation.HttpMethod.Head ->
-                            "HEAD"
-
-                        CodeGenTree.Operation.HttpMethod.Get ->
-                            "GET"
-
-                        CodeGenTree.Operation.HttpMethod.Post ->
-                            "POST"
-
-                        CodeGenTree.Operation.HttpMethod.Put ->
-                            "PUT"
-
-                        CodeGenTree.Operation.HttpMethod.Patch ->
-                            "PATCH"
-
-                        CodeGenTree.Operation.HttpMethod.Delete ->
-                            "DELETE"
-                    },
-                )
-                addMember(
-                    "method = [%M]",
-                    methodMapping,
-                )
-
-                if (path != null) {
-                    addMember("path = [%S]", path)
-                }
-
-                if (inputContentType != null) {
-                    addMember(
-                        "consumes = [%S]",
-                        inputContentType,
-                    )
-                }
-                val outputContentType = outputContentType
-                if (outputContentType != null) {
-                    addMember(
-                        "produces = [%S]",
-                        outputContentType,
-                    )
-                }
-            }.build(),
-        )
-
-        function.addAnnotation(
-            AnnotationSpec.builder(
-                ClassName("org.springframework.web.bind.annotation", "ResponseStatus"),
-            ).addMember(
-                "value = %L",
-                success.toHttpCode(),
+        val address = address
+        if (address != null) {
+            function.beginControlFlow(
+                "%M { it.firstHeader(%S) == %P }.nest {",
+                MemberName(
+                    "org.springframework.web.reactive.function.server.RequestPredicates",
+                    "headers",
+                    isExtension = true,
+                ),
+                "SOAPAction",
+                address,
             )
-                .build(),
+        }
+
+        function.beginControlFlow(
+            "method(%M) { request ->",
+            MemberName(
+                ClassName(
+                    "org.springframework.http",
+                    "HttpMethod",
+                ),
+                when (method) {
+                    CodeGenTree.Operation.HttpMethod.Head ->
+                        "HEAD"
+
+                    CodeGenTree.Operation.HttpMethod.Get ->
+                        "GET"
+
+                    CodeGenTree.Operation.HttpMethod.Post ->
+                        "POST"
+
+                    CodeGenTree.Operation.HttpMethod.Put ->
+                        "PUT"
+
+                    CodeGenTree.Operation.HttpMethod.Patch ->
+                        "PATCH"
+
+                    CodeGenTree.Operation.HttpMethod.Delete ->
+                        "DELETE"
+                },
+            ),
         )
 
-        interfaceSpec.addFunction(function.build())
-        val type = interfaceSpec.build()
-        return type
+        if (input != null && inputContentType?.supportedBySerialization() != false) {
+            function.addStatement(
+                "val body = request.%M<%T>()",
+                MemberName("org.springframework.web.reactive.function.server", "awaitBody", isExtension = true),
+                inputWrapperType?.toSpringPoetType(read = true) ?: input.toSpringPoetType(read = false),
+            )
+        }
+
+        function.addStatement(
+            "%Lrequest.action(%L)",
+            if (output != null) {
+                if (success == 201) {
+                    CodeBlock.of("val (response, location) = ")
+                } else {
+                    CodeBlock.of("val response = ")
+                }
+            } else {
+                CodeBlock.of("")
+            },
+            if (input != null && inputContentType != null) {
+                CodeBlock.of("body")
+            } else {
+                CodeBlock.of("")
+            },
+        )
+
+        if (output != null) {
+            function.addStatement(
+                "%L.%M(response)",
+                success.toHttpCode(),
+                MemberName(
+                    "org.springframework.web.reactive.function.server",
+                    "bodyValueAndAwait",
+                    isExtension = true,
+                ),
+            )
+        } else {
+            function.addStatement(
+                "%L.%M()",
+                success.toHttpCode(),
+                MemberName(
+                    "org.springframework.web.reactive.function.server",
+                    "buildAndAwait",
+                    isExtension = true,
+                ),
+            )
+        }
+
+        function.endControlFlow()
+
+        if (address != null) {
+            function.endControlFlow()
+        }
+        if (inputContentType != null) {
+            function.endControlFlow()
+        }
+        if (outputContentType != null) {
+            function.endControlFlow()
+        }
+        if (path != null) {
+            function.endControlFlow()
+        }
+
+        return function.build()
     }
 }
 
-fun CodeGenTree.Type.toSpringPoetType(
+private fun CodeGenTree.Type.toSpringPoetType(
     read: Boolean,
 ): TypeName = when (this) {
     CodeGenTree.Type.Builtin.FILE,
@@ -185,4 +317,20 @@ fun CodeGenTree.Type.toSpringPoetType(
     }
 
     else -> toPoetType()
+}
+
+private fun ContentType.supportedBySerialization() = when (this) {
+    ContentType.ApplicationSoapXml -> true
+    ContentType.ApplicationXml -> true
+    ContentType.ApplicationJson -> true
+    ContentType.ApplicationProblemJson -> true
+    ContentType.ApplicationProblemXml -> true
+    ContentType.FormUrlEncoded -> false
+    ContentType.MultipartFormData -> false
+    ContentType.OctetStream -> false
+    ContentType.TextPlain -> true
+    ContentType.ApplicationZip -> false
+    ContentType.TextCsv -> true
+    ContentType.TextXml -> true
+    is ContentType.Custom -> false
 }
