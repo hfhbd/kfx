@@ -5,7 +5,7 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
-@XmlSerialName("Fault", NAMESPACE)
+@XmlSerialName("Fault", SOAP_11_NAMESPACE)
 public data class Fault(
     @XmlElement(true)
     @XmlSerialName("faultcode", "")

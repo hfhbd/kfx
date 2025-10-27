@@ -65,7 +65,8 @@ class SerializationTest {
 
         assertEquals(
             expected = faultMessage,
-            actual = xml.decodeFromString(Envelope.serializer(Fault.serializer()),
+            actual = xml.decodeFromString(
+                Envelope.serializer(Fault.serializer()),
                 // language=xml
                 """<SOAP-ENV:Envelope
         xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
@@ -75,7 +76,8 @@ class SerializationTest {
             <faultstring>Server Error</faultstring>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>"""),
+</SOAP-ENV:Envelope>""",
+            ),
         )
     }
 

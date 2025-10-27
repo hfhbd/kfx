@@ -140,8 +140,8 @@ private fun WSDL.toIr(
                 queryParameters = emptyList(),
                 success = 200,
                 headers = emptyList(),
-                inputContentType = ContentType.ApplicationSoapXml,
-                outputContentType = ContentType.ApplicationSoapXml,
+                inputContentType = ContentType.TextXml,
+                outputContentType = ContentType.TextXml,
                 deprecated = false,
             ),
         )
