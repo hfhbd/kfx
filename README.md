@@ -21,7 +21,7 @@ Code generators:
 - Kotlin classes using Kotlinx.serialization
 - Ktor client functions
 - Ktor server functions
-- Spring server functions
+- Spring server webflux functional endpoints
 
 ## Gradle plugin
 
@@ -51,6 +51,7 @@ In the dependencies block, you define what code should be generated:
 - kotlinxJson: Adds `@Serializable` annotation to Kotlin classes
 - ktorClient: Generates ktor client functions
 - ktorServer: Generates ktor server `Route` functions
+- springServer(): Generates Spring webflux `CoRouterFunctionDsl` functional endpoints
 
 You also need to call `usingSourceSet` to connect the generated code to a Gradle SourceSet.
 
