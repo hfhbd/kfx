@@ -8,7 +8,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.ContentType.Application.Soap
+import io.ktor.http.ContentType.Text.Xml
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.Throws
@@ -20,7 +20,7 @@ import kotlin.Unit
 @Throws(Fault::class)
 public suspend fun HttpClient.createFoo(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): Bar {
   val response = post {
-    contentType(Soap)
+    contentType(Xml)
     setBody(body = input)
     builder()
   }

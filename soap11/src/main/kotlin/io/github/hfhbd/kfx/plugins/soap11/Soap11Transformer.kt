@@ -1,4 +1,4 @@
-package io.github.hfhbd.kfx.plugins.soap
+package io.github.hfhbd.kfx.plugins.soap11
 
 import app.softwork.serviceloader.*
 import io.github.hfhbd.kfx.ContentType.*
@@ -7,7 +7,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenTransformer::class)
-class SoapTransformer : CodeGenTransformer {
+class Soap11Transformer : CodeGenTransformer {
     override fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree = codeGen.copy(
         operations = codeGen.operations.mapTo(mutableSetOf()) {
             it.addSoapWrapper()
@@ -15,7 +15,7 @@ class SoapTransformer : CodeGenTransformer {
     )
 
     private val envelopeBody = CodeGenTree.NormalClass(
-        packageName = "io.github.hfhbd.kfx.soap",
+        packageName = "io.github.hfhbd.kfx.soap11",
         names = listOf("Body"),
         annotations = emptyList(),
         documentation = null,
@@ -28,7 +28,7 @@ class SoapTransformer : CodeGenTransformer {
 
     private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation {
         fun envelope(type: CodeGenTree.Type) = CodeGenTree.NormalClass(
-            packageName = "io.github.hfhbd.kfx.soap",
+            packageName = "io.github.hfhbd.kfx.soap11",
             names = listOf("Envelope"),
             annotations = emptyList(),
             documentation = null,
@@ -52,8 +52,8 @@ class SoapTransformer : CodeGenTransformer {
             parameters = listOf(),
             queryParameters = emptyList(),
             path = null,
-            inputContentType = ApplicationSoapXml,
-            outputContentType = ApplicationSoapXml,
+            inputContentType = TextXml,
+            outputContentType = TextXml,
             inputWrapper = CodeGenTree.Expression.Create(
                 envelope(input!!),
                 listOf(

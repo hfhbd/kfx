@@ -51,7 +51,7 @@ include(":creator-kotlinxjson")
 include(":wsdl-model")
 include(":wsdl-fir")
 
-include(":soap")
+include(":soap11")
 include(":soap-runtime")
 
 include(":ktor-server-soap-plugin")
