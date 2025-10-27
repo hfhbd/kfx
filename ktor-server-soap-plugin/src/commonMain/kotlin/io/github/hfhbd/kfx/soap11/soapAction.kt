@@ -12,9 +12,11 @@ public fun Route.soapAction(action: String, build: Route.() -> Unit): Route {
 
 private class Soap11RouteSelector(val action: String) : RouteSelector() {
     override suspend fun evaluate(context: RoutingResolveContext, segmentIndex: Int): RouteSelectorEvaluation =
-        if (context.call.request.header("SOAPAction") == action) {
+        if (context.call.request.header("SOAPAction")?.trim('"') == action) {
             RouteSelectorEvaluation.Success(1.0)
         } else {
             RouteSelectorEvaluation.Failure(qualityFailedParameter, HttpStatusCode.InternalServerError)
         }
+
+    override fun toString(): String = "(soapAction=\"$action\")"
 }
