@@ -57,6 +57,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             202 -> MemberName(className, "Accepted")
             204 -> MemberName(className, "NoContent")
             400 -> MemberName(className, "BadRequest")
+            404 -> MemberName(className, "NotFound")
             else -> error("Not yet supported: $this")
         }
     }
@@ -64,7 +65,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
     private fun CodeGenTree.Operation.generateFunSpec(): FunSpec {
         val function = FunSpec.builder(name)
         val documentation = documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             function.addKdoc(documentation.toKdoc())
         }
         if (deprecated) {
@@ -173,6 +174,10 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         }
 
         function.endControlFlow()
+
+        if (address != null) {
+            function.endControlFlow()
+        }
         if (inputContentType != null) {
             function.endControlFlow()
         }
@@ -182,20 +187,17 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         if (path != null) {
             function.endControlFlow()
         }
-        if (address != null) {
-            function.endControlFlow()
-        }
 
         return function.build()
     }
 }
 
-internal fun String.toKtorServer(): String = replace("\${", "{")
+internal fun String.toKtorServer(): String = replace($$"${", "{")
     .replace("'\\\$([^'.])*'".toRegex()) {
         val value = it.groups[1]?.value
         if (value != null) {
             "'{$value}'"
         } else {
-            "\$"
+            "$"
         }
     }

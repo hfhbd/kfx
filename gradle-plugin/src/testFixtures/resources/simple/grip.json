@@ -173,7 +173,7 @@
             "maxLength": 21
           }
         },
-        "description": "Output of the invoices sent to VW SK SAP system using RVS and CSV"
+        "description": "Some description"
       },
       "io.github.hfhbd.Fault": {
         "type": "object",
