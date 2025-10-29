@@ -1,6 +1,5 @@
-package io.github.hfhbd.kfx.wsdl.model
+package io.github.hfhbd.kfx.xsd
 
-import io.github.hfhbd.kfx.xsd.Documentation
 import kotlinx.serialization.modules.SerializersModule
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -11,6 +10,7 @@ fun xml(
 ): XML = XML(
     serializersModule = SerializersModule {
         include(Documentation.serializerModule())
+        include(AppInfo.serializerModule())
         for (transformer in transformerSerializers) {
             include(transformer)
         }
@@ -20,7 +20,5 @@ fun xml(
     xmlVersion = XmlVersion.XML10
     xmlDeclMode = XmlDeclMode.Charset
     autoPolymorphic = true
-    defaultPolicy {
-        ignoreUnknownChildren()
-    }
+    indentString = "    "
 }

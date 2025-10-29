@@ -3,8 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(projects.core)
-    api(projects.wsdlModel)
+    api(projects.xsdFir)
 
     testFixturesApi(libs.ktor.client.core)
     testFixturesApi(projects.ktorServerSoapPlugin)
