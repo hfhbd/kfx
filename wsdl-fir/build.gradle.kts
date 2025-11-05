@@ -48,6 +48,10 @@ testing.suites {
     register("FooService", JvmTestSuite::class) {
         dependencies {
             implementation(projects.validation)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.server.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.server.test.host)
         }
     }
 }
