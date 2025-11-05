@@ -26,6 +26,18 @@ class Soap11Transformer : CodeGenTransformer {
         isSealed = false,
     )
 
+    private val defaultFault = CodeGenTree.NormalClass(
+        packageName = "io.github.hfhbd.kfx.soap11",
+        names = listOf("Fault"),
+        annotations = emptyList(),
+        documentation = null,
+        types = emptyList(),
+        isFault = false,
+        members = emptyList(),
+        functions = emptyList(),
+        isSealed = false,
+    )
+
     private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation {
         fun envelope(type: CodeGenTree.Type) = CodeGenTree.NormalClass(
             packageName = "io.github.hfhbd.kfx.soap11",
@@ -39,6 +51,8 @@ class Soap11Transformer : CodeGenTransformer {
             isSealed = false,
         )
 
+        val fault = fault ?: defaultFault
+
         return CodeGenTree.Operation(
             packageName = packageName,
             name = name,
@@ -47,7 +61,7 @@ class Soap11Transformer : CodeGenTransformer {
             address = address,
             input = input!!,
             output = output!!,
-            fault = fault!!,
+            fault = fault,
             method = CodeGenTree.Operation.HttpMethod.Post,
             parameters = listOf(),
             queryParameters = emptyList(),
@@ -91,7 +105,7 @@ class Soap11Transformer : CodeGenTransformer {
                     ),
                 ),
             ),
-            faultWrapper = envelope(fault!!),
+            faultWrapper = envelope(fault),
             nullableOutput = null,
             success = 200,
             headers = emptyList(),

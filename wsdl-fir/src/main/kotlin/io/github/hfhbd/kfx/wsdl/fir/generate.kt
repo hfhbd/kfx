@@ -16,7 +16,7 @@ import io.github.hfhbd.kfx.wsdl.model.SimpleType
 import io.github.hfhbd.kfx.wsdl.model.Type
 import io.github.hfhbd.kfx.wsdl.model.WSDL
 import io.github.hfhbd.kfx.wsdl.model.xml
-import nl.adaptivity.xmlutil.core.*
+import nl.adaptivity.xmlutil.core.KtXmlReader
 import java.io.InputStream
 import java.nio.file.Path
 import java.util.ServiceLoader
@@ -106,9 +106,18 @@ private fun WSDL.toIr(
     val namespaces = allNamespaces()
 
     for (message in messages) {
-        val (ns, name) = message.part.element.split(":")
+        val elementNsAndName = message.part.element.split(":")
+        val ns: String?
+        val name: String
+        if (elementNsAndName.size == 1) {
+            name = elementNsAndName.single()
+            ns = null
+        } else {
+            ns = elementNsAndName.first()
+            name = elementNsAndName.last()
+        }
         val typeAlias = IRTree.ClassName(targetNamespace.packageName, message.name)
-        val namespace = namespaces[ns] ?: getNS(ns)
+        val namespace = ns?.let { namespaces[it] ?: getNS(it) }
         val resolved = IRTree.ClassName(namespace?.packageName ?: targetNamespace.packageName, name)
         if (resolved != typeAlias) {
             irTypes[typeAlias] = Classes.TypeAlias(resolved)
@@ -655,7 +664,16 @@ private fun WSDL.allNamespaces(): Map<String, String> = types.flatMap {
 }.associate { it }
 
 private fun Type.resolve(definitions: WSDL): IRTree.ClassName {
-    val (namespace, name) = message.split(":")
+    val namespace: String?
+    val name: String
+    val nsAndName = message.split(":")
+    if (nsAndName.size == 1) {
+        namespace = null
+        name = nsAndName.single()
+    } else {
+        namespace = nsAndName.first()
+        name = nsAndName.last()
+    }
 
     val found = definitions.allNamespaces()[namespace]
 
@@ -680,6 +698,7 @@ private fun String.toBuiltin(): IRTree.Type.Builtin? = when {
     endsWith(":base64Binary") -> IRTree.Type.Builtin.STRING
     endsWith(":boolean") -> IRTree.Type.Builtin.BOOLEAN
     endsWith(":integer") || endsWith(":int") -> IRTree.Type.Builtin.INT
+    endsWith(":long") -> IRTree.Type.Builtin.LONG
     endsWith(":decimal") -> IRTree.Type.Builtin.DOUBLE
     else -> null
 }
