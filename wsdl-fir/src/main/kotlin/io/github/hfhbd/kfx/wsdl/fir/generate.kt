@@ -117,7 +117,7 @@ private fun WSDL.toIr(
             name = elementNsAndName.last()
         }
         val typeAlias = IRTree.ClassName(targetNamespace.packageName, message.name)
-        val namespace = ns?.let { namespaces[ns] ?: getNS(ns) }
+        val namespace = ns?.let { namespaces[it] ?: getNS(it) }
         val resolved = IRTree.ClassName(namespace?.packageName ?: targetNamespace.packageName, name)
         if (resolved != typeAlias) {
             irTypes[typeAlias] = Classes.TypeAlias(resolved)
