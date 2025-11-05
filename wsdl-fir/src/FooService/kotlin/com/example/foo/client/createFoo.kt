@@ -6,6 +6,7 @@ import com.example.foo.Foo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.`header`
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Text.Xml
@@ -20,6 +21,7 @@ import kotlin.Unit
 @Throws(Fault::class)
 public suspend fun HttpClient.createFoo(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): Bar {
   val response = post {
+    `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFoo")
     contentType(Xml)
     setBody(body = input)
     builder()

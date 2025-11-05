@@ -180,6 +180,15 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
             }
         }
+        val address = address
+        if (address != null) {
+            addStatement(
+                "%M(%S, %S)",
+                MemberName("io.ktor.client.request", "header", isExtension = true),
+                "SOAPAction",
+                address,
+            )
+        }
 
         if (queryParameters.isNotEmpty()) {
             for (queryParameter in queryParameters) {
