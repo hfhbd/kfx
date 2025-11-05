@@ -16,7 +16,7 @@ interface KfxDependencies : Dependencies {
     fun kotlinxJson(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-kotlinxjson:$VERSION")
     fun kotlinxXmlutil(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-xmlutil:$VERSION")
 
-    fun soap(): ExternalModuleDependency = dependencyFactory.create("$GROUP:soap:$VERSION")
+    fun soap11(): ExternalModuleDependency = dependencyFactory.create("$GROUP:soap11:$VERSION")
     fun validation(): ExternalModuleDependency = dependencyFactory.create("$GROUP:validation:$VERSION")
     fun removeType(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-removetype:$VERSION")
     fun odata(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
