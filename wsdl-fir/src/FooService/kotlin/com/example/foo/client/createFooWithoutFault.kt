@@ -1,10 +1,10 @@
 package com.example.foo.client
 
 import com.example.bar.Bar
-import com.example.foo.Fault
 import com.example.foo.Foo
 import io.github.hfhbd.kfx.soap11.Body
 import io.github.hfhbd.kfx.soap11.Envelope
+import io.github.hfhbd.kfx.soap11.Fault
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -21,9 +21,9 @@ import kotlin.Unit
  * Create Foo
  */
 @Throws(Fault::class)
-public suspend fun HttpClient.createFoo(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): Bar {
+public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): Bar {
   val response = post {
-    `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFoo")
+    `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFooWithoutFault")
     contentType(Xml)
     setBody(
         body = Envelope<Foo>(

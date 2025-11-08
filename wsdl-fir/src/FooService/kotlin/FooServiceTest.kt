@@ -2,6 +2,7 @@ import com.example.bar.*
 import com.example.foo.*
 import com.example.foo.client.createFoo
 import com.example.foo.server.createFoo
+import io.github.hfhbd.kfx.soap11.*
 import io.ktor.serialization.kotlinx.serialization
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.routing.routing
@@ -34,7 +35,7 @@ class FooServiceTest {
                     )
                 }
                 createFoo { 
-                    it.bar
+                    Envelope(null, Body(it.body.body.bar))
                 }
             }
         }
