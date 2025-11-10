@@ -17,13 +17,23 @@ public data class Envelope<T> private constructor(
 
     @XmlElement
     @SerialName("Body")
-    internal val bodyHolder: Body<T>,
+    private val bodyHolder: Body<T>,
 ) {
     public constructor(header: Header? = null, body: T) : this(header, Body(body))
-    
+
     public val body: T get() = bodyHolder.body
-    
-    public fun copy(header: Header? = this.header, body: T): Envelope<T> = copy(header = header, bodyHolder = Body(body))
+
+    public fun copy(header: Header? = this.header, body: T): Envelope<T> = copy(
+        header = header,
+        bodyHolder = Body(body),
+    )
 }
 
 public const val SOAP_11_NAMESPACE: String = "http://schemas.xmlsoap.org/soap/envelope/"
+
+@Serializable
+@XmlSerialName("Body", SOAP_11_NAMESPACE)
+private data class Body<T>(
+    @XmlElement
+    val body: T,
+)

@@ -35,7 +35,7 @@ class FooServiceTest {
                     )
                 }
                 createFoo { 
-                    Envelope(null, Body(it.body.body.bar))
+                    Envelope(null, it.body.bar)
                 }
             }
         }

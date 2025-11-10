@@ -2,7 +2,6 @@ package com.example.foo.client
 
 import com.example.bar.Bar
 import com.example.foo.Foo
-import io.github.hfhbd.kfx.soap11.Body
 import io.github.hfhbd.kfx.soap11.Envelope
 import io.github.hfhbd.kfx.soap11.Fault
 import io.ktor.client.HttpClient
@@ -28,18 +27,16 @@ public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend
     setBody(
         body = Envelope<Foo>(
           header = null,
-          body = Body(
-            body = input,
-          ),
+          body = input,
         ),
         )
     builder()
   }
   if (response.status.isSuccess()) {
     val output = response.body<Envelope<Bar>>()
-    return output.body.body
+    return output.body
   } else {
     val output = response.body<Envelope<Fault>>()
-    throw output.body.body
+    throw output.body
   }
 }
