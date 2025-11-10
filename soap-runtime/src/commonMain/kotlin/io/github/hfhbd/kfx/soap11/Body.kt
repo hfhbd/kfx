@@ -6,7 +6,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName("Body", SOAP_11_NAMESPACE)
-public data class Body<T>(
+internal data class Body<T>(
     @XmlElement
     val body: T,
 )
