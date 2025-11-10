@@ -81,6 +81,11 @@
             <wsdl:output message="tns:CreateFooResponseMessage" name="CreateFooResponse"/>
             <wsdl:fault message="tns:Fault" name="Fault"/>
         </wsdl:operation>
+        <wsdl:operation name="CreateFooWithoutFault">
+            <wsdl:documentation>Create Foo</wsdl:documentation>
+            <wsdl:input message="tns:CreateFooMessage" name="CreateFoo"/>
+            <wsdl:output message="tns:CreateFooResponseMessage" name="CreateFooResponse"/>
+        </wsdl:operation>
     </wsdl:portType>
 
     <wsdl:binding name="FooServiceBinding"
@@ -98,6 +103,15 @@
             <wsdl:fault name="Fault">
                 <soap:fault name="Fault" use="literal"/>
             </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="CreateFooWithoutFault">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="CreateFoo">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CreateFooResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
 

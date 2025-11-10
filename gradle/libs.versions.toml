@@ -23,7 +23,6 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-ktor-server-double-receive = { module = "io.ktor:ktor-server-double-receive", version.ref = "ktor" }
 
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.20" }
 

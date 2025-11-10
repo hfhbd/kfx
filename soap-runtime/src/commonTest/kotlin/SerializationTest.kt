@@ -1,4 +1,3 @@
-import io.github.hfhbd.kfx.soap11.Body
 import io.github.hfhbd.kfx.soap11.Envelope
 import io.github.hfhbd.kfx.soap11.Fault
 import io.github.hfhbd.kfx.soap11.Header
@@ -15,11 +14,11 @@ class SerializationTest {
         val xml = XML
         val someMessage = Envelope(
             header = null,
-            body = Body(Pair("foo", 42)),
+            body = Pair("foo", 42),
         )
         val faultMessage = Envelope(
             header = null,
-            body = Body(Fault(faultCode = "soap:Server", faultString = "Some Error")),
+            body = Fault(faultCode = "soap:Server", faultString = "Some Error"),
         )
 
         val someMessageXml = xml.encodeToString(
@@ -60,7 +59,7 @@ class SerializationTest {
 
         val faultMessage = Envelope(
             header = null,
-            body = Body(Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error")),
+            body = Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error"),
         )
 
         assertEquals(
@@ -92,11 +91,11 @@ class SerializationTest {
         )
         val someMessage = Envelope(
             header = MyHeader(to = "to"),
-            body = Body(Pair("foo", 42)),
+            body = Pair("foo", 42),
         )
         val faultMessage = Envelope(
             header = MyHeader(to = "to"),
-            body = Body(Fault(faultCode = "soap:Server", faultString = "Some Error")),
+            body = Fault(faultCode = "soap:Server", faultString = "Some Error"),
         )
 
         val someMessageXml = xml.encodeToString(

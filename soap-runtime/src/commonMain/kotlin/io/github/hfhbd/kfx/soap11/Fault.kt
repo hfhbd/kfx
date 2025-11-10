@@ -22,4 +22,4 @@ public data class Fault(
     @XmlElement(true)
     @XmlSerialName("detail", "")
     val detail: String? = null,
-)
+) : Exception(faultString)
