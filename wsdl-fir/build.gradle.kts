@@ -29,6 +29,8 @@ testing.suites {
             implementation(projects.creatorXmlutil)
             implementation(projects.ktorClient)
             implementation(projects.ktorServer)
+            implementation(projects.soapRuntime)
+            implementation(projects.soap11)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.server.core)

@@ -1,7 +1,7 @@
 package io.github.hfhbd.kfx.plugins.soap11
 
-import app.softwork.serviceloader.*
-import io.github.hfhbd.kfx.ContentType.*
+import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.kfx.ContentType.TextXml
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.ir.IRTree
@@ -12,18 +12,6 @@ class Soap11Transformer : CodeGenTransformer {
         operations = codeGen.operations.mapTo(mutableSetOf()) {
             it.addSoapWrapper()
         },
-    )
-
-    private val envelopeBody = CodeGenTree.NormalClass(
-        packageName = "io.github.hfhbd.kfx.soap11",
-        names = listOf("Body"),
-        annotations = emptyList(),
-        documentation = null,
-        types = emptyList(),
-        isFault = false,
-        members = emptyList(),
-        functions = emptyList(),
-        isSealed = false,
     )
 
     private val defaultFault = CodeGenTree.NormalClass(
@@ -72,36 +60,20 @@ class Soap11Transformer : CodeGenTransformer {
                 envelope(input!!),
                 listOf(
                     "header" to CodeGenTree.Expression.NullLiteral,
-                    "body" to CodeGenTree.Expression.Create(
-                        envelopeBody,
-                        listOf(
-                            "body" to CodeGenTree.Expression.Input,
-                        ),
-                    ),
+                    "body" to CodeGenTree.Expression.Input,
                 ),
             ),
             inputWrapperType = envelope(input!!),
             outputWrapperType = envelope(output!!),
             outputMember = CodeGenTree.Expression.Chain(
                 CodeGenTree.Expression.Output,
-                CodeGenTree.Expression.Chain(
-                    CodeGenTree.Expression.CallMember(
-                        CodeGenTree.Member(
-                            name = "body",
-                            type = envelopeBody,
-                            nullable = false,
-                            documentation = null,
-                            annotations = listOf(),
-                        ),
-                    ),
-                    CodeGenTree.Expression.CallMember(
-                        CodeGenTree.Member(
-                            name = "body",
-                            type = output!!,
-                            nullable = false,
-                            documentation = null,
-                            annotations = listOf(),
-                        ),
+                CodeGenTree.Expression.CallMember(
+                    CodeGenTree.Member(
+                        name = "body",
+                        type = output!!,
+                        nullable = false,
+                        documentation = null,
+                        annotations = listOf(),
                     ),
                 ),
             ),
