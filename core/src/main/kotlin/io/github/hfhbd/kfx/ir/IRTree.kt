@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.ir
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -171,13 +172,13 @@ data class IRTree(
         val location: String?,
         val address: String?,
 
-        val success: Int?,
+        val success: StatusCode?,
 
         val input: Type?,
         val inputContentType: ContentType?,
         val output: Type?,
         val outputContentType: ContentType?,
-        val nullableOutput: Int?,
+        val notFound: Boolean,
         val fault: NormalClass?,
 
         val deprecated: Boolean,

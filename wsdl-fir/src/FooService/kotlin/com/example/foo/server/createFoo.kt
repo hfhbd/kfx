@@ -26,12 +26,12 @@ public fun Route.createFoo(action: suspend ApplicationCall.(Envelope<Foo>) -> Cr
           val body = call.receive<Envelope<Foo>>()
           val response = call.action(body)
           when (response) {
-            is CreateFooResult.Failure -> {
-              call.response.status(InternalServerError)
-              call.respond(response.body)
-            }
             is CreateFooResult.Success -> {
               call.response.status(OK)
+              call.respond(response.body)
+            }
+            is CreateFooResult.Failure -> {
+              call.response.status(InternalServerError)
               call.respond(response.body)
             }
           }

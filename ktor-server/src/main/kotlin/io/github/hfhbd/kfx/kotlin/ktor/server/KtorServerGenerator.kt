@@ -2,11 +2,13 @@ package io.github.hfhbd.kfx.kotlin.ktor.server
 
 import app.softwork.serviceloader.ServiceLoader
 import com.squareup.kotlinpoet.*
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
 import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
 import io.github.hfhbd.kfx.kotlin.ktor.toKtor
+import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import io.github.hfhbd.kfx.kotlin.toKdoc
 import io.github.hfhbd.kfx.toKtorPoetType
 import java.nio.file.Path
@@ -49,16 +51,23 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         isExtension = true,
     )
 
-    private fun Int?.toHttpCode(): MemberName {
+    private fun StatusCode.toHttpCode(): MemberName {
         val className = ClassName("io.ktor.http", "HttpStatusCode", "Companion")
         return when (this) {
-            null, 200 -> MemberName(className, "OK")
-            201 -> MemberName(className, "Created")
-            202 -> MemberName(className, "Accepted")
-            204 -> MemberName(className, "NoContent")
-            400 -> MemberName(className, "BadRequest")
-            404 -> MemberName(className, "NotFound")
-            else -> error("Not yet supported: $this")
+            StatusCode.OK -> MemberName(className, "OK")
+            StatusCode.Created -> MemberName(className, "Created")
+            StatusCode.Accepted -> MemberName(className, "Accepted")
+            StatusCode.NoContent -> MemberName(className, "NoContent")
+            StatusCode.BadRequest -> MemberName(className, "BadRequest")
+            StatusCode.NotFound -> MemberName(className, "NotFound")
+            StatusCode.Unauthorized -> MemberName(className, "Unauthorized")
+            StatusCode.Forbidden -> MemberName(className, "Forbidden")
+            StatusCode.NotAcceptable -> MemberName(className, "NotAcceptable")
+            StatusCode.Conflict -> MemberName(className, "Conflict")
+            StatusCode.LengthRequired -> MemberName(className, "LengthRequired")
+            StatusCode.ContentTooLarge -> MemberName(className, "ContentTooLarge")
+            StatusCode.TooManyRequests -> MemberName(className, "TooManyRequests")
+            StatusCode.InternalServerError -> MemberName(className, "InternalServerError")
         }
     }
 
@@ -94,8 +103,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                             add(ParameterSpec.unnamed(input.toKtorPoetType(read = true)))
                         }
                     },
-                    returnType = outputWrapperType?.toKtorPoetType(read = false) ?: output?.toKtorPoetType(read = false)
-                        ?: UNIT,
+                    returnType = returnType?.toKtorPoetType(read = false) ?: UNIT,
                 ).copy(
                     suspending = true,
                 ),
@@ -161,16 +169,39 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 CodeBlock.of("")
             },
         )
+        val nameAllocator = NameAllocator()
+        nameAllocator.newName("input")
+        nameAllocator.newName("builder")
+        nameAllocator.newName("response")
 
         val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
-        if (output != null) {
-            function.addStatement(
-                "call.response.status(%M)",
-                success.toHttpCode(),
-            )
-            function.addStatement("call.%M(response)", respond)
+        if (responseBranches.isNotEmpty()) {
+            function.beginControlFlow("when (response)")
+            for (responseBranch in responseBranches) {
+                function.beginControlFlow("%L ->", responseBranch.condition.toCodeBlock(nameAllocator))
+                val response = responseBranch.response
+                if (response != null) {
+                    function.addStatement(
+                        "call.response.status(%M)",
+                        responseBranch.statusCode.toHttpCode(),
+                    )
+                    function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
+                } else {
+                    function.addStatement("call.%M(%M)", respond, responseBranch.statusCode.toHttpCode())
+                }
+                function.endControlFlow()
+            }
+            function.endControlFlow()
         } else {
-            function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+            if (output != null) {
+                function.addStatement(
+                    "call.response.status(%M)",
+                    success.toHttpCode(),
+                )
+                function.addStatement("call.%M(response)", respond)
+            } else {
+                function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+            }   
         }
 
         function.endControlFlow()

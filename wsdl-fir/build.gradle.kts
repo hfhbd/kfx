@@ -31,6 +31,7 @@ testing.suites {
             implementation(projects.ktorServer)
             implementation(projects.soapRuntime)
             implementation(projects.soap11)
+            implementation(projects.responseClasses)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.server.core)

@@ -66,17 +66,20 @@ class XmlUtilCreator : KotlinxCoreCreator {
         documentation = ir.documentation,
         isFault = ir.isFault,
         annotations = buildList {
-            add(SERIALIZABLE)
-            add(
-                CodeGenTree.Annotation(
-                    "nl.adaptivity.xmlutil.serialization",
-                    listOf("XmlSerialName"),
-                    mapOf(
-                        "value" to StringLiteral(ir.serialName!!),
-                        "namespace" to StringLiteral(ir.namespace!!),
+            val serialName = ir.serialName
+            if (serialName != null) {
+                add(SERIALIZABLE)
+                add(
+                    CodeGenTree.Annotation(
+                        "nl.adaptivity.xmlutil.serialization",
+                        listOf("XmlSerialName"),
+                        mapOf(
+                            "value" to StringLiteral(serialName),
+                            "namespace" to StringLiteral(ir.namespace!!),
+                        ),
                     ),
-                ),
-            )
+                )
+            }
             if (ir.deprecated) {
                 add(DEPRECATED)
             }

@@ -26,14 +26,14 @@ public fun Route.createFooWithoutFault(action: suspend ApplicationCall.(Envelope
           val body = call.receive<Envelope<Foo>>()
           val response = call.action(body)
           when (response) {
-              is CreateFooWithoutFaultResult.Failure -> {
-                call.response.status(InternalServerError)
-                call.respond(response.body)
-              }
-              is CreateFooWithoutFaultResult.Success -> {
-                call.response.status(OK)
-                call.respond(response.body)
-              }
+            is CreateFooWithoutFaultResult.Success -> {
+              call.response.status(OK)
+              call.respond(response.body)
+            }
+            is CreateFooWithoutFaultResult.Failure -> {
+              call.response.status(InternalServerError)
+              call.respond(response.body)
+            }
           }
         }
       }

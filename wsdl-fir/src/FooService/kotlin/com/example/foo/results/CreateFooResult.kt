@@ -4,7 +4,12 @@ import com.example.bar.Bar
 import com.example.foo.Fault
 import io.github.hfhbd.kfx.soap11.Envelope
 
-sealed interface CreateFooResult {
-  data class Success(val body: Envelope<Bar>) : CreateFooResult
-  data class Failure(val body: Envelope<Fault>) : CreateFooResult
+public sealed interface CreateFooResult {
+  public data class Success(
+    public val body: Envelope<Bar>,
+  ) : CreateFooResult
+
+  public data class Failure(
+    public val body: Envelope<Fault>,
+  ) : CreateFooResult
 }

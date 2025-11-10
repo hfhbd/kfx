@@ -34,6 +34,7 @@ include(":contextual-date")
 
 include(":ir-packagename")
 include(":ir-odata")
+include(":response-classes")
 
 include(":oauth2-runtime")
 

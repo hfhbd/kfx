@@ -29,7 +29,6 @@ fun CodeGenTree.Expression.ConstExpression.toCodeBlock(): CodeBlock = when (this
 
 fun CodeGenTree.Expression.toCodeBlock(
     nameAllocator: NameAllocator,
-    toPoetType: CodeGenTree.Type.() -> TypeName,
 ): CodeBlock = when (this) {
     is CodeGenTree.Expression.ConstExpression -> toCodeBlock()
     is CodeGenTree.Expression.UuidLiteral -> CodeBlock.of(
@@ -65,7 +64,7 @@ fun CodeGenTree.Expression.toCodeBlock(
             block.indent()
         }
         for ((name, parameter) in parameters) {
-            block.add("$name = %L,\n", parameter.toCodeBlock(nameAllocator, toPoetType))
+            block.add("$name = %L,\n", parameter.toCodeBlock(nameAllocator))
         }
         if (parameters.isNotEmpty()) {
             block.unindent()
@@ -77,22 +76,23 @@ fun CodeGenTree.Expression.toCodeBlock(
     is CodeGenTree.Expression.Parameter -> CodeBlock.of("%L", nameAllocator[parameter.name])
     is CodeGenTree.Expression.Input -> CodeBlock.of("input")
     is CodeGenTree.Expression.Output -> CodeBlock.of("output")
+    is CodeGenTree.Expression.Response -> CodeBlock.of("response")
     is CodeGenTree.Expression.Chain -> CodeBlock.of(
         "%L.%L",
-        lhs.toCodeBlock(nameAllocator, toPoetType),
-        rhs.toCodeBlock(nameAllocator, toPoetType),
+        lhs.toCodeBlock(nameAllocator),
+        rhs.toCodeBlock(nameAllocator),
     )
     is CodeGenTree.Expression.Plus -> CodeBlock.of(
         "%L + %L",
-        lhs.toCodeBlock(nameAllocator, toPoetType),
-        rhs.toCodeBlock(nameAllocator, toPoetType),
+        lhs.toCodeBlock(nameAllocator),
+        rhs.toCodeBlock(nameAllocator),
     )
 
     CodeGenTree.Expression.NullLiteral -> CodeBlock.of("null")
     is CodeGenTree.Expression.ListOf -> CodeBlock.Builder().apply {
         add("%M(", MemberName("kotlin.collections", "listOf", isExtension = true))
         for (expr in expressions) {
-            add(expr.toCodeBlock(nameAllocator, toPoetType))
+            add(expr.toCodeBlock(nameAllocator))
             add("\n,")
         }
         add(")")
@@ -101,7 +101,7 @@ fun CodeGenTree.Expression.toCodeBlock(
     is CodeGenTree.Expression.ArrayOf -> CodeBlock.Builder().apply {
         add("%M(", MemberName("kotlin", "arrayOf", isExtension = true))
         for (expr in expressions) {
-            add(expr.toCodeBlock(nameAllocator, toPoetType))
+            add(expr.toCodeBlock(nameAllocator))
             add("\n,")
         }
         add(")")
@@ -125,11 +125,12 @@ fun CodeGenTree.Expression.toCodeBlock(
         }
         add("(")
         for ((parameterName, parameter) in parameters) {
-            add("%L = %L", parameterName, parameter.toCodeBlock(nameAllocator, toPoetType))
+            add("%L = %L", parameterName, parameter.toCodeBlock(nameAllocator))
             add(",\n")
         }
         add(")")
     }.build()
+    is CodeGenTree.Expression.Is -> CodeBlock.of("is %T", type.toPoetType())
 }
 
 fun String.toKdoc() = CodeBlock.of("%L", replace("*/*", "* / *").replace("/*", "/ *").replace("*/", "* /"))

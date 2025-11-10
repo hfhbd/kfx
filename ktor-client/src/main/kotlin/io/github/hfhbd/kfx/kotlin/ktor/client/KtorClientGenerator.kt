@@ -74,7 +74,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         addParameter(ParameterSpec.builder("builder", httpRequestBuilderLambda).defaultValue("{}").build())
 
         val documentation = operation.documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             addKdoc(documentation.toKdoc())
         }
 
@@ -174,9 +174,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     "%M(%S, %L)",
                     MemberName("io.ktor.client.request", "header", isExtension = true),
                     header.name,
-                    CodeGenTree.Expression.Parameter(header).toCodeBlock(nameAllocator) {
-                        toKtorPoetType(read = true)
-                    },
+                    CodeGenTree.Expression.Parameter(header).toCodeBlock(nameAllocator),
                 )
             }
         }
@@ -196,9 +194,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     "%M(%S, %L)",
                     parameter,
                     queryParameter.name,
-                    CodeGenTree.Expression.Parameter(queryParameter).toCodeBlock(nameAllocator) {
-                        toKtorPoetType(read = true)
-                    },
+                    CodeGenTree.Expression.Parameter(queryParameter).toCodeBlock(nameAllocator),
                 )
             }
         }
@@ -219,9 +215,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     if (inputWrapper != null) {
                         CodeBlock.builder().add(
                             "%L,\n",
-                            inputWrapper.toCodeBlock(nameAllocator) {
-                                toKtorPoetType(read = true)
-                            },
+                            inputWrapper.toCodeBlock(nameAllocator),
                         ).build()
                     } else {
                         CodeBlock.of("input")
@@ -268,7 +262,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         val function = FunSpec.builder(name)
         val nameAllocator = NameAllocator()
         val documentation = documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             function.addKdoc(documentation.toKdoc())
         }
         val fault = fault
@@ -307,17 +301,17 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         function.addParameter(ParameterSpec.builder(builderName, httpRequestBuilderLambda).defaultValue("{}").build())
 
         val output = output
-        if (output != null) {
-            function.returns(output.toKtorPoetType(read = false).copy(nullable = nullableOutput != null))
+        val returnType = returnType
+        if (returnType != null) {
+            function.returns(returnType.toKtorPoetType(read = false).copy(nullable = notFound))
         }
 
         function.addCode(getResponse(nameAllocator, builderName))
 
-        val nullableOutput = nullableOutput
-        if (output != null && nullableOutput != null) {
+        val nullableOutput = notFound
+        if (output != null && nullableOutput) {
             function.beginControlFlow(
-                "if (response.status.value == %L)",
-                nullableOutput,
+                "if (response.status.value == 404)",
             )
             function.addStatement("return null")
             function.endControlFlow()
@@ -337,9 +331,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
                 function.addStatement(
                     "return %L",
-                    outputMember?.toCodeBlock(nameAllocator) {
-                        toKtorPoetType(read = false)
-                    } ?: CodeBlock.of("output"),
+                    outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                 )
             }
 
@@ -350,9 +342,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             )
             function.addStatement(
                 "throw %L",
-                outputMember?.toCodeBlock(nameAllocator) {
-                    toKtorPoetType(read = false)
-                } ?: CodeBlock.of("output"),
+                outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
             )
             function.endControlFlow()
         } else if (output != null) {
@@ -362,9 +352,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             )
             function.addStatement(
                 "return %L",
-                outputMember?.toCodeBlock(nameAllocator) {
-                    toKtorPoetType(read = false)
-                } ?: CodeBlock.of("output"),
+                outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
             )
         }
 
@@ -375,15 +363,13 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         val name = nameAllocator.newName(name, name)
         return ParameterSpec.builder(name, type.toKtorPoetType(read = true).copy(nullable = nullable)).apply {
             val documentation = documentation
-            if (documentation != null && documentation.isNotBlank()) {
+            if (!documentation.isNullOrBlank()) {
                 addKdoc(documentation.toKdoc())
             }
             val defaultValue = defaultValue
             if (defaultValue != null) {
                 defaultValue(
-                    defaultValue.toCodeBlock(nameAllocator) {
-                        toKtorPoetType(read = true)
-                    },
+                    defaultValue.toCodeBlock(nameAllocator),
                 )
             }
         }.build()

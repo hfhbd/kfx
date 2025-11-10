@@ -1,10 +1,34 @@
 package io.github.hfhbd.kfx.plugins.soap11
 
-import app.softwork.serviceloader.ServiceLoader
-import io.github.hfhbd.kfx.ContentType.TextXml
-import io.github.hfhbd.kfx.codegen.CodeGenTransformer
-import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.ir.IRTree
+import app.softwork.serviceloader.*
+import io.github.hfhbd.kfx.ContentType.*
+import io.github.hfhbd.kfx.codegen.*
+import io.github.hfhbd.kfx.ir.*
+
+@ServiceLoader(IrTransformer::class)
+class Soap11FaultTransformer : IrTransformer {
+    override fun invoke(irTree: IRTree): IRTree {
+        return irTree.copy(
+            operations = irTree.operations.mapTo(mutableSetOf()) {
+                it.copy(
+                    fault = it.fault ?: IRTree.NormalClass(
+                        packageName = "io.github.hfhbd.kfx.soap11",
+                        name = "Fault",
+                        packageNameSuffix = "",
+                        serialName = null,
+                        namespace = null,
+                        members = emptyMap(),
+                        documentation = null,
+                        isFault = true,
+                        discriminator = null,
+                        allOf = null,
+                        deprecated = false,
+                    )
+                )
+            }
+        )
+    }
+}
 
 @ServiceLoader(CodeGenTransformer::class)
 class Soap11Transformer : CodeGenTransformer {
@@ -14,12 +38,12 @@ class Soap11Transformer : CodeGenTransformer {
         },
     )
 
-    private val defaultFault = CodeGenTree.NormalClass(
+    private fun envelope(type: CodeGenTree.Type) = CodeGenTree.NormalClass(
         packageName = "io.github.hfhbd.kfx.soap11",
-        names = listOf("Fault"),
+        names = listOf("Envelope"),
         annotations = emptyList(),
         documentation = null,
-        types = emptyList(),
+        types = listOf(type),
         isFault = false,
         members = emptyList(),
         functions = emptyList(),
@@ -27,35 +51,7 @@ class Soap11Transformer : CodeGenTransformer {
     )
 
     private fun CodeGenTree.Operation.addSoapWrapper(): CodeGenTree.Operation {
-        fun envelope(type: CodeGenTree.Type) = CodeGenTree.NormalClass(
-            packageName = "io.github.hfhbd.kfx.soap11",
-            names = listOf("Envelope"),
-            annotations = emptyList(),
-            documentation = null,
-            types = listOf(type),
-            isFault = false,
-            members = emptyList(),
-            functions = emptyList(),
-            isSealed = false,
-        )
-
-        val fault = fault ?: defaultFault
-
-        return CodeGenTree.Operation(
-            packageName = packageName,
-            name = name,
-            documentation = documentation,
-            location = location,
-            address = address,
-            input = input!!,
-            output = output!!,
-            fault = fault,
-            method = CodeGenTree.Operation.HttpMethod.Post,
-            parameters = listOf(),
-            queryParameters = emptyList(),
-            path = null,
-            inputContentType = TextXml,
-            outputContentType = TextXml,
+        return copy(
             inputWrapper = CodeGenTree.Expression.Create(
                 envelope(input!!),
                 listOf(
@@ -77,11 +73,7 @@ class Soap11Transformer : CodeGenTransformer {
                     ),
                 ),
             ),
-            faultWrapper = envelope(fault),
-            nullableOutput = null,
-            success = 200,
-            headers = emptyList(),
-            deprecated = false,
+            faultWrapper = fault?.let { envelope(it) },
         )
     }
 }

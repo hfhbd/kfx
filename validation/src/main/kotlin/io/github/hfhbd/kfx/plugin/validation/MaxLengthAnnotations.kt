@@ -1,10 +1,9 @@
 package io.github.hfhbd.kfx.plugin.validation
 
-import app.softwork.serviceloader.ServiceLoader
-import io.github.hfhbd.kfx.codegen.CodeGenTransformer
-import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.IntLiteral
-import io.github.hfhbd.kfx.ir.IRTree
+import app.softwork.serviceloader.*
+import io.github.hfhbd.kfx.codegen.*
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
+import io.github.hfhbd.kfx.ir.*
 
 @ServiceLoader(CodeGenTransformer::class)
 class MaxLengthAnnotations : CodeGenTransformer {
@@ -13,13 +12,17 @@ class MaxLengthAnnotations : CodeGenTransformer {
             when (codeGenClass) {
                 is CodeGenTree.Enum -> codeGenClass
                 is CodeGenTree.NormalClass -> {
-                    val irClass = ir.classes.single {
+                    val irClass = ir.classes.singleOrNull {
                         it.packageName == codeGenClass.packageName && it.name == codeGenClass.names.singleOrNull()
-                    } as IRTree.NormalClass
+                    } as IRTree.NormalClass?
 
-                    codeGenClass.copy(
-                        members = codeGenClass.members.updateMembers(irClass),
-                    )
+                    if (irClass != null) {
+                        codeGenClass.copy(
+                            members = codeGenClass.members.updateMembers(irClass),
+                        )
+                    } else {
+                        codeGenClass
+                    }
                 }
             }
         },
@@ -44,6 +47,7 @@ class MaxLengthAnnotations : CodeGenTransformer {
                                     ),
                                 ),
                             )
+
                             is IRTree.Member.Requirement.MaxLength ->
                                 add(
                                     CodeGenTree.Annotation(

@@ -162,7 +162,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         }
 
         val documentation = documentation
-        if (documentation != null && documentation.isNotBlank()) {
+        if (!documentation.isNullOrBlank()) {
             typeBuilder.addKdoc(documentation.toKdoc())
         }
 
