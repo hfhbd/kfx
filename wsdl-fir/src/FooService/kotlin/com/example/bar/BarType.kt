@@ -10,17 +10,17 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
  */
 @Serializable
 @XmlSerialName(
-  value = "Bar",
+  value = "BarType",
   namespace = "http://example.com/bar",
 )
-@JvmInline
-public value class Bar private constructor(
-  private val value: BarType,
-) {
-  constructor(validFrom: LocalDate? = null) : this(BarType(validFrom))
-
+public data class BarType(
   /**
    * Valid From
    */
-  public val validFrom: LocalDate? get() = value.validFrom
-}
+  @XmlElement
+  @XmlSerialName(
+    value = "ValidFrom",
+    namespace = "http://example.com/bar",
+  )
+  public val validFrom: LocalDate? = null,
+)

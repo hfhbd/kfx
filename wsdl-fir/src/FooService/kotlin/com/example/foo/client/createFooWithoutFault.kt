@@ -2,6 +2,7 @@ package com.example.foo.client
 
 import com.example.bar.Bar
 import com.example.foo.Foo
+import com.example.foo.results.CreateFooWithoutFaultResult
 import io.github.hfhbd.kfx.soap11.Envelope
 import io.github.hfhbd.kfx.soap11.Fault
 import io.ktor.client.HttpClient
@@ -13,14 +14,12 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Text.Xml
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import kotlin.Throws
 import kotlin.Unit
 
 /**
  * Create Foo
  */
-@Throws(Fault::class)
-public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): Bar {
+public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): CreateFooWithoutFaultResult {
   val response = post {
     `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFooWithoutFault")
     contentType(Xml)
@@ -34,9 +33,9 @@ public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend
   }
   if (response.status.isSuccess()) {
     val output = response.body<Envelope<Bar>>()
-    return output.body
+    return CreateFooWithoutFaultResult.Success(output)
   } else {
     val output = response.body<Envelope<Fault>>()
-    throw output.body
+    return CreateFooWithoutFaultResult.Failure(output)
   }
 }

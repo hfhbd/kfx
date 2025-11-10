@@ -33,7 +33,6 @@ include(":validation")
 include(":contextual-date")
 
 include(":ir-packagename")
-include(":ir-removetype")
 include(":ir-odata")
 
 include(":oauth2-runtime")

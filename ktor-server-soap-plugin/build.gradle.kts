@@ -6,7 +6,6 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(libs.ktor.server.core)
-            api(libs.serialization.xml)
         }
     }
 }
