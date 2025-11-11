@@ -10,7 +10,9 @@ import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
 import io.github.hfhbd.kfx.kotlin.ktor.toKtor
 import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import io.github.hfhbd.kfx.kotlin.toKdoc
-import io.github.hfhbd.kfx.toKtorPoetType
+import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
+import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
+import io.github.hfhbd.kfx.kotlin.toPoetType
 import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
@@ -50,26 +52,6 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         },
         isExtension = true,
     )
-
-    private fun StatusCode.toHttpCode(): MemberName {
-        val className = ClassName("io.ktor.http", "HttpStatusCode", "Companion")
-        return when (this) {
-            StatusCode.OK -> MemberName(className, "OK")
-            StatusCode.Created -> MemberName(className, "Created")
-            StatusCode.Accepted -> MemberName(className, "Accepted")
-            StatusCode.NoContent -> MemberName(className, "NoContent")
-            StatusCode.BadRequest -> MemberName(className, "BadRequest")
-            StatusCode.NotFound -> MemberName(className, "NotFound")
-            StatusCode.Unauthorized -> MemberName(className, "Unauthorized")
-            StatusCode.Forbidden -> MemberName(className, "Forbidden")
-            StatusCode.NotAcceptable -> MemberName(className, "NotAcceptable")
-            StatusCode.Conflict -> MemberName(className, "Conflict")
-            StatusCode.LengthRequired -> MemberName(className, "LengthRequired")
-            StatusCode.ContentTooLarge -> MemberName(className, "ContentTooLarge")
-            StatusCode.TooManyRequests -> MemberName(className, "TooManyRequests")
-            StatusCode.InternalServerError -> MemberName(className, "InternalServerError")
-        }
-    }
 
     private fun CodeGenTree.Operation.generateFunSpec(): FunSpec {
         val function = FunSpec.builder(name)
@@ -175,10 +157,11 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         nameAllocator.newName("response")
 
         val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
-        if (responseBranches.isNotEmpty()) {
+        val responseBranches = responseBranches
+        if (responseBranches != null) {
             function.beginControlFlow("when (response)")
-            for (responseBranch in responseBranches) {
-                function.beginControlFlow("%L ->", responseBranch.condition.toCodeBlock(nameAllocator))
+            fun a(responseBranch: CodeGenTree.Operation.ResponseBranches.Branch) {
+                function.beginControlFlow("is %T ->", responseBranch.isCondition.toPoetType())
                 val response = responseBranch.response
                 if (response != null) {
                     function.addStatement(
@@ -191,6 +174,10 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 }
                 function.endControlFlow()
             }
+            
+            responseBranches.success?.let { a(it) }
+            responseBranches.notFound?.let { a(it) }
+            responseBranches.fault?.let { a(it) }
             function.endControlFlow()
         } else {
             if (output != null) {

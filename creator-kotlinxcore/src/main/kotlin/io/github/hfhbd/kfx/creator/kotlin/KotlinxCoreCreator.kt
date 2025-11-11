@@ -133,7 +133,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
             success = ir.success ?: StatusCode.OK,
             headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
             deprecated = ir.deprecated,
-            responseBranches = emptyList(),
+            responseBranches = null,
         )
     }
 

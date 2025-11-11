@@ -3,16 +3,13 @@ package io.github.hfhbd.kfx.kotlin.ktor.client
 import app.softwork.serviceloader.*
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.github.hfhbd.kfx.ContentType
-import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.codegen.CodeGenerator
-import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
-import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
-import io.github.hfhbd.kfx.kotlin.ktor.toKtor
-import io.github.hfhbd.kfx.kotlin.toCodeBlock
-import io.github.hfhbd.kfx.kotlin.toKdoc
-import io.github.hfhbd.kfx.toKtorPoetType
-import java.nio.file.Path
+import io.github.hfhbd.kfx.*
+import io.github.hfhbd.kfx.codegen.*
+import io.github.hfhbd.kfx.kotlin.*
+import io.github.hfhbd.kfx.kotlin.ktor.*
+import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
+import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
+import java.nio.file.*
 
 @ServiceLoader(CodeGenerator::class)
 class KtorClientGenerator : KotlinPoetCodeGenerator {
@@ -82,24 +79,22 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         beginControlFlow("%M", MemberName("io.ktor.client.plugins.auth.providers", "bearer", isExtension = true))
         beginControlFlow("refreshTokens")
 
-        addCode(
-            operation.getResponse(nameAllocator, "builder", withReceiver = CodeBlock.of("client")) {
-                CodeBlock.builder().apply {
-                    when (grantType) {
-                        CodeGenTree.Auth.OAuth2.GrantType.ClientCredentials -> {
-                            add("%M(%S, %S)\n", parameter, "grant_type", "client_credentials")
-                            add(
-                                "%M(clientId, clientSecret)\n",
-                                MemberName("io.ktor.client.request", "basicAuth", isExtension = true),
-                            )
-                        }
+        getResponse(operation, nameAllocator, "builder", withReceiver = CodeBlock.of("client")) {
+            CodeBlock.builder().apply {
+                when (grantType) {
+                    CodeGenTree.Auth.OAuth2.GrantType.ClientCredentials -> {
+                        add("%M(%S, %S)\n", parameter, "grant_type", "client_credentials")
+                        add(
+                            "%M(clientId, clientSecret)\n",
+                            MemberName("io.ktor.client.request", "basicAuth", isExtension = true),
+                        )
                     }
-                    add("%M(%L)\n", contentType, ContentType.FormUrlEncoded.toKtor())
+                }
+                add("%M(%L)\n", contentType, ContentType.FormUrlEncoded.toKtor())
 
-                    add("markAsRefreshTokenRequest()")
-                }.build()
-            },
-        )
+                add("markAsRefreshTokenRequest()")
+            }.build()
+        }
         addStatement("val output = %L", getOutput(operation.output!!.toKtorPoetType(false)))
         addStatement(
             """%T(output.accessToken, output.refreshToken ?: "")""",
@@ -148,28 +143,28 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         addFunction(generateFunSpec())
     }.build()
 
-    private fun CodeGenTree.Operation.getResponse(
+    private fun FunSpec.Builder.getResponse(
+        operation: CodeGenTree.Operation,
         nameAllocator: NameAllocator,
         builderName: String,
         withReceiver: CodeBlock? = null,
         custom: (() -> CodeBlock)? = null,
-    ): CodeBlock = CodeBlock.builder().apply {
-        add("val response = ")
-        if (withReceiver != null) {
-            add("%L.", withReceiver)
-        }
+    ) {
         beginControlFlow(
-            "%M%L",
-            method.toPoet(),
-            if (path != null) {
-                CodeBlock.of("(urlString = %P)", path!!.removePrefix("/"))
+            "val response = %L%M%L",
+            if (withReceiver != null) {
+                CodeBlock.of("%L.", withReceiver)
+            } else CodeBlock.of(""),
+            operation.method.toPoet(),
+            if (operation.path != null) {
+                CodeBlock.of("(urlString = %P)", operation.path!!.removePrefix("/"))
             } else {
                 CodeBlock.of("")
             },
         )
 
-        if (headers.isNotEmpty()) {
-            for (header in headers) {
+        if (operation.headers.isNotEmpty()) {
+            for (header in operation.headers) {
                 addStatement(
                     "%M(%S, %L)",
                     MemberName("io.ktor.client.request", "header", isExtension = true),
@@ -178,7 +173,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
             }
         }
-        val address = address
+        val address = operation.address
         if (address != null) {
             addStatement(
                 "%M(%S, %S)",
@@ -188,8 +183,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             )
         }
 
-        if (queryParameters.isNotEmpty()) {
-            for (queryParameter in queryParameters) {
+        if (operation.queryParameters.isNotEmpty()) {
+            for (queryParameter in operation.queryParameters) {
                 addStatement(
                     "%M(%S, %L)",
                     parameter,
@@ -199,36 +194,35 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             }
         }
 
-        if (inputContentType != null) {
+        if (operation.inputContentType != null) {
             addStatement(
                 "%M(%L)",
                 contentType,
-                inputContentType!!.toKtor(),
+                operation.inputContentType!!.toKtor(),
             )
 
-            if (input != null && inputContentType!!.supportedBySerialization()) {
-                val inputWrapper = inputWrapper
+            if (operation.input != null && operation.inputContentType!!.supportedBySerialization()) {
+                val inputWrapper = operation.inputWrapper
                 addStatement(
-                    "%M(%Lbody = %L)",
+                    "%M(%L%L%L)",
                     MemberName("io.ktor.client.request", "setBody", isExtension = true),
                     if (inputWrapper != null) CodeBlock.of("\n") else CodeBlock.of(""),
                     if (inputWrapper != null) {
-                        CodeBlock.builder().add(
-                            "%L,\n",
-                            inputWrapper.toCodeBlock(nameAllocator),
-                        ).build()
+                        CodeBlock.builder().add("%L", inputWrapper.toCodeBlock(nameAllocator)).build()
                     } else {
                         CodeBlock.of("input")
                     },
+                    if (inputWrapper != null) CodeBlock.of(",\n") else CodeBlock.of(""),
                 )
             }
         }
 
         if (custom != null) {
-            add("%L\n", custom())
+            addStatement("%L", custom())
         }
-        add("%L()\n", builderName)
-    }.endControlFlow().build()
+        addStatement("%L()", builderName)
+        endControlFlow()
+    }
 
     private val parameter = MemberName("io.ktor.client.request", "parameter", isExtension = true)
     private val contentType = MemberName("io.ktor.http", "contentType", isExtension = true)
@@ -306,54 +300,97 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             function.returns(returnType.toKtorPoetType(read = false).copy(nullable = notFound))
         }
 
-        function.addCode(getResponse(nameAllocator, builderName))
+        function.getResponse(this, nameAllocator, builderName)
 
-        val nullableOutput = notFound
-        if (output != null && nullableOutput) {
-            function.beginControlFlow(
-                "if (response.status.value == 404)",
-            )
-            function.addStatement("return null")
-            function.endControlFlow()
-        }
+        val responseBranches = responseBranches
+        if (responseBranches != null) {
+            function.beginControlFlow("when (response.status)")
+            val success = responseBranches.success
+            if (success != null) {
+                function.beginControlFlow(
+                    "%M ->", success.statusCode.toHttpCode(),
+                )
+                if (output != null) {
+                    function.addStatement(
+                        "val output = %L",
+                        getOutput(
+                            (outputWrapperType ?: output).toKtorPoetType(read = false),
+                        ),
+                    )
+                }
+                function.addStatement("return %T(output)", success.isCondition.toPoetType())
+                function.endControlFlow()
+            }
+            val notFound = responseBranches.notFound
+            if (notFound != null) {
+                function.beginControlFlow(
+                    "%M ->", notFound.statusCode.toHttpCode(),
+                )
+                function.addStatement("return %T", notFound.isCondition.toPoetType())
+                function.endControlFlow()
+            }
 
-        if (fault != null) {
-            function.beginControlFlow(
-                "if (response.status.%M())",
-                MemberName("io.ktor.http", "isSuccess", isExtension = true),
-            )
-            if (output != null) {
+            function.beginControlFlow("else ->")
+            val faultOutput = faultWrapper ?: this.fault
+            if (faultOutput != null) {
                 function.addStatement(
                     "val output = %L",
                     getOutput(
-                        (outputWrapperType ?: output).toKtorPoetType(read = false),
+                        (faultOutput).toKtorPoetType(read = false),
                     ),
+                )
+            }
+            function.addStatement("return %T(output)", responseBranches.fault.isCondition.toPoetType())
+            function.endControlFlow()
+            function.endControlFlow()
+        } else {
+            val nullableOutput = notFound
+            if (output != null && nullableOutput) {
+                function.beginControlFlow(
+                    "if (response.status.value == 404)",
+                )
+                function.addStatement("return null")
+                function.endControlFlow()
+            }
+
+            if (fault != null) {
+                function.beginControlFlow(
+                    "if (response.status.%M())",
+                    MemberName("io.ktor.http", "isSuccess", isExtension = true),
+                )
+                if (output != null) {
+                    function.addStatement(
+                        "val output = %L",
+                        getOutput(
+                            (outputWrapperType ?: output).toKtorPoetType(read = false),
+                        ),
+                    )
+                    function.addStatement(
+                        "return %L",
+                        outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
+                    )
+                }
+
+                function.nextControlFlow("else")
+                function.addStatement(
+                    "val output = %L",
+                    getOutput((faultWrapper ?: fault).toKtorPoetType(read = false)),
+                )
+                function.addStatement(
+                    "throw %L",
+                    outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
+                )
+                function.endControlFlow()
+            } else if (output != null) {
+                function.addStatement(
+                    "val output = %L",
+                    getOutput((outputWrapperType ?: output).toKtorPoetType(read = false)),
                 )
                 function.addStatement(
                     "return %L",
                     outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                 )
             }
-
-            function.nextControlFlow("else")
-            function.addStatement(
-                "val output = %L",
-                getOutput((faultWrapper ?: fault).toKtorPoetType(read = false)),
-            )
-            function.addStatement(
-                "throw %L",
-                outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
-            )
-            function.endControlFlow()
-        } else if (output != null) {
-            function.addStatement(
-                "val output = %L",
-                getOutput((outputWrapperType ?: output).toKtorPoetType(read = false)),
-            )
-            function.addStatement(
-                "return %L",
-                outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
-            )
         }
 
         return function.build()

@@ -225,17 +225,24 @@ data class CodeGenTree(
         val inputWrapperType: Type?,
         val outputWrapperType: Type?,
         val outputMember: Expression?,
-        val responseBranches: List<Branch>,
+        val responseBranches: ResponseBranches?,
 
         val faultWrapper: Type?,
         val deprecated: Boolean,
     ) {
+        @Serializable
+        data class ResponseBranches(
+            val success: Branch?,
+            val notFound: Branch?,
+            val fault: Branch,
+        ) {
             @Serializable
             data class Branch(
-                val condition: Expression.BooleanExpression,
-                val statusCode: StatusCode, 
+                val isCondition: Type,
+                val statusCode: StatusCode,
                 val response: Expression?
             )
+        }
         
         @Serializable
         enum class HttpMethod {

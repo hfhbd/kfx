@@ -12,8 +12,8 @@ import io.ktor.client.request.`header`
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Text.Xml
+import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.contentType
-import io.ktor.http.isSuccess
 import kotlin.Unit
 
 /**
@@ -24,18 +24,21 @@ public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend
     `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFooWithoutFault")
     contentType(Xml)
     setBody(
-        body = Envelope<Foo>(
+        Envelope<Foo>(
           header = null,
           body = input,
         ),
         )
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<Envelope<Bar>>()
-    return CreateFooWithoutFaultResult.Success(output)
-  } else {
-    val output = response.body<Envelope<Fault>>()
-    return CreateFooWithoutFaultResult.Failure(output)
+  when (response.status) {
+    OK -> {
+      val output = response.body<Envelope<Bar>>()
+      return CreateFooWithoutFaultResult.Success(output)
+    }
+    else -> {
+      val output = response.body<Envelope<Fault>>()
+      return CreateFooWithoutFaultResult.Failure(output)
+    }
   }
 }

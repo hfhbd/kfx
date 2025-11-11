@@ -2,6 +2,7 @@ import app.softwork.serviceloader.*
 import io.github.hfhbd.kfx.*
 import io.github.hfhbd.kfx.codegen.*
 import io.github.hfhbd.kfx.codegen.CodeGenTree.*
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Operation.ResponseBranches.*
 import io.github.hfhbd.kfx.ir.*
 
 @ServiceLoader(CodeGenTransformer::class)
@@ -45,22 +46,20 @@ class ResponseClasses : CodeGenTransformer {
                         )
                     }
 
-                    val fault = it.faultWrapper ?: it.fault
-                    if (fault != null) {
-                        add(
-                            NormalClass(
-                                packageName = newReturnTypeName.packageName,
-                                names = listOf("Failure"),
-                                members = listOfNotNull(
-                                    Member(
-                                        name = "body",
-                                        type = fault,
-                                    )
-                                ),
-                                superInterfaces = listOf(newReturnTypeName),
-                            )
+                    val fault = it.faultWrapper ?: it.fault!!
+                    add(
+                        NormalClass(
+                            packageName = newReturnTypeName.packageName,
+                            names = listOf("Failure"),
+                            members = listOfNotNull(
+                                Member(
+                                    name = "body",
+                                    type = fault,
+                                )
+                            ),
+                            superInterfaces = listOf(newReturnTypeName),
                         )
-                    }
+                    )
                 }
             )
 
@@ -69,62 +68,48 @@ class ResponseClasses : CodeGenTransformer {
             it.copy(
                 fault = null,
                 returnType = newReturnType,
-                responseBranches = buildList {
-                    add(
-                        Operation.Branch(
-                            condition = Expression.Is(
-                                NormalClass(
-                                    packageName = newReturnTypeName.packageName,
-                                    names = newReturnTypeName.names + listOf("Success"),
-                                )
+                responseBranches = Operation.ResponseBranches(
+                    Branch(
+                        isCondition = NormalClass(
+                            packageName = newReturnTypeName.packageName,
+                            names = newReturnTypeName.names + listOf("Success"),
+                        ),
+                        statusCode = it.success,
+                        response = Expression.Chain(
+                            Expression.Response,
+                            Expression.CallMember(
+                                Member(
+                                    name = "body",
+                                    type = Type.Builtin.UNIT,
+                                ),
                             ),
-                            statusCode = it.success,
-                            response = Expression.Chain(
-                                Expression.Response,
-                                Expression.CallMember(
-                                    Member(
-                                        name = "body",
-                                        type = Type.Builtin.UNIT,
-                                    ),
+                        ),
+                    ),
+                    if (it.notFound) Branch(
+                        isCondition = NormalClass(
+                            packageName = newReturnTypeName.packageName,
+                            names = newReturnTypeName.names + listOf("NotFound"),
+                        ),
+                        statusCode = StatusCode.NotFound,
+                        response = null,
+                    ) else null,
+                    Branch(
+                        isCondition = NormalClass(
+                            packageName = newReturnTypeName.packageName,
+                            names = newReturnTypeName.names + listOf("Failure"),
+                        ),
+                        statusCode = StatusCode.InternalServerError,
+                        response = Expression.Chain(
+                            Expression.Response,
+                            Expression.CallMember(
+                                Member(
+                                    name = "body",
+                                    type = Type.Builtin.UNIT,
                                 ),
                             ),
                         )
                     )
-                    if (it.notFound) {
-                        add(
-                            Operation.Branch(
-                                condition = Expression.Is(
-                                    NormalClass(
-                                        packageName = newReturnTypeName.packageName,
-                                        names = newReturnTypeName.names + listOf("NotFound"),
-                                    )
-                                ),
-                                statusCode = StatusCode.NotFound,
-                                response = null,
-                            )
-                        )
-                    }
-                    add(
-                        Operation.Branch(
-                            condition = Expression.Is(
-                                NormalClass(
-                                    packageName = newReturnTypeName.packageName,
-                                    names = newReturnTypeName.names + listOf("Failure"),
-                                )
-                            ),
-                            statusCode = StatusCode.InternalServerError,
-                            response = Expression.Chain(
-                                Expression.Response,
-                                Expression.CallMember(
-                                    Member(
-                                        name = "body",
-                                        type = Type.Builtin.UNIT,
-                                    ),
-                                ),
-                            ),
-                        )
-                    )
-                }
+                )
             )
         }
         return codeGen.copy(
