@@ -26,12 +26,17 @@ class ResponseClasses : CodeGenTransformer {
                             NormalClass(
                                 packageName = newReturnTypeName.packageName,
                                 names = listOf("Success"),
-                                members = listOfNotNull(
+                                members = listOf(
                                     Member(
                                         name = "body",
                                         type = output,
                                     ),
-                                ),
+                                ) + it.outputHeaders.map {
+                                    Member(
+                                        name = it.name,
+                                        type = it.type,
+                                    )
+                                },
                                 superInterfaces = listOf(newReturnTypeName),
                             ),
                         )
@@ -52,12 +57,17 @@ class ResponseClasses : CodeGenTransformer {
                         NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = listOf("Failure"),
-                            members = listOfNotNull(
+                            members = listOf(
                                 Member(
                                     name = "body",
                                     type = fault,
                                 ),
-                            ),
+                            )  + it.faultHeaders.map {
+                                Member(
+                                    name = it.name,
+                                    type = it.type,
+                                )
+                            },
                             superInterfaces = listOf(newReturnTypeName),
                         ),
                     )

@@ -7,19 +7,19 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.head
 import io.ktor.server.routing.route
-import responses.BazACsrfToken
+import results.BazACsrfTokenResult
 
 /**
  * Get the CSRF Token for BazA
  */
-public fun Route.bazACsrfToken(action: suspend ApplicationCall.() -> BazACsrfToken) {
+public fun Route.bazACsrfToken(action: suspend ApplicationCall.() -> BazACsrfTokenResult) {
   route(path = """/http/foo/bar/baz""") {
     head {
       when (val response = call.action()) {
-        is BazACsrfToken.Success -> {
+        is BazACsrfTokenResult.Success -> {
           call.respond(OK)
         }
-        is BazACsrfToken.Error -> {
+        is BazACsrfTokenResult.Failure -> {
           call.respond(InternalServerError)
         }
       }

@@ -128,8 +128,14 @@ interface KotlinxCoreCreator : CodeGenCreator {
             inputWrapperType = null,
             outputWrapperType = null,
             outputMember = null,
+            outputHeaders = ir.outputHeaders.map {
+                it.toCodeGen(defaultNull = false)
+            },
             notFound = ir.notFound,
             faultWrapper = null,
+            faultHeaders = ir.faultHeaders.map {
+                it.toCodeGen(defaultNull = false)
+            },
             success = ir.success ?: StatusCode.OK,
             headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
             deprecated = ir.deprecated,

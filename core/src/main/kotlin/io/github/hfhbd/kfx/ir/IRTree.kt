@@ -178,8 +178,10 @@ data class IRTree(
         val inputContentType: ContentType?,
         val output: Type?,
         val outputContentType: ContentType?,
+        val outputHeaders: List<Parameter>,
         val notFound: Boolean,
         val fault: NormalClass?,
+        val faultHeaders: List<Parameter>,
 
         val deprecated: Boolean,
     ) {

@@ -9,12 +9,11 @@ import io.ktor.client.request.`header`
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.contentType
-import io.ktor.http.isSuccess
-import responses.BazA
 import kotlin.String
 import kotlin.Unit
+import results.BazAResult
 
 /**
  * Foo Bar API
@@ -26,23 +25,27 @@ public suspend fun HttpClient.bazA(
   X_CSRF_Token: String,
   B: String? = null,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
-): BazA {
+): BazAResult {
   val response = post(urlString = """http/foo/bar/baz""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     `header`("B", B)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
-  return when (val status = response.status) {
-      HttpStatusCode.OK -> {
-          BazA.Success(
-            body = response.body<String>(),
-            logid = response.headers["logid"],
-          )
-      }
-      else -> {
-          BazA.Error(body = response.body<Fault>(), logid = response.headers["logid"])
-      }
+  when (response.status) {
+    OK -> {
+      val output = response.body<String>()
+      return BazAResult.Success(
+        body =  output,
+        logid = response.headers["logid"]!!,
+      )
+    }
+    else -> {
+      return BazAResult.Failure(
+        body = response.body<Fault>(),
+        logid = response.headers["logid"]!!,
+      )
+    }
   }
 }

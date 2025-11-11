@@ -214,10 +214,12 @@ data class CodeGenTree(
 
         val input: Type?,
         val output: Type?,
+        val outputHeaders: List<Parameter>,
         val returnType: Type?,
         val success: StatusCode,
         val notFound: Boolean,
         val fault: NormalClass?,
+        val faultHeaders: List<Parameter>,
         val inputContentType: ContentType?,
         val outputContentType: ContentType?,
 
