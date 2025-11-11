@@ -240,10 +240,10 @@ data class CodeGenTree(
             data class Branch(
                 val isCondition: Type,
                 val statusCode: StatusCode,
-                val response: Expression?
+                val response: Expression?,
             )
         }
-        
+
         @Serializable
         enum class HttpMethod {
             Head, Get, Post, Put, Patch, Delete

@@ -154,7 +154,9 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             "val response = %L%M%L",
             if (withReceiver != null) {
                 CodeBlock.of("%L.", withReceiver)
-            } else CodeBlock.of(""),
+            } else {
+                CodeBlock.of("")
+            },
             operation.method.toPoet(),
             if (operation.path != null) {
                 CodeBlock.of("(urlString = %P)", operation.path!!.removePrefix("/"))
@@ -308,7 +310,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             val success = responseBranches.success
             if (success != null) {
                 function.beginControlFlow(
-                    "%M ->", success.statusCode.toHttpCode(),
+                    "%M ->",
+                    success.statusCode.toHttpCode(),
                 )
                 if (output != null) {
                     function.addStatement(
@@ -324,7 +327,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             val notFound = responseBranches.notFound
             if (notFound != null) {
                 function.beginControlFlow(
-                    "%M ->", notFound.statusCode.toHttpCode(),
+                    "%M ->",
+                    notFound.statusCode.toHttpCode(),
                 )
                 function.addStatement("return %T", notFound.isCondition.toPoetType())
                 function.endControlFlow()

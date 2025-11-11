@@ -2,16 +2,15 @@ package io.github.hfhbd.kfx.kotlin.ktor.server
 
 import app.softwork.serviceloader.ServiceLoader
 import com.squareup.kotlinpoet.*
-import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
 import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
+import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
 import io.github.hfhbd.kfx.kotlin.ktor.toKtor
+import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
 import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import io.github.hfhbd.kfx.kotlin.toKdoc
-import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
-import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
 import io.github.hfhbd.kfx.kotlin.toPoetType
 import java.nio.file.Path
 
@@ -174,7 +173,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 }
                 function.endControlFlow()
             }
-            
+
             responseBranches.success?.let { a(it) }
             responseBranches.notFound?.let { a(it) }
             responseBranches.fault?.let { a(it) }
@@ -188,7 +187,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 function.addStatement("call.%M(response)", respond)
             } else {
                 function.addStatement("call.%M(%M)", respond, success.toHttpCode())
-            }   
+            }
         }
 
         function.endControlFlow()

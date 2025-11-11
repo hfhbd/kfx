@@ -23,9 +23,9 @@ class Soap11FaultTransformer : IrTransformer {
                         discriminator = null,
                         allOf = null,
                         deprecated = false,
-                    )
+                    ),
                 )
-            }
+            },
         )
     }
 }

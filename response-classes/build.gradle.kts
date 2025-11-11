@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    api(projects.creatorXmlutil)
+    api(projects.core)
 }

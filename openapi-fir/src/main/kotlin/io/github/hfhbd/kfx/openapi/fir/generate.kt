@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.openapi.fir
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
@@ -295,8 +296,8 @@ private fun OpenApi.Operation.toIr(
                 )
             }
         },
-        success = statusCodes.success?.toIntOrNull(),
-        nullableOutput = if ("404" in responses.keys) 404 else null,
+        success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
+        notFound = "404" in responses.keys,
         deprecated = deprecated,
         headers = parameters.mapNotNull {
             when (it.position) {
@@ -373,8 +374,8 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
                         output = OAuth2Token,
                         outputContentType = ContentType.ApplicationJson,
                         location = null,
-                        success = 200,
-                        nullableOutput = null,
+                        success = StatusCode.OK,
+                        notFound = false,
                         headers = emptyList(),
                         deprecated = false,
                     ),

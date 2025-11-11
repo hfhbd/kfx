@@ -10,9 +10,10 @@ class ResponseClasses : CodeGenTransformer {
     override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree {
         val classes = codeGen.classes.toMutableSet()
         val operations = codeGen.operations.mapTo(mutableSetOf()) {
+            val packageName = if(it.packageName.isBlank()) "results" else it.packageName + ".results"
             val newReturnTypeName = ClassName(
-                it.packageName + ".results",
-                listOf(it.name.replaceFirstChar { it.uppercase() } + "Result")
+                packageName,
+                listOf(it.name.replaceFirstChar { it.uppercase() } + "Result"),
             )
             val newReturnType = NormalClass(
                 packageName = newReturnTypeName.packageName,
@@ -29,10 +30,10 @@ class ResponseClasses : CodeGenTransformer {
                                     Member(
                                         name = "body",
                                         type = output,
-                                    )
+                                    ),
                                 ),
-                                superInterfaces = listOf(newReturnTypeName)
-                            )
+                                superInterfaces = listOf(newReturnTypeName),
+                            ),
                         )
                     }
 
@@ -41,8 +42,8 @@ class ResponseClasses : CodeGenTransformer {
                             NormalClass(
                                 packageName = newReturnTypeName.packageName,
                                 names = listOf("NotFound"),
-                                superInterfaces = listOf(newReturnTypeName)
-                            )
+                                superInterfaces = listOf(newReturnTypeName),
+                            ),
                         )
                     }
 
@@ -55,12 +56,12 @@ class ResponseClasses : CodeGenTransformer {
                                 Member(
                                     name = "body",
                                     type = fault,
-                                )
+                                ),
                             ),
                             superInterfaces = listOf(newReturnTypeName),
-                        )
+                        ),
                     )
-                }
+                },
             )
 
             classes.add(newReturnType)
@@ -85,14 +86,18 @@ class ResponseClasses : CodeGenTransformer {
                             ),
                         ),
                     ),
-                    if (it.notFound) Branch(
-                        isCondition = NormalClass(
-                            packageName = newReturnTypeName.packageName,
-                            names = newReturnTypeName.names + listOf("NotFound"),
-                        ),
-                        statusCode = StatusCode.NotFound,
-                        response = null,
-                    ) else null,
+                    if (it.notFound) {
+                        Branch(
+                            isCondition = NormalClass(
+                                packageName = newReturnTypeName.packageName,
+                                names = newReturnTypeName.names + listOf("NotFound"),
+                            ),
+                            statusCode = StatusCode.NotFound,
+                            response = null,
+                        )
+                    } else {
+                        null
+                    },
                     Branch(
                         isCondition = NormalClass(
                             packageName = newReturnTypeName.packageName,
@@ -107,9 +112,9 @@ class ResponseClasses : CodeGenTransformer {
                                     type = Type.Builtin.UNIT,
                                 ),
                             ),
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
             )
         }
         return codeGen.copy(

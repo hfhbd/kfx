@@ -21,6 +21,6 @@ enum class StatusCode(val value: Int) {
     ;
 
     companion object {
-        fun byValue(value: Int) = entries.first { it.value == value }
+        fun fromValue(value: Int) = entries.first { it.value == value }
     }
 }

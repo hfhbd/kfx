@@ -38,11 +38,11 @@ public suspend fun HttpClient.bazA(
       HttpStatusCode.OK -> {
           BazA.Success(
             body = response.body<String>(),
-            logid = response.headers["logid"]!!,
+            logid = response.headers["logid"],
           )
       }
       else -> {
-          BazA.Error(body = response.body<Fault>())
+          BazA.Error(body = response.body<Fault>(), logid = response.headers["logid"])
       }
   }
 }
