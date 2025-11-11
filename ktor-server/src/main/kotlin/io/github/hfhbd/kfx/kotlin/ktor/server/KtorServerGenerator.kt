@@ -162,6 +162,16 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             fun a(responseBranch: CodeGenTree.Operation.ResponseBranches.Branch) {
                 function.beginControlFlow("is %T ->", responseBranch.isCondition.toPoetType())
                 val response = responseBranch.response
+                for ((memberName, _) in responseBranch.isCondition.members) {
+                    if (memberName == "body") {
+                        continue
+                    }
+                    function.addStatement(
+                        "call.response.%M(%S, response.$memberName)",
+                        MemberName("io.ktor.server.response", "header", isExtension = true),
+                        memberName,
+                    )
+                }
                 if (response != null) {
                     function.addStatement(
                         "call.response.status(%M)",

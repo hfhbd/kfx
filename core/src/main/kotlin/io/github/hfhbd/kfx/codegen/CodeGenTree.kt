@@ -240,7 +240,7 @@ data class CodeGenTree(
         ) {
             @Serializable
             data class Branch(
-                val isCondition: Type,
+                val isCondition: NormalClass,
                 val statusCode: StatusCode,
                 val response: Expression?,
             )
