@@ -138,12 +138,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             )
         }
         function.addStatement(
-            "%Lcall.action(%L)",
-            if (output != null) {
-                CodeBlock.of("val response = ")
-            } else {
-                CodeBlock.of("")
-            },
+            "val response = call.action(%L)",
             if (input != null && inputContentType?.supportedBySerialization() != false) {
                 CodeBlock.of("body")
             } else {
@@ -155,38 +150,12 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         nameAllocator.newName("builder")
         nameAllocator.newName("response")
 
-        val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
         val responseBranches = responseBranches
         if (responseBranches != null) {
             function.beginControlFlow("when (response)")
-            fun a(responseBranch: CodeGenTree.Operation.ResponseBranches.Branch) {
-                function.beginControlFlow("is %T ->", responseBranch.isCondition.toPoetType())
-                val response = responseBranch.response
-                for ((memberName, _) in responseBranch.isCondition.members) {
-                    if (memberName == "body") {
-                        continue
-                    }
-                    function.addStatement(
-                        "call.response.%M(%S, response.$memberName)",
-                        MemberName("io.ktor.server.response", "header", isExtension = true),
-                        memberName,
-                    )
-                }
-                if (response != null) {
-                    function.addStatement(
-                        "call.response.status(%M)",
-                        responseBranch.statusCode.toHttpCode(),
-                    )
-                    function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
-                } else {
-                    function.addStatement("call.%M(%M)", respond, responseBranch.statusCode.toHttpCode())
-                }
-                function.endControlFlow()
-            }
-
-            responseBranches.success?.let { a(it) }
-            responseBranches.notFound?.let { a(it) }
-            responseBranches.fault?.let { a(it) }
+            responseBranches.success?.let { a(it, function, nameAllocator) }
+            responseBranches.notFound?.let { a(it, function, nameAllocator) }
+            a(responseBranches.fault, function, nameAllocator)
             function.endControlFlow()
         } else {
             if (output != null) {
@@ -217,6 +186,41 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
 
         return function.build()
     }
+}
+
+private val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
+
+private fun a(
+    responseBranch: CodeGenTree.Operation.ResponseBranches.Branch,
+    function: FunSpec.Builder,
+    nameAllocator: NameAllocator,
+) {
+    function.beginControlFlow("is %T ->", responseBranch.isCondition.toPoetType())
+    val response = responseBranch.response
+    for ((headerName, member) in responseBranch.headers) {
+        val (memberName, nullable) = member
+        if (nullable) {
+            function.beginControlFlow("if (response.%L != null)", memberName)
+        }
+        function.addStatement(
+            "call.response.%M(%S, response.$memberName)",
+            MemberName("io.ktor.server.response", "header", isExtension = true),
+            headerName,
+        )
+        if (nullable) {
+            function.endControlFlow()
+        }
+    }
+    if (response != null) {
+        function.addStatement(
+            "call.response.status(%M)",
+            responseBranch.statusCode.toHttpCode(),
+        )
+        function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
+    } else {
+        function.addStatement("call.%M(%M)", respond, responseBranch.statusCode.toHttpCode())
+    }
+    function.endControlFlow()
 }
 
 internal fun String.toKtorServer(): String = replace($$"${", "{")

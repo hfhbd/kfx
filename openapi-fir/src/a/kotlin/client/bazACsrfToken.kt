@@ -10,8 +10,6 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import kotlin.String
 import kotlin.Unit
 import results.BazACsrfTokenResult
-import results.BazACsrfTokenResult.Failure
-import results.BazACsrfTokenResult.Success
 
 /**
  * Get the CSRF Token for BazA
@@ -21,15 +19,13 @@ public suspend fun HttpClient.bazACsrfToken(X_CSRF_Token: String = "FETCH", buil
     `header`("X-CSRF-Token", X_CSRF_Token)
     builder()
   }
-  return when (response.status) {
+  when (response.status) {
     OK -> {
-      Success(
-          xCsrfToken = response.headers["X-CSRF-Token"]!!
-      )
+      return BazACsrfTokenResult.Success(XCSRFToken = response.headers["X-CSRF-Token"]!!)
     }
-
     else -> {
-      Failure(response.body<Fault>())
+      val output = response.body<Fault>()
+      return BazACsrfTokenResult.Failure(body = output)
     }
   }
 }

@@ -6,7 +6,7 @@ import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
-import io.ktor.server.response.header
+import io.ktor.server.response.`header`
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.accept
@@ -27,13 +27,17 @@ public fun Route.bazA(action: suspend ApplicationCall.(FooInput) -> BazAResult) 
           val response = call.action(body)
           when (response) {
             is BazAResult.Success -> {
+              if (response.logid != null) {
+                call.response.`header`("logid", response.logid)
+              }
               call.response.status(OK)
-              call.response.header("logid", response.logid)
               call.respond(response.body)
             }
             is BazAResult.Failure -> {
+              if (response.logid != null) {
+                call.response.`header`("logid", response.logid)
+              }
               call.response.status(InternalServerError)
-              call.response.header("logid", response.logid)
               call.respond(response.body)
             }
           }

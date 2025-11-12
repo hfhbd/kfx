@@ -8,39 +8,47 @@ import io.github.hfhbd.kfx.ir.*
 @ServiceLoader(CodeGenTransformer::class)
 class ResponseClasses : CodeGenTransformer {
     override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree {
-        val classes = codeGen.classes.toMutableSet()
+        val classes = codeGen.classes.mapTo(mutableSetOf()) {
+            when (it) {
+                is NormalClass -> it.copy(
+                    isFault = false,
+                )
+                is CodeGenTree.Enum -> it
+            }
+        }
+
         val operations = codeGen.operations.mapTo(mutableSetOf()) {
-            val packageName = if(it.packageName.isBlank()) "results" else it.packageName + ".results"
+            val packageName = if (it.packageName.isBlank()) "results" else it.packageName + ".results"
             val newReturnTypeName = ClassName(
                 packageName,
                 listOf(it.name.replaceFirstChar { it.uppercase() } + "Result"),
             )
+            val fault = it.faultWrapper ?: it.fault!!
             val newReturnType = NormalClass(
                 packageName = newReturnTypeName.packageName,
                 names = newReturnTypeName.names,
                 isSealed = true,
                 innerClasses = buildList {
                     val output = it.outputWrapperType ?: it.output
-                    if (output != null) {
-                        add(
-                            NormalClass(
-                                packageName = newReturnTypeName.packageName,
-                                names = listOf("Success"),
-                                members = listOf(
-                                    Member(
-                                        name = "body",
-                                        type = output,
-                                    ),
-                                ) + it.outputHeaders.map {
-                                    Member(
-                                        name = it.name,
+                    add(
+                        NormalClass(
+                            packageName = newReturnTypeName.packageName,
+                            names = listOf("Success"),
+                            members = buildList {
+                                if (output != null) {
+                                    add(Member(name = "body", type = output))
+                                }
+                                for (it in it.outputHeaders) {
+                                    add(Member(
+                                        name = it.name.toCamelCase(),
                                         type = it.type,
-                                    )
-                                },
-                                superInterfaces = listOf(newReturnTypeName),
-                            ),
-                        )
-                    }
+                                        nullable = it.nullable,
+                                    ))
+                                }
+                            },
+                            superInterfaces = listOf(newReturnTypeName),
+                        ),
+                    )
 
                     if (it.notFound) {
                         add(
@@ -52,21 +60,15 @@ class ResponseClasses : CodeGenTransformer {
                         )
                     }
 
-                    val fault = it.faultWrapper ?: it.fault!!
                     add(
                         NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = listOf("Failure"),
-                            members = listOf(
-                                Member(
-                                    name = "body",
-                                    type = fault,
-                                ),
-                            )  + it.faultHeaders.map {
-                                Member(
-                                    name = it.name,
-                                    type = it.type,
-                                )
+                            members = buildList {
+                                add(Member(name = "body", type = fault))
+                                for (it in it.faultHeaders) {
+                                    add(Member(name = it.name.toCamelCase(), type = it.type, nullable = it.nullable,))
+                                }
                             },
                             superInterfaces = listOf(newReturnTypeName),
                         ),
@@ -80,23 +82,34 @@ class ResponseClasses : CodeGenTransformer {
                 fault = null,
                 returnType = newReturnType,
                 responseBranches = Operation.ResponseBranches(
-                    Branch(
+                    success = Branch(
                         isCondition = NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = newReturnTypeName.names + listOf("Success"),
+                            members = it.outputHeaders.map {
+                                Member(
+                                    name = it.name.toCamelCase(),
+                                    type = it.type,
+                                )
+                            }
                         ),
                         statusCode = it.success,
-                        response = Expression.Chain(
-                            Expression.Response,
-                            Expression.CallMember(
-                                Member(
-                                    name = "body",
-                                    type = Type.Builtin.UNIT,
+                        response = it.output?.let {
+                            Expression.Chain(
+                                Expression.Response,
+                                Expression.CallMember(
+                                    Member(
+                                        name = "body",
+                                        type = Type.Builtin.UNIT,
+                                    ),
                                 ),
-                            ),
-                        ),
+                            )
+                        },
+                        headers = it.outputHeaders.associate {
+                            it.name to (it.name.toCamelCase() to it.nullable)
+                        }
                     ),
-                    if (it.notFound) {
+                    notFound = if (it.notFound) {
                         Branch(
                             isCondition = NormalClass(
                                 packageName = newReturnTypeName.packageName,
@@ -104,14 +117,26 @@ class ResponseClasses : CodeGenTransformer {
                             ),
                             statusCode = StatusCode.NotFound,
                             response = null,
+                            headers = emptyMap(),
                         )
                     } else {
                         null
                     },
-                    Branch(
+                    fault = Branch(
                         isCondition = NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = newReturnTypeName.names + listOf("Failure"),
+                            members = listOf(
+                                Member(
+                                    name = "body",
+                                    type = fault,
+                                )
+                            ) + it.faultHeaders.map {
+                                Member(
+                                    name = it.name.toCamelCase(),
+                                    type = it.type,
+                                )
+                            }
                         ),
                         statusCode = StatusCode.InternalServerError,
                         response = Expression.Chain(
@@ -123,6 +148,9 @@ class ResponseClasses : CodeGenTransformer {
                                 ),
                             ),
                         ),
+                        headers = it.faultHeaders.associate {
+                            it.name to (it.name.toCamelCase() to it.nullable)
+                        }
                     ),
                 ),
             )

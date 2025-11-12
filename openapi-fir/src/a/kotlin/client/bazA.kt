@@ -36,16 +36,11 @@ public suspend fun HttpClient.bazA(
   when (response.status) {
     OK -> {
       val output = response.body<String>()
-      return BazAResult.Success(
-        body =  output,
-        logid = response.headers["logid"]!!,
-      )
+      return BazAResult.Success(body = output, logid = response.headers["logid"])
     }
     else -> {
-      return BazAResult.Failure(
-        body = response.body<Fault>(),
-        logid = response.headers["logid"]!!,
-      )
+      val output = response.body<Fault>()
+      return BazAResult.Failure(body = output, logid = response.headers["logid"])
     }
   }
 }

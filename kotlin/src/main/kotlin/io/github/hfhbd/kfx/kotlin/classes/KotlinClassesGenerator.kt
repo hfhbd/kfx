@@ -198,7 +198,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                         addAnnotation(annotation.toAnno())
                     }
                     val documentation = value.documentation
-                    if (documentation != null && documentation.isNotBlank()) {
+                    if (!documentation.isNullOrBlank()) {
                         addKdoc(documentation.toKdoc())
                     }
                 }

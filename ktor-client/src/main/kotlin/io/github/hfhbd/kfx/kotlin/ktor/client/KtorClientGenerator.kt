@@ -10,6 +10,8 @@ import io.github.hfhbd.kfx.kotlin.ktor.*
 import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
 import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
 import java.nio.file.*
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 @ServiceLoader(CodeGenerator::class)
 class KtorClientGenerator : KotlinPoetCodeGenerator {
@@ -313,15 +315,24 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     "%M ->",
                     success.statusCode.toHttpCode(),
                 )
-                if (output != null) {
+                if (success.response != null) {
                     function.addStatement(
                         "val output = %L",
                         getOutput(
-                            (outputWrapperType ?: output).toKtorPoetType(read = false),
+                            (outputWrapperType ?: output!!).toKtorPoetType(read = false),
                         ),
                     )
+                    val parameters = (listOf(
+                        CodeBlock.of("body = output"),
+                    ) + headersToCode(success.headers)).joinToCode()
+                    function.addStatement("return %T(%L)", success.isCondition.toPoetType(), parameters)
+                } else if (success.headers.isNotEmpty()) {
+                    val parameters = headersToCode(success.headers).joinToCode()
+                    function.addStatement("return %T(%L)", success.isCondition.toPoetType(), parameters)
+                } else {
+                    function.addStatement("return %T", success.isCondition.toPoetType())
                 }
-                function.addStatement("return %T(output)", success.isCondition.toPoetType())
+
                 function.endControlFlow()
             }
             val notFound = responseBranches.notFound
@@ -335,16 +346,26 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             }
 
             function.beginControlFlow("else ->")
-            val faultOutput = faultWrapper ?: this.fault
+            val faultOutput = responseBranches.fault.response
             if (faultOutput != null) {
                 function.addStatement(
                     "val output = %L",
                     getOutput(
-                        (faultOutput).toKtorPoetType(read = false),
+                        (faultWrapper
+                            ?: responseBranches.fault.isCondition.members.first().type).toKtorPoetType(read = false),
                     ),
                 )
+                val parameters = (listOf(
+                    CodeBlock.of("body = output"),
+                ) + headersToCode(responseBranches.fault.headers)).joinToCode()
+                function.addStatement("return %T(%L)", responseBranches.fault.isCondition.toPoetType(), parameters)
+            } else if (responseBranches.fault.headers.isNotEmpty()) {
+                val parameters = headersToCode(responseBranches.fault.headers).joinToCode()
+                function.addStatement("return %T(%L)", responseBranches.fault.isCondition.toPoetType(), parameters)
+            } else {
+                function.addStatement("return %T", responseBranches.fault.isCondition.toPoetType())
             }
-            function.addStatement("return %T(output)", responseBranches.fault.isCondition.toPoetType())
+
             function.endControlFlow()
             function.endControlFlow()
         } else {
@@ -399,6 +420,16 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
 
         return function.build()
     }
+
+    private fun headersToCode(headers: Map<String, Pair<String, Boolean>>): List<CodeBlock> =
+        headers.map { (headerName, member) ->
+            val (memberName, nullable) = member
+            CodeBlock.of(
+                "$memberName = response.headers[%S]%L",
+                headerName,
+                if (nullable) "" else "!!",
+            )
+        }
 
     private fun CodeGenTree.Operation.Parameter.toPoet(nameAllocator: NameAllocator): ParameterSpec {
         val name = nameAllocator.newName(name, name)

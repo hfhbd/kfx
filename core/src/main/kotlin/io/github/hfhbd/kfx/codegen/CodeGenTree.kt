@@ -243,6 +243,7 @@ data class CodeGenTree(
                 val isCondition: NormalClass,
                 val statusCode: StatusCode,
                 val response: Expression?,
+                val headers: Map<String, Pair<String, Boolean>>,
             )
         }
 
