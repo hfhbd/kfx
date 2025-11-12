@@ -34,11 +34,11 @@ public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend
   when (response.status) {
     OK -> {
       val output = response.body<Envelope<Bar>>()
-      return CreateFooWithoutFaultResult.Success(output)
+      return CreateFooWithoutFaultResult.Success(body = output)
     }
     else -> {
       val output = response.body<Envelope<Fault>>()
-      return CreateFooWithoutFaultResult.Failure(output)
+      return CreateFooWithoutFaultResult.Failure(body = output)
     }
   }
 }
