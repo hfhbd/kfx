@@ -39,6 +39,7 @@ testing.suites {
 
     register("a", JvmTestSuite::class) {
         dependencies {
+            implementation(projects.responseClasses)
             implementation(projects.validation)
         }
     }

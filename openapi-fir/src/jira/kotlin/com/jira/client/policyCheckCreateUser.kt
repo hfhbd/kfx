@@ -25,7 +25,7 @@ import kotlin.Unit
 public suspend fun HttpClient.policyCheckCreateUser(input: PasswordPolicyCreateUserBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): String {
   val response = post(urlString = """api/2/password/policy/createUser""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<String>()

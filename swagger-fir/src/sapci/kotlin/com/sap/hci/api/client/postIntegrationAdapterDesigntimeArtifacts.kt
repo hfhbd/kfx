@@ -31,7 +31,7 @@ public suspend fun HttpClient.postIntegrationAdapterDesigntimeArtifacts(
   val response = post(urlString = """IntegrationAdapterDesigntimeArtifacts""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

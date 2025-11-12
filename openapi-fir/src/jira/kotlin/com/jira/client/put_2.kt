@@ -29,7 +29,7 @@ public suspend fun HttpClient.put_2(
     `header`("If-Match", If_Match)
     `header`("versionHash", versionHash)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -25,7 +25,7 @@ public suspend fun HttpClient.changeUserPassword(
     parameter("key", key)
     parameter("username", username)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

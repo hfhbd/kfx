@@ -25,7 +25,7 @@ public suspend fun HttpClient.createSynchronizationFastRun(
   val response = post(urlString = """fastSynchronizationRuns""") {
     parameter("test", test)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<FastRunResponse>()

@@ -28,7 +28,7 @@ public suspend fun HttpClient.createSynchronizationRunWithUrlInput(
     parameter("start", start)
     parameter("test", test)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<SynchronizationRunWithConfiguration>()

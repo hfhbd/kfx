@@ -21,7 +21,7 @@ public suspend fun HttpClient.moveIssuesToEpic(
 ) {
   val response = post(urlString = """agile/1.0/epic/${epicIdOrKey}/issue""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

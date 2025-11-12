@@ -1,11 +1,11 @@
 package io.github.hfhbd.kfx.codegen
 
-import io.github.hfhbd.kfx.ContentType
-import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Serializable
-import kotlin.time.Duration
+import io.github.hfhbd.kfx.*
+import kotlinx.datetime.*
+import kotlinx.serialization.*
+import kotlin.time.*
 import kotlin.time.Instant
-import kotlin.uuid.Uuid
+import kotlin.uuid.*
 
 @Serializable
 data class CodeGenTree(
@@ -87,7 +87,8 @@ data class CodeGenTree(
         @Serializable
         data class Parameter(val name: String, val upperBound: List<Type>) : Type
 
-        @Serializable data object STAR : Type
+        @Serializable
+        data object STAR : Type
     }
 
     @Serializable
@@ -171,11 +172,12 @@ data class CodeGenTree(
         val names: List<String>,
         val runtimeTypes: List<Type> = emptyList(),
     ) {
-        val qualifiedName: String get() = if (packageName.isEmpty()) {
-            names.joinToString(".")
-        } else {
-            "$packageName.${names.joinToString(".")}"
-        }
+        val qualifiedName: String
+            get() = if (packageName.isEmpty()) {
+                names.joinToString(".")
+            } else {
+                "$packageName.${names.joinToString(".")}"
+            }
     }
 
     @Serializable
@@ -212,9 +214,12 @@ data class CodeGenTree(
 
         val input: Type?,
         val output: Type?,
-        val success: Int?,
-        val nullableOutput: Int?,
+        val outputHeaders: List<Parameter>,
+        val returnType: Type?,
+        val success: StatusCode,
+        val notFound: Boolean,
         val fault: NormalClass?,
+        val faultHeaders: List<Parameter>,
         val inputContentType: ContentType?,
         val outputContentType: ContentType?,
 
@@ -222,10 +227,26 @@ data class CodeGenTree(
         val inputWrapperType: Type?,
         val outputWrapperType: Type?,
         val outputMember: Expression?,
+        val responseBranches: ResponseBranches?,
 
         val faultWrapper: Type?,
         val deprecated: Boolean,
     ) {
+        @Serializable
+        data class ResponseBranches(
+            val success: Branch?,
+            val notFound: Branch?,
+            val fault: Branch,
+        ) {
+            @Serializable
+            data class Branch(
+                val isCondition: NormalClass,
+                val statusCode: StatusCode,
+                val response: Expression?,
+                val headers: Map<String, Pair<String, Boolean>>,
+            )
+        }
+
         @Serializable
         enum class HttpMethod {
             Head, Get, Post, Put, Patch, Delete
@@ -250,6 +271,9 @@ data class CodeGenTree(
 
         @Serializable
         data object Output : Expression
+
+        @Serializable
+        data object Response : Expression
 
         @Serializable
         data class Chain(val lhs: Expression, val rhs: Expression) : Expression
@@ -318,7 +342,7 @@ data class CodeGenTree(
         data class InstantLiteral(val value: Instant) : Expression
 
         @Serializable
-        data class BooleanLiteral(val value: Boolean) : ConstExpression
+        data class BooleanLiteral(val value: Boolean) : ConstExpression, BooleanExpression
 
         @Serializable
         data object NullLiteral : Expression
@@ -340,6 +364,11 @@ data class CodeGenTree(
 
         @Serializable
         data class CallStatic(val type: Type) : Invokable
+
+        sealed interface BooleanExpression : Expression
+
+        @Serializable
+        data class Is(val type: Type) : BooleanExpression
     }
 
     @Serializable

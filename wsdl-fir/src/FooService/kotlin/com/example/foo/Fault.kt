@@ -1,6 +1,5 @@
 package com.example.foo
 
-import kotlin.Exception
 import kotlin.String
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -17,5 +16,5 @@ public data class Fault(
     value = "message",
     namespace = "http://example.com/foo",
   )
-  public override val message: String,
-) : Exception()
+  public val message: String,
+)

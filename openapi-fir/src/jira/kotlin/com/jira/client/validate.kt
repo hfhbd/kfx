@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.validate(input: String, builder: suspend HttpRequestBuilder.() -> Unit = {}): LicenseValidationResults {
   val response = post(urlString = """api/2/licenseValidator""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<LicenseValidationResults>()

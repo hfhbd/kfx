@@ -24,7 +24,7 @@ public suspend fun HttpClient.moveField(
 ) {
   val response = post(urlString = """api/2/screens/${screenId}/tabs/${tabId}/fields/${id}/move""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

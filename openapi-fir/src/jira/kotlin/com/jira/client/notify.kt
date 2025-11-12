@@ -22,7 +22,7 @@ public suspend fun HttpClient.notify(
 ) {
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/notify""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

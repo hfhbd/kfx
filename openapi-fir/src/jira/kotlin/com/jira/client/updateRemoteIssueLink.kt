@@ -24,7 +24,7 @@ public suspend fun HttpClient.updateRemoteIssueLink(
 ) {
   val response = put(urlString = """api/2/issue/${issueIdOrKey}/remotelink/${linkId}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.getWorklogsForIds(input: WorklogIdsRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): WorklogResponse {
   val response = post(urlString = """api/2/worklog/list""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<WorklogResponse>()

@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createCustomField(input: CustomFieldDefinitionJsonBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): FieldBean {
   val response = post(urlString = """api/2/field""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<FieldBean>()

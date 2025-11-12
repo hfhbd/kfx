@@ -22,7 +22,7 @@ public suspend fun HttpClient.addProjectAssociationsToScheme(
 ) {
   val response = post(urlString = """api/2/issuetypescheme/${schemeId}/associations""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

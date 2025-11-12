@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createProjectRole(input: CreateUpdateRoleRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): ProjectRoleBean {
   val response = post(urlString = """api/2/role""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ProjectRoleBean>()

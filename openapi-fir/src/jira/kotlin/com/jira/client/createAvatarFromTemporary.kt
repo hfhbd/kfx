@@ -22,7 +22,7 @@ public suspend fun HttpClient.createAvatarFromTemporary(
 ) {
   val response = post(urlString = """api/2/avatar/${type}/temporaryCrop""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

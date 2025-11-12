@@ -27,9 +27,7 @@ class CallUuidTest {
                     ),
                     parameters = emptyList(),
                 ),
-            ).toCodeBlock(nameAllocator = NameAllocator()) {
-                toPoetType(false)
-            }.toString(),
+            ).toCodeBlock(nameAllocator = NameAllocator()).toString(),
         )
     }
 }

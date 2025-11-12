@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.setDefaultShareScope(input: DefaultShareScopeBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): DefaultShareScopeBean {
   val response = put(urlString = """api/2/filter/defaultShareScope""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<DefaultShareScopeBean>()

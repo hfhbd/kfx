@@ -22,7 +22,7 @@ import kotlin.Unit
 public suspend fun HttpClient.setTerminologyEntries(input: TerminologyRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """api/2/terminology/entries""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

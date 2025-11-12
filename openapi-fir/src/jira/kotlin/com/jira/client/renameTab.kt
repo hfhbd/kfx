@@ -23,7 +23,7 @@ public suspend fun HttpClient.renameTab(
 ): ScreenableTabBean {
   val response = put(urlString = """api/2/screens/${screenId}/tabs/${tabId}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ScreenableTabBean>()

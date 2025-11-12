@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createIssueType(input: IssueTypeCreateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """api/2/issuetype""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

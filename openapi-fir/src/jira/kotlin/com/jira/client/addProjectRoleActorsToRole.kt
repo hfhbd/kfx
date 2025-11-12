@@ -23,7 +23,7 @@ public suspend fun HttpClient.addProjectRoleActorsToRole(
 ): ProjectRoleActorsBean? {
   val response = post(urlString = """api/2/role/${id}/actors""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

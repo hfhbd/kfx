@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
@@ -37,14 +38,22 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         addFunction(generateInterfaceSpec())
     }.build()
 
-    private fun Int?.toHttpCode(): CodeBlock = when (this) {
-        null, 200 -> CodeBlock.of("ok()")
-        201 -> CodeBlock.of("created(location)")
-        202 -> CodeBlock.of("accepted()")
-        204 -> CodeBlock.of("noContent()")
-        400 -> CodeBlock.of("badRequest()")
-        404 -> CodeBlock.of("notFound()")
-        else -> error("Not yet supported: $this")
+    private fun StatusCode.toHttpCode(): CodeBlock = when (this) {
+        StatusCode.OK -> CodeBlock.of("ok()")
+        StatusCode.Created -> CodeBlock.of("created(location)")
+        StatusCode.Accepted -> CodeBlock.of("accepted()")
+        StatusCode.NoContent -> CodeBlock.of("noContent()")
+        StatusCode.BadRequest -> CodeBlock.of("badRequest()")
+        StatusCode.NotFound -> CodeBlock.of("notFound()")
+        StatusCode.Unauthorized -> CodeBlock.of("status(401)")
+        StatusCode.Forbidden -> CodeBlock.of("status(403)")
+        StatusCode.NotAcceptable -> CodeBlock.of("status(406)")
+        StatusCode.Conflict -> CodeBlock.of("status(409)")
+        StatusCode.LengthRequired -> CodeBlock.of("status(411)")
+        StatusCode.ContentTooLarge -> CodeBlock.of("status(413)")
+        StatusCode.UnprocessableEntity -> CodeBlock.of("unprocessableEntity()")
+        StatusCode.TooManyRequests -> CodeBlock.of("status(429)")
+        StatusCode.InternalServerError -> CodeBlock.of("status(500)")
     }
 
     private fun ContentType.toMediaType(): CodeBlock = when (this) {
@@ -170,7 +179,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                     }
                 },
                 returnType = when {
-                    success == 201 && returnType != null -> ClassName(
+                    success == StatusCode.Created && returnType != null -> ClassName(
                         "kotlin",
                         "Pair",
                     ).parameterizedBy(
@@ -249,7 +258,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         function.addStatement(
             "%Lrequest.action(%L)",
             if (output != null) {
-                if (success == 201) {
+                if (success == StatusCode.Created) {
                     CodeBlock.of("val (response, location) = ")
                 } else {
                     CodeBlock.of("val response = ")

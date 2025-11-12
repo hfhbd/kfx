@@ -6,9 +6,12 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
 import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
+import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
 import io.github.hfhbd.kfx.kotlin.ktor.toKtor
+import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
+import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import io.github.hfhbd.kfx.kotlin.toKdoc
-import io.github.hfhbd.kfx.toKtorPoetType
+import io.github.hfhbd.kfx.kotlin.toPoetType
 import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
@@ -49,19 +52,6 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         isExtension = true,
     )
 
-    private fun Int?.toHttpCode(): MemberName {
-        val className = ClassName("io.ktor.http", "HttpStatusCode", "Companion")
-        return when (this) {
-            null, 200 -> MemberName(className, "OK")
-            201 -> MemberName(className, "Created")
-            202 -> MemberName(className, "Accepted")
-            204 -> MemberName(className, "NoContent")
-            400 -> MemberName(className, "BadRequest")
-            404 -> MemberName(className, "NotFound")
-            else -> error("Not yet supported: $this")
-        }
-    }
-
     private fun CodeGenTree.Operation.generateFunSpec(): FunSpec {
         val function = FunSpec.builder(name)
         val documentation = documentation
@@ -94,8 +84,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                             add(ParameterSpec.unnamed(input.toKtorPoetType(read = true)))
                         }
                     },
-                    returnType = outputWrapperType?.toKtorPoetType(read = false) ?: output?.toKtorPoetType(read = false)
-                        ?: UNIT,
+                    returnType = returnType?.toKtorPoetType(read = false) ?: UNIT,
                 ).copy(
                     suspending = true,
                 ),
@@ -148,29 +137,52 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 inputWrapperType?.toKtorPoetType(read = true) ?: input.toKtorPoetType(read = true),
             )
         }
-        function.addStatement(
-            "%Lcall.action(%L)",
-            if (output != null) {
-                CodeBlock.of("val response = ")
-            } else {
-                CodeBlock.of("")
-            },
-            if (input != null && inputContentType?.supportedBySerialization() != false) {
-                CodeBlock.of("body")
-            } else {
-                CodeBlock.of("")
-            },
-        )
+        val nameAllocator = NameAllocator()
+        nameAllocator.newName("input")
+        nameAllocator.newName("builder")
+        nameAllocator.newName("response")
 
-        val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
-        if (output != null) {
+        val responseBranches = responseBranches
+        if (responseBranches != null) {
             function.addStatement(
-                "call.response.status(%M)",
-                success.toHttpCode(),
+                "val response = call.action(%L)",
+                if (input != null && inputContentType?.supportedBySerialization() != false) {
+                    CodeBlock.of("body")
+                } else {
+                    CodeBlock.of("")
+                },
             )
-            function.addStatement("call.%M(response)", respond)
+            function.beginControlFlow("when (response)")
+            responseBranches.success?.let { a(it, function, nameAllocator) }
+            responseBranches.notFound?.let { a(it, function, nameAllocator) }
+            a(responseBranches.fault, function, nameAllocator)
+            function.endControlFlow()
         } else {
-            function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+            if (output != null) {
+                function.addStatement(
+                    "val response = call.action(%L)",
+                    if (input != null && inputContentType?.supportedBySerialization() != false) {
+                        CodeBlock.of("body")
+                    } else {
+                        CodeBlock.of("")
+                    },
+                )
+                function.addStatement(
+                    "call.response.status(%M)",
+                    success.toHttpCode(),
+                )
+                function.addStatement("call.%M(response)", respond)
+            } else {
+                function.addStatement(
+                    "call.action(%L)",
+                    if (input != null && inputContentType?.supportedBySerialization() != false) {
+                        CodeBlock.of("body")
+                    } else {
+                        CodeBlock.of("")
+                    },
+                )
+                function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+            }
         }
 
         function.endControlFlow()
@@ -190,6 +202,41 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
 
         return function.build()
     }
+}
+
+private val respond = MemberName("io.ktor.server.response", "respond", isExtension = true)
+
+private fun a(
+    responseBranch: CodeGenTree.Operation.ResponseBranches.Branch,
+    function: FunSpec.Builder,
+    nameAllocator: NameAllocator,
+) {
+    function.beginControlFlow("is %T ->", responseBranch.isCondition.toPoetType())
+    val response = responseBranch.response
+    for ((headerName, member) in responseBranch.headers) {
+        val (memberName, nullable) = member
+        if (nullable) {
+            function.beginControlFlow("if (response.%L != null)", memberName)
+        }
+        function.addStatement(
+            "call.response.%M(%S, response.$memberName)",
+            MemberName("io.ktor.server.response", "header", isExtension = true),
+            headerName,
+        )
+        if (nullable) {
+            function.endControlFlow()
+        }
+    }
+    if (response != null) {
+        function.addStatement(
+            "call.response.status(%M)",
+            responseBranch.statusCode.toHttpCode(),
+        )
+        function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
+    } else {
+        function.addStatement("call.%M(%M)", respond, responseBranch.statusCode.toHttpCode())
+    }
+    function.endControlFlow()
 }
 
 internal fun String.toKtorServer(): String = replace($$"${", "{")

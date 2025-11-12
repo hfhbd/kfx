@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.changeMyPassword(input: PasswordBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = put(urlString = """api/2/myself/password""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -32,7 +32,7 @@ public suspend fun HttpClient.estimateIssueForBoard(
   val response = put(urlString = """agile/1.0/issue/${issueIdOrKey}/estimation""") {
     parameter("boardId", boardId)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

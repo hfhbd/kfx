@@ -32,7 +32,7 @@ public suspend fun HttpClient.createSynchronizationRunWithExecutionGroup(
     parameter("start", start)
     parameter("test", test)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -24,7 +24,7 @@ public suspend fun HttpClient.updateIssueTypeScheme(
 ): IssueTypeSchemeBean? {
   val response = put(urlString = """api/2/issuetypescheme/${schemeId}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

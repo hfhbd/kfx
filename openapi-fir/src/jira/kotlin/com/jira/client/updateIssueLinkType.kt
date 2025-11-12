@@ -22,7 +22,7 @@ public suspend fun HttpClient.updateIssueLinkType(
 ) {
   val response = put(urlString = """api/2/issueLinkType/${issueLinkTypeId}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

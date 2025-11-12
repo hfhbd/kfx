@@ -23,7 +23,7 @@ public suspend fun HttpClient.updateComponent(
 ): ComponentBean? {
   val response = put(urlString = """api/2/component/${id}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

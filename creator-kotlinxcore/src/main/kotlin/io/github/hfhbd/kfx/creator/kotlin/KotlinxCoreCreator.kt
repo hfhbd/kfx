@@ -1,5 +1,6 @@
 package io.github.hfhbd.kfx.creator.kotlin
 
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
@@ -106,6 +107,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
             address = ir.address,
             input = ir.input?.let { toCodeGen(it) },
             output = ir.output?.let { toCodeGen(it) },
+            returnType = ir.output?.let { toCodeGen(it) },
             fault = ir.fault?.let { toCodeGen(it) },
             method = when (ir.method) {
                 IRTree.Operation.HttpMethod.Head -> CodeGenTree.Operation.HttpMethod.Head
@@ -126,11 +128,18 @@ interface KotlinxCoreCreator : CodeGenCreator {
             inputWrapperType = null,
             outputWrapperType = null,
             outputMember = null,
-            nullableOutput = ir.nullableOutput,
+            outputHeaders = ir.outputHeaders.map {
+                it.toCodeGen(defaultNull = false)
+            },
+            notFound = ir.notFound,
             faultWrapper = null,
-            success = ir.success,
+            faultHeaders = ir.faultHeaders.map {
+                it.toCodeGen(defaultNull = false)
+            },
+            success = ir.success ?: StatusCode.OK,
             headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
             deprecated = ir.deprecated,
+            responseBranches = null,
         )
     }
 

@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createScheme(input: WorkflowSchemeBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """api/2/workflowscheme""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

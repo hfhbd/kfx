@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createUser(input: UserWriteBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): UserWriteBean {
   val response = post(urlString = """api/2/user""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<UserWriteBean>()

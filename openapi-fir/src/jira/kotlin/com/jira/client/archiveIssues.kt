@@ -24,7 +24,7 @@ public suspend fun HttpClient.archiveIssues(
   val response = post(urlString = """api/2/issue/archive""") {
     parameter("notifyUsers", notifyUsers)
     contentType(Plain)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

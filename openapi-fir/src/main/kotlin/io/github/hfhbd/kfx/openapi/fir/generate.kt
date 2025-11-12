@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.openapi.fir
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
@@ -90,6 +91,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Head,
@@ -102,6 +104,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Get,
@@ -114,6 +117,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Post,
@@ -126,6 +130,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Put,
@@ -138,6 +143,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Patch,
@@ -150,6 +156,7 @@ private fun OpenApi.toIr(
                     path,
                     pathObject.parameters,
                     components.parameters,
+                    components.headers,
                     components.responses,
                     irTypes,
                     IRTree.Operation.HttpMethod.Delete,
@@ -177,6 +184,7 @@ private fun OpenApi.Operation.toIr(
     path: String,
     pathParameters: List<OpenApi.Parameter>,
     componentParameters: Map<String, OpenApi.Parameter>,
+    componentHeaders: Map<String, OpenApi.Operation.Header>,
     componentsResponses: Map<String, OpenApi.Operation.Response>,
     irTypes: MutableMap<String, IRTree.Class>,
     method: IRTree.Operation.HttpMethod,
@@ -232,6 +240,9 @@ private fun OpenApi.Operation.toIr(
         outputContentType = responses[statusCodes.success]?.content?.entries?.firstOrNull()?.key?.let {
             ContentType.fromString(it)
         },
+        outputHeaders = responses[statusCodes.success]?.headers?.map {
+            it.value.toParameter(it.key, componentHeaders, irTypes)
+        } ?: emptyList(),
         fault = responses[statusCodes.fault]?.let {
             val s = (
                 it.toIr(
@@ -245,6 +256,9 @@ private fun OpenApi.Operation.toIr(
             irTypes[className] = s
             s
         },
+        faultHeaders = responses[statusCodes.fault]?.headers?.map {
+            it.value.toParameter(it.key, componentHeaders, irTypes)
+        } ?: emptyList(),
         parameters = parameters.mapNotNull {
             when (it.position) {
                 OpenApi.Parameter.Position.Cookie -> null
@@ -295,8 +309,8 @@ private fun OpenApi.Operation.toIr(
                 )
             }
         },
-        success = statusCodes.success?.toIntOrNull(),
-        nullableOutput = if ("404" in responses.keys) 404 else null,
+        success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
+        notFound = "404" in responses.keys,
         deprecated = deprecated,
         headers = parameters.mapNotNull {
             when (it.position) {
@@ -368,13 +382,15 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
                         address = null,
                         queryParameters = emptyList(),
                         fault = null,
+                        faultHeaders = emptyList(),
                         input = null,
                         inputContentType = null,
                         output = OAuth2Token,
                         outputContentType = ContentType.ApplicationJson,
+                        outputHeaders = emptyList(),
                         location = null,
-                        success = 200,
-                        nullableOutput = null,
+                        success = StatusCode.OK,
+                        notFound = false,
                         headers = emptyList(),
                         deprecated = false,
                     ),
@@ -436,6 +452,37 @@ private fun OpenApi.Parameter.toParameter(
         return null to IRTree.Operation.Parameter(
             name = name!!,
             type = schema!!.toIr(name, name, irTypes),
+            nullable = !required,
+            documentation = description,
+            serialName = null,
+            defaultValue = schema!!.toIrDefault(),
+            deprecated = deprecated,
+        )
+    }
+}
+
+private fun OpenApi.Operation.Header.toParameter(
+    headerName: String,
+    headers: Map<String, OpenApi.Operation.Header>,
+    irTypes: MutableMap<String, IRTree.Class>,
+): IRTree.Operation.Parameter {
+    if (ref != null) {
+        val name = ref!!.removePrefix("#/components/headers/")
+        val found = headers[name]!!
+
+        return IRTree.Operation.Parameter(
+            name = headerName,
+            type = found.schema!!.toIr(name, name, irTypes),
+            nullable = !found.required,
+            documentation = found.description,
+            serialName = null,
+            defaultValue = found.schema!!.toIrDefault(),
+            deprecated = deprecated,
+        )
+    } else {
+        return IRTree.Operation.Parameter(
+            name = headerName,
+            type = schema!!.toIr(null, headerName, irTypes),
             nullable = !required,
             documentation = description,
             serialName = null,

@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createPriorityScheme(input: PrioritySchemeUpdateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): PrioritySchemeBean {
   val response = post(urlString = """api/2/priorityschemes""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<PrioritySchemeBean>()

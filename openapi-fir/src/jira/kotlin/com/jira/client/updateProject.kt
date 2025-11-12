@@ -26,7 +26,7 @@ public suspend fun HttpClient.updateProject(
   val response = put(urlString = """api/2/project/${projectIdOrKey}""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

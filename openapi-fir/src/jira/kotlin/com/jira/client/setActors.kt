@@ -25,7 +25,7 @@ public suspend fun HttpClient.setActors(
 ): ProjectRoleBean? {
   val response = put(urlString = """api/2/project/${projectIdOrKey}/role/${id}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

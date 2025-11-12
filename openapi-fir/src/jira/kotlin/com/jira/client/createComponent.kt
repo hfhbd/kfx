@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createComponent(input: ComponentBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): ComponentBean? {
   val response = post(urlString = """api/2/component""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -1,19 +1,29 @@
-import com.example.bar.*
-import com.example.foo.*
+import com.example.bar.Bar
+import com.example.foo.Fault
+import com.example.foo.Foo
 import com.example.foo.client.createFoo
+import com.example.foo.client.createFooWithoutFault
+import com.example.foo.results.CreateFooResult
+import com.example.foo.results.CreateFooWithoutFaultResult
 import com.example.foo.server.createFoo
-import io.github.hfhbd.kfx.soap11.*
+import com.example.foo.server.createFooWithoutFault
+import io.github.hfhbd.kfx.soap11.Envelope
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.serialization
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.routing.routing
 import io.ktor.server.testing.testApplication
-import kotlinx.datetime.*
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
-import nl.adaptivity.xmlutil.serialization.*
+import nl.adaptivity.xmlutil.serialization.XML
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class FooServiceTest {
     @Test
@@ -23,9 +33,9 @@ class FooServiceTest {
             "FooServiceTest.kt",
         )
     }
-    
+
     @Test
-    fun mockTest() = testApplication {
+    fun mockSuccessTest() = testApplication {
         application {
             routing {
                 install(ContentNegotiation) {
@@ -34,12 +44,12 @@ class FooServiceTest {
                         Json,
                     )
                 }
-                createFoo { 
-                    Envelope(null, it.body.bar)
+                createFoo {
+                    CreateFooResult.Success(Envelope(null, it.body.bar))
                 }
             }
         }
-        val response = createClient  {
+        val response = createClient {
             install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
                 serialization(
                     io.ktor.http.ContentType.Text.Xml,
@@ -52,7 +62,95 @@ class FooServiceTest {
                 foo = 42,
             )
         )
-        assertEquals(Bar(), response)
+        assertTrue(response is CreateFooResult.Success)
+        assertEquals(Bar(), response.body.body)
+    }
+
+    @Test
+    fun mockFailureTest() = testApplication {
+        application {
+            routing {
+                install(ContentNegotiation) {
+                    serialization(
+                        io.ktor.http.ContentType.Text.Xml,
+                        Json,
+                    )
+                }
+                createFoo {
+                    CreateFooResult.Failure(
+                        Envelope(
+                            null,
+                            Fault(
+                                message = "Some client error",
+                            )
+                        )
+                    )
+                }
+            }
+        }
+        val response = createClient {
+            install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+                serialization(
+                    io.ktor.http.ContentType.Text.Xml,
+                    Json,
+                )
+            }
+            Logging {
+                logger = Logger.SIMPLE
+                level = LogLevel.ALL
+            }
+        }.createFoo(
+            input = Foo(
+                bar = Bar(),
+                foo = 42,
+            )
+        )
+        assertTrue(response is CreateFooResult.Failure)
+        assertEquals("Some client error", response.body.body.message)
+    }
+
+    @Test
+    fun mockDefaultFaultTest() = testApplication {
+        application {
+            routing {
+                install(ContentNegotiation) {
+                    serialization(
+                        io.ktor.http.ContentType.Text.Xml,
+                        Json,
+                    )
+                }
+                createFooWithoutFault {
+                    CreateFooWithoutFaultResult.Failure(
+                        Envelope(
+                            null,
+                            io.github.hfhbd.kfx.soap11.Fault(
+                                faultCode = "",
+                                faultString = "Some client error",
+                            )
+                        )
+                    )
+                }
+            }
+        }
+        val response = createClient {
+            install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+                serialization(
+                    io.ktor.http.ContentType.Text.Xml,
+                    Json,
+                )
+            }
+            Logging {
+                logger = Logger.SIMPLE
+                level = LogLevel.ALL
+            }
+        }.createFooWithoutFault(
+            input = Foo(
+                bar = Bar(),
+                foo = 42,
+            )
+        )
+        assertTrue(response is CreateFooWithoutFaultResult.Failure)
+        assertEquals("Some client error", response.body.body.faultString)
     }
 
     @Test

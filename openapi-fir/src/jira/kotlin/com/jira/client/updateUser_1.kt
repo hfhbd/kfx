@@ -26,7 +26,7 @@ public suspend fun HttpClient.updateUser_1(
     parameter("key", key)
     parameter("username", username)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -23,7 +23,7 @@ public suspend fun HttpClient.updateDraftDefault(
 ): WorkflowSchemeBean? {
   val response = put(urlString = """api/2/workflowscheme/${id}/draft/default""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

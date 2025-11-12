@@ -35,7 +35,7 @@ public suspend fun HttpClient.putMessageMappingDesigntimeArtifactsByIdAndVersion
   val response = put(urlString = """MessageMappingDesigntimeArtifacts(Id='${id}',Version='${version}')""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

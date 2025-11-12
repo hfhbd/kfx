@@ -26,7 +26,7 @@ public suspend fun HttpClient.moveVersion(
 ): VersionBean? {
   val response = post(urlString = """api/2/version/${id}/move""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

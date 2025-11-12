@@ -21,7 +21,7 @@ public suspend fun HttpClient.updateProjectAvatar(
 ) {
   val response = put(urlString = """api/2/project/${projectIdOrKey}/avatar""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

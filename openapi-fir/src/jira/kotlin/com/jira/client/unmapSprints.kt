@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.unmapSprints(input: UnmapSprintsBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = put(urlString = """agile/1.0/sprint/unmap""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

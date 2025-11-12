@@ -31,6 +31,7 @@ testing.suites {
             implementation(projects.ktorServer)
             implementation(projects.soapRuntime)
             implementation(projects.soap11)
+            implementation(projects.responseClasses)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.server.core)
@@ -54,6 +55,7 @@ testing.suites {
             implementation(libs.ktor.server.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.server.test.host)
+            implementation(libs.ktor.client.logging)
         }
     }
 }

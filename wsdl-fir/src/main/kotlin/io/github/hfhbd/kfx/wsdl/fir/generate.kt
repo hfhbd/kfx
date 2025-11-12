@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.wsdl.fir
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
@@ -141,14 +142,16 @@ private fun WSDL.toIr(
                 address = "$targetNamespace/${portType.name}/${operation.name}",
                 input = irTypes.find(operation.input.resolve(this)) as IRTree.NormalClass,
                 output = irTypes.find(operation.output.resolve(this)) as IRTree.NormalClass,
-                nullableOutput = null,
+                notFound = false,
                 fault = operation.fault?.resolve(this)?.let { irTypes.find(it) as IRTree.NormalClass? },
                 path = null,
                 method = IRTree.Operation.HttpMethod.Post,
                 parameters = emptyList(),
                 queryParameters = emptyList(),
-                success = 200,
+                success = StatusCode.OK,
                 headers = emptyList(),
+                outputHeaders = emptyList(),
+                faultHeaders = emptyList(),
                 inputContentType = ContentType.TextXml,
                 outputContentType = ContentType.TextXml,
                 deprecated = false,

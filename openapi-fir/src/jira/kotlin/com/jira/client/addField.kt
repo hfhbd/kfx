@@ -24,7 +24,7 @@ public suspend fun HttpClient.addField(
 ): ScreenableFieldBean {
   val response = post(urlString = """api/2/screens/${screenId}/tabs/${tabId}/fields""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ScreenableFieldBean>()

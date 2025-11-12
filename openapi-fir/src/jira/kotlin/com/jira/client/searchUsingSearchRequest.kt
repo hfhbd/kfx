@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.searchUsingSearchRequest(input: SearchRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): SearchResultsBean {
   val response = post(urlString = """api/2/search""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<SearchResultsBean>()

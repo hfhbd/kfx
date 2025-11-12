@@ -23,7 +23,7 @@ public suspend fun HttpClient.assignPriorityScheme(
 ): PrioritySchemeBean? {
   val response = put(urlString = """api/2/project/${projectKeyOrId}/priorityscheme""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

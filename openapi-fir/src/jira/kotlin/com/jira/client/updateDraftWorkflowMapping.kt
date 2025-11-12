@@ -27,7 +27,7 @@ public suspend fun HttpClient.updateDraftWorkflowMapping(
   val response = put(urlString = """api/2/workflowscheme/${id}/draft/workflow""") {
     parameter("workflowName", workflowName)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<WorkflowSchemeBean>()

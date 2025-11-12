@@ -21,7 +21,7 @@ public suspend fun HttpClient.delete_1(
 ) {
   val response = post(urlString = """api/2/version/${id}/removeAndSwap""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

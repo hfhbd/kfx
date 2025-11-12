@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.rankIssues(input: IssueRankRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = put(urlString = """agile/1.0/issue/rank""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -24,7 +24,7 @@ public suspend fun HttpClient.createPermissionScheme(
   val response = post(urlString = """api/2/permissionscheme""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<PermissionSchemeBean>()

@@ -21,7 +21,7 @@ public suspend fun HttpClient.setRefinedVelocity(
 ) {
   val response = put(urlString = """agile/1.0/board/${boardId}/settings/refined-velocity""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createVersion(input: VersionBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): VersionBean {
   val response = post(urlString = """api/2/version""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<VersionBean>()

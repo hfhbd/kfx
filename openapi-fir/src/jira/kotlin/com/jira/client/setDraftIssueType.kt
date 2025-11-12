@@ -26,7 +26,7 @@ public suspend fun HttpClient.setDraftIssueType(
 ): WorkflowSchemeBean? {
   val response = put(urlString = """api/2/workflowscheme/${id}/draft/issuetype/${issueType}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

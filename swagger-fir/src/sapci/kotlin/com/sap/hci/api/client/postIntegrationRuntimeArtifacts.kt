@@ -23,7 +23,7 @@ public suspend fun HttpClient.postIntegrationRuntimeArtifacts(
   val response = post(urlString = """IntegrationRuntimeArtifacts""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

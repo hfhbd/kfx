@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:tns="http://example.com/foo"
-                  xmlns:bar="http://example.com/bar"
-                  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+<wsdl:definitions 
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:wsp="http://www.w3.org/ns/ws-policy" 
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:tns="http://example.com/foo"
+                  xmlns:bar="http://example.com/bar"
                   name="FooService"
                   targetNamespace="http://example.com/foo">
     <wsdl:types>
@@ -118,12 +115,6 @@
     <wsdl:service name="FooService">
         <wsdl:port binding="tns:FooServiceBinding"
                    name="FooServicePort">
-            <wsaw:UsingAddressing wsdl:required="true"/>
-            <wsp:Policy>
-                <wsam:Addressing>
-                    <wsp:Policy/>
-                </wsam:Addressing>
-            </wsp:Policy>
             <soap:address location="ws://example.com/FooService"/>
         </wsdl:port>
     </wsdl:service>
