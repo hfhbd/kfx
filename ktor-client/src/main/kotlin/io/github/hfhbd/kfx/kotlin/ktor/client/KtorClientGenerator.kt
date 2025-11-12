@@ -322,9 +322,11 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                             (outputWrapperType ?: output!!).toKtorPoetType(read = false),
                         ),
                     )
-                    val parameters = (listOf(
-                        CodeBlock.of("body = output"),
-                    ) + headersToCode(success.headers)).joinToCode()
+                    val parameters = (
+                        listOf(
+                            CodeBlock.of("body = output"),
+                        ) + headersToCode(success.headers)
+                        ).joinToCode()
                     function.addStatement("return %T(%L)", success.isCondition.toPoetType(), parameters)
                 } else if (success.headers.isNotEmpty()) {
                     val parameters = headersToCode(success.headers).joinToCode()
@@ -351,13 +353,17 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 function.addStatement(
                     "val output = %L",
                     getOutput(
-                        (faultWrapper
-                            ?: responseBranches.fault.isCondition.members.first().type).toKtorPoetType(read = false),
+                        (
+                            faultWrapper
+                                ?: responseBranches.fault.isCondition.members.first().type
+                            ).toKtorPoetType(read = false),
                     ),
                 )
-                val parameters = (listOf(
-                    CodeBlock.of("body = output"),
-                ) + headersToCode(responseBranches.fault.headers)).joinToCode()
+                val parameters = (
+                    listOf(
+                        CodeBlock.of("body = output"),
+                    ) + headersToCode(responseBranches.fault.headers)
+                    ).joinToCode()
                 function.addStatement("return %T(%L)", responseBranches.fault.isCondition.toPoetType(), parameters)
             } else if (responseBranches.fault.headers.isNotEmpty()) {
                 val parameters = headersToCode(responseBranches.fault.headers).joinToCode()

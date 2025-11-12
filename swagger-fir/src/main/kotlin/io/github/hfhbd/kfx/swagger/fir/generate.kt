@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx.swagger.fir
 
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
@@ -152,7 +153,7 @@ private fun generate(
         inputContentType = operation.consumes.firstOrNull()?.let {
             ContentType.fromString(it)
         },
-        success = statusCodes.success?.toIntOrNull(),
+        success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
         output = operation.responses[statusCodes.success]?.schema?.let {
             if (it.isUnit()) {
                 IRTree.Type.Builtin.UNIT
@@ -168,7 +169,15 @@ private fun generate(
         outputContentType = operation.produces.firstOrNull()?.let {
             ContentType.fromString(it)
         },
-        nullableOutput = if ("404" in operation.responses) 404 else null,
+        outputHeaders = operation.responses[statusCodes.success]?.headers?.map { (name, it) ->
+            it.toParameter(
+                name,
+                IRTree.ClassName("", name),
+                irTypes,
+                definitions,
+            )
+        } ?: emptyList(),
+        notFound = "404" in operation.responses,
         fault = operation.responses[statusCodes.fault]?.schema?.let {
             val ref = it.ref
             val ir = (
@@ -188,6 +197,14 @@ private fun generate(
             irTypes[IRTree.ClassName(ir.packageName, ir.name)] = ir
             ir
         },
+        faultHeaders = operation.responses[statusCodes.fault]?.headers?.map { (name, it) ->
+            it.toParameter(
+                name,
+                IRTree.ClassName("", name),
+                irTypes,
+                definitions,
+            )
+        } ?: emptyList(),
         parameters = operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> null
@@ -300,9 +317,11 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
                 fault = null,
                 input = null,
                 output = OAuth2Token,
-                nullableOutput = null,
+                outputHeaders = emptyList(),
+                faultHeaders = emptyList(),
+                notFound = false,
                 location = null,
-                success = 200,
+                success = StatusCode.OK,
                 headers = emptyList(),
                 inputContentType = null,
                 outputContentType = ContentType.ApplicationJson,
@@ -406,6 +425,34 @@ private fun Parameter.toParameter(
         deprecated = false,
     )
 }
+
+private fun Header.toParameter(
+    headerName: String,
+    parentQName: IRTree.ClassName,
+    irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
+    definitions: Map<String, Definition>,
+): IRTree.Operation.Parameter = IRTree.Operation.Parameter(
+    name = headerName,
+    type = when (type) {
+        Header.Type.String -> IRTree.Type.Builtin.STRING
+        Header.Type.Integer -> IRTree.Type.Builtin.INT
+        Header.Type.Number -> IRTree.Type.Builtin.DOUBLE
+        Header.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
+        Header.Type.Array -> IRTree.Type.LIST(
+            list = items!!.toIr(
+                parentQName,
+                headerName,
+                irTypes,
+                definitions,
+            ),
+        )
+    },
+    nullable = true,
+    documentation = description,
+    serialName = null,
+    defaultValue = null,
+    deprecated = false,
+)
 
 private fun Parameter.defaultValue(): IRTree.Literal? = when (val primitive = default?.jsonPrimitive) {
     null -> null

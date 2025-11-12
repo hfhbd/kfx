@@ -150,6 +150,8 @@ private fun WSDL.toIr(
                 queryParameters = emptyList(),
                 success = StatusCode.OK,
                 headers = emptyList(),
+                outputHeaders = emptyList(),
+                faultHeaders = emptyList(),
                 inputContentType = ContentType.TextXml,
                 outputContentType = ContentType.TextXml,
                 deprecated = false,

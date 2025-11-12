@@ -39,11 +39,13 @@ class ResponseClasses : CodeGenTransformer {
                                     add(Member(name = "body", type = output))
                                 }
                                 for (it in it.outputHeaders) {
-                                    add(Member(
-                                        name = it.name.toCamelCase(),
-                                        type = it.type,
-                                        nullable = it.nullable,
-                                    ))
+                                    add(
+                                        Member(
+                                            name = it.name.toCamelCase(),
+                                            type = it.type,
+                                            nullable = it.nullable,
+                                        ),
+                                    )
                                 }
                             },
                             superInterfaces = listOf(newReturnTypeName),
@@ -67,7 +69,7 @@ class ResponseClasses : CodeGenTransformer {
                             members = buildList {
                                 add(Member(name = "body", type = fault))
                                 for (it in it.faultHeaders) {
-                                    add(Member(name = it.name.toCamelCase(), type = it.type, nullable = it.nullable,))
+                                    add(Member(name = it.name.toCamelCase(), type = it.type, nullable = it.nullable))
                                 }
                             },
                             superInterfaces = listOf(newReturnTypeName),
@@ -91,7 +93,7 @@ class ResponseClasses : CodeGenTransformer {
                                     name = it.name.toCamelCase(),
                                     type = it.type,
                                 )
-                            }
+                            },
                         ),
                         statusCode = it.success,
                         response = it.output?.let {
@@ -107,7 +109,7 @@ class ResponseClasses : CodeGenTransformer {
                         },
                         headers = it.outputHeaders.associate {
                             it.name to (it.name.toCamelCase() to it.nullable)
-                        }
+                        },
                     ),
                     notFound = if (it.notFound) {
                         Branch(
@@ -130,13 +132,13 @@ class ResponseClasses : CodeGenTransformer {
                                 Member(
                                     name = "body",
                                     type = fault,
-                                )
+                                ),
                             ) + it.faultHeaders.map {
                                 Member(
                                     name = it.name.toCamelCase(),
                                     type = it.type,
                                 )
-                            }
+                            },
                         ),
                         statusCode = StatusCode.InternalServerError,
                         response = Expression.Chain(
@@ -150,7 +152,7 @@ class ResponseClasses : CodeGenTransformer {
                         ),
                         headers = it.faultHeaders.associate {
                             it.name to (it.name.toCamelCase() to it.nullable)
-                        }
+                        },
                     ),
                 ),
             )
