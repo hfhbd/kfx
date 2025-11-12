@@ -21,7 +21,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createSealed(input: FooSealed, builder: suspend HttpRequestBuilder.() -> Unit = {}): String {
   val response = post(urlString = """sealed""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

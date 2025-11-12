@@ -25,7 +25,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createBoard(input: BoardCreateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): BoardBean {
   val response = post(urlString = """agile/1.0/board""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<BoardBean>()

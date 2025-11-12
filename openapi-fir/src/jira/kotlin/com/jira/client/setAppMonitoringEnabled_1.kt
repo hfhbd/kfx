@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.setAppMonitoringEnabled_1(input: IpdMonitoringRestEntity, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """api/2/monitoring/ipd""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

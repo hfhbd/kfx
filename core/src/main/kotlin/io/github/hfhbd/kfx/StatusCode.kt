@@ -16,7 +16,8 @@ enum class StatusCode(val value: Int) {
     Conflict(409),
     LengthRequired(411),
     ContentTooLarge(413),
-    TooManyRequests(439),
+    UnprocessableEntity(422),
+    TooManyRequests(429),
     InternalServerError(500),
     ;
 

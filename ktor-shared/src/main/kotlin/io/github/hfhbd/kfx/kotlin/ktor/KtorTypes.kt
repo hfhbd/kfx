@@ -35,6 +35,7 @@ fun StatusCode.toHttpCode(): MemberName {
         StatusCode.Conflict -> MemberName(className, "Conflict")
         StatusCode.LengthRequired -> MemberName(className, "LengthRequired")
         StatusCode.ContentTooLarge -> MemberName(className, "ContentTooLarge")
+        StatusCode.UnprocessableEntity -> MemberName(className, "UnprocessableEntity")
         StatusCode.TooManyRequests -> MemberName(className, "TooManyRequests")
         StatusCode.InternalServerError -> MemberName(className, "InternalServerError")
     }

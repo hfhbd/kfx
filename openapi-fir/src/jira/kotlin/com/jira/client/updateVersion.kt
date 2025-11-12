@@ -21,7 +21,7 @@ public suspend fun HttpClient.updateVersion(
 ) {
   val response = put(urlString = """api/2/version/${id}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

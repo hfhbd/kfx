@@ -34,7 +34,7 @@ public suspend fun HttpClient.addWorklog(
     parameter("adjustEstimate", adjustEstimate)
     parameter("reduceBy", reduceBy)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<WorklogResponse>()

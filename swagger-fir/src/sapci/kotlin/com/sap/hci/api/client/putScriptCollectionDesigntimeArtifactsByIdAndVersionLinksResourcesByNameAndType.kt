@@ -48,7 +48,7 @@ public suspend fun HttpClient.putScriptCollectionDesigntimeArtifactsByIdAndVersi
     `header`("X-CSRF-Token", X_CSRF_Token)
     parameter("referencedResourceType", referencedResourceType)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

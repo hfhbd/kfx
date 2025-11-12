@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.setBaseURL(input: String, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = put(urlString = """api/2/settings/baseUrl""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

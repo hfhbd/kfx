@@ -31,7 +31,7 @@ public suspend fun HttpClient.updateSprint(
 ): SprintBean? {
   val response = put(urlString = """agile/1.0/sprint/${sprintId}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

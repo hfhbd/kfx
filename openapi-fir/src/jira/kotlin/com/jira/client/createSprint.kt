@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createSprint(input: SprintCreateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): SprintBean? {
   val response = post(urlString = """agile/1.0/sprint""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -22,7 +22,7 @@ public suspend fun HttpClient.addTab(
 ): ScreenableTabBean {
   val response = post(urlString = """api/2/screens/${screenId}/tabs""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ScreenableTabBean>()

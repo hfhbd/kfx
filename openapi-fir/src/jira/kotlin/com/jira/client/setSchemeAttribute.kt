@@ -22,7 +22,7 @@ public suspend fun HttpClient.setSchemeAttribute(
 ) {
   val response = put(urlString = """api/2/permissionscheme/${permissionSchemeId}/attribute/${key}""") {
     contentType(Plain)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

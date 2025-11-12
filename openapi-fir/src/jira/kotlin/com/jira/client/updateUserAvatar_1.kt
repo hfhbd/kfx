@@ -24,7 +24,7 @@ public suspend fun HttpClient.updateUserAvatar_1(
   val response = put(urlString = """api/2/user/avatar""") {
     parameter("username", username)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

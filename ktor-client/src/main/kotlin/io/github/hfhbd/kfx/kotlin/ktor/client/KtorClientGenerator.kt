@@ -82,20 +82,17 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         beginControlFlow("refreshTokens")
 
         getResponse(operation, nameAllocator, "builder", withReceiver = CodeBlock.of("client")) {
-            CodeBlock.builder().apply {
-                when (grantType) {
-                    CodeGenTree.Auth.OAuth2.GrantType.ClientCredentials -> {
-                        add("%M(%S, %S)\n", parameter, "grant_type", "client_credentials")
-                        add(
-                            "%M(clientId, clientSecret)\n",
-                            MemberName("io.ktor.client.request", "basicAuth", isExtension = true),
-                        )
-                    }
+            when (grantType) {
+                CodeGenTree.Auth.OAuth2.GrantType.ClientCredentials -> {
+                    addStatement("%M(%S, %S)", parameter, "grant_type", "client_credentials")
+                    addStatement(
+                        "%M(clientId, clientSecret)",
+                        MemberName("io.ktor.client.request", "basicAuth", isExtension = true),
+                    )
                 }
-                add("%M(%L)\n", contentType, ContentType.FormUrlEncoded.toKtor())
-
-                add("markAsRefreshTokenRequest()")
-            }.build()
+            }
+            addStatement("%M(%L)", contentType, ContentType.FormUrlEncoded.toKtor())
+            addStatement("markAsRefreshTokenRequest()")
         }
         addStatement("val output = %L", getOutput(operation.output!!.toKtorPoetType(false)))
         addStatement(
@@ -150,7 +147,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         nameAllocator: NameAllocator,
         builderName: String,
         withReceiver: CodeBlock? = null,
-        custom: (() -> CodeBlock)? = null,
+        custom: FunSpec.Builder.() -> Unit = {},
     ) {
         beginControlFlow(
             "val response = %L%M%L",
@@ -221,9 +218,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             }
         }
 
-        if (custom != null) {
-            addStatement("%L", custom())
-        }
+        custom()
         addStatement("%L()", builderName)
         endControlFlow()
     }

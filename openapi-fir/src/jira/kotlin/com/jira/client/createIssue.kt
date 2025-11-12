@@ -33,7 +33,7 @@ public suspend fun HttpClient.createIssue(
   val response = post(urlString = """api/2/issue""") {
     parameter("updateHistory", updateHistory)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<IssueCreateResponse>()

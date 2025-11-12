@@ -37,7 +37,7 @@ public suspend fun HttpClient.updateWorklog(
     parameter("newEstimate", newEstimate)
     parameter("adjustEstimate", adjustEstimate)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<WorklogResponse>()

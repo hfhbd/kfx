@@ -27,7 +27,7 @@ public suspend fun HttpClient.editFilter(
   val response = put(urlString = """api/2/filter/${id}""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<FilterBean>()

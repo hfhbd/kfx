@@ -27,7 +27,7 @@ public suspend fun HttpClient.doTransition(
 ) {
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/transitions""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

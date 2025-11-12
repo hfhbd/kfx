@@ -25,7 +25,7 @@ public suspend fun HttpClient.addWatcher_1(
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/watchers""") {
     parameter("userName", userName)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

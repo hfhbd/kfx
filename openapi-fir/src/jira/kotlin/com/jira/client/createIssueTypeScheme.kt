@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createIssueTypeScheme(input: IssueTypeSchemeCreateUpdateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): IssueTypeSchemeBean {
   val response = post(urlString = """api/2/issuetypescheme""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<IssueTypeSchemeBean>()

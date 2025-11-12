@@ -15,7 +15,7 @@ import kotlin.Unit
 public suspend fun HttpClient.upsertProcessorConfiguration(input: ProcessorConfiguration, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = put(urlString = """configurations""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

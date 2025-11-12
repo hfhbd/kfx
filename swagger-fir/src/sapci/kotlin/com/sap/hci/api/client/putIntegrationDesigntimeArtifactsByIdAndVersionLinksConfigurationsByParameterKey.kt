@@ -39,7 +39,7 @@ public suspend fun HttpClient.putIntegrationDesigntimeArtifactsByIdAndVersionLin
   val response = put(urlString = """IntegrationDesigntimeArtifacts(Id='${id}',Version='${version}')/${'$'}links/Configurations('${parameterKey}')""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

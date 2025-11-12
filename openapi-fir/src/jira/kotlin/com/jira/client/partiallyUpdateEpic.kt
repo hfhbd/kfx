@@ -23,7 +23,7 @@ public suspend fun HttpClient.partiallyUpdateEpic(
 ): EpicBean? {
   val response = post(urlString = """agile/1.0/epic/${epicIdOrKey}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

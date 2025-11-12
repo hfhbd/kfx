@@ -24,7 +24,7 @@ import kotlin.Unit
 public suspend fun HttpClient.policyCheckUpdateUser(input: PasswordPolicyUpdateUserBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): String? {
   val response = post(urlString = """api/2/password/policy/updateUser""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

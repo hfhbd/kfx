@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.browseDeployments(input: BrowseDeploymentsRequest, builder: suspend HttpRequestBuilder.() -> Unit = {}): BrowseDeploymentsResponse {
   val response = post(urlString = """api/v1/publisher/deployments/files""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<BrowseDeploymentsResponse>()

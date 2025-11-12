@@ -8,10 +8,10 @@
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
     <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt$KotlinxCoreCreator$override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type</ID>
     <ID>CyclomaticComplexMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
-    <ID>CyclomaticComplexMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, )</ID>
     <ID>CyclomaticComplexMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>CyclomaticComplexMethod:KtorTypes.kt$fun StatusCode.toHttpCode(): MemberName</ID>
     <ID>CyclomaticComplexMethod:SpringServerGenerator.kt$SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
+    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt$SpringServerGenerator$private fun StatusCode.toHttpCode(): CodeBlock</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentHeaders: Map&lt;String, OpenApi.Operation.Header>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
     <ID>CyclomaticComplexMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
@@ -23,7 +23,7 @@
     <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
     <ID>LongMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
-    <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: (() -> CodeBlock)? = null, )</ID>
+    <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: FunSpec.Builder.() -> Unit = {}, )</ID>
     <ID>LongMethod:KtorServerGenerator.kt$KtorServerGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:ResponseClasses.kt$ResponseClasses$override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree</ID>
     <ID>LongMethod:SpringServerGenerator.kt$SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
@@ -44,12 +44,6 @@
     <ID>LongParameterList:generate.kt$( swaggerFile: InputStream, outputDirectory: java.nio.file.Path, codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), firTransformers: Iterable&lt;SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), )</ID>
     <ID>LongParameterList:generate.kt$( wsdlFile: InputStream, import: (String) -> InputStream, outputDirectory: Path, firTransformerFactories: Iterable&lt;WsdlTransformerFactory> = ServiceLoader.load(WsdlTransformerFactory::class.java), transformerFactories: Iterable&lt;IrTransformer> = ServiceLoader.load(IrTransformer::class.java), codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(), codeGenTransformer: Iterable&lt;CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java), codeGenerators: Iterable&lt;CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java), )</ID>
     <ID>LoopWithTooManyJumpStatements:generate.kt$for</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$200</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$201</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$202</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$204</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$400</ID>
-    <ID>MagicNumber:SpringServerGenerator.kt$SpringServerGenerator$404</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.Accepted$202</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.BadRequest$400</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.Conflict$409</ID>
@@ -62,8 +56,9 @@
     <ID>MagicNumber:StatusCode.kt$StatusCode.NotAcceptable$406</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.NotFound$404</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.OK$200</ID>
-    <ID>MagicNumber:StatusCode.kt$StatusCode.TooManyRequests$439</ID>
+    <ID>MagicNumber:StatusCode.kt$StatusCode.TooManyRequests$429</ID>
     <ID>MagicNumber:StatusCode.kt$StatusCode.Unauthorized$401</ID>
+    <ID>MagicNumber:StatusCode.kt$StatusCode.UnprocessableEntity$422</ID>
     <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Fault>&lt;faultcode xmlns="">soap:Server&lt;/faultcode>&lt;faultstring xmlns="">Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>
     <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Body>&lt;Pair first="foo" second="42" />&lt;/Body>&lt;/Envelope>"""</ID>
     <ID>MaxLineLength:SerializationTest.kt$SerializationTest$"""&lt;Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">&lt;Header>&lt;to>to&lt;/to>&lt;/Header>&lt;Body>&lt;Fault>&lt;faultcode xmlns="">soap:Server&lt;/faultcode>&lt;faultstring xmlns="">Some Error&lt;/faultstring>&lt;/Fault>&lt;/Body>&lt;/Envelope>"""</ID>

@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.login(input: AuthParams, builder: suspend HttpRequestBuilder.() -> Unit = {}): AuthSuccess {
   val response = post(urlString = """auth/1/session""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<AuthSuccess>()

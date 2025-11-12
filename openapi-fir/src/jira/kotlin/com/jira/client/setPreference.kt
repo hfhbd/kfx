@@ -22,7 +22,7 @@ public suspend fun HttpClient.setPreference(
   val response = put(urlString = """api/2/mypreferences""") {
     parameter("key", key)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

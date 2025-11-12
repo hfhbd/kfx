@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.scheduleUserAnonymizationRerun(input: UserAnonymizationRerunRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """api/2/user/anonymization/rerun""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

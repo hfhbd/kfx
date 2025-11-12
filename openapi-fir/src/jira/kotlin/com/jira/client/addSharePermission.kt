@@ -24,7 +24,7 @@ public suspend fun HttpClient.addSharePermission(
 ): FilterPermissionBean? {
   val response = post(urlString = """api/2/filter/${id}/permission""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

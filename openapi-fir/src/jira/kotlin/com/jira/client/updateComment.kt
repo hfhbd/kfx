@@ -29,7 +29,7 @@ public suspend fun HttpClient.updateComment(
   val response = put(urlString = """api/2/issue/${issueIdOrKey}/comment/${id}""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<CommentJsonBean>()

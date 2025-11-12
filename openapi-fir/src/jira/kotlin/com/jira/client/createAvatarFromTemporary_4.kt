@@ -25,7 +25,7 @@ public suspend fun HttpClient.createAvatarFromTemporary_4(
   val response = post(urlString = """api/2/user/avatar""") {
     parameter("username", username)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

@@ -24,7 +24,7 @@ public suspend fun HttpClient.createOrUpdateRemoteIssueLink(
 ): RemoteIssueLinkBean {
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/remotelink""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<RemoteIssueLinkBean>()

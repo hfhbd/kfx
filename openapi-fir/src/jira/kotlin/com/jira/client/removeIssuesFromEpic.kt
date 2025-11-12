@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.removeIssuesFromEpic(input: IssueAssignRequestBean, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = post(urlString = """agile/1.0/epic/none/issue""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

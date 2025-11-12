@@ -30,7 +30,7 @@ public suspend fun HttpClient.postMessageMappingDesigntimeArtifacts(
   val response = post(urlString = """MessageMappingDesigntimeArtifacts""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

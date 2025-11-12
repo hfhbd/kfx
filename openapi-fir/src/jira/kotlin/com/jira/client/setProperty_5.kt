@@ -27,7 +27,7 @@ public suspend fun HttpClient.setProperty_5(
     parameter("userKey", userKey)
     parameter("username", username)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

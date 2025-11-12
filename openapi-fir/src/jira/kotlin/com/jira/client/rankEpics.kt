@@ -21,7 +21,7 @@ public suspend fun HttpClient.rankEpics(
 ) {
   val response = put(urlString = """agile/1.0/epic/${epicIdOrKey}/rank""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

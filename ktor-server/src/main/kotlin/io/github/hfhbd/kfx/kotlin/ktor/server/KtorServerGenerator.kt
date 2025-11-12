@@ -137,14 +137,6 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                 inputWrapperType?.toKtorPoetType(read = true) ?: input.toKtorPoetType(read = true),
             )
         }
-        function.addStatement(
-            "val response = call.action(%L)",
-            if (input != null && inputContentType?.supportedBySerialization() != false) {
-                CodeBlock.of("body")
-            } else {
-                CodeBlock.of("")
-            },
-        )
         val nameAllocator = NameAllocator()
         nameAllocator.newName("input")
         nameAllocator.newName("builder")
@@ -152,6 +144,14 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
 
         val responseBranches = responseBranches
         if (responseBranches != null) {
+            function.addStatement(
+                "val response = call.action(%L)",
+                if (input != null && inputContentType?.supportedBySerialization() != false) {
+                    CodeBlock.of("body")
+                } else {
+                    CodeBlock.of("")
+                },
+            )
             function.beginControlFlow("when (response)")
             responseBranches.success?.let { a(it, function, nameAllocator) }
             responseBranches.notFound?.let { a(it, function, nameAllocator) }
@@ -160,11 +160,27 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         } else {
             if (output != null) {
                 function.addStatement(
+                    "val response = call.action(%L)",
+                    if (input != null && inputContentType?.supportedBySerialization() != false) {
+                        CodeBlock.of("body")
+                    } else {
+                        CodeBlock.of("")
+                    },
+                )
+                function.addStatement(
                     "call.response.status(%M)",
                     success.toHttpCode(),
                 )
                 function.addStatement("call.%M(response)", respond)
             } else {
+                function.addStatement(
+                    "call.action(%L)",
+                    if (input != null && inputContentType?.supportedBySerialization() != false) {
+                        CodeBlock.of("body")
+                    } else {
+                        CodeBlock.of("")
+                    },
+                )
                 function.addStatement("call.%M(%M)", respond, success.toHttpCode())
             }
         }

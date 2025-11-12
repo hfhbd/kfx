@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createProject(input: ProjectInputBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): ProjectIdentity {
   val response = post(urlString = """api/2/project""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ProjectIdentity>()

@@ -22,7 +22,7 @@ public suspend fun HttpClient.assign(
 ) {
   val response = put(urlString = """api/2/issue/${issueIdOrKey}/assignee""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -26,7 +26,7 @@ public suspend fun HttpClient.addUserToGroup(
   val response = post(urlString = """api/2/group/user""") {
     parameter("groupname", groupname)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {

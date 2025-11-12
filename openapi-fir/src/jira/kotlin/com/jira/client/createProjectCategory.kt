@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createProjectCategory(input: ProjectCategoryBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): ProjectCategoryJsonBean {
   val response = post(urlString = """api/2/projectCategory""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<ProjectCategoryJsonBean>()

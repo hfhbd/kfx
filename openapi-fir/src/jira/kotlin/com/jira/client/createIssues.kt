@@ -19,7 +19,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createIssues(input: IssuesUpdateBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): IssuesCreateResponse {
   val response = post(urlString = """api/2/issue/bulk""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<IssuesCreateResponse>()

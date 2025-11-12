@@ -21,7 +21,7 @@ public suspend fun HttpClient.swapSprint(
 ) {
   val response = post(urlString = """agile/1.0/sprint/${sprintId}/swap""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

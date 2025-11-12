@@ -27,7 +27,7 @@ public suspend fun HttpClient.addComment(
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/comment""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<CommentJsonBean>()

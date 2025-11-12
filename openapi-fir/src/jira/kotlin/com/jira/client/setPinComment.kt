@@ -24,7 +24,7 @@ public suspend fun HttpClient.setPinComment(
 ) {
   val response = put(urlString = """api/2/issue/${issueIdOrKey}/comment/${id}/pin""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

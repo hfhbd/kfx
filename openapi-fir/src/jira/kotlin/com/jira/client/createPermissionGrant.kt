@@ -26,7 +26,7 @@ public suspend fun HttpClient.createPermissionGrant(
   val response = post(urlString = """api/2/permissionscheme/${schemeId}/permission""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<PermissionGrantBean>()

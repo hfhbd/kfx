@@ -18,7 +18,7 @@ import kotlin.Unit
 public suspend fun HttpClient.createGroup(input: AddGroupBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): GroupBean {
   val response = post(urlString = """api/2/group""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<GroupBean>()

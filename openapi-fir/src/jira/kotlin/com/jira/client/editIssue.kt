@@ -26,7 +26,7 @@ public suspend fun HttpClient.editIssue(
   val response = put(urlString = """api/2/issue/${issueIdOrKey}""") {
     parameter("notifyUsers", notifyUsers)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

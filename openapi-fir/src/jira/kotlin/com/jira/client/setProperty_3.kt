@@ -24,7 +24,7 @@ public suspend fun HttpClient.setProperty_3(
 ) {
   val response = put(urlString = """api/2/issuetype/${issueTypeId}/properties/${propertyKey}""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

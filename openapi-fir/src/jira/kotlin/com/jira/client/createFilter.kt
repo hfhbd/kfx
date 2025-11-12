@@ -24,7 +24,7 @@ public suspend fun HttpClient.createFilter(
   val response = post(urlString = """api/2/filter""") {
     parameter("expand", expand)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<FilterBean>()

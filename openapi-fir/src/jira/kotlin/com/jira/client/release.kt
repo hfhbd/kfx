@@ -16,7 +16,7 @@ import kotlin.Unit
 public suspend fun HttpClient.release(input: String, builder: suspend HttpRequestBuilder.() -> Unit = {}) {
   val response = delete(urlString = """auth/1/websudo""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

@@ -21,7 +21,7 @@ public suspend fun HttpClient.createOrUpdateRemoteVersionLink(
 ) {
   val response = post(urlString = """api/2/version/${versionId}/remotelink""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

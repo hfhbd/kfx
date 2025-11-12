@@ -22,7 +22,7 @@ public suspend fun HttpClient.moveSubTasks(
 ) {
   val response = post(urlString = """api/2/issue/${issueIdOrKey}/subtask/move""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
 }

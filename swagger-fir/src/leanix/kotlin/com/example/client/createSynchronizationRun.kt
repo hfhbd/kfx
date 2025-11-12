@@ -29,7 +29,7 @@ public suspend fun HttpClient.createSynchronizationRun(
     parameter("start", start)
     parameter("test", test)
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   val output = response.body<List<StatusResponse>>()

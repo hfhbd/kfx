@@ -17,7 +17,7 @@ import kotlin.Unit
 public suspend fun HttpClient.updateUser(input: UserWriteBean, builder: suspend HttpRequestBuilder.() -> Unit = {}): UserWriteBean? {
   val response = put(urlString = """api/2/myself""") {
     contentType(Json)
-    setBody(body = input)
+    setBody(input)
     builder()
   }
   if (response.status.value == 404) {
