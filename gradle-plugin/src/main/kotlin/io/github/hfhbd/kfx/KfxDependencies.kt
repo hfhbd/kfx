@@ -18,7 +18,6 @@ interface KfxDependencies : Dependencies {
 
     fun soap11(): ExternalModuleDependency = dependencyFactory.create("$GROUP:soap11:$VERSION")
     fun validation(): ExternalModuleDependency = dependencyFactory.create("$GROUP:validation:$VERSION")
-    fun removeType(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-removetype:$VERSION")
     fun responseClasses(): ExternalModuleDependency = dependencyFactory.create("$GROUP:response-classes:$VERSION")
     fun odata(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
     fun contextualDate(): ExternalModuleDependency = dependencyFactory.create("$GROUP:contextual-date:$VERSION")

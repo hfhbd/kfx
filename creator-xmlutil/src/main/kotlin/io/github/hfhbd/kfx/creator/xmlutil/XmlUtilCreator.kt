@@ -17,7 +17,8 @@ class XmlUtilCreator : KotlinxCoreCreator {
         nullable = ir.nullable,
         documentation = ir.documentation,
         annotations = buildList {
-            when (ir.xmlType!!) {
+            when (ir.xmlType) {
+                null -> {}
                 IRTree.XmlType.Element -> {
                     add(
                         CodeGenTree.Annotation("nl.adaptivity.xmlutil.serialization", listOf("XmlElement"), emptyMap()),
@@ -62,9 +63,22 @@ class XmlUtilCreator : KotlinxCoreCreator {
     override fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass = CodeGenTree.NormalClass(
         packageName = ir.packageName,
         names = listOf(ir.name),
-        members = ir.members.map { toCodeGen(it.value, it.key) },
+        members = ir.members.map {
+            toCodeGen(it.value, name = it.key)
+        },
+        computedProperties = if (ir.isValue) {
+            val singleMember = ir.members[ir.members.keys.single()]!!
+            (singleMember.type as IRTree.NormalClass).members.map {
+                toCodeGen(it.value, name = it.key).copy(
+                    annotations = emptyList(),
+                )
+            }
+        } else {
+            emptyList()
+        },
         documentation = ir.documentation,
         isFault = ir.isFault,
+        isValue = ir.isValue,
         annotations = buildList {
             val serialName = ir.serialName
             if (serialName != null) {

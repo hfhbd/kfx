@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<FooType xmlns="http://example.com/foo">
+<Foo xmlns="http://example.com/foo">
     <Bar>
         <ValidFrom xmlns="http://example.com/bar">1970-02-12</ValidFrom>
     </Bar>
     <Foo>42</Foo>
-</FooType>
+</Foo>

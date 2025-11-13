@@ -1,4 +1,5 @@
 import com.example.bar.Bar
+import com.example.bar.BarType
 import com.example.foo.Fault
 import com.example.foo.Foo
 import com.example.foo.client.createFoo
@@ -45,7 +46,7 @@ class FooServiceTest {
                     )
                 }
                 createFoo {
-                    CreateFooResult.Success(Envelope(null, it.body.bar))
+                    CreateFooResult.Success(Envelope(null, Bar(it.body.bar.validFrom)))
                 }
             }
         }
@@ -58,7 +59,7 @@ class FooServiceTest {
             }
         }.createFoo(
             input = Foo(
-                bar = Bar(),
+                bar = BarType(),
                 foo = 42,
             )
         )
@@ -101,7 +102,7 @@ class FooServiceTest {
             }
         }.createFoo(
             input = Foo(
-                bar = Bar(),
+                bar = BarType(),
                 foo = 42,
             )
         )
@@ -145,7 +146,7 @@ class FooServiceTest {
             }
         }.createFooWithoutFault(
             input = Foo(
-                bar = Bar(),
+                bar = BarType(),
                 foo = 42,
             )
         )
@@ -156,7 +157,7 @@ class FooServiceTest {
     @Test
     fun parseTest() {
         val foo = Foo(
-            bar = Bar(validFrom = LocalDate.fromEpochDays(42)),
+            bar = BarType(validFrom = LocalDate.fromEpochDays(42)),
             foo = 42,
         )
         val fooXml = XML {

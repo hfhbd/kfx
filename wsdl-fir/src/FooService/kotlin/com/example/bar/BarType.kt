@@ -1,27 +1,26 @@
 package com.example.bar
 
-import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Bar details
  */
-@JvmInline
 @Serializable
 @XmlSerialName(
-  value = "Bar",
+  value = "BarType",
   namespace = "http://example.com/bar",
 )
-public value class Bar private constructor(
-  private val _value: BarType,
-) {
+public data class BarType(
   /**
    * Valid From
    */
-  public val validFrom: LocalDate?
-    get() = _value.validFrom
-
-  public constructor(validFrom: LocalDate? = null) : this(BarType(validFrom))
-}
+  @XmlElement
+  @XmlSerialName(
+    value = "ValidFrom",
+    namespace = "http://example.com/bar",
+  )
+  public val validFrom: LocalDate? = null,
+)

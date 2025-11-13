@@ -80,9 +80,18 @@ interface KotlinxCoreCreator : CodeGenCreator {
         members = ir.members.map {
             toCodeGen(it.value, name = it.key)
         },
+        computedProperties = if (ir.isValue) {
+            val singleMember = ir.members[ir.members.keys.single()]!!
+            (singleMember.type as IRTree.NormalClass).members.map {
+                toCodeGen(it.value, name = it.key)
+            }
+        } else {
+            emptyList()
+        },
         functions = emptyList(),
         documentation = ir.documentation,
         isFault = ir.isFault,
+        isValue = ir.isValue,
         annotations = buildList {
             add(SERIALIZABLE)
             val irSerialName = ir.serialName
