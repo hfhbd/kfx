@@ -2,6 +2,7 @@ package io.github.hfhbd.kfx.ir
 
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
+import io.github.hfhbd.kfx.ir.IRTree.Member.Requirement
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -99,6 +100,7 @@ data class IRTree(
         val members: Map<String, Member>,
         override val documentation: String?,
         val isFault: Boolean,
+        val isValue: Boolean = false,
         val discriminator: String?,
         val allOf: ClassName?,
         override val deprecated: Boolean,

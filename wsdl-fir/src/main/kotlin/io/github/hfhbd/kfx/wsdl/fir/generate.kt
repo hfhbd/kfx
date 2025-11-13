@@ -13,9 +13,9 @@ import io.github.hfhbd.kfx.wsdl.model.Attribute
 import io.github.hfhbd.kfx.wsdl.model.Choice
 import io.github.hfhbd.kfx.wsdl.model.Element
 import io.github.hfhbd.kfx.wsdl.model.NS
+import io.github.hfhbd.kfx.wsdl.model.OperationType
 import io.github.hfhbd.kfx.wsdl.model.Schema
 import io.github.hfhbd.kfx.wsdl.model.SimpleType
-import io.github.hfhbd.kfx.wsdl.model.Type
 import io.github.hfhbd.kfx.wsdl.model.WSDL
 import io.github.hfhbd.kfx.wsdl.model.xml
 import nl.adaptivity.xmlutil.core.KtXmlReader
@@ -85,7 +85,7 @@ private val String.packageName: String
     }
 
 private sealed interface Classes {
-    data class TypeAlias(val actual: IRTree.ClassName, val serialName: String, val namespace: String) : Classes
+    data class TypeAlias(val actual: IRTree.ClassName, val serialName: String, val namespace: String, val ignore: Boolean) : Classes
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
@@ -106,32 +106,13 @@ private fun WSDL.toIr(
         }
     }
 
-    val namespaces = allNamespaces()
-
-    for (message in messages) {
-        val elementNsAndName = message.part.element.split(":")
-        val ns: String?
-        val name: String
-        if (elementNsAndName.size == 1) {
-            name = elementNsAndName.single()
-            ns = null
-        } else {
-            ns = elementNsAndName.first()
-            name = elementNsAndName.last()
-        }
-        val typeAlias = IRTree.ClassName(targetNamespace.packageName, message.name)
-        val namespace = ns?.let { namespaces[it] ?: getNS(it) }
-        val resolved = IRTree.ClassName(namespace?.packageName ?: targetNamespace.packageName, name)
-        if (resolved != typeAlias) {
-            irTypes[typeAlias] = Classes.TypeAlias(resolved, message.name, targetNamespace)
-        }
-    }
-
     val faults = portType.operations.map {
         it.fault
     }.mapNotNull {
         it?.resolve(this)
     }.toSet()
+
+    val classes = irTypes.resolveMembers(faults)
 
     val operations = mutableSetOf<IRTree.Operation>()
     for (operation in portType.operations) {
@@ -142,10 +123,22 @@ private fun WSDL.toIr(
                 documentation = operation.documentation?.trimDocumentation(),
                 location = service.port.address.location,
                 address = "$targetNamespace/${portType.name}/${operation.name}",
-                input = irTypes.find(operation.input.resolve(this)) as IRTree.NormalClass,
-                output = irTypes.find(operation.output.resolve(this)) as IRTree.NormalClass,
+                input = operation.input.resolve(this).let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    }
+                },
+                output = operation.output.resolve(this).let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    }
+                },
                 notFound = false,
-                fault = operation.fault?.resolve(this)?.let { irTypes.find(it) as IRTree.NormalClass? },
+                fault = operation.fault?.resolve(this)?.let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    } as IRTree.NormalClass?
+                },
                 path = null,
                 method = IRTree.Operation.HttpMethod.Post,
                 parameters = emptyList(),
@@ -162,9 +155,7 @@ private fun WSDL.toIr(
     }
 
     val irTree = IRTree(
-        irTypes.resolveMembers(
-            faults,
-        ),
+        classes = classes,
         operations,
         auth = emptySet(),
     )
@@ -250,7 +241,7 @@ private fun toIr(
             val typeAlias = IRTree.ClassName(schema.targetNamespace.packageName, element.name!!)
             val resolved = IRTree.ClassName(schema.namespace(ns), type.remove())
             if (resolved != typeAlias) {
-                irTypes[typeAlias] = Classes.TypeAlias(resolved, element.name!!, schema.targetNamespace)
+                irTypes[typeAlias] = Classes.TypeAlias(resolved, element.name!!, schema.targetNamespace, ignore = false)
             }
         } else {
             val elementName = element.name!!
@@ -320,7 +311,7 @@ private fun toIr(
                 val namespace = schema.namespace(ns)
                 val resolved = IRTree.ClassName(namespace, name)
                 if (resolved != typeAlias) {
-                    irTypes[typeAlias] = Classes.TypeAlias(resolved, name, namespace)
+                    irTypes[typeAlias] = Classes.TypeAlias(resolved, name, namespace, ignore = false)
                 }
             }
         } else if (complexType.simpleContent != null) {
@@ -420,6 +411,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
     }
     for ((className, classes) in this@resolveMembers) {
         when (classes) {
+            is Classes.TypeAlias if classes.ignore -> continue
             is Classes.TypeAlias -> {
                 val found = this@resolveMembers.find(classes.actual) as IRTree.NormalClass
                 add(
@@ -444,6 +436,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
                         ),
                         documentation = found.documentation,
                         isFault = false,
+                        isValue = true,
                         discriminator = null,
                         allOf = null,
                         deprecated = false,
@@ -699,24 +692,29 @@ private fun WSDL.allNamespaces(): Map<String, String> = types.flatMap {
     s
 }.associate { it }
 
-private fun Type.resolve(definitions: WSDL): IRTree.ClassName {
-    val namespace: String?
+private fun OperationType.resolve(definitions: WSDL): IRTree.ClassName {
     val name: String
     val nsAndName = message.split(":")
     if (nsAndName.size == 1) {
-        namespace = null
         name = nsAndName.single()
     } else {
-        namespace = nsAndName.first()
+        val ns = nsAndName.first()
+        val namespace = definitions.allNamespaces()[ns]!!
+        require(namespace == definitions.targetNamespace)
         name = nsAndName.last()
     }
 
-    val found = definitions.allNamespaces()[namespace]
-
-    return if (found != null) {
-        IRTree.ClassName(found.packageName, name)
+    val message = definitions.messages.single {
+        it.name == name
+    }
+    val ref = message.part.element
+    val refNames = ref.split(":")
+    if (refNames.size == 1) {
+        return IRTree.ClassName(definitions.targetNamespace.packageName, refNames.single())
     } else {
-        IRTree.ClassName(definitions.targetNamespace.packageName, name)
+        val namespace = refNames.first()
+        val refNamespace = definitions.allNamespaces()[namespace]!!
+        return IRTree.ClassName(refNamespace.packageName, refNames.last())
     }
 }
 

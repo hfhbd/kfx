@@ -1,19 +1,21 @@
 package com.example.foo
 
 import kotlin.String
+import kotlin.jvm.JvmInline
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
+@JvmInline
 @Serializable
 @XmlSerialName(
   value = "Fault",
   namespace = "http://example.com/foo",
 )
-@JvmInline
 public value class Fault private constructor(
-  private val value: FaultType,
+  private val _value: FaultType,
 ) {
-  constructor(message: String) : this(FaultType(message))
+  public val message: String
+    get() = _value.message
 
-  val message: String get() = value.message
+  public constructor(message: String) : this(FaultType(message))
 }

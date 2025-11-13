@@ -157,19 +157,19 @@ data class Operation(
 
     @XmlElement
     @XmlSerialName("input", WSDL_NS)
-    val input: Type,
+    val input: OperationType,
 
     @XmlElement
     @XmlSerialName("output", WSDL_NS)
-    val output: Type,
+    val output: OperationType,
 
     @XmlElement
     @XmlSerialName("fault", WSDL_NS)
-    val fault: Type? = null,
+    val fault: OperationType? = null,
 )
 
 @Serializable
-data class Type(
+data class OperationType(
     val message: String,
     val name: String? = null,
     @XmlSerialName("Action", WSA)

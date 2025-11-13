@@ -77,12 +77,25 @@ interface KotlinxCoreCreator : CodeGenCreator {
     override fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass = CodeGenTree.NormalClass(
         packageName = ir.packageName + if (ir.packageNameSuffix != "") ".${ir.packageNameSuffix}" else "",
         names = listOf(ir.name),
-        members = ir.members.map {
-            toCodeGen(it.value, name = it.key)
+        members = if (ir.isValue) {
+            ir.members.map {
+                toCodeGen(it.value, name = it.key)
+            }
+        } else {
+            ir.members.map {
+                toCodeGen(it.value, name = it.key)
+            }
         },
+        computedProperties = if (ir.isValue) {
+            val singleMember = ir.members[ir.members.keys.single()]!!
+            (singleMember.type as IRTree.NormalClass).members.map {
+                toCodeGen(it.value, name = it.key)
+            }
+        } else emptyList(),
         functions = emptyList(),
         documentation = ir.documentation,
         isFault = ir.isFault,
+        isValue = ir.isValue,
         annotations = buildList {
             add(SERIALIZABLE)
             val irSerialName = ir.serialName

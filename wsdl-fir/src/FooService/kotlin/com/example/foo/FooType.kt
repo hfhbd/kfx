@@ -1,6 +1,6 @@
 package com.example.foo
 
-import com.example.bar.Bar
+import com.example.bar.BarType
 import kotlin.Int
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
@@ -17,7 +17,7 @@ public data class FooType(
     value = "Bar",
     namespace = "http://example.com/foo",
   )
-  public val bar: Bar,
+  public val bar: BarType,
   @XmlElement
   @XmlSerialName(
     value = "Foo",

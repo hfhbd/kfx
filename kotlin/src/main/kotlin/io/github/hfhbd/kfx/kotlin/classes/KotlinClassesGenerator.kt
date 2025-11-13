@@ -99,10 +99,16 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         val valueMemberType = valueMember.type.toPoetType()
 
         val privateConstructor = FunSpec.constructorBuilder()
+        privateConstructor.addModifiers(KModifier.PRIVATE)
         privateConstructor.addParameter(
             name = valueMember.name,
             type = valueMemberType,
         )
+        typeSpec.primaryConstructor(privateConstructor.build())
+        typeSpec.addMember(valueMember, isFault = false) {
+            addModifiers(KModifier.PRIVATE)
+            initializer(valueMember.name)
+        }
 
         val constructor = FunSpec.constructorBuilder()
 

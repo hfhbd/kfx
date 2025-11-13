@@ -63,9 +63,26 @@ class XmlUtilCreator : KotlinxCoreCreator {
     override fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass = CodeGenTree.NormalClass(
         packageName = ir.packageName,
         names = listOf(ir.name),
-        members = ir.members.map { toCodeGen(it.value, it.key) },
+        members = if (ir.isValue) {
+            ir.members.map {
+                toCodeGen(it.value, name = it.key)
+            }
+        } else {
+            ir.members.map {
+                toCodeGen(it.value, name = it.key)
+            }
+        },
+        computedProperties = if (ir.isValue) {
+            val singleMember = ir.members[ir.members.keys.single()]!!
+            (singleMember.type as IRTree.NormalClass).members.map {
+                toCodeGen(it.value, name = it.key).copy(
+                    annotations = emptyList(),
+                )
+            }
+        } else emptyList(),
         documentation = ir.documentation,
         isFault = ir.isFault,
+        isValue = ir.isValue,
         annotations = buildList {
             val serialName = ir.serialName
             if (serialName != null) {

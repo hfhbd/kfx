@@ -23,6 +23,7 @@ class KotlinxJsonCreator : KotlinxCoreCreator {
         },
         documentation = ir.documentation,
         isFault = ir.isFault,
+        isValue = ir.isValue,
         annotations = buildList {
             add(CodeGenTree.Annotation("kotlinx.serialization", listOf("Serializable"), emptyMap()))
             val discriminator = ir.discriminator
