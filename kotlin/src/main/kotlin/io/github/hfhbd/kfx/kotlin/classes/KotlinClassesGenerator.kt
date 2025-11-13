@@ -146,11 +146,13 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
             constructor
                 .callThisConstructor(
                     CodeBlock.of(
-                        "%T(%L)",
+                        "%T%L%L%L",
                         valueMemberType,
+                        if (computedProperties.isEmpty()) "" else "(",
                         computedProperties.map {
                             CodeBlock.of(it.name)
                         }.joinToCode(),
+                        if (computedProperties.isEmpty()) "" else ")",
                     ),
                 )
                 .build(),
