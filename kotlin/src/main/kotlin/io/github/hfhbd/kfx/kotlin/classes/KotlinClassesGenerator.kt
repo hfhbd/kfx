@@ -150,7 +150,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                         valueMemberType,
                         computedProperties.map {
                             CodeBlock.of(it.name)
-                        }.joinToCode(","),
+                        }.joinToCode(),
                     ),
                 )
                 .build(),

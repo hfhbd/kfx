@@ -21,5 +21,5 @@ public value class Foo private constructor(
   public val foo: Int
     get() = _value.foo
 
-  public constructor(bar: BarType, foo: Int) : this(FooType(bar,foo))
+  public constructor(bar: BarType, foo: Int) : this(FooType(bar, foo))
 }
