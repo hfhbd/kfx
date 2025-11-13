@@ -114,9 +114,11 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
 
         for (member in computedProperties) {
             val type = typeSpec.addMember(member, isFault = false) {
-                getter(FunSpec.getterBuilder().addStatement(
-                    "return ${valueMember.name}.${member.name}"
-                ).build())
+                getter(
+                    FunSpec.getterBuilder().addStatement(
+                        "return ${valueMember.name}.${member.name}",
+                    ).build(),
+                )
             }
 
             constructor.addParameter(
@@ -140,17 +142,19 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
             )
         }
 
-        typeSpec.addFunction(constructor
-            .callThisConstructor(
-                CodeBlock.of(
-                    "%T(%L)",
-                    valueMemberType,
-                    computedProperties.map {
-                        CodeBlock.of(it.name)
-                    }.joinToCode(",")
+        typeSpec.addFunction(
+            constructor
+                .callThisConstructor(
+                    CodeBlock.of(
+                        "%T(%L)",
+                        valueMemberType,
+                        computedProperties.map {
+                            CodeBlock.of(it.name)
+                        }.joinToCode(","),
+                    ),
                 )
-            )
-            .build())
+                .build(),
+        )
 
         return typeSpec
     }

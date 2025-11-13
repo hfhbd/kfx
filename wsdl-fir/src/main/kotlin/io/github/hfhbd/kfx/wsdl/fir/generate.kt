@@ -58,9 +58,6 @@ private fun InputStream.createIr(
     val reader = KtXmlReader(this)
     val wsdl = xml.decodeFromReader(WSDL.serializer(), reader)
     val irTree = wsdl.toIr(
-        { prefix ->
-            reader.getNamespaceURI(prefix)
-        },
         wsdlTransformerFactories.map { it.create() },
     ) {
         xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
@@ -85,12 +82,16 @@ private val String.packageName: String
     }
 
 private sealed interface Classes {
-    data class TypeAlias(val actual: IRTree.ClassName, val serialName: String, val namespace: String, val ignore: Boolean) : Classes
+    data class TypeAlias(
+        val actual: IRTree.ClassName,
+        val serialName: String,
+        val namespace: String,
+        val ignore: Boolean,
+    ) : Classes
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
 private fun WSDL.toIr(
-    getNS: (String) -> String?,
     wsdlTransformers: Collection<WsdlTransformer>,
     import: (String) -> Schema,
 ): IRTree {
@@ -432,7 +433,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
                                 requirements = emptyList(),
                                 isOverride = false,
                                 deprecated = false,
-                            )
+                            ),
                         ),
                         documentation = found.documentation,
                         isFault = false,
@@ -440,7 +441,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
                         discriminator = null,
                         allOf = null,
                         deprecated = false,
-                    )
+                    ),
                 )
             }
 
@@ -623,25 +624,25 @@ private fun List<Element>.mapToIr(
         val elementName = (it.name ?: it.ref!!.split(":")[1])
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-                IRTree.Member(
-                    type = if (it.maxOccurs == "unbounded") {
-                        IRTree.Type.LIST(type)
-                    } else {
-                        type
-                    },
-                    nullable = it.nillable == true || it.minOccurs == "0",
-                    serialName = elementName,
-                    namespace = if (it.ref == null) {
-                        schema.targetNamespace
-                    } else {
-                        (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
-                    },
-                    documentation = it.annotation?.documentation(),
-                    xmlType = IRTree.XmlType.Element,
-                    requirements = emptyList(),
-                    isOverride = false,
-                    deprecated = false,
-                )
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = if (it.ref == null) {
+                    schema.targetNamespace
+                } else {
+                    (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
+                },
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            )
     }
 }
 

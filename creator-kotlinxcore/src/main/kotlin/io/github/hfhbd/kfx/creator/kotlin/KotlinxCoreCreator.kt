@@ -91,7 +91,9 @@ interface KotlinxCoreCreator : CodeGenCreator {
             (singleMember.type as IRTree.NormalClass).members.map {
                 toCodeGen(it.value, name = it.key)
             }
-        } else emptyList(),
+        } else {
+            emptyList()
+        },
         functions = emptyList(),
         documentation = ir.documentation,
         isFault = ir.isFault,

@@ -79,7 +79,9 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     annotations = emptyList(),
                 )
             }
-        } else emptyList(),
+        } else {
+            emptyList()
+        },
         documentation = ir.documentation,
         isFault = ir.isFault,
         isValue = ir.isValue,

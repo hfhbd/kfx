@@ -21,6 +21,7 @@
     <ID>CyclomaticComplexMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>FunctionNaming:PackageName.kt$fun PackageName(packageName: String)</ID>
     <ID>LongMethod:ContentType.kt$fun ContentType.toKtor(): CodeBlock</ID>
+    <ID>LongMethod:KotlinClassesGenerator.kt$KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generateValueClass(): TypeSpec.Builder</ID>
     <ID>LongMethod:KotlinPoetCodeGenerator.kt$fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
     <ID>LongMethod:KtorClientGenerator.kt$KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: FunSpec.Builder.() -> Unit = {}, )</ID>
@@ -33,7 +34,7 @@
     <ID>LongMethod:generate.kt$private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
     <ID>LongMethod:generate.kt$private fun Swagger.toIr( swaggerTransformers: Iterable&lt;SwaggerTransformer>, ): IRTree</ID>
-    <ID>LongMethod:generate.kt$private fun WSDL.toIr( getNS: (String) -> String?, wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
+    <ID>LongMethod:generate.kt$private fun WSDL.toIr( wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
     <ID>LongMethod:generate.kt$private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:generate.kt$private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
     <ID>LongMethod:generate.kt$private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
