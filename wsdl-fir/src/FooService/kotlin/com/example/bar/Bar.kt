@@ -1,8 +1,8 @@
 package com.example.bar
 
+import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
-import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
@@ -15,12 +15,12 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 )
 @JvmInline
 public value class Bar private constructor(
-  private val value: BarType,
+  private val _value: BarType,
 ) {
-  constructor(validFrom: LocalDate? = null) : this(BarType(validFrom))
+  public constructor(validFrom: LocalDate? = null) : this(BarType(validFrom))
 
   /**
    * Valid From
    */
-  public val validFrom: LocalDate? get() = value.validFrom
+  public val validFrom: LocalDate? get() = _value.validFrom
 }

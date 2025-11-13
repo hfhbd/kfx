@@ -123,6 +123,8 @@ data class CodeGenTree(
         override val documentation: String? = null,
         val isFault: Boolean = false,
         val isCompanion: Boolean = false,
+        val isValue: Boolean = false,
+        val computedProperties: List<Member> = emptyList(),
         val isStatic: Boolean = false,
         override val annotations: List<Annotation> = emptyList(),
         val types: List<Type> = emptyList(),

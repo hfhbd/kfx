@@ -50,14 +50,15 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         val constructor = FunSpec.constructorBuilder()
 
         for (member in members) {
-            val type = typeSpec.addMember(member, isFault, addInitializer = true)
+            val type = typeSpec.addMember(member, isFault) {
+                initializer(member.name)
+            }
 
             constructor.addParameter(
                 ParameterSpec.builder(member.name, type).apply {
                     for (annotation in member.annotations) {
                         addAnnotation(annotation.toAnno())
                     }
-                }.apply {
                     if (member.nullable) {
                         when (member.type) {
                             is CodeGenTree.Type.LIST -> defaultValue(
@@ -79,10 +80,79 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         return typeSpec
     }
 
+    private fun CodeGenTree.NormalClass.generateValueClass(): TypeSpec.Builder {
+        val typeSpec = TypeSpec.classBuilder(names.single())
+        typeSpec.addAnnotation(AnnotationSpec.builder(ClassName("kotlin.jvm", "JvmInline")).build())
+        typeSpec.addModifiers(KModifier.VALUE)
+
+        for (typeParameter in types) {
+            require(typeParameter is CodeGenTree.Type.Parameter)
+            typeSpec.addTypeVariable(
+                TypeVariableName(
+                    name = typeParameter.name,
+                    bounds = typeParameter.upperBound.map { it.toPoetType() },
+                ),
+            )
+        }
+
+        val valueMember = members.single()
+        val valueMemberType = valueMember.type.toPoetType()
+
+        val privateConstructor = FunSpec.constructorBuilder()
+        privateConstructor.addParameter(
+            name = valueMember.name,
+            type = valueMemberType,
+        )
+
+        val constructor = FunSpec.constructorBuilder()
+
+        for (member in computedProperties) {
+            val type = typeSpec.addMember(member, isFault = false) {
+                getter(FunSpec.getterBuilder().addStatement(
+                    "return ${valueMember.name}.${member.name}"
+                ).build())
+            }
+
+            constructor.addParameter(
+                ParameterSpec.builder(member.name, type).apply {
+                    for (annotation in member.annotations) {
+                        addAnnotation(annotation.toAnno())
+                    }
+                    if (member.nullable) {
+                        when (member.type) {
+                            is CodeGenTree.Type.LIST -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptyList", isExtension = true),
+                                ),
+                            )
+
+                            else -> defaultValue("null")
+                        }
+                    }
+                }.build(),
+            )
+        }
+
+        typeSpec.addFunction(constructor
+            .callThisConstructor(
+                CodeBlock.of(
+                    "%T(%L)",
+                    valueMemberType,
+                    computedProperties.map {
+                        CodeBlock.of(it.name)
+                    }.joinToCode(",")
+                )
+            )
+            .build())
+
+        return typeSpec
+    }
+
     private fun TypeSpec.Builder.addMember(
         member: CodeGenTree.Member,
         isFault: Boolean,
-        addInitializer: Boolean,
+        custom: PropertySpec.Builder.() -> Unit = {},
     ): TypeName {
         val type = member.type.toPoetType().copy(
             nullable = if (member.type is CodeGenTree.Type.LIST) false else member.nullable,
@@ -91,18 +161,16 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         val prop = PropertySpec.builder(name = member.name, type = type)
             .mutable(member.mutable)
 
-        if (addInitializer) {
-            prop.initializer(member.name)
-        }
-
         if (member.overrideable || isFault && member.name == "message") {
             prop.addModifiers(KModifier.PUBLIC, KModifier.OVERRIDE)
         }
 
         val doc = member.documentation
-        if (doc != null && doc.isNotBlank()) {
+        if (!doc.isNullOrBlank()) {
             prop.addKdoc(doc.toKdoc())
         }
+
+        prop.custom()
 
         addProperty(prop.build())
 
@@ -140,10 +208,12 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                     .addModifiers(KModifier.SEALED)
                     .apply {
                         for (member in members) {
-                            addMember(member, isFault, addInitializer = false)
+                            addMember(member, isFault)
                         }
                     }
             }
+
+            isValue -> generateValueClass()
 
             else -> {
                 generateNormalClass()

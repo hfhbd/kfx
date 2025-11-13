@@ -8,6 +8,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.toCodeGen
+import io.github.hfhbd.kfx.wsdl.model.Annotation
 import io.github.hfhbd.kfx.wsdl.model.Attribute
 import io.github.hfhbd.kfx.wsdl.model.Choice
 import io.github.hfhbd.kfx.wsdl.model.Element
@@ -67,23 +68,24 @@ private fun InputStream.createIr(
     return irTree
 }
 
-private val String.packageName: String get() {
-    val parts = removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
-    val host = parts[0].split(".").reversed()
-    return (host + parts.drop(1)).joinToString(".") {
-        val s = it.lowercase()
-            .replace("-", "_")
-            .replace(".", "")
-        if (s.toIntOrNull() != null) {
-            "v$s"
-        } else {
-            s
+private val String.packageName: String
+    get() {
+        val parts = removePrefix("urn:").removePrefix("http://").removePrefix("https://").split("/")
+        val host = parts[0].split(".").reversed()
+        return (host + parts.drop(1)).joinToString(".") {
+            val s = it.lowercase()
+                .replace("-", "_")
+                .replace(".", "")
+            if (s.toIntOrNull() != null) {
+                "v$s"
+            } else {
+                s
+            }
         }
     }
-}
 
 private sealed interface Classes {
-    data class TypeAlias(val actual: IRTree.ClassName) : Classes
+    data class TypeAlias(val actual: IRTree.ClassName, val serialName: String, val namespace: String) : Classes
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
@@ -121,7 +123,7 @@ private fun WSDL.toIr(
         val namespace = ns?.let { namespaces[it] ?: getNS(it) }
         val resolved = IRTree.ClassName(namespace?.packageName ?: targetNamespace.packageName, name)
         if (resolved != typeAlias) {
-            irTypes[typeAlias] = Classes.TypeAlias(resolved)
+            irTypes[typeAlias] = Classes.TypeAlias(resolved, message.name, targetNamespace)
         }
     }
 
@@ -246,9 +248,9 @@ private fun toIr(
             }
 
             val typeAlias = IRTree.ClassName(schema.targetNamespace.packageName, element.name!!)
-            val resolved = IRTree.ClassName(schema.namespace(ns), type.remove(suffix = true))
+            val resolved = IRTree.ClassName(schema.namespace(ns), type.remove())
             if (resolved != typeAlias) {
-                irTypes[typeAlias] = Classes.TypeAlias(resolved)
+                irTypes[typeAlias] = Classes.TypeAlias(resolved, element.name!!, schema.targetNamespace)
             }
         } else {
             val elementName = element.name!!
@@ -315,9 +317,10 @@ private fun toIr(
                 }
                 irTypes[typeAlias] = Classes.ActualClass(irClass)
             } else {
-                val resolved = IRTree.ClassName(schema.namespace(ns), name)
+                val namespace = schema.namespace(ns)
+                val resolved = IRTree.ClassName(namespace, name)
                 if (resolved != typeAlias) {
-                    irTypes[typeAlias] = Classes.TypeAlias(resolved)
+                    irTypes[typeAlias] = Classes.TypeAlias(resolved, name, namespace)
                 }
             }
         } else if (complexType.simpleContent != null) {
@@ -392,7 +395,7 @@ private fun toIr(
     }
 }
 
-private fun io.github.hfhbd.kfx.wsdl.model.Annotation.documentation(): String? {
+private fun Annotation.documentation(): String? {
     return documentation?.values?.mapNotNull {
         (it as? String)?.trimDocumentation() ?: return@mapNotNull null
     }?.joinToString("")?.trim()
@@ -415,9 +418,39 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
         val found = find(it) as IRTree.NormalClass
         IRTree.ClassName(found.packageName, found.name)
     }
-    for ((_, classes) in this@resolveMembers) {
+    for ((className, classes) in this@resolveMembers) {
         when (classes) {
-            is Classes.TypeAlias -> continue
+            is Classes.TypeAlias -> {
+                val found = this@resolveMembers.find(classes.actual) as IRTree.NormalClass
+                add(
+                    IRTree.NormalClass(
+                        packageName = className.packageName,
+                        packageNameSuffix = "",
+                        name = className.name,
+                        serialName = classes.serialName,
+                        namespace = classes.namespace,
+                        members = mapOf(
+                            "_value" to IRTree.Member(
+                                type = found,
+                                nullable = false,
+                                serialName = null,
+                                namespace = null,
+                                documentation = null,
+                                xmlType = null,
+                                requirements = emptyList(),
+                                isOverride = false,
+                                deprecated = false,
+                            )
+                        ),
+                        documentation = found.documentation,
+                        isFault = false,
+                        discriminator = null,
+                        allOf = null,
+                        deprecated = false,
+                    )
+                )
+            }
+
             is Classes.ActualClass -> when (val forClass = classes.forClass) {
                 is IRTree.Type.Builtin -> continue
                 is IRTree.Type.LIST -> continue
@@ -597,25 +630,25 @@ private fun List<Element>.mapToIr(
         val elementName = (it.name ?: it.ref!!.split(":")[1])
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-            IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
-                    IRTree.Type.LIST(type)
-                } else {
-                    type
-                },
-                nullable = it.nillable == true || it.minOccurs == "0",
-                serialName = elementName,
-                namespace = if (it.ref == null) {
-                    schema.targetNamespace
-                } else {
-                    (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
-                },
-                documentation = it.annotation?.documentation(),
-                xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            )
+                IRTree.Member(
+                    type = if (it.maxOccurs == "unbounded") {
+                        IRTree.Type.LIST(type)
+                    } else {
+                        type
+                    },
+                    nullable = it.nillable == true || it.minOccurs == "0",
+                    serialName = elementName,
+                    namespace = if (it.ref == null) {
+                        schema.targetNamespace
+                    } else {
+                        (schema.annotation?.appInfo!!.appInfo.filterIsInstance<NS>()).single { it.prefix == ns }.uri
+                    },
+                    documentation = it.annotation?.documentation(),
+                    xmlType = IRTree.XmlType.Element,
+                    requirements = emptyList(),
+                    isOverride = false,
+                    deprecated = false,
+                )
     }
 }
 
@@ -706,7 +739,7 @@ private fun String.toBuiltin(): IRTree.Type.Builtin? = when {
     else -> null
 }
 
-private fun String.remove(suffix: Boolean = true): String {
+private fun String.remove(): String {
     val s = split(":").let {
         if (it.size == 1) {
             it[0]
@@ -714,5 +747,5 @@ private fun String.remove(suffix: Boolean = true): String {
             it[1]
         }
     }
-    return if (suffix) s.removeSuffix("Type") else s
+    return s
 }
