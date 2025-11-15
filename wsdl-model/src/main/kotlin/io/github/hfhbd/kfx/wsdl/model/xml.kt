@@ -20,4 +20,7 @@ fun xml(
     xmlVersion = XmlVersion.XML10
     xmlDeclMode = XmlDeclMode.Charset
     autoPolymorphic = true
+    defaultPolicy {
+        ignoreUnknownChildren()
+    }
 }
