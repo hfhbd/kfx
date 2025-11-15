@@ -1,6 +1,5 @@
 package io.github.hfhbd.kfx.wsdl.fir
 
-import com.sun.xml.internal.ws.model.RuntimeModeler.getNamespace
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
@@ -641,7 +640,7 @@ private fun List<Element>.mapToIr(
                 namespace = if (it.ref == null) {
                     schema.targetNamespace
                 } else {
-                    getNamespace(ns)
+                    ns?.let { getNamespace(it) }
                 },
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
