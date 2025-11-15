@@ -653,7 +653,11 @@ private fun List<Element>.mapToIr(
 }
 
 @JvmName("mapToIrAttributes")
-private fun Attribute.mapToIr(schema: Schema, topLevel: Map<IRTree.ClassName, Classes>, getNamespace: (prefix: String) -> String): Pair<String, IRTree.Member> {
+private fun Attribute.mapToIr(
+    schema: Schema,
+    topLevel: Map<IRTree.ClassName, Classes>,
+    getNamespace: (prefix: String) -> String,
+): Pair<String, IRTree.Member> {
     val (ns, name) = requireNotNull(type) {
         "$this $schema"
     }.split(":")
