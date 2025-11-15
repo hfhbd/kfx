@@ -8,13 +8,8 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import nl.adaptivity.xmlutil.serialization.XmlValue
 
-private const val ISO = "http://purl.oclc.org/dsdl/schematron"
 private const val SOAP = "http://schemas.xmlsoap.org/wsdl/soap/"
-private const val WSA = "http://www.w3.org/2005/08/addressing"
-private const val WSAM = "http://www.w3.org/2007/05/addressing/metadata"
-private const val WSAW = "http://www.w3.org/2006/05/addressing/wsdl"
 private const val WSDL_NS = "http://schemas.xmlsoap.org/wsdl/"
-private const val WSP = "http://www.w3.org/ns/ws-policy"
 private const val XSD = "http://www.w3.org/2001/XMLSchema"
 
 @Serializable
@@ -60,10 +55,6 @@ data class Binding(
     @XmlElement
     @XmlSerialName("binding", SOAP)
     val binding: SoapBinding,
-
-    @XmlElement
-    @XmlSerialName("UsingAddressing", WSA)
-    val usingAddressing: UsingAddressing? = null,
 
     @XmlElement
     @XmlSerialName("operation", WSDL_NS)
@@ -172,8 +163,6 @@ data class Operation(
 data class OperationType(
     val message: String,
     val name: String? = null,
-    @XmlSerialName("Action", WSA)
-    val action: String? = null,
 )
 
 @Serializable
@@ -205,14 +194,6 @@ data class Port(
     val name: String,
 
     @XmlElement
-    @XmlSerialName("UsingAddressing", WSAW)
-    val usingAddressing: UsingAddressing? = null,
-
-    @XmlElement
-    @XmlSerialName("Policy", WSP)
-    val policy: Policy? = null,
-
-    @XmlElement
     @XmlSerialName("address", SOAP)
     val address: Address,
 )
@@ -220,25 +201,6 @@ data class Port(
 @Serializable
 data class Address(
     val location: String,
-)
-
-@Serializable
-data class UsingAddressing(
-    @XmlSerialName("required", WSDL_NS)
-    val required: Boolean,
-)
-
-@Serializable
-data class Policy(
-    @XmlElement
-    @XmlSerialName("Addressing", WSAM)
-    val addressing: Addressing? = null,
-)
-
-@Serializable
-data class Addressing(
-    @XmlSerialName("Policy", WSP)
-    val policy: Policy,
 )
 
 @Serializable
@@ -313,9 +275,6 @@ data class SimpleType(
 @Serializable
 data class Restriction(
     val base: String,
-    @XmlElement
-    @XmlSerialName("pattern", XSD)
-    val pattern: List<Pattern> = emptyList(),
 
     @XmlElement
     @XmlSerialName("enumeration", XSD)
@@ -510,47 +469,9 @@ data class AppInfo(
     companion object {
         fun serializerModule() = SerializersModule {
             polymorphic(Any::class, String::class, String.serializer())
-            polymorphic(Any::class, NS::class, NS.serializer())
-            polymorphic(Any::class, Pattern::class, Pattern.serializer())
         }
     }
 }
-
-@Serializable
-@XmlSerialName("pattern", ISO)
-data class Pattern(
-    val name: String? = null,
-    @XmlElement
-    @XmlSerialName("rule", ISO)
-    val rule: Rule? = null,
-
-    val value: String? = null,
-)
-
-@Serializable
-data class Rule(
-    val context: String,
-
-    @XmlElement
-    @XmlSerialName("assert", ISO)
-    val assert: Assert,
-)
-
-@Serializable
-data class Assert(
-    @XmlElement(false)
-    val test: String,
-
-    @XmlValue
-    val description: String,
-)
-
-@Serializable
-@XmlSerialName("ns", ISO)
-data class NS(
-    val prefix: String,
-    val uri: String,
-)
 
 @Serializable
 data class Import(
