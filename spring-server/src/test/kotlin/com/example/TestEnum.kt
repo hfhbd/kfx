@@ -1,16 +1,17 @@
 package com.example
 
-import kotlin.String
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.String
 
 @Serializable
 public enum class TestEnum {
-  @SerialName(value = "A")
-  A,
-  @SerialName(value = "B.B")
-  BB,
-  ;
+    @SerialName(value = "A")
+    A,
 
-  override fun toString(): String = serializer().descriptor.getElementName(ordinal)
+    @SerialName(value = "B.B")
+    BB,
+    ;
+
+    override fun toString(): String = serializer().descriptor.getElementName(ordinal)
 }

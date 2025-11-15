@@ -2,7 +2,6 @@ plugins {
     id("java-gradle-plugin")
     kotlin("jvm")
     id("setup")
-    id("publish")
     id("java-test-fixtures")
 }
 

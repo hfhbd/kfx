@@ -1,6 +1,8 @@
 package io.github.hfhbd.kfx.swagger.model
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class SwaggerTest {
     @Test

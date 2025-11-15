@@ -2,7 +2,6 @@ package io.github.hfhbd.kfx.ir
 
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
-import io.github.hfhbd.kfx.ir.IRTree.Member.Requirement
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -10,11 +9,7 @@ import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @Serializable
-data class IRTree(
-    val classes: Set<Class>,
-    val operations: Set<Operation>,
-    val auth: Set<Auth>,
-) {
+data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val auth: Set<Auth>) {
     @Serializable
     sealed interface Type {
         @Serializable
@@ -109,7 +104,9 @@ data class IRTree(
     @Serializable
     data class ClassName(val packageName: String, val name: String) {
         val qname = if (packageName.isEmpty()) name else "$packageName.$name"
+
         override fun equals(other: Any?): Boolean = qname == (other as? ClassName)?.qname
+
         override fun hashCode(): Int = qname.hashCode()
 
         override fun toString(): String = qname
@@ -139,7 +136,10 @@ data class IRTree(
 
     @Serializable
     enum class XmlType {
-        Element, Value, Attribute, CData
+        Element,
+        Value,
+        Attribute,
+        CData,
     }
 
     @Serializable
@@ -152,11 +152,7 @@ data class IRTree(
         override val deprecated: Boolean,
     ) : Class {
         @Serializable
-        data class Value(
-            val value: String,
-            val documentation: String?,
-            val serialName: String?,
-        )
+        data class Value(val value: String, val documentation: String?, val serialName: String?)
     }
 
     @Serializable
@@ -164,18 +160,14 @@ data class IRTree(
         val packageName: String,
         val name: String,
         val documentation: String?,
-
         val method: HttpMethod,
         val path: String?,
         val parameters: List<Parameter>,
         val headers: List<Parameter>,
         val queryParameters: List<Parameter>,
-
         val location: String?,
         val address: String?,
-
         val success: StatusCode?,
-
         val input: Type?,
         val inputContentType: ContentType?,
         val output: Type?,
@@ -184,12 +176,16 @@ data class IRTree(
         val notFound: Boolean,
         val fault: NormalClass?,
         val faultHeaders: List<Parameter>,
-
         val deprecated: Boolean,
     ) {
         @Serializable
         enum class HttpMethod {
-            Head, Get, Post, Put, Patch, Delete
+            Head,
+            Get,
+            Post,
+            Put,
+            Patch,
+            Delete,
         }
 
         @Serializable
@@ -249,11 +245,7 @@ data class IRTree(
     @Serializable
     sealed interface Auth {
         @Serializable
-        data class OAuth2(
-            val flow: Flow,
-            val operation: Operation,
-            val grantType: GrantType,
-        ) : Auth {
+        data class OAuth2(val flow: Flow, val operation: Operation, val grantType: GrantType) : Auth {
             @Serializable
             enum class Flow {
                 Application,
@@ -266,12 +258,8 @@ data class IRTree(
         }
 
         @Serializable
-        data class Http(
-            val schema: Schema,
-            val name: String,
-            val packageName: String,
-            val documentation: String?,
-        ) : Auth {
+        data class Http(val schema: Schema, val name: String, val packageName: String, val documentation: String?) :
+            Auth {
             @Serializable
             enum class Schema {
                 Basic,

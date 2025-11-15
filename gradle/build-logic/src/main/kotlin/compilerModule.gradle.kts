@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("setup")
-    id("publish")
     id("java-test-fixtures")
     id("jvm-test-suite")
     id("app.softwork.serviceloader-compiler")

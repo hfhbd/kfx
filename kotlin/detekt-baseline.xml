@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generate(): TypeSpec</ID>
+    <ID>LongMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generateValueClass(): TypeSpec.Builder</ID>
+  </CurrentIssues>
+</SmellBaseline>

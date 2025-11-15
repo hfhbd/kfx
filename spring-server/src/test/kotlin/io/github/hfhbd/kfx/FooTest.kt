@@ -11,7 +11,6 @@ import org.springframework.test.web.reactive.server.expectBody
 @SpringBootTest
 @AutoConfigureMockMvc
 internal class FooTest(@Autowired private val webClient: WebTestClient) {
-
     @Test
     fun bazA() {
         webClient

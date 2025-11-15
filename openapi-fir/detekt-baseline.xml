@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:Generate.kt:private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentHeaders: Map&lt;String, OpenApi.Operation.Header>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:Generate.kt:private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
+    <ID>CyclomaticComplexMethod:Generate.kt:private fun Schema.toIrDefault(): IRTree.Literal?</ID>
+    <ID>LongMethod:Generate.kt:private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentHeaders: Map&lt;String, OpenApi.Operation.Header>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
+    <ID>LongMethod:Generate.kt:private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
+    <ID>LongMethod:Generate.kt:private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
+    <ID>LongMethod:Generate.kt:private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
+    <ID>LoopWithTooManyJumpStatements:Generate.kt:for</ID>
+    <ID>TooManyFunctions:Generate.kt:io.github.hfhbd.kfx.openapi.fir.Generate.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

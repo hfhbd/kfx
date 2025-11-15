@@ -8,7 +8,9 @@ import org.springframework.http.converter.json.KotlinSerializationJsonHttpMessag
 @SpringBootApplication
 class FooApplication {
     @Bean
-    fun messageConverter() = KotlinSerializationJsonHttpMessageConverter(Json {
-        ignoreUnknownKeys = true
-    })
+    fun messageConverter() = KotlinSerializationJsonHttpMessageConverter(
+        Json {
+            ignoreUnknownKeys = true
+        },
+    )
 }

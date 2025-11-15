@@ -4,12 +4,19 @@ import io.github.hfhbd.kfx.ir.IRTree
 
 interface CodeGenCreator {
     fun toCodeGen(ir: IRTree.Operation): CodeGenTree.Operation
+
     fun toCodeGen(ir: IRTree.Member, name: String): CodeGenTree.Member
+
     fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type
+
     fun toCodeGen(ir: IRTree.Class): CodeGenTree.Class
+
     fun toCodeGen(ir: IRTree.Enum): CodeGenTree.Enum
+
     fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass
+
     fun toCodeGen(ir: IRTree.Auth): CodeGenTree.Auth
+
     fun toCodeGen(ir: IRTree.ClassName): CodeGenTree.ClassName
 }
 

@@ -1,6 +1,6 @@
 package io.github.hfhbd.kfx.plugins.contextualdate
 
-import app.softwork.serviceloader.*
+import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.ir.IRTree

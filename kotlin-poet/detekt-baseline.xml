@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
+    <ID>LongMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
+  </CurrentIssues>
+</SmellBaseline>

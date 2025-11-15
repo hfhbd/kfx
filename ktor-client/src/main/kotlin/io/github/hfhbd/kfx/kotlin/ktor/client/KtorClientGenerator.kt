@@ -1,17 +1,34 @@
 package io.github.hfhbd.kfx.kotlin.ktor.client
 
-import app.softwork.serviceloader.*
-import com.squareup.kotlinpoet.*
+import app.softwork.serviceloader.ServiceLoader
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.NameAllocator
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.github.hfhbd.kfx.*
-import io.github.hfhbd.kfx.codegen.*
-import io.github.hfhbd.kfx.kotlin.*
-import io.github.hfhbd.kfx.kotlin.ktor.*
+import com.squareup.kotlinpoet.STRING
+import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.UNIT
+import com.squareup.kotlinpoet.joinToCode
+import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.codegen.CodeGenerator
+import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
+import io.github.hfhbd.kfx.kotlin.ktor.supportedBySerialization
 import io.github.hfhbd.kfx.kotlin.ktor.toHttpCode
+import io.github.hfhbd.kfx.kotlin.ktor.toKtor
 import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
-import java.nio.file.*
-import kotlin.collections.component1
-import kotlin.collections.component2
+import io.github.hfhbd.kfx.kotlin.toCodeBlock
+import io.github.hfhbd.kfx.kotlin.toKdoc
+import io.github.hfhbd.kfx.kotlin.toPoetType
+import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
 class KtorClientGenerator : KotlinPoetCodeGenerator {

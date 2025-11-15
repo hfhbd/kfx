@@ -9,10 +9,17 @@ import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.model.Swagger
-import io.github.hfhbd.kfx.swagger.model.Swagger.*
+import io.github.hfhbd.kfx.swagger.model.Swagger.Definition
+import io.github.hfhbd.kfx.swagger.model.Swagger.Header
+import io.github.hfhbd.kfx.swagger.model.Swagger.Parameter
+import io.github.hfhbd.kfx.swagger.model.Swagger.Path
+import io.github.hfhbd.kfx.swagger.model.Swagger.SecurityDefinition
 import io.github.hfhbd.kfx.swagger.model.json
 import io.github.hfhbd.kfx.toCodeGen
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.InputStream
 import java.util.ServiceLoader
 
@@ -475,9 +482,9 @@ private fun Map<IRTree.ClassName, IRTree.Class>.findOrNull(id: String): IRTree.C
     return this[id]
 }
 
-private fun Map<IRTree.ClassName, IRTree.Class>.find(id: String): IRTree.Class {
-    return findOrNull(id) ?: error("$id not in $keys")
-}
+private fun Map<IRTree.ClassName, IRTree.Class>.find(id: String): IRTree.Class = findOrNull(
+    id,
+) ?: error("$id not in $keys")
 
 private fun Definition.toIr(
     parentQName: IRTree.ClassName?,

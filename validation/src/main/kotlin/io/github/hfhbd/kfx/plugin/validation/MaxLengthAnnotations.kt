@@ -1,9 +1,10 @@
 package io.github.hfhbd.kfx.plugin.validation
 
-import app.softwork.serviceloader.*
-import io.github.hfhbd.kfx.codegen.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
-import io.github.hfhbd.kfx.ir.*
+import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.IntLiteral
+import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenTransformer::class)
 class MaxLengthAnnotations : CodeGenTransformer {

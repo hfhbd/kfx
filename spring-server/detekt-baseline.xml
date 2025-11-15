@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
+    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun StatusCode.toHttpCode(): CodeBlock</ID>
+    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
+    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun ContentType.toMediaType(): CodeBlock</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -1,9 +1,7 @@
 package com.example
 
-import kotlin.String
 import kotlinx.serialization.Serializable
+import kotlin.String
 
 @Serializable
-public data class FooInputArrByBar(
-  public val a: String? = null,
-)
+public data class FooInputArrByBar(public val a: String? = null)

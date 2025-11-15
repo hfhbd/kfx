@@ -7,10 +7,21 @@ import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
-import io.github.hfhbd.kfx.ir.IRTree.Literal.*
+import io.github.hfhbd.kfx.ir.IRTree.Literal.BOOLEAN
+import io.github.hfhbd.kfx.ir.IRTree.Literal.BYTE
+import io.github.hfhbd.kfx.ir.IRTree.Literal.DATE
+import io.github.hfhbd.kfx.ir.IRTree.Literal.DOUBLE
+import io.github.hfhbd.kfx.ir.IRTree.Literal.DURATION
+import io.github.hfhbd.kfx.ir.IRTree.Literal.FLOAT
+import io.github.hfhbd.kfx.ir.IRTree.Literal.INSTANT
+import io.github.hfhbd.kfx.ir.IRTree.Literal.INT
+import io.github.hfhbd.kfx.ir.IRTree.Literal.LONG
+import io.github.hfhbd.kfx.ir.IRTree.Literal.SHORT
+import io.github.hfhbd.kfx.ir.IRTree.Literal.STRING
+import io.github.hfhbd.kfx.ir.IRTree.Literal.UUID
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.openapi.model.OpenApi
-import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.*
+import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema
 import io.github.hfhbd.kfx.openapi.model.json
 import io.github.hfhbd.kfx.operationIdToCamelCase
 import io.github.hfhbd.kfx.toCamelCase
@@ -19,7 +30,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 import java.nio.file.Path
-import java.util.*
+import java.util.ServiceLoader
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -500,7 +511,7 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
         Schema.STRING.Format.DateTime -> default?.let { INSTANT(Instant.parse(it)) }
         Schema.STRING.Format.Password -> null
         Schema.STRING.Format.Duration -> default?.let { DURATION(Duration.parse(it)) }
-        Schema.STRING.Format.Uuid -> default?.let { IRTree.Literal.UUID(Uuid.parse(it)) }
+        Schema.STRING.Format.Uuid -> default?.let { UUID(Uuid.parse(it)) }
         else -> default?.let { STRING(it) }
     }
 
@@ -526,9 +537,7 @@ private fun Map<String, IRTree.Class>.findOrNull(id: String): IRTree.Class? {
     return this[id]
 }
 
-private fun Map<String, IRTree.Class>.find(id: String): IRTree.Class {
-    return findOrNull(id) ?: error("$id not in $keys")
-}
+private fun Map<String, IRTree.Class>.find(id: String): IRTree.Class = findOrNull(id) ?: error("$id not in $keys")
 
 private fun Schema.toIr(
     parentName: String?,
@@ -603,22 +612,22 @@ private fun Schema.STRING.toIr(
 private fun Schema.isUnit(): Boolean =
     this is Schema.OBJECT && ref == null && properties.isEmpty() && additionalPropertiesSchema == null
 
-private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName {
-    return (ref?.removePrefix("#/components/schemas/") ?: name!!).asClassName()
-}
+private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName = (
+    ref?.removePrefix(
+        "#/components/schemas/",
+    ) ?: name!!
+    ).asClassName()
 
-private fun String.asClassName(): IRTree.ClassName {
-    return if ("." in this) {
-        val qName = split(".")
-        IRTree.ClassName(
-            qName.dropLast(1).joinToString(".") {
-                it.lowercase()
-            },
-            qName.last().replaceFirstChar { it.uppercaseChar() },
-        )
-    } else {
-        IRTree.ClassName("", replaceFirstChar { it.uppercaseChar() })
-    }
+private fun String.asClassName(): IRTree.ClassName = if ("." in this) {
+    val qName = split(".")
+    IRTree.ClassName(
+        qName.dropLast(1).joinToString(".") {
+            it.lowercase()
+        },
+        qName.last().replaceFirstChar { it.uppercaseChar() },
+    )
+} else {
+    IRTree.ClassName("", replaceFirstChar { it.uppercaseChar() })
 }
 
 private fun Schema.OBJECT.toIr(
@@ -700,52 +709,50 @@ private fun Map<String, Schema>.toMembers(
     name: String? = null,
     irTypes: MutableMap<String, IRTree.Class>,
     required: List<String>? = null,
-): Map<String, IRTree.Member> {
-    return mapValues { (propertyName, property) ->
-        val type = if (property.isUnit()) {
-            IRTree.Type.Builtin.UNIT
-        } else {
-            property.toIr(
-                parentName = name,
-                propertyName,
-                irTypes,
-            )
-        }
-
-        if (property.hasNoRef) {
-            addToIr(type, irTypes)
-        }
-
-        val required = required
-
-        IRTree.Member(
-            type = type,
-            nullable = when {
-                required != null -> propertyName !in required
-                else -> true
-            },
-            namespace = null,
-            serialName = null,
-            documentation = property.description,
-            xmlType = null,
-            requirements = listOfNotNull(
-                if (property is Schema.STRING) {
-                    property.minLength?.let { IRTree.Member.Requirement.MinLength(it) }
-                } else {
-                    null
-                },
-                if (property is Schema.STRING) {
-                    property.maxLength?.let {
-                        IRTree.Member.Requirement.MaxLength(it)
-                    }
-                } else {
-                    null
-                },
-            ),
-            isOverride = false,
-            deprecated = property.deprecated,
+): Map<String, IRTree.Member> = mapValues { (propertyName, property) ->
+    val type = if (property.isUnit()) {
+        IRTree.Type.Builtin.UNIT
+    } else {
+        property.toIr(
+            parentName = name,
+            propertyName,
+            irTypes,
         )
     }
+
+    if (property.hasNoRef) {
+        addToIr(type, irTypes)
+    }
+
+    val required = required
+
+    IRTree.Member(
+        type = type,
+        nullable = when {
+            required != null -> propertyName !in required
+            else -> true
+        },
+        namespace = null,
+        serialName = null,
+        documentation = property.description,
+        xmlType = null,
+        requirements = listOfNotNull(
+            if (property is Schema.STRING) {
+                property.minLength?.let { IRTree.Member.Requirement.MinLength(it) }
+            } else {
+                null
+            },
+            if (property is Schema.STRING) {
+                property.maxLength?.let {
+                    IRTree.Member.Requirement.MaxLength(it)
+                }
+            } else {
+                null
+            },
+        ),
+        isOverride = false,
+        deprecated = property.deprecated,
+    )
 }
 
 private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>) {

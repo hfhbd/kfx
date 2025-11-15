@@ -17,7 +17,4 @@ fun Set<String>.getStatusCodes(): StatusCodes {
     }
 }
 
-data class StatusCodes(
-    val success: String?,
-    val fault: String?,
-)
+data class StatusCodes(val success: String?, val fault: String?)

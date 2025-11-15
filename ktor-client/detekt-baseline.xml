@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
+    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: FunSpec.Builder.() -> Unit = {}, )</ID>
+    <ID>TooManyFunctions:KtorClientGenerator.kt:KtorClientGenerator : KotlinPoetCodeGenerator</ID>
+  </CurrentIssues>
+</SmellBaseline>
