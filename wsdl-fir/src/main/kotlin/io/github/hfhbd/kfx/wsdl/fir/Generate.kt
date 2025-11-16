@@ -121,7 +121,6 @@ private fun WSDL.toIr(
         }
     }.toSet()
 
-
     val classes = irTypes.resolveMembers(faults)
     val operations = mutableSetOf<IRTree.Operation>()
 
@@ -667,25 +666,25 @@ private fun List<Element>.mapToIr(
         val elementName = (it.name ?: it.ref!!.split(":")[1])
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-                IRTree.Member(
-                    type = if (it.maxOccurs == "unbounded") {
-                        IRTree.Type.LIST(type)
-                    } else {
-                        type
-                    },
-                    nullable = it.nillable == true || it.minOccurs == "0",
-                    serialName = elementName,
-                    namespace = if (it.ref == null) {
-                        schema.targetNamespace
-                    } else {
-                        ns?.let { getNamespace(it) }
-                    },
-                    documentation = it.annotation?.documentation(),
-                    xmlType = IRTree.XmlType.Element,
-                    requirements = emptyList(),
-                    isOverride = false,
-                    deprecated = false,
-                )
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = if (it.ref == null) {
+                    schema.targetNamespace
+                } else {
+                    ns?.let { getNamespace(it) }
+                },
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            )
     }
 }
 
