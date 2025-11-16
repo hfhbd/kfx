@@ -3,7 +3,6 @@
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  xmlns:iso="http://purl.oclc.org/dsdl/schematron"
                   xmlns:tns="http://example.com/foo"
                   xmlns:bar="http://example.com/bar"
                   name="FooService"
@@ -11,11 +10,6 @@
     <wsdl:types>
         <xsd:schema
                 xmlns:bar="http://example.com/bar" elementFormDefault="qualified" targetNamespace="http://example.com/bar">
-            <xsd:annotation>
-                <xsd:appinfo>
-                    <iso:ns prefix="bar" uri="http://example.com/bar"/>
-                </xsd:appinfo>
-            </xsd:annotation>
             <xsd:element name="Bar" type="bar:BarType"/>
             <xsd:complexType name="BarType">
                 <xsd:annotation>
@@ -37,12 +31,6 @@
                     xmlns:tns="http://example.com/foo"
                     elementFormDefault="qualified"
                     targetNamespace="http://example.com/foo">
-            <xsd:annotation>
-                <xsd:appinfo>
-                    <iso:ns prefix="tns" uri="http://example.com/foo"/>
-                    <iso:ns prefix="bar" uri="http://example.com/bar"/>
-                </xsd:appinfo>
-            </xsd:annotation>
             <xsd:import namespace="http://example.com/bar"/>
             <xsd:element name="Foo" type="tns:FooType"/>
             <xsd:element name="Fault" type="tns:FaultType"/>
@@ -90,7 +78,7 @@
         <wsdl:documentation>SOAP over HTTP</wsdl:documentation>
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="CreateFoo">
-            <soap:operation soapAction="" style="document"/>
+            <soap:operation soapAction="http://example.com/FooService/createFoo" style="document"/>
             <wsdl:input name="CreateFoo">
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -102,7 +90,7 @@
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="CreateFooWithoutFault">
-            <soap:operation soapAction="" style="document"/>
+            <soap:operation soapAction="http://example.com/FooService/createFooWithoutFault" style="document"/>
             <wsdl:input name="CreateFoo">
                 <soap:body use="literal"/>
             </wsdl:input>

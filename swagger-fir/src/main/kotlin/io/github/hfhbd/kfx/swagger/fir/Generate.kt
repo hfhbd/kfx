@@ -144,7 +144,7 @@ private fun generate(
         documentation = operation.description,
         method = method,
         location = null,
-        address = null,
+        soapAction = null,
         path = path.replace("{", "\${"),
         input = operation.parameters.mapNotNull {
             when (it.position) {
@@ -319,7 +319,7 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
                         deprecated = false,
                     ),
                 ),
-                address = null,
+                soapAction = null,
                 queryParameters = emptyList(),
                 fault = null,
                 input = null,

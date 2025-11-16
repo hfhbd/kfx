@@ -21,7 +21,7 @@ import kotlin.Unit
  */
 public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): CreateFooWithoutFaultResult {
   val response = post {
-    `header`("SOAPAction", "http://example.com/foo/FooServicePortType/CreateFooWithoutFault")
+    `header`("SOAPAction", "http://example.com/FooService/createFooWithoutFault")
     contentType(Xml)
     setBody(
         Envelope<Foo>(

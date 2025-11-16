@@ -113,57 +113,93 @@ private fun WSDL.toIr(
         }
     }
 
-    val faults = portType.operations.map {
-        it.fault
-    }.mapNotNull {
-        it?.resolve(this, getNamespace)
+    val faults = portTypes.flatMap {
+        it.operations.map {
+            it.fault
+        }.mapNotNull {
+            it?.resolve(this, getNamespace)
+        }
     }.toSet()
 
-    val classes = irTypes.resolveMembers(faults)
 
+    val classes = irTypes.resolveMembers(faults)
     val operations = mutableSetOf<IRTree.Operation>()
-    for (operation in portType.operations) {
-        operations.add(
-            IRTree.Operation(
-                packageName = targetNamespace.packageName,
-                name = operation.name.replaceFirstChar { it.lowercaseChar() },
-                documentation = operation.documentation?.trimDocumentation(),
-                location = service.port.address.location,
-                address = "$targetNamespace/${portType.name}/${operation.name}",
-                input = operation.input.resolve(this, getNamespace).let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    }
-                },
-                output = operation.output.resolve(this, getNamespace).let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    }
-                },
-                notFound = false,
-                fault = operation.fault?.resolve(this, getNamespace)?.let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    } as IRTree.NormalClass?
-                },
-                path = null,
-                method = IRTree.Operation.HttpMethod.Post,
-                parameters = emptyList(),
-                queryParameters = emptyList(),
-                success = StatusCode.OK,
-                headers = emptyList(),
-                outputHeaders = emptyList(),
-                faultHeaders = emptyList(),
-                inputContentType = ContentType.TextXml,
-                outputContentType = ContentType.TextXml,
-                deprecated = false,
-            ),
-        )
+
+    for (service in services) {
+        val servicePort = service.port
+        val bindingNamespace: String
+        val bindingName: String
+        if (':' in servicePort.binding) {
+            val split = servicePort.binding.split(":")
+            bindingNamespace = getNamespace(split.first())
+            bindingName = split.last()
+        } else {
+            bindingNamespace = targetNamespace
+            bindingName = servicePort.binding
+        }
+        val binding = bindings.single {
+            targetNamespace == bindingNamespace && it.name == bindingName
+        }
+        val portTypeName = binding.type
+        val portNamespace: String
+        val portName: String
+        if (':' in portTypeName) {
+            val split = portTypeName.split(":")
+            portNamespace = getNamespace(split.first())
+            portName = split.last()
+        } else {
+            portNamespace = targetNamespace
+            portName = portTypeName
+        }
+        val portType = portTypes.single {
+            targetNamespace == portNamespace && it.name == portName
+        }
+        for (bindingOperation in binding.operations) {
+            val operation = portType.operations.single {
+                it.name == bindingOperation.name
+            }
+            operations.add(
+                IRTree.Operation(
+                    packageName = targetNamespace.packageName,
+                    name = operation.name.replaceFirstChar { it.lowercaseChar() },
+                    documentation = operation.documentation?.trimDocumentation(),
+                    location = service.port.address.location,
+                    soapAction = bindingOperation.operation.soapAction,
+                    input = operation.input.resolve(this, getNamespace).let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        }
+                    },
+                    output = operation.output.resolve(this, getNamespace).let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        }
+                    },
+                    notFound = false,
+                    fault = operation.fault?.resolve(this, getNamespace)?.let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        } as IRTree.NormalClass?
+                    },
+                    path = null,
+                    method = IRTree.Operation.HttpMethod.Post,
+                    parameters = emptyList(),
+                    queryParameters = emptyList(),
+                    success = StatusCode.OK,
+                    headers = emptyList(),
+                    outputHeaders = emptyList(),
+                    faultHeaders = emptyList(),
+                    inputContentType = ContentType.TextXml,
+                    outputContentType = ContentType.TextXml,
+                    deprecated = false,
+                ),
+            )
+        }
     }
 
     val irTree = IRTree(
         classes = classes,
-        operations,
+        operations = operations,
         auth = emptySet(),
     )
     return irTree
@@ -631,25 +667,25 @@ private fun List<Element>.mapToIr(
         val elementName = (it.name ?: it.ref!!.split(":")[1])
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-            IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
-                    IRTree.Type.LIST(type)
-                } else {
-                    type
-                },
-                nullable = it.nillable == true || it.minOccurs == "0",
-                serialName = elementName,
-                namespace = if (it.ref == null) {
-                    schema.targetNamespace
-                } else {
-                    ns?.let { getNamespace(it) }
-                },
-                documentation = it.annotation?.documentation(),
-                xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            )
+                IRTree.Member(
+                    type = if (it.maxOccurs == "unbounded") {
+                        IRTree.Type.LIST(type)
+                    } else {
+                        type
+                    },
+                    nullable = it.nillable == true || it.minOccurs == "0",
+                    serialName = elementName,
+                    namespace = if (it.ref == null) {
+                        schema.targetNamespace
+                    } else {
+                        ns?.let { getNamespace(it) }
+                    },
+                    documentation = it.annotation?.documentation(),
+                    xmlType = IRTree.XmlType.Element,
+                    requirements = emptyList(),
+                    isOverride = false,
+                    deprecated = false,
+                )
     }
 }
 

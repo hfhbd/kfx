@@ -191,13 +191,13 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
             }
         }
-        val address = operation.address
-        if (address != null) {
+        val soapAction = operation.soapAction
+        if (soapAction != null) {
             addStatement(
                 "%M(%S, %S)",
                 MemberName("io.ktor.client.request", "header", isExtension = true),
                 "SOAPAction",
-                address,
+                soapAction,
             )
         }
 

@@ -127,7 +127,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
         name = ir.name,
         documentation = ir.documentation,
         location = ir.location,
-        address = ir.address,
+        soapAction = ir.soapAction,
         input = ir.input?.let { toCodeGen(it) },
         output = ir.output?.let { toCodeGen(it) },
         returnType = ir.output?.let { toCodeGen(it) },
