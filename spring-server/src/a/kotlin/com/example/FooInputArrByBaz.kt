@@ -1,7 +1,9 @@
 package com.example
 
-import kotlinx.serialization.Serializable
 import kotlin.String
+import kotlinx.serialization.Serializable
 
 @Serializable
-public data class FooInputArrByBaz(public val b: String? = null)
+public data class FooInputArrByBaz(
+  public val b: String? = null,
+)
