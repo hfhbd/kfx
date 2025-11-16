@@ -1,6 +1,6 @@
 package io.github.hfhbd.kfx.wsdl
 
-import io.github.hfhbd.kfx.wsdl.fir.generate
+import io.github.hfhbd.kfx.wsdl.fir.generateWsdl
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -19,7 +19,7 @@ internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameter
         parameters.wsdlFile.asFile.get().inputStream().use {
             val openStreams = mutableListOf<InputStream>()
             try {
-                generate(
+                generateWsdl(
                     wsdlFile = it,
                     import = { fileName ->
                         val inputStream =

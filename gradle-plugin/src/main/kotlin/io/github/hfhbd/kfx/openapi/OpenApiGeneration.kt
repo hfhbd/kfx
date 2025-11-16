@@ -1,7 +1,7 @@
 package io.github.hfhbd.kfx.openapi
 
 import io.github.hfhbd.kfx.ir.IrTransformer
-import io.github.hfhbd.kfx.openapi.fir.generate
+import io.github.hfhbd.kfx.openapi.fir.generateOpenApi
 import io.github.hfhbd.kfx.plugins.packagename.PackageName
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -22,7 +22,7 @@ internal abstract class OpenApiGeneration : WorkAction<OpenApiGeneration.OpenApi
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
         parameters.openapiFile.asFile.get().inputStream().use {
-            generate(
+            generateOpenApi(
                 openApiFile = it,
                 outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
                 transformerFactories = if (packageName != null) {

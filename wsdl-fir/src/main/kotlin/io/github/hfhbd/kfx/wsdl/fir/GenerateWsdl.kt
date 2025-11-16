@@ -22,7 +22,7 @@ import java.io.InputStream
 import java.nio.file.Path
 import java.util.ServiceLoader
 
-fun generate(
+fun generateWsdl(
     wsdlFile: InputStream,
     import: (String) -> InputStream,
     outputDirectory: Path,

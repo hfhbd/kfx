@@ -1,17 +1,17 @@
-import io.github.hfhbd.kfx.swagger.fir.generate
+import io.github.hfhbd.kfx.swagger.fir.generateSwagger
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
 import kotlin.io.path.deleteRecursively
 
-private object TestUtil
+private object SwaggerTestUtil
 
 @OptIn(ExperimentalPathApi::class)
-fun test(name: String, vararg ignoreFiles: String = arrayOf("SwaggerTesting.kt")) {
+fun testSwagger(name: String, vararg ignoreFiles: String = arrayOf("SwaggerTesting.kt")) {
     val outputDirectory = Path("build/kfx-tests/$name")
     outputDirectory.deleteRecursively()
 
-    generate(
-        swaggerFile = TestUtil::class.java.getResourceAsStream("/$name.json"),
+    generateSwagger(
+        swaggerFile = SwaggerTestUtil::class.java.getResourceAsStream("/$name.json"),
         outputDirectory = outputDirectory,
     )
     assertEqualsDirectories(

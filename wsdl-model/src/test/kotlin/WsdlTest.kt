@@ -8,4 +8,10 @@ class WsdlTest {
         val text = WsdlTest::class.java.getResourceAsStream("/FooService.wsdl")!!.bufferedReader().readText()
         xml().decodeFromString(WSDL.serializer(), text)
     }
+
+    @Test
+    fun parseIncludedService() {
+        val text = WsdlTest::class.java.getResourceAsStream("/IncludedService.wsdl")!!.bufferedReader().readText()
+        xml().decodeFromString(WSDL.serializer(), text)
+    }
 }
