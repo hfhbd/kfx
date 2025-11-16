@@ -124,23 +124,29 @@ private fun WSDL.toIr(
     val classes = irTypes.resolveMembers(faults)
     val operations = mutableSetOf<IRTree.Operation>()
 
-    fun resolveNamespaceAndName(qualifiedName: String, getNamespace: (String) -> String, targetNamespace: String): Pair<String, String> {
-        return if (':' in qualifiedName) {
-            val split = qualifiedName.split(":")
-            getNamespace(split.first()) to split.last()
-        } else {
-            targetNamespace to qualifiedName
-        }
+    fun resolveNamespaceAndName(
+        qualifiedName: String,
+        getNamespace: (String) -> String,
+    ): Pair<String, String> = if (':' in
+        qualifiedName
+    ) {
+        val split = qualifiedName.split(":")
+        getNamespace(split.first()) to split.last()
+    } else {
+        targetNamespace to qualifiedName
     }
 
     for (service in services) {
         val servicePort = service.port
-        val (bindingNamespace, bindingName) = resolveNamespaceAndName(servicePort.binding, getNamespace, targetNamespace)
+        val (bindingNamespace, bindingName) = resolveNamespaceAndName(
+            servicePort.binding,
+            getNamespace,
+        )
         val binding = bindings.single {
             targetNamespace == bindingNamespace && it.name == bindingName
         }
         val portTypeName = binding.type
-        val (portNamespace, portName) = resolveNamespaceAndName(portTypeName, getNamespace, targetNamespace)
+        val (portNamespace, portName) = resolveNamespaceAndName(portTypeName, getNamespace)
         val portType = portTypes.single {
             targetNamespace == portNamespace && it.name == portName
         }
