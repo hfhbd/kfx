@@ -11,8 +11,6 @@ dependencies {
 
 testing.suites {
     register("a", JvmTestSuite::class) {
-        useKotlinTest()
-
         dependencies {
             implementation(projects.kotlin)
             implementation(projects.creatorKotlinxjson)
@@ -28,10 +26,7 @@ testing.suites {
         }
 
         targets.configureEach {
-            val target = this
             testTask {
-                outputs.dir("build/kfx-tests/${target.name}")
-
                 javaLauncher.set(javaToolchains.launcherFor {
                     languageVersion.set(JavaLanguageVersion.of(17))
                 })

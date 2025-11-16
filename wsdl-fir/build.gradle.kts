@@ -38,14 +38,6 @@ testing.suites {
 
             implementation(testFixtures(projects.wsdlModel))
         }
-        targets.configureEach {
-            tasks.check {
-                dependsOn(testTask)
-            }
-            testTask {
-                outputs.dir("build/kfx-tests/${this@withType.name}")
-            }
-        }
     }
 
     register("FooService", JvmTestSuite::class) {

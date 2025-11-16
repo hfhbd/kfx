@@ -24,6 +24,15 @@ java {
 
 testing.suites.withType(JvmTestSuite::class).configureEach {
     useKotlinTest()
+    targets.configureEach {
+        val target = this
+        tasks.check {
+            dependsOn(testTask)
+        }
+        testTask {
+            outputs.dir("build/kfx-tests/${target.name}")
+        }
+    }
 }
 
 publishing {
