@@ -166,7 +166,7 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         val headers: List<Parameter>,
         val queryParameters: List<Parameter>,
         val location: String?,
-        val address: String?,
+        val soapAction: String?,
         val success: StatusCode?,
         val input: Type?,
         val inputContentType: ContentType?,

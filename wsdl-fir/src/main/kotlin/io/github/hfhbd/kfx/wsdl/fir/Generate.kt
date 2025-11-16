@@ -113,57 +113,89 @@ private fun WSDL.toIr(
         }
     }
 
-    val faults = portType.operations.map {
-        it.fault
-    }.mapNotNull {
-        it?.resolve(this, getNamespace)
+    val faults = portTypes.flatMap {
+        it.operations.map {
+            it.fault
+        }.mapNotNull {
+            it?.resolve(this, getNamespace)
+        }
     }.toSet()
 
     val classes = irTypes.resolveMembers(faults)
-
     val operations = mutableSetOf<IRTree.Operation>()
-    for (operation in portType.operations) {
-        operations.add(
-            IRTree.Operation(
-                packageName = targetNamespace.packageName,
-                name = operation.name.replaceFirstChar { it.lowercaseChar() },
-                documentation = operation.documentation?.trimDocumentation(),
-                location = service.port.address.location,
-                address = "$targetNamespace/${portType.name}/${operation.name}",
-                input = operation.input.resolve(this, getNamespace).let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    }
-                },
-                output = operation.output.resolve(this, getNamespace).let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    }
-                },
-                notFound = false,
-                fault = operation.fault?.resolve(this, getNamespace)?.let { resolved ->
-                    classes.firstOrNull {
-                        it.packageName == resolved.packageName && it.name == resolved.name
-                    } as IRTree.NormalClass?
-                },
-                path = null,
-                method = IRTree.Operation.HttpMethod.Post,
-                parameters = emptyList(),
-                queryParameters = emptyList(),
-                success = StatusCode.OK,
-                headers = emptyList(),
-                outputHeaders = emptyList(),
-                faultHeaders = emptyList(),
-                inputContentType = ContentType.TextXml,
-                outputContentType = ContentType.TextXml,
-                deprecated = false,
-            ),
+
+    fun resolveNamespaceAndName(
+        qualifiedName: String,
+        getNamespace: (String) -> String,
+    ): Pair<String, String> = if (':' in
+        qualifiedName
+    ) {
+        val split = qualifiedName.split(":")
+        getNamespace(split.first()) to split.last()
+    } else {
+        targetNamespace to qualifiedName
+    }
+
+    for (service in services) {
+        val servicePort = service.port
+        val (bindingNamespace, bindingName) = resolveNamespaceAndName(
+            servicePort.binding,
+            getNamespace,
         )
+        val binding = bindings.single {
+            targetNamespace == bindingNamespace && it.name == bindingName
+        }
+        val portTypeName = binding.type
+        val (portNamespace, portName) = resolveNamespaceAndName(portTypeName, getNamespace)
+        val portType = portTypes.single {
+            targetNamespace == portNamespace && it.name == portName
+        }
+        for (bindingOperation in binding.operations) {
+            val operation = portType.operations.single {
+                it.name == bindingOperation.name
+            }
+            operations.add(
+                IRTree.Operation(
+                    packageName = targetNamespace.packageName,
+                    name = operation.name.replaceFirstChar { it.lowercaseChar() },
+                    documentation = operation.documentation?.trimDocumentation(),
+                    location = service.port.address.location,
+                    soapAction = bindingOperation.operation.soapAction,
+                    input = operation.input.resolve(this, getNamespace).let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        }
+                    },
+                    output = operation.output.resolve(this, getNamespace).let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        }
+                    },
+                    notFound = false,
+                    fault = operation.fault?.resolve(this, getNamespace)?.let { resolved ->
+                        classes.firstOrNull {
+                            it.packageName == resolved.packageName && it.name == resolved.name
+                        } as IRTree.NormalClass?
+                    },
+                    path = null,
+                    method = IRTree.Operation.HttpMethod.Post,
+                    parameters = emptyList(),
+                    queryParameters = emptyList(),
+                    success = StatusCode.OK,
+                    headers = emptyList(),
+                    outputHeaders = emptyList(),
+                    faultHeaders = emptyList(),
+                    inputContentType = ContentType.TextXml,
+                    outputContentType = ContentType.TextXml,
+                    deprecated = false,
+                ),
+            )
+        }
     }
 
     val irTree = IRTree(
         classes = classes,
-        operations,
+        operations = operations,
         auth = emptySet(),
     )
     return irTree

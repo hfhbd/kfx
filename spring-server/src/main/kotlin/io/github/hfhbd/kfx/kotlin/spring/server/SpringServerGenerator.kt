@@ -213,8 +213,8 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
             function.beginControlFlow("accept(%L).nest", outputContentType.toMediaType())
         }
 
-        val address = address
-        if (address != null) {
+        val soapAction = soapAction
+        if (soapAction != null) {
             function.beginControlFlow(
                 "%M { it.firstHeader(%S) == %P }.nest {",
                 MemberName(
@@ -223,7 +223,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                     isExtension = true,
                 ),
                 "SOAPAction",
-                address,
+                soapAction,
             )
         }
 
@@ -306,7 +306,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
 
         function.endControlFlow()
 
-        if (address != null) {
+        if (soapAction != null) {
             function.endControlFlow()
         }
         if (inputContentType != null) {

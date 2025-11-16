@@ -28,13 +28,13 @@ data class WSDL(
     val messages: List<Message>,
     @XmlElement
     @XmlSerialName("portType", WSDL_NS)
-    val portType: PortType,
+    val portTypes: List<PortType>,
     @XmlElement
     @XmlSerialName("binding", WSDL_NS)
-    val binding: Binding,
+    val bindings: List<Binding>,
     @XmlElement
     @XmlSerialName("service", WSDL_NS)
-    val service: Service,
+    val services: List<Service>,
 )
 
 @Serializable

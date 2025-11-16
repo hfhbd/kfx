@@ -21,7 +21,7 @@ import io.ktor.server.routing.post
 public fun Route.createFooWithoutFault(action: suspend ApplicationCall.(Envelope<Foo>) -> CreateFooWithoutFaultResult) {
   contentType(Xml) {
     accept(Xml) {
-      soapAction("http://example.com/foo/FooServicePortType/CreateFooWithoutFault") {
+      soapAction("http://example.com/FooService/createFooWithoutFault") {
         post {
           val body = call.receive<Envelope<Foo>>()
           val response = call.action(body)
