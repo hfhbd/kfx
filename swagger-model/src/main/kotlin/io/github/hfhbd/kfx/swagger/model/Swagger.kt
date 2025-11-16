@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonTransformingSerializer
 
 @Serializable
 data class Swagger(
@@ -26,17 +28,10 @@ data class Swagger(
     val externalDocs: ExternalDocs? = null,
 ) {
     @Serializable
-    public data class ExternalDocs(
-        val description: String? = null,
-        val url: String,
-    )
+    public data class ExternalDocs(val description: String? = null, val url: String)
 
     @Serializable
-    public data class Info(
-        val title: String,
-        val description: String? = null,
-        val version: String,
-    )
+    public data class Info(val title: String, val description: String? = null, val version: String)
 
     @Serializable
     data class Tag(val name: String)
@@ -79,9 +74,7 @@ data class Swagger(
 
         @SerialName("basic")
         @Serializable
-        data class BasicAuthentication(
-            val description: String? = null,
-        ) : SecurityDefinition
+        data class BasicAuthentication(val description: String? = null) : SecurityDefinition
 
         @SerialName("apiKey")
         @Serializable

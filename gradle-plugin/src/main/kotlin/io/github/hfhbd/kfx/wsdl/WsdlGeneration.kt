@@ -22,9 +22,10 @@ internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameter
                 generate(
                     wsdlFile = it,
                     import = { fileName ->
-                        val inputStream = parameters.schemaFiles.singleOrNull { it.name == fileName }?.inputStream() ?: error(
-                            "Expected $fileName in ${parameters.schemaFiles.map { it.name }}",
-                        )
+                        val inputStream =
+                            parameters.schemaFiles.singleOrNull { it.name == fileName }?.inputStream() ?: error(
+                                "Expected $fileName in ${parameters.schemaFiles.map { it.name }}",
+                            )
                         openStreams.add(inputStream)
                         inputStream
                     },

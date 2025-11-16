@@ -1,9 +1,18 @@
 package io.github.hfhbd.kfx.kotlin.spring.server
 
-import app.softwork.serviceloader.*
-import com.squareup.kotlinpoet.*
+import app.softwork.serviceloader.ServiceLoader
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.UNIT
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
@@ -23,8 +32,8 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
     }
 
     // ignore auth
-    override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> {
-        return codeGenTree.operations.map { it.generateFileSpec() }
+    override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> = codeGenTree.operations.map {
+        it.generateFileSpec()
     }
 
     private fun CodeGenTree.Operation.generateFileSpec(): FileSpec = FileSpec.builder(

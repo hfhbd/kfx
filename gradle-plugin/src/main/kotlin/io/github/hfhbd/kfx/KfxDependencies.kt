@@ -8,17 +8,24 @@ interface KfxDependencies : Dependencies {
     val compiler: DependencyCollector
 
     fun kotlin(): ExternalModuleDependency = dependencyFactory.create("$GROUP:kotlin:$VERSION")
+
     fun ktorClient(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-client:$VERSION")
+
     fun ktorServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-server:$VERSION")
 
     fun springServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:spring-server:$VERSION")
 
     fun kotlinxJson(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-kotlinxjson:$VERSION")
+
     fun kotlinxXmlutil(): ExternalModuleDependency = dependencyFactory.create("$GROUP:creator-xmlutil:$VERSION")
 
     fun soap11(): ExternalModuleDependency = dependencyFactory.create("$GROUP:soap11:$VERSION")
+
     fun validation(): ExternalModuleDependency = dependencyFactory.create("$GROUP:validation:$VERSION")
+
     fun responseClasses(): ExternalModuleDependency = dependencyFactory.create("$GROUP:response-classes:$VERSION")
+
     fun odata(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ir-odata:$VERSION")
+
     fun contextualDate(): ExternalModuleDependency = dependencyFactory.create("$GROUP:contextual-date:$VERSION")
 }

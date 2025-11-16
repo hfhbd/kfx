@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:ContentType.kt:ContentType.Companion$fun fromString(contentType: String): ContentType?</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.Accepted$202</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.BadRequest$400</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.Conflict$409</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.ContentTooLarge$413</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.Created$201</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.Forbidden$403</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.InternalServerError$500</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.LengthRequired$411</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.NoContent$204</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.NotAcceptable$406</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.NotFound$404</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.OK$200</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.TooManyRequests$429</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.Unauthorized$401</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.UnprocessableEntity$422</ID>
+  </CurrentIssues>
+</SmellBaseline>

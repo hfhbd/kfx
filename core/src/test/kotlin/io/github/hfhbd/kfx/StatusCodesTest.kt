@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class StatusCodesTest {
     @Test

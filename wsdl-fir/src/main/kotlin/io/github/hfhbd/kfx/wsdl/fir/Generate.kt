@@ -92,6 +92,7 @@ private sealed interface Classes {
         val namespace: String,
         val ignore: Boolean,
     ) : Classes
+
     data class ActualClass(val forClass: IRTree.Type) : Classes
 }
 
@@ -491,6 +492,7 @@ private fun List<Element>.mapToIr(
         val extension = it.complexType?.simpleContent?.extension
         val ref = (it.type ?: it.ref ?: it.name!!).split(":")
         val ns: String?
+
         fun createCustomWrapper(type: IRTree.Type): IRTree.Class {
             val qname = IRTree.ClassName(schema.targetNamespace.packageName, prefix.name + ref[0])
             var classe: IRTree.Class = IRTree.NormalClass(

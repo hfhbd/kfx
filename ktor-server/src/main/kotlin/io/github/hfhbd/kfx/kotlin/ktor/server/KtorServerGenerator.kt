@@ -1,7 +1,16 @@
 package io.github.hfhbd.kfx.kotlin.ktor.server
 
 import app.softwork.serviceloader.ServiceLoader
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.NameAllocator
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.UNIT
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
@@ -24,8 +33,8 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
     }
 
     // ignore auth
-    override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> {
-        return codeGenTree.operations.map { it.generateFileSpec() }
+    override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> = codeGenTree.operations.map {
+        it.generateFileSpec()
     }
 
     private fun CodeGenTree.Operation.generateFileSpec(): FileSpec = FileSpec.builder(

@@ -1,20 +1,24 @@
-formatting:
-  NoWildcardImports:
+ktlint:
+  ChainMethodContinuation:
     active: false
-  Filename:
+  FunctionSignature:
     active: false
-  TrailingCommaOnDeclarationSite:
+  MaximumLineLength:
+    active: false
+  MultilineExpressionWrapping:
+    active: false
+  NoEmptyFirstLineInClassBody:
     active: true
-  TrailingCommaOnCallSite:
+  SpacingAroundSquareBrackets:
     active: true
+  StringTemplateIndent:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
 
 style:
-  WildcardImport:
-    active: false
   CollapsibleIfStatements:
     active: true
   DataClassShouldBeImmutable:

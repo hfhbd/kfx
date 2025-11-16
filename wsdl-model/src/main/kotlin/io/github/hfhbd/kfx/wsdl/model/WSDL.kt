@@ -17,27 +17,21 @@ private const val XSD = "http://www.w3.org/2001/XMLSchema"
 data class WSDL(
     val name: String,
     val targetNamespace: String,
-
     @XmlElement
     @XmlSerialName("documentation", WSDL_NS)
     val documentation: Documentation? = null,
-
     @XmlElement
     @XmlSerialName("types", WSDL_NS)
     val types: List<Types>,
-
     @XmlElement
     @XmlSerialName("message", WSDL_NS)
     val messages: List<Message>,
-
     @XmlElement
     @XmlSerialName("portType", WSDL_NS)
     val portType: PortType,
-
     @XmlElement
     @XmlSerialName("binding", WSDL_NS)
     val binding: Binding,
-
     @XmlElement
     @XmlSerialName("service", WSDL_NS)
     val service: Service,
@@ -47,15 +41,12 @@ data class WSDL(
 data class Binding(
     val name: String,
     val type: String,
-
     @XmlElement
     @XmlSerialName("documentation", WSDL_NS)
     val documentation: String? = null,
-
     @XmlElement
     @XmlSerialName("binding", SOAP)
     val binding: SoapBinding,
-
     @XmlElement
     @XmlSerialName("operation", WSDL_NS)
     val operations: List<SoapOperation>,
@@ -64,24 +55,19 @@ data class Binding(
 @Serializable
 data class SoapOperation(
     val name: String,
-
     @XmlElement
     @XmlSerialName("operation", SOAP)
     val operation: Operation,
-
     @XmlElement
     @XmlSerialName("input", WSDL_NS)
     val input: Input,
-
     @XmlElement
     @XmlSerialName("output", WSDL_NS)
     val output: Output,
-
     @XmlElement
     @XmlSerialName("fault", WSDL_NS)
     val fault: Fault? = null,
 ) {
-
     @Serializable
     data class Input(
         val name: String? = null,
@@ -106,26 +92,18 @@ data class SoapOperation(
         val fault: Fault,
     ) {
         @Serializable
-        data class Fault(
-            val name: String,
-            val use: String,
-        )
+        data class Fault(val name: String, val use: String)
     }
 
     @Serializable
-    data class Body(
-        val use: String,
-    )
+    data class Body(val use: String)
 
     @Serializable
     data class Operation(val soapAction: String, val style: String? = null)
 }
 
 @Serializable
-data class SoapBinding(
-    val style: String,
-    val transport: String,
-)
+data class SoapBinding(val style: String, val transport: String)
 
 @Serializable
 data class PortType(
@@ -141,29 +119,22 @@ data class PortType(
 @Serializable
 data class Operation(
     val name: String,
-
     @XmlElement
     @XmlSerialName("documentation", WSDL_NS)
     val documentation: String? = null,
-
     @XmlElement
     @XmlSerialName("input", WSDL_NS)
     val input: OperationType,
-
     @XmlElement
     @XmlSerialName("output", WSDL_NS)
     val output: OperationType,
-
     @XmlElement
     @XmlSerialName("fault", WSDL_NS)
     val fault: OperationType? = null,
 )
 
 @Serializable
-data class OperationType(
-    val message: String,
-    val name: String? = null,
-)
+data class OperationType(val message: String, val name: String? = null)
 
 @Serializable
 data class Message(
@@ -174,15 +145,11 @@ data class Message(
 )
 
 @Serializable
-data class Part(
-    val element: String,
-    val name: String,
-)
+data class Part(val element: String, val name: String)
 
 @Serializable
 data class Service(
     val name: String,
-
     @XmlElement
     @XmlSerialName("port", WSDL_NS)
     val port: Port,
@@ -192,16 +159,13 @@ data class Service(
 data class Port(
     val binding: String,
     val name: String,
-
     @XmlElement
     @XmlSerialName("address", SOAP)
     val address: Address,
 )
 
 @Serializable
-data class Address(
-    val location: String,
-)
+data class Address(val location: String)
 
 @Serializable
 data class Documentation(
@@ -226,47 +190,36 @@ data class Types(
 data class Schema(
     val elementFormDefault: String? = null,
     val targetNamespace: String,
-
     val attributeFormDefault: String? = null,
-
     @XmlElement
     @XmlSerialName("import", XSD)
     val imports: List<Import> = emptyList(),
-
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
-
     @XmlElement
     @XmlSerialName("element", XSD)
     val elements: List<Element>,
-
     @XmlElement
     @XmlSerialName("complexType", XSD)
     val complexTypes: List<ComplexType>,
-
     @XmlElement
     @XmlSerialName("simpleType", XSD)
     val simpleType: List<SimpleType>,
-
     @XmlElement
     @XmlSerialName("include", XSD)
     val include: Include? = null,
 )
 
 @Serializable
-data class Include(
-    val schemaLocation: String,
-)
+data class Include(val schemaLocation: String)
 
 @Serializable
 data class SimpleType(
     val name: String? = null,
-
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
-
     @XmlElement
     @XmlSerialName("restriction", XSD)
     val restriction: Restriction,
@@ -275,35 +228,27 @@ data class SimpleType(
 @Serializable
 data class Restriction(
     val base: String,
-
     @XmlElement
     @XmlSerialName("enumeration", XSD)
     val enumeration: List<Enumeration> = emptyList(),
-
     @XmlElement
     @XmlSerialName("minLength", XSD)
     val minLength: MinLength? = null,
-
     @XmlElement
     @XmlSerialName("maxLength", XSD)
     val maxLength: MaxLength? = null,
-
     @XmlElement
     @XmlSerialName("minInclusive", XSD)
     val minInclusive: MinInclusive? = null,
-
     @XmlElement
     @XmlSerialName("maxInclusive", XSD)
     val maxInclusive: MaxInclusive? = null,
-
     @XmlElement
     @XmlSerialName("fractionDigits", XSD)
     val fractionDigits: FractionDigits? = null,
-
     @XmlElement
     @XmlSerialName("totalDigits", XSD)
     val totalDigits: TotalDigits? = null,
-
     @XmlElement
     @XmlSerialName("length", XSD)
     val length: Length? = null,
@@ -340,23 +285,18 @@ data class Enumeration(
 @Serializable
 data class ComplexType(
     val name: String? = null,
-
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
-
     @XmlElement
     @XmlSerialName("sequence", XSD)
     val sequence: Sequence? = null,
-
     @XmlElement
     @XmlSerialName("simpleContent", XSD)
     val simpleContent: SimpleContent? = null,
-
     @XmlElement
     @XmlSerialName("attribute", XSD)
     val attributes: List<Attribute> = emptyList(),
-
     @XmlElement
     @XmlSerialName("complexContent", XSD)
     val complexContent: ComplexContent? = null,
@@ -382,7 +322,6 @@ data class Extension(
     @XmlElement
     @XmlSerialName("attribute", XSD)
     val attributes: List<Attribute> = emptyList(),
-
     @XmlElement
     @XmlSerialName("sequence", XSD)
     val sequence: Sequence?,
@@ -393,9 +332,7 @@ data class Attribute(
     val name: String,
     val type: String? = null,
     val use: String? = null,
-
     val default: String? = null,
-
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
@@ -406,13 +343,10 @@ data class Sequence(
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
-
     @XmlSerialName("minOccurs", XSD)
     val minOccurs: String? = null,
-
     @XmlSerialName("maxOccurs", XSD)
     val maxOccurs: String? = null,
-
     val elements: List<Elements>,
 )
 
@@ -434,17 +368,13 @@ data class Element(
     @XmlElement
     @XmlSerialName("annotation", XSD)
     val annotation: Annotation? = null,
-
     val minOccurs: String? = null,
     val maxOccurs: String? = null,
     val nillable: Boolean? = null,
-
     val ref: String? = null,
-
     @XmlElement
     @XmlSerialName("complexType", XSD)
     val complexType: ComplexType? = null,
-
     @XmlElement
     @XmlSerialName("simpleType", XSD)
     val simpleType: SimpleType? = null,
@@ -455,7 +385,6 @@ data class Annotation(
     @XmlElement
     @XmlSerialName("appinfo", XSD)
     val appInfo: AppInfo? = null,
-
     @XmlElement
     @XmlSerialName("documentation", XSD)
     val documentation: Documentation? = null,
@@ -474,7 +403,4 @@ data class AppInfo(
 }
 
 @Serializable
-data class Import(
-    val namespace: String,
-    val schemaLocation: String? = null,
-)
+data class Import(val namespace: String, val schemaLocation: String? = null)

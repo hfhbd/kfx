@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.dokka")
-    id("io.gitlab.arturbosch.detekt")
+    id("merge-detekt")
 }
 
 dokka {
@@ -16,34 +16,11 @@ dokka {
     }
 }
 
-detekt {
-    source.from(fileTree(layout.settingsDirectory) {
-        include("**/*.kt")
-        exclude("**/*.kts")
-        exclude("**/resources/**")
-        exclude("**/generated/**")
-        exclude("**/build/**")
-        exclude("**/testFixtures/**")
-
-        exclude("**/leanix/**")
-        exclude("**/sapci/**")
-        exclude("**/a/**")
-        exclude("**/test/**")
-        exclude("**/central/**")
-        exclude("**/jira/**")
-        exclude("**/sealed/**")
-        exclude("**/FooService/**")
-    })
-    parallel = true
-    autoCorrect = true
-    buildUponDefaultConfig = true
-
-    reports {
-        sarif.required.set(true)
-    }
-    
+mergeDetekt {
     dependencies {
-        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detekt.toolVersion}")
+        for (subproject in subprojects) {
+            sarif(project(subproject.path))
+        }
     }
 }
 

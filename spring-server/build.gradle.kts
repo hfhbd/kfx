@@ -6,41 +6,41 @@ plugins {
 dependencies {
     implementation(projects.kotlinPoet)
 
-    testImplementation(platform(libs.spring.bom))
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(libs.serialization.json)
+    testFixturesApi(testFixtures(projects.openapiFir))
 }
 
-tasks.compileTestJava {
-    javaCompiler.set(javaToolchains.compilerFor {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    })
-}
+testing.suites {
+    register("a", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.kotlin)
+            implementation(projects.creatorKotlinxjson)
+            implementation(testFixtures(project()))
 
-tasks.compileTestKotlin {
-    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-}
+            implementation(platform(libs.spring.bom))
+            implementation("org.springframework.boot:spring-boot-starter-webflux")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+            implementation("org.springframework.boot:spring-boot-starter-test")
+            implementation(libs.serialization.json)
 
-testing.suites.named("test", JvmTestSuite::class) {
-    dependencies {
-        implementation(testFixtures(projects.openapiFir))
+            implementation(testFixtures(projects.openapiModel))
+        }
 
-        implementation(projects.kotlin)
-        implementation(projects.creatorKotlinxjson)
-        implementation(projects.springServer)
-
-        implementation(testFixtures(projects.openapiModel))
-    }
-
-    targets.configureEach {
-        testTask {
-            outputs.dir("build/kfx-tests/test")
-
-            javaLauncher.set(javaToolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(17))
-            })
+        targets.configureEach {
+            testTask {
+                javaLauncher.set(javaToolchains.launcherFor {
+                    languageVersion.set(JavaLanguageVersion.of(17))
+                })
+            }
+        }
+        sources {
+            tasks.named(compileJavaTaskName, JavaCompile::class) {
+                javaCompiler.set(javaToolchains.compilerFor {
+                    languageVersion.set(JavaLanguageVersion.of(17))
+                })
+            }
+            tasks.named("compile${name.replaceFirstChar { it.uppercaseChar() }}Kotlin", org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile::class) {
+                compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            }
         }
     }
 }

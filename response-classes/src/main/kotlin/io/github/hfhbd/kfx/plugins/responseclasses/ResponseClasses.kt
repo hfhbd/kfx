@@ -1,16 +1,18 @@
-import app.softwork.serviceloader.*
-import io.github.hfhbd.kfx.*
-import io.github.hfhbd.kfx.codegen.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Operation.ResponseBranches.*
-import io.github.hfhbd.kfx.ir.*
+package io.github.hfhbd.kfx.plugins.responseclasses
+
+import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.kfx.StatusCode
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.kfx.toCamelCase
 
 @ServiceLoader(CodeGenTransformer::class)
 class ResponseClasses : CodeGenTransformer {
     override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree {
         val classes = codeGen.classes.mapTo(mutableSetOf()) {
             when (it) {
-                is NormalClass -> it.copy(
+                is CodeGenTree.NormalClass -> it.copy(
                     isFault = false,
                 )
                 is CodeGenTree.Enum -> it
@@ -19,28 +21,28 @@ class ResponseClasses : CodeGenTransformer {
 
         val operations = codeGen.operations.mapTo(mutableSetOf()) {
             val packageName = if (it.packageName.isBlank()) "results" else it.packageName + ".results"
-            val newReturnTypeName = ClassName(
+            val newReturnTypeName = CodeGenTree.ClassName(
                 packageName,
                 listOf(it.name.replaceFirstChar { it.uppercase() } + "Result"),
             )
             val fault = it.faultWrapper ?: it.fault!!
-            val newReturnType = NormalClass(
+            val newReturnType = CodeGenTree.NormalClass(
                 packageName = newReturnTypeName.packageName,
                 names = newReturnTypeName.names,
                 isSealed = true,
                 innerClasses = buildList {
                     val output = it.outputWrapperType ?: it.output
                     add(
-                        NormalClass(
+                        CodeGenTree.NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = listOf("Success"),
                             members = buildList {
                                 if (output != null) {
-                                    add(Member(name = "body", type = output))
+                                    add(CodeGenTree.Member(name = "body", type = output))
                                 }
                                 for (it in it.outputHeaders) {
                                     add(
-                                        Member(
+                                        CodeGenTree.Member(
                                             name = it.name.toCamelCase(),
                                             type = it.type,
                                             nullable = it.nullable,
@@ -54,7 +56,7 @@ class ResponseClasses : CodeGenTransformer {
 
                     if (it.notFound) {
                         add(
-                            NormalClass(
+                            CodeGenTree.NormalClass(
                                 packageName = newReturnTypeName.packageName,
                                 names = listOf("NotFound"),
                                 superInterfaces = listOf(newReturnTypeName),
@@ -63,13 +65,19 @@ class ResponseClasses : CodeGenTransformer {
                     }
 
                     add(
-                        NormalClass(
+                        CodeGenTree.NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = listOf("Failure"),
                             members = buildList {
-                                add(Member(name = "body", type = fault))
+                                add(CodeGenTree.Member(name = "body", type = fault))
                                 for (it in it.faultHeaders) {
-                                    add(Member(name = it.name.toCamelCase(), type = it.type, nullable = it.nullable))
+                                    add(
+                                        CodeGenTree.Member(
+                                            name = it.name.toCamelCase(),
+                                            type = it.type,
+                                            nullable = it.nullable,
+                                        ),
+                                    )
                                 }
                             },
                             superInterfaces = listOf(newReturnTypeName),
@@ -83,13 +91,13 @@ class ResponseClasses : CodeGenTransformer {
             it.copy(
                 fault = null,
                 returnType = newReturnType,
-                responseBranches = Operation.ResponseBranches(
-                    success = Branch(
-                        isCondition = NormalClass(
+                responseBranches = CodeGenTree.Operation.ResponseBranches(
+                    success = CodeGenTree.Operation.ResponseBranches.Branch(
+                        isCondition = CodeGenTree.NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = newReturnTypeName.names + listOf("Success"),
                             members = it.outputHeaders.map {
-                                Member(
+                                CodeGenTree.Member(
                                     name = it.name.toCamelCase(),
                                     type = it.type,
                                 )
@@ -97,12 +105,12 @@ class ResponseClasses : CodeGenTransformer {
                         ),
                         statusCode = it.success,
                         response = it.output?.let {
-                            Expression.Chain(
-                                Expression.Response,
-                                Expression.CallMember(
-                                    Member(
+                            CodeGenTree.Expression.Chain(
+                                CodeGenTree.Expression.Response,
+                                CodeGenTree.Expression.CallMember(
+                                    CodeGenTree.Member(
                                         name = "body",
-                                        type = Type.Builtin.UNIT,
+                                        type = CodeGenTree.Type.Builtin.UNIT,
                                     ),
                                 ),
                             )
@@ -112,8 +120,8 @@ class ResponseClasses : CodeGenTransformer {
                         },
                     ),
                     notFound = if (it.notFound) {
-                        Branch(
-                            isCondition = NormalClass(
+                        CodeGenTree.Operation.ResponseBranches.Branch(
+                            isCondition = CodeGenTree.NormalClass(
                                 packageName = newReturnTypeName.packageName,
                                 names = newReturnTypeName.names + listOf("NotFound"),
                             ),
@@ -124,29 +132,29 @@ class ResponseClasses : CodeGenTransformer {
                     } else {
                         null
                     },
-                    fault = Branch(
-                        isCondition = NormalClass(
+                    fault = CodeGenTree.Operation.ResponseBranches.Branch(
+                        isCondition = CodeGenTree.NormalClass(
                             packageName = newReturnTypeName.packageName,
                             names = newReturnTypeName.names + listOf("Failure"),
                             members = listOf(
-                                Member(
+                                CodeGenTree.Member(
                                     name = "body",
                                     type = fault,
                                 ),
                             ) + it.faultHeaders.map {
-                                Member(
+                                CodeGenTree.Member(
                                     name = it.name.toCamelCase(),
                                     type = it.type,
                                 )
                             },
                         ),
                         statusCode = StatusCode.InternalServerError,
-                        response = Expression.Chain(
-                            Expression.Response,
-                            Expression.CallMember(
-                                Member(
+                        response = CodeGenTree.Expression.Chain(
+                            CodeGenTree.Expression.Response,
+                            CodeGenTree.Expression.CallMember(
+                                CodeGenTree.Member(
                                     name = "body",
-                                    type = Type.Builtin.UNIT,
+                                    type = CodeGenTree.Type.Builtin.UNIT,
                                 ),
                             ),
                         ),

@@ -4,7 +4,6 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.CallFunction
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.CallStatic
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.Chain
 import io.github.hfhbd.kfx.kotlin.toCodeBlock
-import io.github.hfhbd.kfx.kotlin.toPoetType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

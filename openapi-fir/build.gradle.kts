@@ -11,8 +11,6 @@ dependencies {
 
 testing.suites {
     withType(JvmTestSuite::class) {
-        useKotlinTest()
-
         dependencies {
             implementation(testFixtures(project()))
 
@@ -26,14 +24,6 @@ testing.suites {
             implementation(libs.ktor.server.core)
             implementation(projects.oauth2Runtime)
             implementation(testFixtures(projects.openapiModel))
-        }
-        targets.configureEach {
-            tasks.check {
-                dependsOn(testTask)
-            }
-            testTask {
-                outputs.dir("build/kfx-tests/${this@withType.name}")
-            }
         }
     }
 

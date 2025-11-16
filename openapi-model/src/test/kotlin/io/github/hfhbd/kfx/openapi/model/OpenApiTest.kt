@@ -2,8 +2,8 @@
 
 package io.github.hfhbd.kfx.openapi.model
 
-import kotlinx.serialization.*
-import kotlin.test.*
+import kotlinx.serialization.InternalSerializationApi
+import kotlin.test.Test
 
 class OpenApiTest {
     @Test

@@ -3,8 +3,23 @@ package io.github.hfhbd.kfx.creator.kotlin
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenCreator
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.*
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.BooleanLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.ByteLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.CharLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DateLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DoubleLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DurationLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.FloatLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.InstantLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.IntLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.LongLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.ShortLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.UuidLiteral
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.Builtin
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.DateType
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.LIST
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.MAP
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.toPascalCaseEnumValue
 
@@ -107,50 +122,48 @@ interface KotlinxCoreCreator : CodeGenCreator {
         superInterfaces = listOfNotNull(ir.allOf?.let { toCodeGen(it) }),
     )
 
-    override fun toCodeGen(ir: IRTree.Operation): CodeGenTree.Operation {
-        return CodeGenTree.Operation(
-            packageName = ir.packageName,
-            name = ir.name,
-            documentation = ir.documentation,
-            location = ir.location,
-            address = ir.address,
-            input = ir.input?.let { toCodeGen(it) },
-            output = ir.output?.let { toCodeGen(it) },
-            returnType = ir.output?.let { toCodeGen(it) },
-            fault = ir.fault?.let { toCodeGen(it) },
-            method = when (ir.method) {
-                IRTree.Operation.HttpMethod.Head -> CodeGenTree.Operation.HttpMethod.Head
-                IRTree.Operation.HttpMethod.Get -> CodeGenTree.Operation.HttpMethod.Get
-                IRTree.Operation.HttpMethod.Post -> CodeGenTree.Operation.HttpMethod.Post
-                IRTree.Operation.HttpMethod.Put -> CodeGenTree.Operation.HttpMethod.Put
-                IRTree.Operation.HttpMethod.Patch -> CodeGenTree.Operation.HttpMethod.Patch
-                IRTree.Operation.HttpMethod.Delete -> CodeGenTree.Operation.HttpMethod.Delete
-            },
-            parameters = ir.parameters.map {
-                it.toCodeGen(defaultNull = false)
-            },
-            queryParameters = ir.queryParameters.map { it.toCodeGen(defaultNull = true) },
-            path = ir.path,
-            inputContentType = ir.inputContentType,
-            outputContentType = ir.outputContentType,
-            inputWrapper = null,
-            inputWrapperType = null,
-            outputWrapperType = null,
-            outputMember = null,
-            outputHeaders = ir.outputHeaders.map {
-                it.toCodeGen(defaultNull = false)
-            },
-            notFound = ir.notFound,
-            faultWrapper = null,
-            faultHeaders = ir.faultHeaders.map {
-                it.toCodeGen(defaultNull = false)
-            },
-            success = ir.success ?: StatusCode.OK,
-            headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
-            deprecated = ir.deprecated,
-            responseBranches = null,
-        )
-    }
+    override fun toCodeGen(ir: IRTree.Operation): CodeGenTree.Operation = CodeGenTree.Operation(
+        packageName = ir.packageName,
+        name = ir.name,
+        documentation = ir.documentation,
+        location = ir.location,
+        address = ir.address,
+        input = ir.input?.let { toCodeGen(it) },
+        output = ir.output?.let { toCodeGen(it) },
+        returnType = ir.output?.let { toCodeGen(it) },
+        fault = ir.fault?.let { toCodeGen(it) },
+        method = when (ir.method) {
+            IRTree.Operation.HttpMethod.Head -> CodeGenTree.Operation.HttpMethod.Head
+            IRTree.Operation.HttpMethod.Get -> CodeGenTree.Operation.HttpMethod.Get
+            IRTree.Operation.HttpMethod.Post -> CodeGenTree.Operation.HttpMethod.Post
+            IRTree.Operation.HttpMethod.Put -> CodeGenTree.Operation.HttpMethod.Put
+            IRTree.Operation.HttpMethod.Patch -> CodeGenTree.Operation.HttpMethod.Patch
+            IRTree.Operation.HttpMethod.Delete -> CodeGenTree.Operation.HttpMethod.Delete
+        },
+        parameters = ir.parameters.map {
+            it.toCodeGen(defaultNull = false)
+        },
+        queryParameters = ir.queryParameters.map { it.toCodeGen(defaultNull = true) },
+        path = ir.path,
+        inputContentType = ir.inputContentType,
+        outputContentType = ir.outputContentType,
+        inputWrapper = null,
+        inputWrapperType = null,
+        outputWrapperType = null,
+        outputMember = null,
+        outputHeaders = ir.outputHeaders.map {
+            it.toCodeGen(defaultNull = false)
+        },
+        notFound = ir.notFound,
+        faultWrapper = null,
+        faultHeaders = ir.faultHeaders.map {
+            it.toCodeGen(defaultNull = false)
+        },
+        success = ir.success ?: StatusCode.OK,
+        headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
+        deprecated = ir.deprecated,
+        responseBranches = null,
+    )
 
     private fun IRTree.Operation.Parameter.toCodeGen(defaultNull: Boolean): CodeGenTree.Operation.Parameter =
         CodeGenTree.Operation.Parameter(
@@ -159,7 +172,8 @@ interface KotlinxCoreCreator : CodeGenCreator {
             type = toCodeGen(type),
             documentation = documentation,
             serialName = serialName,
-            defaultValue = defaultValue?.toCodeGen() ?: if (nullable && defaultNull) NullLiteral else null,
+            defaultValue =
+            defaultValue?.toCodeGen() ?: if (nullable && defaultNull) CodeGenTree.Expression.NullLiteral else null,
         )
 
     private fun IRTree.Literal.toCodeGen(): CodeGenTree.Expression = when (this) {
@@ -208,6 +222,7 @@ interface KotlinxCoreCreator : CodeGenCreator {
 }
 
 val SERIALIZABLE = CodeGenTree.Annotation("kotlinx.serialization", listOf("Serializable"), emptyMap())
+
 fun serialName(value: String) = CodeGenTree.Annotation(
     "kotlinx.serialization",
     listOf("SerialName"),

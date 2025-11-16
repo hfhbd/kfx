@@ -5,17 +5,26 @@ package io.github.hfhbd.kfx.openapi.model
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema.OBJECT.OneOf.Companion.emptyOneOf
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema.OBJECT.Properties.Companion.emptyProperties
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.Response
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.*
-import kotlinx.serialization.encoding.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.KeepGeneratedSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonEncoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 
 @KeepGeneratedSerializer
 @Serializable(with = OpenApi.CustomSerializer::class)
 public data class OpenApi(
     @SerialName("openapi")
     val version: String,
-
     val info: Info,
     val tags: List<Tag> = emptyList(),
     val servers: List<Server> = emptyList(),
@@ -86,32 +95,17 @@ public data class OpenApi(
         }
 
         @Serializable
-        data class License(
-            val name: String,
-            val url: String? = null,
-            val email: String? = null,
-        )
+        data class License(val name: String, val url: String? = null, val email: String? = null)
 
         @Serializable
-        data class Contact(
-            val name: String? = null,
-            val identifier: String? = null,
-            val url: String? = null,
-        )
+        data class Contact(val name: String? = null, val identifier: String? = null, val url: String? = null)
     }
 
     @Serializable
-    data class Tag(
-        val name: String,
-        val description: String? = null,
-        val externalDocs: ExternalDocs? = null,
-    )
+    data class Tag(val name: String, val description: String? = null, val externalDocs: ExternalDocs? = null)
 
     @Serializable
-    data class ExternalDocs(
-        val url: String,
-        val description: String? = null,
-    )
+    data class ExternalDocs(val url: String, val description: String? = null)
 
     @Serializable
     public data class Server(
@@ -120,11 +114,7 @@ public data class OpenApi(
         val variables: Map<String, Variable> = emptyMap(),
     ) {
         @Serializable
-        data class Variable(
-            val description: String? = null,
-            val enum: List<String> = emptyList(),
-            val default: String,
-        )
+        data class Variable(val description: String? = null, val enum: List<String> = emptyList(), val default: String)
     }
 
     @Serializable
@@ -194,10 +184,7 @@ public data class OpenApi(
         )
 
         @Serializable
-        public data class MediaType(
-            val schema: Components.Schema? = null,
-            val examples: JsonElement? = null,
-        )
+        public data class MediaType(val schema: Components.Schema? = null, val examples: JsonElement? = null)
     }
 
     @Serializable
@@ -276,10 +263,7 @@ public data class OpenApi(
                 }
 
                 @Serializable
-                data class Discriminator(
-                    val propertyName: String,
-                    val mapping: Map<String, String> = emptyMap(),
-                )
+                data class Discriminator(val propertyName: String, val mapping: Map<String, String> = emptyMap())
             }
 
             @KeepGeneratedSerializer
@@ -532,16 +516,11 @@ public data class OpenApi(
 
         @Serializable
         @SerialName("mutualTLS")
-        data class MutualTLS(
-            override val description: String? = null,
-        ) : SecurityScheme
+        data class MutualTLS(override val description: String? = null) : SecurityScheme
 
         @Serializable
         @SerialName("oauth2")
-        data class OAuth2(
-            override val description: String? = null,
-            val flows: Flows,
-        ) : SecurityScheme {
+        data class OAuth2(override val description: String? = null, val flows: Flows) : SecurityScheme {
             @Serializable
             data class Flows(
                 val implicit: Implicit? = null,
@@ -586,10 +565,8 @@ public data class OpenApi(
 
         @Serializable
         @SerialName("openIdConnect")
-        data class OpenIdConnect(
-            override val description: String? = null,
-            val openIdConnectUrl: String,
-        ) : SecurityScheme
+        data class OpenIdConnect(override val description: String? = null, val openIdConnectUrl: String) :
+            SecurityScheme
     }
 }
 

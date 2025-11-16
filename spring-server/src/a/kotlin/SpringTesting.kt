@@ -1,10 +1,11 @@
 import kotlin.test.Test
+import test
 
 class SpringTesting {
     @Test
     fun a() {
         test(
-            "test",
+            "a",
             ignoreFiles = arrayOf(
                 "SpringTesting.kt",
                 "io/github/hfhbd/kfx/BazAController.kt",

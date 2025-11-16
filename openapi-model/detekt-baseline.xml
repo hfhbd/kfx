@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>PropertyName:OpenApi.kt:OpenApi.Operation.Response.Companion$public const val default: String = "default"</ID>
+  </CurrentIssues>
+</SmellBaseline>
