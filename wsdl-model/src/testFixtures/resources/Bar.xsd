@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:bar="http://example.com/bar"
+        elementFormDefault="qualified"
+        targetNamespace="http://example.com/bar">
+    <xsd:element name="Bar" type="bar:BarType"/>
+    <xsd:complexType name="BarType">
+        <xsd:annotation>
+            <xsd:documentation>Bar details</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="ValidFrom" type="xsd:date">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                    </xsd:appinfo>
+                    <xsd:documentation>Valid From</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

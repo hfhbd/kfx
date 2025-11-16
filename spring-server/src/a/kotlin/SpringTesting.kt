@@ -1,10 +1,10 @@
 import kotlin.test.Test
-import test
+import testOpenApi
 
 class SpringTesting {
     @Test
     fun a() {
-        test(
+        testOpenApi(
             "a",
             ignoreFiles = arrayOf(
                 "SpringTesting.kt",

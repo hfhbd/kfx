@@ -2,7 +2,7 @@ package io.github.hfhbd.kfx.swagger
 
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.plugins.packagename.PackageName
-import io.github.hfhbd.kfx.swagger.fir.generate
+import io.github.hfhbd.kfx.swagger.fir.generateSwagger
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -22,7 +22,7 @@ internal abstract class SwaggerGeneration : WorkAction<SwaggerGeneration.Swagger
         val transformerFactories = ServiceLoader.load(IrTransformer::class.java)
 
         parameters.swaggerFile.asFile.get().inputStream().use {
-            generate(
+            generateSwagger(
                 swaggerFile = it,
                 outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
                 transformerFactories = if (packageName != null) {

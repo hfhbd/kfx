@@ -10,12 +10,6 @@ dependencies {
     testFixturesApi(projects.ktorServerSoapPlugin)
     testFixturesApi(libs.ktor.server.core)
     testFixturesApi(testFixtures(projects.core))
-
-    testImplementation(projects.validation)
-    testImplementation(projects.ktorClient)
-    testImplementation(projects.ktorServer)
-    testImplementation(projects.kotlin)
-    testImplementation(projects.contextualDate)
 }
 
 testing.suites {
@@ -36,13 +30,24 @@ testing.suites {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.server.core)
 
+            implementation(projects.validation)
+
             implementation(testFixtures(projects.wsdlModel))
         }
     }
 
     register("FooService", JvmTestSuite::class) {
         dependencies {
-            implementation(projects.validation)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.server.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.server.test.host)
+            implementation(libs.ktor.client.logging)
+        }
+    }
+
+    register("IncludedService", JvmTestSuite::class) {
+        dependencies {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.server.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)

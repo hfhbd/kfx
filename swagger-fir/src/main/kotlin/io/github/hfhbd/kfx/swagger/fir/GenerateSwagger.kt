@@ -23,7 +23,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import java.io.InputStream
 import java.util.ServiceLoader
 
-fun generate(
+fun generateSwagger(
     swaggerFile: InputStream,
     outputDirectory: java.nio.file.Path,
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),

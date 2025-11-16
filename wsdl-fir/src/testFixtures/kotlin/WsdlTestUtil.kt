@@ -1,19 +1,19 @@
-import io.github.hfhbd.kfx.wsdl.fir.generate
+import io.github.hfhbd.kfx.wsdl.fir.generateWsdl
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
 import kotlin.io.path.deleteRecursively
 
-private object TestUtil
+private object WsdlTestUtil
 
 @OptIn(ExperimentalPathApi::class)
 fun testWsdl(name: String, vararg ignoreFiles: String = arrayOf("WsdlTesting.kt")) {
     val outputDirectory = Path("build/kfx-tests/$name")
     outputDirectory.deleteRecursively()
 
-    generate(
-        wsdlFile = TestUtil::class.java.getResourceAsStream("/$name.wsdl"),
+    generateWsdl(
+        wsdlFile = WsdlTestUtil::class.java.getResourceAsStream("/$name.wsdl"),
         import = {
-            TestUtil::class.java.getResourceAsStream("/$it.xsd")
+            WsdlTestUtil::class.java.getResourceAsStream("/$it")
         },
         outputDirectory = outputDirectory,
     )

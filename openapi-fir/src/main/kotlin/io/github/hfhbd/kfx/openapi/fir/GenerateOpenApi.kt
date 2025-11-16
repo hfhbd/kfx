@@ -35,7 +35,7 @@ import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-fun generate(
+fun generateOpenApi(
     openApiFile: InputStream,
     outputDirectory: Path,
     firTransformers: Iterable<OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java),
