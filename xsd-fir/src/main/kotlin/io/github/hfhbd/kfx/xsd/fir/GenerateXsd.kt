@@ -276,13 +276,13 @@ private fun toIr(
                             base.toBuiltin()
                         } else {
                             irTypes.find(
-                                IRTree.ClassName(base.namespace!!.packageName, base.localPart)
+                                IRTree.ClassName(base.namespace!!.packageName, base.localPart),
                             )
                         }
                         put(
                             "value",
                             IRTree.Member(
-                                type =  type,
+                                type = type,
                                 nullable = false,
                                 serialName = "",
                                 namespace = "",

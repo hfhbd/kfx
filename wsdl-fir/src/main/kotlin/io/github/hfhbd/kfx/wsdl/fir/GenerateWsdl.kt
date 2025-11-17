@@ -89,9 +89,9 @@ private fun WSDL.toIr(
     for (type in types) {
         for (schema in type.schemas) {
             toIr(
-                schema = schema, 
-                xsdTransformers = emptyList(), 
-                includeMembers = false, 
+                schema = schema,
+                xsdTransformers = emptyList(),
+                includeMembers = false,
                 irTypes = irTypes,
                 import = import,
             )
@@ -100,7 +100,7 @@ private fun WSDL.toIr(
     for (type in types) {
         for (schema in type.schemas) {
             toIr(
-                schema, 
+                schema,
                 xsdTransformers = xsdTransformers,
                 includeMembers = true,
                 irTypes = irTypes,
