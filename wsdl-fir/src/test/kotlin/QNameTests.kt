@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 class QNameTests {
     @Test
     fun testQName() {
-        val string = QName( XSD_NAMESPACE, "string")
+        val string = QName(XSD_NAMESPACE, "string")
         assertTrue(string.isXSD())
 
         assertNull(QName("string").namespace)

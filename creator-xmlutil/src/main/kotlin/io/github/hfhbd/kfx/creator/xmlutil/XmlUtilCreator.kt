@@ -27,7 +27,7 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     if (ir.type is IRTree.Type.Builtin && ir.serialName != null) {
                         if (ir.serialName != name) {
                             add(
-                                serialName(ir.serialName!!)
+                                serialName(ir.serialName!!),
                             )
                         }
                     } else {
@@ -56,7 +56,7 @@ class XmlUtilCreator : KotlinxCoreCreator {
                 IRTree.XmlType.Attribute -> {
                     if (ir.serialName != null && ir.serialName != name) {
                         add(
-                            serialName(ir.serialName!!)
+                            serialName(ir.serialName!!),
                         )
                     }
                 }

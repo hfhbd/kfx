@@ -247,7 +247,10 @@ private fun toIr(
         val elementType = element.type
         if (elementType != null) {
             val typeAlias = IRTree.ClassName(schema.targetNamespace.packageName, element.name!!)
-            val resolved = IRTree.ClassName((elementType.namespace ?: schema.targetNamespace) .packageName, elementType.localPart)
+            val resolved = IRTree.ClassName(
+                (elementType.namespace ?: schema.targetNamespace).packageName,
+                elementType.localPart,
+            )
             if (resolved != typeAlias) {
                 irTypes[typeAlias] = Classes.TypeAlias(resolved, element.name!!, schema.targetNamespace, ignore = false)
             }
@@ -706,7 +709,12 @@ private fun SimpleType.toBuiltin(): IRTree.Type.Builtin? = restriction.base.take
 }?.toBuiltin()
 
 private fun SimpleType.resolve(schema: Schema, irTypes: Map<IRTree.ClassName, Classes>): IRTree.Type = toBuiltin()
-    ?: irTypes.find(IRTree.ClassName((restriction.base.namespace ?: schema.targetNamespace).packageName, restriction.base.localPart))
+    ?: irTypes.find(
+        IRTree.ClassName(
+            (restriction.base.namespace ?: schema.targetNamespace).packageName,
+            restriction.base.localPart,
+        ),
+    )
 
 private fun QName.toBuiltin(): IRTree.Type.Builtin {
     require(isXSD())
