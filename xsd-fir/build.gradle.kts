@@ -27,5 +27,5 @@ testing.suites {
             implementation(projects.contextualDate)
         }
     }
-    register("bar", JvmTestSuite::class)
+    register("Bar", JvmTestSuite::class)
 }
