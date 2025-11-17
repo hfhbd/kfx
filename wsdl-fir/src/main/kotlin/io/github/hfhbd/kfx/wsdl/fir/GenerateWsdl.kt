@@ -170,7 +170,7 @@ private fun WSDL.toIr(
             for (wsdlTransformer in wsdlTransformers) {
                 irOperation = wsdlTransformer.invoke(operation, this, irOperation)
             }
-            
+
             operations.add(irOperation)
         }
     }
