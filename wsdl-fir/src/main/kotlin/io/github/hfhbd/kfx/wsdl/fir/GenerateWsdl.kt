@@ -88,8 +88,21 @@ private fun WSDL.toIr(
     val irTypes = mutableMapOf<IRTree.ClassName, Classes>()
     for (type in types) {
         for (schema in type.schemas) {
-            schema.toIr(
+            toIr(
+                schema = schema, 
+                xsdTransformers = emptyList(), 
+                includeMembers = false, 
+                irTypes = irTypes,
+                import = import,
+            )
+        }
+    }
+    for (type in types) {
+        for (schema in type.schemas) {
+            toIr(
+                schema, 
                 xsdTransformers = xsdTransformers,
+                includeMembers = true,
                 irTypes = irTypes,
                 import = import,
             )
