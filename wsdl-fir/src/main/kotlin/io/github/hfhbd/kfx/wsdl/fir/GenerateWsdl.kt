@@ -168,7 +168,7 @@ private fun WSDL.toIr(
                 deprecated = false,
             )
             for (wsdlTransformer in wsdlTransformers) {
-                irOperation = wsdlTransformer.invoke(operation, this, irOperation)
+                irOperation = wsdlTransformer(operation, this, irOperation)
             }
 
             operations.add(irOperation)
