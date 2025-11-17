@@ -93,22 +93,14 @@ private fun Schema.toIr(
     import: (String) -> Schema,
 ): IRTree {
     val irTypes = mutableMapOf<IRTree.ClassName, Classes>()
-    toIr(xsdTransformers, irTypes, import)
+    toIr(this, emptyList(), false, irTypes, import)
+    toIr(this, xsdTransformers, true, irTypes, import)
 
     return IRTree(
         classes = irTypes.resolveMembers(),
         operations = emptySet(),
         auth = emptySet(),
     )
-}
-
-fun Schema.toIr(
-    xsdTransformers: Collection<XsdTransformer>,
-    irTypes: MutableMap<IRTree.ClassName, Classes>,
-    import: (String) -> Schema,
-) {
-    toIr(this, emptyList(), false, irTypes, import)
-    toIr(this, xsdTransformers, true, irTypes, import)
 }
 
 fun toIr(
@@ -279,10 +271,18 @@ private fun toIr(
                 serialName = complexType.name,
                 members = if (includeMembers) {
                     buildMap {
+                        val base = complexType.simpleContent!!.extension.base
+                        val type = if (base.isXSD()) {
+                            base.toBuiltin()
+                        } else {
+                            irTypes.find(
+                                IRTree.ClassName(base.namespace!!.packageName, base.localPart),
+                            )
+                        }
                         put(
                             "value",
                             IRTree.Member(
-                                type = complexType.simpleContent!!.extension.base.toBuiltin(),
+                                type = type,
                                 nullable = false,
                                 serialName = "",
                                 namespace = "",
@@ -604,7 +604,7 @@ private fun Attribute.mapToIr(
         type.toBuiltin()
     } else {
         val namespace = (type.namespace ?: schema.targetNamespace).packageName
-        val qname = IRTree.ClassName(namespace, name)
+        val qname = IRTree.ClassName(namespace, type.localPart)
         topLevel.find(qname)
     }
 
@@ -648,7 +648,9 @@ private fun SimpleType.resolve(schema: Schema, irTypes: Map<IRTree.ClassName, Cl
     )
 
 private fun QName.toBuiltin(): IRTree.Type.Builtin {
-    require(isXSD())
+    require(isXSD()) {
+        toString()
+    }
     return when (localPart) {
         "string" -> IRTree.Type.Builtin.STRING
         "anyURI" -> IRTree.Type.Builtin.STRING
