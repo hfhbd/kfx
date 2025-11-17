@@ -13,10 +13,22 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 )
 public data class configurationType(
   @XmlElement
+  @XmlSerialName(
+    value = "verify-metadata",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `verify-metadata`: Boolean,
   @XmlElement
+  @XmlSerialName(
+    value = "verify-signatures",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `verify-signatures`: Boolean,
   @XmlElement
+  @XmlSerialName(
+    value = "keyring-format",
+    namespace = "https://schema.gradle.org/dependency-verification",
+  )
   public val `keyring-format`: String? = null,
   @XmlElement
   @XmlSerialName(
