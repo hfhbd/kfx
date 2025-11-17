@@ -69,19 +69,18 @@ private fun InputStream.createIr(
 
     val wsdl = xml.decodeFromReader(WSDL.serializer(), KtXmlReader(this))
     val irTree = wsdl.toIr(
+        wsdlTransformers,
         xsdTransformerFactories.map { it.create() },
     ) {
-        var imported = xsdXml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
-        for (wsdlTransformer in wsdlTransformers) {
-            imported = wsdlTransformer(imported, it)
+        import(it).use {
+            xsdXml.decodeFromReader(Schema.serializer(), KtXmlReader(it))
         }
-
-        imported
     }
     return irTree
 }
 
 private fun WSDL.toIr(
+    wsdlTransformers: List<WsdlTransformer>,
     xsdTransformers: List<XsdTransformer>,
     import: (String) -> Schema,
 ): IRTree {
@@ -134,42 +133,45 @@ private fun WSDL.toIr(
             val operation = portType.operations.single {
                 it.name == bindingOperation.name
             }
-            operations.add(
-                IRTree.Operation(
-                    packageName = targetNamespace.packageName,
-                    name = operation.name.replaceFirstChar { it.lowercaseChar() },
-                    documentation = operation.documentation?.trimDocumentation(),
-                    location = service.port.address.location,
-                    soapAction = bindingOperation.operation.soapAction,
-                    input = operation.input.resolve(this).let { resolved ->
-                        classes.firstOrNull {
-                            it.packageName == resolved.packageName && it.name == resolved.name
-                        }
-                    },
-                    output = operation.output.resolve(this).let { resolved ->
-                        classes.firstOrNull {
-                            it.packageName == resolved.packageName && it.name == resolved.name
-                        }
-                    },
-                    notFound = false,
-                    fault = operation.fault?.resolve(this)?.let { resolved ->
-                        classes.firstOrNull {
-                            it.packageName == resolved.packageName && it.name == resolved.name
-                        } as IRTree.NormalClass?
-                    },
-                    path = null,
-                    method = IRTree.Operation.HttpMethod.Post,
-                    parameters = emptyList(),
-                    queryParameters = emptyList(),
-                    success = StatusCode.OK,
-                    headers = emptyList(),
-                    outputHeaders = emptyList(),
-                    faultHeaders = emptyList(),
-                    inputContentType = ContentType.TextXml,
-                    outputContentType = ContentType.TextXml,
-                    deprecated = false,
-                ),
+            var irOperation = IRTree.Operation(
+                packageName = targetNamespace.packageName,
+                name = operation.name.replaceFirstChar { it.lowercaseChar() },
+                documentation = operation.documentation?.trimDocumentation(),
+                location = service.port.address.location,
+                soapAction = bindingOperation.operation.soapAction,
+                input = operation.input.resolve(this).let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    }
+                },
+                output = operation.output.resolve(this).let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    }
+                },
+                notFound = false,
+                fault = operation.fault?.resolve(this)?.let { resolved ->
+                    classes.firstOrNull {
+                        it.packageName == resolved.packageName && it.name == resolved.name
+                    } as IRTree.NormalClass?
+                },
+                path = null,
+                method = IRTree.Operation.HttpMethod.Post,
+                parameters = emptyList(),
+                queryParameters = emptyList(),
+                success = StatusCode.OK,
+                headers = emptyList(),
+                outputHeaders = emptyList(),
+                faultHeaders = emptyList(),
+                inputContentType = ContentType.TextXml,
+                outputContentType = ContentType.TextXml,
+                deprecated = false,
             )
+            for (wsdlTransformer in wsdlTransformers) {
+                irOperation = wsdlTransformer(operation, this, irOperation)
+            }
+
+            operations.add(irOperation)
         }
     }
 
