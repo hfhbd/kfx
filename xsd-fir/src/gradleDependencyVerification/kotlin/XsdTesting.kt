@@ -5,11 +5,11 @@ import kotlin.test.Test
 class XsdTesting {
     @Test
     fun gradleDependencyVerification() {
-        test("gradleDependencyVerification")
+        testXsd("gradleDependencyVerification")
     }
 
     @Test
-    fun decode() {
+    fun decodeGradleDependencyVerification() {
         XML.decodeFromString(
             VerificationMetadata.serializer(),
             XsdTesting::class.java.getResource("/verification-metadata.xml")!!.readText()

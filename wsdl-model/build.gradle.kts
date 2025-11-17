@@ -4,4 +4,6 @@ plugins {
 
 dependencies {
     api(projects.xsdModel)
+
+    testFixturesApi(testFixtures(projects.xsdModel))
 }

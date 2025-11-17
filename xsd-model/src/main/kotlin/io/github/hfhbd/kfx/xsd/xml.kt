@@ -21,4 +21,7 @@ fun xml(
     xmlDeclMode = XmlDeclMode.Charset
     autoPolymorphic = true
     indentString = "    "
+    defaultPolicy {
+        ignoreUnknownChildren()
+    }
 }
