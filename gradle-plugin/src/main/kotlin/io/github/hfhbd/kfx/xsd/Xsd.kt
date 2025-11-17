@@ -23,11 +23,8 @@ abstract class Xsd : Kfx {
 
         dependencies.compiler.add("$GROUP:xsd-fir:$VERSION")
 
-        val kfxXsd = configurations.dependencyScope("kfxXsd$serviceName") {
-            it.fromDependencyCollector(this@Xsd.dependencies.compiler)
-        }
         val kfxXsdClasspath = configurations.resolvable("kfxXsdClasspath$serviceName") {
-            it.extendsFrom(kfxXsd.get())
+            it.fromDependencyCollector(this@Xsd.dependencies.compiler)
         }
         sourceSet.srcDir(
             tasks.register("convertXsdFiles$serviceName", ConvertXsdFiles::class.java) {

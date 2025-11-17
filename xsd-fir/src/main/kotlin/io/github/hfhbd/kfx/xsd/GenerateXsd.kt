@@ -111,8 +111,9 @@ fun toIr(
     for (import in schema.imports) {
         val schemaLocation = import.schemaLocation
         if (schemaLocation != null) {
+            val imported = import(schemaLocation)
             toIr(
-                import(schemaLocation),
+                imported,
                 xsdTransformers,
                 includeMembers,
                 irTypes,

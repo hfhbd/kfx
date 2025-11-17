@@ -5,7 +5,6 @@ plugins {
 }
 
 kfx.register("grip", OpenApi::class) {
-    files.from(file("grip.json"))
     dependencies {
         compiler(ktorClient())
         compiler(kotlinxJson())
