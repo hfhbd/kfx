@@ -17,11 +17,14 @@ public data class FooType(
   @XmlElement
   @XmlSerialName(
     value = "Bar",
-    namespace = "http://example.com/bar",
+    namespace = "http://example.com/foo",
   )
   public val bar: BarType,
   @XmlElement
-  @SerialName(value = "Foo")
+  @XmlSerialName(
+    value = "Foo",
+    namespace = "http://example.com/foo",
+  )
   public val foo: Int,
   @SerialName(value = "Baz")
   public val baz: Boolean? = null,

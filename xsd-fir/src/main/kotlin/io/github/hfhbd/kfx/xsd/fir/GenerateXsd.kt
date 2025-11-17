@@ -583,7 +583,7 @@ private fun List<Element>.mapToIr(
                 namespace = if (ref == null) {
                     schema.targetNamespace
                 } else {
-                    ref.namespace
+                    schema.targetNamespace
                 },
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
