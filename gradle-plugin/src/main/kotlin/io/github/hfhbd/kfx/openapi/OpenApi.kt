@@ -27,11 +27,8 @@ abstract class OpenApi : Kfx {
         dependencies.compiler.add("$GROUP:openapi-fir:$VERSION")
         dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
 
-        val kfxOpenApi = configurations.dependencyScope("kfxOpenApi$serviceName") {
-            it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
-        }
         val kfxOpenApiClasspath = configurations.resolvable("kfxOpenApiClasspath$serviceName") {
-            it.extendsFrom(kfxOpenApi.get())
+            it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
         }
         sourceSet.srcDir(
             tasks.register("convertOpenApiFiles$serviceName", ConvertOpenApiFiles::class.java) {

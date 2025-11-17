@@ -1,5 +1,6 @@
 package io.github.hfhbd.kfx.wsdl.model
 
+import io.github.hfhbd.kfx.xsd.model.Documentation
 import kotlinx.serialization.modules.SerializersModule
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -10,7 +11,6 @@ fun xml(
 ): XML = XML(
     serializersModule = SerializersModule {
         include(Documentation.serializerModule())
-        include(AppInfo.serializerModule())
         for (transformer in transformerSerializers) {
             include(transformer)
         }

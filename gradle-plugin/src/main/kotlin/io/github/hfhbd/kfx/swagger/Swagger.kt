@@ -27,11 +27,8 @@ abstract class Swagger : Kfx {
         dependencies.compiler.add("$GROUP:swagger-fir:$VERSION")
         dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
 
-        val kfxSwagger = configurations.dependencyScope("kfxSwagger$serviceName") {
-            it.fromDependencyCollector(this@Swagger.dependencies.compiler)
-        }
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
-            it.extendsFrom(kfxSwagger.get())
+            it.fromDependencyCollector(this@Swagger.dependencies.compiler)
         }
         sourceSet.srcDir(
             tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {

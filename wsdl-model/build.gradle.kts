@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(libs.serialization.core)
-    api(libs.serialization.xml)
+    api(projects.xsdModel)
+
+    testFixturesApi(testFixtures(projects.xsdModel))
 }

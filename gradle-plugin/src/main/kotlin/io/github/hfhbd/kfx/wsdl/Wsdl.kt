@@ -24,11 +24,8 @@ abstract class Wsdl : Kfx {
 
         dependencies.compiler.add("$GROUP:wsdl-fir:$VERSION")
 
-        val kfxWsdl = configurations.dependencyScope("kfxWsdl$serviceName") {
-            it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
-        }
         val kfxWsdlClasspath = configurations.resolvable("kfxWsdlClasspath$serviceName") {
-            it.extendsFrom(kfxWsdl.get())
+            it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
         }
         sourceSet.srcDir(
             tasks.register("convertWsdlFiles$serviceName", ConvertWsdlFiles::class.java) {

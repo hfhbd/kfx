@@ -3,6 +3,7 @@ package io.github.hfhbd.kfx
 import io.github.hfhbd.kfx.openapi.OpenApi
 import io.github.hfhbd.kfx.swagger.Swagger
 import io.github.hfhbd.kfx.wsdl.Wsdl
+import io.github.hfhbd.kfx.xsd.Xsd
 import org.gradle.api.PolymorphicDomainObjectContainer
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.ExtensionAware
@@ -18,6 +19,7 @@ internal abstract class KfxExtensionImpl @Inject constructor(objects: ObjectFact
         registerBinding(OpenApi::class.java, OpenApi::class.java)
         registerBinding(Swagger::class.java, Swagger::class.java)
         registerBinding(Wsdl::class.java, Wsdl::class.java)
+        registerBinding(Xsd::class.java, Xsd::class.java)
     }) {
     init {
         whenObjectAdded {
