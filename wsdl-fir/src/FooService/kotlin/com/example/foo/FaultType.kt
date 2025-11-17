@@ -12,9 +12,5 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 )
 public data class FaultType(
   @XmlElement
-  @XmlSerialName(
-    value = "message",
-    namespace = "http://example.com/foo",
-  )
   public val message: String,
 )

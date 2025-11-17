@@ -168,8 +168,8 @@ class FooServiceTest {
             indentString = "    "
         }.encodeToString(Foo.serializer(), foo)
         assertEquals(
-            fooXml + "\n",
             FooServiceTest::class.java.getResource("/Foo.xml").readText(),
+            fooXml + "\n",
         )
         assertEquals(
             foo,

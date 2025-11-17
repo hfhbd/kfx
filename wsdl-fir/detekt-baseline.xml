@@ -2,12 +2,12 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, getNamespace: (prefix: String) -> String, ): Map&lt;String, IRTree.Member></ID>
-    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr( getNamespace: (prefix: String) -> String, wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
-    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, getNamespace: (prefix: String) -> String, )</ID>
-    <ID>LongMethod:GenerateWsdl.kt:private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, getNamespace: (prefix: String) -> String, ): Map&lt;String, IRTree.Member></ID>
-    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr( getNamespace: (prefix: String) -> String, wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
-    <ID>LongMethod:GenerateWsdl.kt:private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, getNamespace: (prefix: String) -> String, )</ID>
+    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
+    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>LongMethod:GenerateWsdl.kt:private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
+    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: Collection&lt;WsdlTransformer>, import: (String) -> Schema, ): IRTree</ID>
+    <ID>LongMethod:GenerateWsdl.kt:private fun toIr( schema: Schema, wsdlTransformers: Collection&lt;WsdlTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateWsdl.kt:for</ID>
     <ID>TooManyFunctions:GenerateWsdl.kt:io.github.hfhbd.kfx.wsdl.fir.GenerateWsdl.kt</ID>
   </CurrentIssues>

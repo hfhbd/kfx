@@ -1,6 +1,7 @@
 package com.example.bar
 
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -18,9 +19,6 @@ public data class BarType(
    * Valid From
    */
   @XmlElement
-  @XmlSerialName(
-    value = "ValidFrom",
-    namespace = "http://example.com/bar",
-  )
+  @SerialName(value = "ValidFrom")
   public val validFrom: LocalDate? = null,
 )

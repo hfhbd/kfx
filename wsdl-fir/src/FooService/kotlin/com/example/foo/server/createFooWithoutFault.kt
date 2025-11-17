@@ -16,7 +16,7 @@ import io.ktor.server.routing.contentType
 import io.ktor.server.routing.post
 
 /**
- * Create Foo
+ * Create Foo using default SOAP Fault
  */
 public fun Route.createFooWithoutFault(action: suspend ApplicationCall.(Envelope<Foo>) -> CreateFooWithoutFaultResult) {
   contentType(Xml) {
