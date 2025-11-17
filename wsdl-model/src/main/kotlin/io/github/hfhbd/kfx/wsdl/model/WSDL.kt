@@ -135,7 +135,7 @@ data class Operation(
 )
 
 @Serializable
-data class OperationType(@Serializable(QNameSerializer::class) val message: QName, val name: String)
+data class OperationType(@Serializable(QNameSerializer::class) val message: QName, val name: String? = null)
 
 @Serializable
 data class Message(

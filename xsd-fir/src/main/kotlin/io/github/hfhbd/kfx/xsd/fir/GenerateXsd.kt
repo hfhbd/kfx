@@ -189,23 +189,27 @@ private fun toIr(
                 serialName = elementName,
                 namespace = schema.targetNamespace,
                 documentation = element.annotation?.documentation(),
-                members = (
-                    element.complexType?.sequence?.elements?.map {
-                        when (it) {
-                            is Choice -> it.element
-                            is Element -> it
-                        }
-                    }?.mapToIr(
-                        qname,
-                        schema,
-                        xsdTransformers,
-                        irTypes,
-                    ) ?: emptyMap()
-                    ) + (
-                    element.complexType?.attributes?.map {
-                        it.mapToIr(schema, irTypes)
-                    } ?: emptyList()
-                    ),
+                members = if (includeMembers) {
+                    (
+                        element.complexType?.sequence?.elements?.map {
+                            when (it) {
+                                is Choice -> it.element
+                                is Element -> it
+                            }
+                        }?.mapToIr(
+                            qname,
+                            schema,
+                            xsdTransformers,
+                            irTypes,
+                        ) ?: emptyMap()
+                        ) + (
+                        element.complexType?.attributes?.map {
+                            it.mapToIr(schema, irTypes)
+                        } ?: emptyList()
+                        )
+                } else {
+                    emptyMap()
+                },
                 isFault = false,
                 allOf = null,
                 discriminator = null,
@@ -364,7 +368,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
         when (classes) {
             is Classes.TypeAlias if classes.ignore -> continue
             is Classes.TypeAlias -> {
-                val found = this@resolveMembers.find(classes.actual) as IRTree.NormalClass
+                val found = this@resolveMembers.find(classes.actual)
                 add(
                     IRTree.NormalClass(
                         packageName = className.packageName,
@@ -385,7 +389,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
                                 deprecated = false,
                             ),
                         ),
-                        documentation = found.documentation,
+                        documentation = (found as? IRTree.Class)?.documentation,
                         isFault = false,
                         isValue = true,
                         discriminator = null,
