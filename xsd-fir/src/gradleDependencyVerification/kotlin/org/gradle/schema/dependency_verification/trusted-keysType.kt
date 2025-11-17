@@ -11,11 +11,11 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   value = "trusted-keysType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class TrustedKeys(
+public data class `trusted-keysType`(
   @XmlElement
   @XmlSerialName(
     value = "trusted-key",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val `trusted-key`: List<TrustedKey> = emptyList(),
+  public val `trusted-key`: List<`trusted-keyType`> = emptyList(),
 )

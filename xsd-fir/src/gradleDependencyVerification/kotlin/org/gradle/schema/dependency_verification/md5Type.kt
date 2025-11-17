@@ -1,25 +1,25 @@
 package org.gradle.schema.dependency_verification
 
+import kotlin.String
+import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @Serializable
 @XmlSerialName(
-  value = "verification-metadata",
+  value = "md5Type",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
-public data class VerificationMetadata(
+public data class md5Type(
   @XmlElement
   @XmlSerialName(
-    value = "configuration",
+    value = "also-trust",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
-  public val configuration: Configuration,
-  @XmlElement
-  @XmlSerialName(
-    value = "components",
-    namespace = "https://schema.gradle.org/dependency-verification",
-  )
-  public val components: Components,
+  public val `also-trust`: List<`also-trustType`> = emptyList(),
+  public val `value`: String,
+  public val origin: String? = null,
+  public val reason: String? = null,
 )
