@@ -1,6 +1,6 @@
-import io.github.hfhbd.kfx.xsd.XSD_NAMESPACE
-import io.github.hfhbd.kfx.xsd.isXSD
-import io.github.hfhbd.kfx.xsd.namespace
+import io.github.hfhbd.kfx.xsd.fir.isXSD
+import io.github.hfhbd.kfx.xsd.fir.namespace
+import io.github.hfhbd.kfx.xsd.model.XSD_NAMESPACE
 import kotlin.test.Test
 import kotlin.test.assertNull
 import kotlin.test.assertTrue

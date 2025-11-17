@@ -6,7 +6,6 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
-import java.io.InputStream
 
 internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameters> {
     interface WsdlParameters : WorkParameters {
@@ -17,25 +16,15 @@ internal abstract class WsdlGeneration : WorkAction<WsdlGeneration.WsdlParameter
 
     override fun execute() {
         parameters.wsdlFile.asFile.get().inputStream().use {
-            val openStreams = mutableListOf<InputStream>()
-            try {
-                generateWsdl(
-                    wsdlFile = it,
-                    import = { fileName ->
-                        val inputStream =
-                            parameters.schemaFiles.singleOrNull { it.name == fileName }?.inputStream() ?: error(
-                                "Expected $fileName in ${parameters.schemaFiles.map { it.name }}",
-                            )
-                        openStreams.add(inputStream)
-                        inputStream
-                    },
-                    outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
-                )
-            } finally {
-                for (openStream in openStreams) {
-                    openStream.close()
-                }
-            }
+            generateWsdl(
+                wsdlFile = it,
+                import = { fileName ->
+                    parameters.schemaFiles.singleOrNull { it.name == fileName }?.inputStream() ?: error(
+                        "Expected $fileName in ${parameters.schemaFiles.map { it.name }}",
+                    )
+                },
+                outputDirectory = parameters.outputDirectory.asFile.get().toPath(),
+            )
         }
     }
 }

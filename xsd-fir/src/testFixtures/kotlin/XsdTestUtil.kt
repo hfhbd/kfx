@@ -1,4 +1,4 @@
-import io.github.hfhbd.kfx.xsd.generateXsd
+import io.github.hfhbd.kfx.xsd.fir.generateXsd
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
 import kotlin.io.path.deleteRecursively

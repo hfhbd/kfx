@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api(projects.core)
-    api(projects.wsdlModel)
+    api(projects.xsdModel)
 
     testFixturesImplementation(testFixtures(projects.core))
 }

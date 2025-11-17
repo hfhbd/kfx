@@ -1,4 +1,4 @@
-package io.github.hfhbd.kfx.xsd
+package io.github.hfhbd.kfx.xsd.fir
 
 import kotlinx.serialization.modules.SerializersModule
 

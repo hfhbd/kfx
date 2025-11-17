@@ -11,16 +11,16 @@ import io.github.hfhbd.kfx.toCodeGen
 import io.github.hfhbd.kfx.wsdl.model.OperationType
 import io.github.hfhbd.kfx.wsdl.model.WSDL
 import io.github.hfhbd.kfx.wsdl.model.xml
-import io.github.hfhbd.kfx.xsd.Classes
-import io.github.hfhbd.kfx.xsd.Schema
-import io.github.hfhbd.kfx.xsd.XsdTransformer
-import io.github.hfhbd.kfx.xsd.XsdTransformerFactory
-import io.github.hfhbd.kfx.xsd.find
-import io.github.hfhbd.kfx.xsd.namespace
-import io.github.hfhbd.kfx.xsd.packageName
-import io.github.hfhbd.kfx.xsd.resolve
-import io.github.hfhbd.kfx.xsd.toIr
-import io.github.hfhbd.kfx.xsd.trimDocumentation
+import io.github.hfhbd.kfx.xsd.fir.Classes
+import io.github.hfhbd.kfx.xsd.fir.XsdTransformer
+import io.github.hfhbd.kfx.xsd.fir.XsdTransformerFactory
+import io.github.hfhbd.kfx.xsd.fir.find
+import io.github.hfhbd.kfx.xsd.fir.namespace
+import io.github.hfhbd.kfx.xsd.fir.packageName
+import io.github.hfhbd.kfx.xsd.fir.resolve
+import io.github.hfhbd.kfx.xsd.fir.toIr
+import io.github.hfhbd.kfx.xsd.fir.trimDocumentation
+import io.github.hfhbd.kfx.xsd.model.Schema
 import nl.adaptivity.xmlutil.core.KtXmlReader
 import java.io.InputStream
 import java.nio.file.Path
@@ -60,6 +60,9 @@ private fun InputStream.createIr(
     val xml = xml(
         wsdlTransformerFactories.map { it.serializerModule() },
     )
+    val xsdXml = io.github.hfhbd.kfx.xsd.model.xml(
+        xsdTransformerFactories.map { it.serializerModule() },
+    )
     val wsdlTransformers = wsdlTransformerFactories.map {
         it.create()
     }
@@ -68,7 +71,7 @@ private fun InputStream.createIr(
     val irTree = wsdl.toIr(
         xsdTransformerFactories.map { it.create() },
     ) {
-        var imported = xml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
+        var imported = xsdXml.decodeFromReader(Schema.serializer(), KtXmlReader(import(it)))
         for (wsdlTransformer in wsdlTransformers) {
             imported = wsdlTransformer(imported, it)
         }

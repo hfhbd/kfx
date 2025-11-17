@@ -1,4 +1,4 @@
-package io.github.hfhbd.kfx.xsd
+package io.github.hfhbd.kfx.xsd.model
 
 import kotlinx.serialization.modules.SerializersModule
 import nl.adaptivity.xmlutil.XmlDeclMode

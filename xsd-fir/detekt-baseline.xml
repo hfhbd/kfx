@@ -8,6 +8,6 @@
     <ID>LongMethod:GenerateXsd.kt:private fun List&lt;Element>.mapToIr( prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Map&lt;String, IRTree.Member></ID>
     <ID>LongMethod:GenerateXsd.kt:private fun toIr( schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateXsd.kt:for</ID>
-    <ID>TooManyFunctions:GenerateXsd.kt:io.github.hfhbd.kfx.xsd.GenerateXsd.kt</ID>
+    <ID>TooManyFunctions:GenerateXsd.kt:io.github.hfhbd.kfx.xsd.fir.GenerateXsd.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

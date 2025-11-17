@@ -1,4 +1,4 @@
-package io.github.hfhbd.kfx.xsd
+package io.github.hfhbd.kfx.xsd.model
 
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable

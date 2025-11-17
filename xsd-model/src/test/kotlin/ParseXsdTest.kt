@@ -1,5 +1,5 @@
-import io.github.hfhbd.kfx.xsd.Schema
-import io.github.hfhbd.kfx.xsd.xml
+import io.github.hfhbd.kfx.xsd.model.Schema
+import io.github.hfhbd.kfx.xsd.model.xml
 import kotlin.test.Test
 
 class ParseXsdTest {

@@ -1,8 +1,8 @@
 package io.github.hfhbd.kfx.wsdl.model
 
-import io.github.hfhbd.kfx.xsd.Documentation
-import io.github.hfhbd.kfx.xsd.Schema
-import io.github.hfhbd.kfx.xsd.XSD_NAMESPACE
+import io.github.hfhbd.kfx.xsd.model.Documentation
+import io.github.hfhbd.kfx.xsd.model.Schema
+import io.github.hfhbd.kfx.xsd.model.XSD_NAMESPACE
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.QName
 import nl.adaptivity.xmlutil.QNameSerializer
