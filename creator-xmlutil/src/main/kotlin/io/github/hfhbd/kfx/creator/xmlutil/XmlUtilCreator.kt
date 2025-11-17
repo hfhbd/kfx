@@ -7,6 +7,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
 import io.github.hfhbd.kfx.creator.kotlin.DEPRECATED
 import io.github.hfhbd.kfx.creator.kotlin.KotlinxCoreCreator
 import io.github.hfhbd.kfx.creator.kotlin.SERIALIZABLE
+import io.github.hfhbd.kfx.creator.kotlin.serialName
 import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenCreator::class)
@@ -23,16 +24,24 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     add(
                         CodeGenTree.Annotation("nl.adaptivity.xmlutil.serialization", listOf("XmlElement"), emptyMap()),
                     )
-                    add(
-                        CodeGenTree.Annotation(
-                            "nl.adaptivity.xmlutil.serialization",
-                            listOf("XmlSerialName"),
-                            mapOf(
-                                "value" to StringLiteral(ir.serialName!!),
-                                "namespace" to StringLiteral(ir.namespace!!),
+                    if (ir.type is IRTree.Type.Builtin && ir.serialName != null) {
+                        if (ir.serialName != name) {
+                            add(
+                                serialName(ir.serialName!!)
+                            )
+                        }
+                    } else {
+                        add(
+                            CodeGenTree.Annotation(
+                                "nl.adaptivity.xmlutil.serialization",
+                                listOf("XmlSerialName"),
+                                mapOf(
+                                    "value" to StringLiteral(ir.serialName!!),
+                                    "namespace" to StringLiteral(ir.namespace!!),
+                                ),
                             ),
-                        ),
-                    )
+                        )
+                    }
                 }
 
                 IRTree.XmlType.Value -> add(
@@ -45,13 +54,11 @@ class XmlUtilCreator : KotlinxCoreCreator {
                 }
 
                 IRTree.XmlType.Attribute -> {
-                    add(
-                        CodeGenTree.Annotation(
-                            "kotlinx.serialization",
-                            listOf("SerialName"),
-                            mapOf("value" to StringLiteral(ir.serialName!!)),
-                        ),
-                    )
+                    if (ir.serialName != null && ir.serialName != name) {
+                        add(
+                            serialName(ir.serialName!!)
+                        )
+                    }
                 }
             }
             if (ir.deprecated) {

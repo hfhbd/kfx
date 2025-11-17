@@ -17,7 +17,7 @@ import io.ktor.http.contentType
 import kotlin.Unit
 
 /**
- * Create Foo
+ * Create Foo using default SOAP Fault
  */
 public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend HttpRequestBuilder.() -> Unit = {}): CreateFooWithoutFaultResult {
   val response = post {

@@ -58,7 +58,7 @@
     <wsdl:message name="Fault">
         <wsdl:part element="tns:Fault" name="Fault"/>
     </wsdl:message>
-    
+
     <wsdl:portType name="FooServicePortType">
         <wsdl:operation name="CreateFoo">
             <wsdl:documentation>Create Foo</wsdl:documentation>
@@ -67,7 +67,7 @@
             <wsdl:fault message="tns:Fault" name="Fault"/>
         </wsdl:operation>
         <wsdl:operation name="CreateFooWithoutFault">
-            <wsdl:documentation>Create Foo</wsdl:documentation>
+            <wsdl:documentation>Create Foo using default SOAP Fault</wsdl:documentation>
             <wsdl:input message="tns:CreateFooMessage" name="CreateFoo"/>
             <wsdl:output message="tns:CreateFooResponseMessage" name="CreateFooResponse"/>
         </wsdl:operation>

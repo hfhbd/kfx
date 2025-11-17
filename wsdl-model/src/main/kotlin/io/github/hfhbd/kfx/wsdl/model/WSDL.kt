@@ -4,51 +4,54 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
+import nl.adaptivity.xmlutil.QName
+import nl.adaptivity.xmlutil.QNameSerializer
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import nl.adaptivity.xmlutil.serialization.XmlValue
 
-private const val SOAP = "http://schemas.xmlsoap.org/wsdl/soap/"
-private const val WSDL_NS = "http://schemas.xmlsoap.org/wsdl/"
-private const val XSD = "http://www.w3.org/2001/XMLSchema"
+public const val SOAP_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap/"
+public const val WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/"
+public const val XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema"
 
 @Serializable
-@XmlSerialName("definitions", WSDL_NS)
+@XmlSerialName("definitions", WSDL_NAMESPACE)
 data class WSDL(
     val name: String,
     val targetNamespace: String,
     @XmlElement
-    @XmlSerialName("documentation", WSDL_NS)
+    @XmlSerialName("documentation", WSDL_NAMESPACE)
     val documentation: Documentation? = null,
     @XmlElement
-    @XmlSerialName("types", WSDL_NS)
+    @XmlSerialName("types", WSDL_NAMESPACE)
     val types: List<Types>,
     @XmlElement
-    @XmlSerialName("message", WSDL_NS)
+    @XmlSerialName("message", WSDL_NAMESPACE)
     val messages: List<Message>,
     @XmlElement
-    @XmlSerialName("portType", WSDL_NS)
+    @XmlSerialName("portType", WSDL_NAMESPACE)
     val portTypes: List<PortType>,
     @XmlElement
-    @XmlSerialName("binding", WSDL_NS)
+    @XmlSerialName("binding", WSDL_NAMESPACE)
     val bindings: List<Binding>,
     @XmlElement
-    @XmlSerialName("service", WSDL_NS)
+    @XmlSerialName("service", WSDL_NAMESPACE)
     val services: List<Service>,
 )
 
 @Serializable
 data class Binding(
     val name: String,
-    val type: String,
+    @Serializable(QNameSerializer::class)
+    val type: QName,
     @XmlElement
-    @XmlSerialName("documentation", WSDL_NS)
+    @XmlSerialName("documentation", WSDL_NAMESPACE)
     val documentation: String? = null,
     @XmlElement
-    @XmlSerialName("binding", SOAP)
+    @XmlSerialName("binding", SOAP_NAMESPACE)
     val binding: SoapBinding,
     @XmlElement
-    @XmlSerialName("operation", WSDL_NS)
+    @XmlSerialName("operation", WSDL_NAMESPACE)
     val operations: List<SoapOperation>,
 )
 
@@ -56,23 +59,23 @@ data class Binding(
 data class SoapOperation(
     val name: String,
     @XmlElement
-    @XmlSerialName("operation", SOAP)
+    @XmlSerialName("operation", SOAP_NAMESPACE)
     val operation: Operation,
     @XmlElement
-    @XmlSerialName("input", WSDL_NS)
+    @XmlSerialName("input", WSDL_NAMESPACE)
     val input: Input,
     @XmlElement
-    @XmlSerialName("output", WSDL_NS)
+    @XmlSerialName("output", WSDL_NAMESPACE)
     val output: Output,
     @XmlElement
-    @XmlSerialName("fault", WSDL_NS)
+    @XmlSerialName("fault", WSDL_NAMESPACE)
     val fault: Fault? = null,
 ) {
     @Serializable
     data class Input(
         val name: String? = null,
         @XmlElement
-        @XmlSerialName("body", SOAP)
+        @XmlSerialName("body", SOAP_NAMESPACE)
         val body: Body,
     )
 
@@ -80,7 +83,7 @@ data class SoapOperation(
     data class Output(
         val name: String? = null,
         @XmlElement
-        @XmlSerialName("body", SOAP)
+        @XmlSerialName("body", SOAP_NAMESPACE)
         val body: Body,
     )
 
@@ -88,7 +91,7 @@ data class SoapOperation(
     data class Fault(
         val name: String,
         @XmlElement
-        @XmlSerialName("fault", SOAP)
+        @XmlSerialName("fault", SOAP_NAMESPACE)
         val fault: Fault,
     ) {
         @Serializable
@@ -109,10 +112,10 @@ data class SoapBinding(val style: String, val transport: String)
 data class PortType(
     val name: String,
     @XmlElement
-    @XmlSerialName("documentation", WSDL_NS)
+    @XmlSerialName("documentation", WSDL_NAMESPACE)
     val documentation: String? = null,
     @XmlElement
-    @XmlSerialName("operation", WSDL_NS)
+    @XmlSerialName("operation", WSDL_NAMESPACE)
     val operations: List<Operation>,
 )
 
@@ -120,47 +123,48 @@ data class PortType(
 data class Operation(
     val name: String,
     @XmlElement
-    @XmlSerialName("documentation", WSDL_NS)
+    @XmlSerialName("documentation", WSDL_NAMESPACE)
     val documentation: String? = null,
     @XmlElement
-    @XmlSerialName("input", WSDL_NS)
+    @XmlSerialName("input", WSDL_NAMESPACE)
     val input: OperationType,
     @XmlElement
-    @XmlSerialName("output", WSDL_NS)
+    @XmlSerialName("output", WSDL_NAMESPACE)
     val output: OperationType,
     @XmlElement
-    @XmlSerialName("fault", WSDL_NS)
+    @XmlSerialName("fault", WSDL_NAMESPACE)
     val fault: OperationType? = null,
 )
 
 @Serializable
-data class OperationType(val message: String, val name: String? = null)
+data class OperationType(@Serializable(QNameSerializer::class) val message: QName, val name: String)
 
 @Serializable
 data class Message(
     val name: String,
     @XmlElement
-    @XmlSerialName("part", WSDL_NS)
+    @XmlSerialName("part", WSDL_NAMESPACE)
     val part: Part,
 )
 
 @Serializable
-data class Part(val element: String, val name: String)
+data class Part(val name: String, @Serializable(QNameSerializer::class) val element: QName)
 
 @Serializable
 data class Service(
     val name: String,
     @XmlElement
-    @XmlSerialName("port", WSDL_NS)
+    @XmlSerialName("port", WSDL_NAMESPACE)
     val port: Port,
 )
 
 @Serializable
 data class Port(
-    val binding: String,
     val name: String,
+    @Serializable(QNameSerializer::class)
+    val binding: QName,
     @XmlElement
-    @XmlSerialName("address", SOAP)
+    @XmlSerialName("address", SOAP_NAMESPACE)
     val address: Address,
 )
 
@@ -182,7 +186,7 @@ data class Documentation(
 @Serializable
 data class Types(
     @XmlElement
-    @XmlSerialName("schema", XSD)
+    @XmlSerialName("schema", XSD_NAMESPACE)
     val schemas: List<Schema>,
 )
 
@@ -192,22 +196,22 @@ data class Schema(
     val targetNamespace: String,
     val attributeFormDefault: String? = null,
     @XmlElement
-    @XmlSerialName("import", XSD)
+    @XmlSerialName("import", XSD_NAMESPACE)
     val imports: List<Import> = emptyList(),
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
     @XmlElement
-    @XmlSerialName("element", XSD)
+    @XmlSerialName("element", XSD_NAMESPACE)
     val elements: List<Element>,
     @XmlElement
-    @XmlSerialName("complexType", XSD)
+    @XmlSerialName("complexType", XSD_NAMESPACE)
     val complexTypes: List<ComplexType>,
     @XmlElement
-    @XmlSerialName("simpleType", XSD)
+    @XmlSerialName("simpleType", XSD_NAMESPACE)
     val simpleType: List<SimpleType>,
     @XmlElement
-    @XmlSerialName("include", XSD)
+    @XmlSerialName("include", XSD_NAMESPACE)
     val include: Include? = null,
 )
 
@@ -218,39 +222,40 @@ data class Include(val schemaLocation: String)
 data class SimpleType(
     val name: String? = null,
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
     @XmlElement
-    @XmlSerialName("restriction", XSD)
+    @XmlSerialName("restriction", XSD_NAMESPACE)
     val restriction: Restriction,
 )
 
 @Serializable
 data class Restriction(
-    val base: String,
+    @Serializable(QNameSerializer::class)
+    val base: QName,
     @XmlElement
-    @XmlSerialName("enumeration", XSD)
+    @XmlSerialName("enumeration", XSD_NAMESPACE)
     val enumeration: List<Enumeration> = emptyList(),
     @XmlElement
-    @XmlSerialName("minLength", XSD)
+    @XmlSerialName("minLength", XSD_NAMESPACE)
     val minLength: MinLength? = null,
     @XmlElement
-    @XmlSerialName("maxLength", XSD)
+    @XmlSerialName("maxLength", XSD_NAMESPACE)
     val maxLength: MaxLength? = null,
     @XmlElement
-    @XmlSerialName("minInclusive", XSD)
+    @XmlSerialName("minInclusive", XSD_NAMESPACE)
     val minInclusive: MinInclusive? = null,
     @XmlElement
-    @XmlSerialName("maxInclusive", XSD)
+    @XmlSerialName("maxInclusive", XSD_NAMESPACE)
     val maxInclusive: MaxInclusive? = null,
     @XmlElement
-    @XmlSerialName("fractionDigits", XSD)
+    @XmlSerialName("fractionDigits", XSD_NAMESPACE)
     val fractionDigits: FractionDigits? = null,
     @XmlElement
-    @XmlSerialName("totalDigits", XSD)
+    @XmlSerialName("totalDigits", XSD_NAMESPACE)
     val totalDigits: TotalDigits? = null,
     @XmlElement
-    @XmlSerialName("length", XSD)
+    @XmlSerialName("length", XSD_NAMESPACE)
     val length: Length? = null,
 ) {
     @Serializable
@@ -278,7 +283,7 @@ data class Restriction(
 @Serializable
 data class Enumeration(
     val value: String,
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
 )
 
@@ -286,33 +291,33 @@ data class Enumeration(
 data class ComplexType(
     val name: String? = null,
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
     @XmlElement
-    @XmlSerialName("sequence", XSD)
+    @XmlSerialName("sequence", XSD_NAMESPACE)
     val sequence: Sequence? = null,
     @XmlElement
-    @XmlSerialName("simpleContent", XSD)
+    @XmlSerialName("simpleContent", XSD_NAMESPACE)
     val simpleContent: SimpleContent? = null,
     @XmlElement
-    @XmlSerialName("attribute", XSD)
+    @XmlSerialName("attribute", XSD_NAMESPACE)
     val attributes: List<Attribute> = emptyList(),
     @XmlElement
-    @XmlSerialName("complexContent", XSD)
+    @XmlSerialName("complexContent", XSD_NAMESPACE)
     val complexContent: ComplexContent? = null,
 )
 
 @Serializable
 data class ComplexContent(
     @XmlElement
-    @XmlSerialName("extension", XSD)
+    @XmlSerialName("extension", XSD_NAMESPACE)
     val extension: Extension,
 )
 
 @Serializable
 data class SimpleContent(
     @XmlElement
-    @XmlSerialName("extension", XSD)
+    @XmlSerialName("extension", XSD_NAMESPACE)
     val extension: Extension,
 )
 
@@ -320,32 +325,33 @@ data class SimpleContent(
 data class Extension(
     val base: String,
     @XmlElement
-    @XmlSerialName("attribute", XSD)
+    @XmlSerialName("attribute", XSD_NAMESPACE)
     val attributes: List<Attribute> = emptyList(),
     @XmlElement
-    @XmlSerialName("sequence", XSD)
+    @XmlSerialName("sequence", XSD_NAMESPACE)
     val sequence: Sequence?,
 )
 
 @Serializable
 data class Attribute(
     val name: String,
-    val type: String? = null,
+    @Serializable(QNameSerializer::class)
+    val type: QName? = null,
     val use: String? = null,
     val default: String? = null,
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
 )
 
 @Serializable
 data class Sequence(
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
-    @XmlSerialName("minOccurs", XSD)
+    @XmlSerialName("minOccurs", XSD_NAMESPACE)
     val minOccurs: String? = null,
-    @XmlSerialName("maxOccurs", XSD)
+    @XmlSerialName("maxOccurs", XSD_NAMESPACE)
     val maxOccurs: String? = null,
     val elements: List<Elements>,
 )
@@ -353,40 +359,42 @@ data class Sequence(
 @Serializable
 sealed interface Elements
 
-@XmlSerialName("choice", XSD)
+@XmlSerialName("choice", XSD_NAMESPACE)
 @Serializable
 data class Choice(
-    @XmlSerialName("element", XSD)
+    @XmlSerialName("element", XSD_NAMESPACE)
     val element: Element,
 ) : Elements
 
-@XmlSerialName("element", XSD)
+@XmlSerialName("element", XSD_NAMESPACE)
 @Serializable
 data class Element(
     val name: String? = null,
-    val type: String? = null,
+    @Serializable(QNameSerializer::class)
+    val type: QName? = null,
     @XmlElement
-    @XmlSerialName("annotation", XSD)
+    @XmlSerialName("annotation", XSD_NAMESPACE)
     val annotation: Annotation? = null,
     val minOccurs: String? = null,
     val maxOccurs: String? = null,
     val nillable: Boolean? = null,
-    val ref: String? = null,
+    @Serializable(QNameSerializer::class)
+    val ref: QName? = null,
     @XmlElement
-    @XmlSerialName("complexType", XSD)
+    @XmlSerialName("complexType", XSD_NAMESPACE)
     val complexType: ComplexType? = null,
     @XmlElement
-    @XmlSerialName("simpleType", XSD)
+    @XmlSerialName("simpleType", XSD_NAMESPACE)
     val simpleType: SimpleType? = null,
 ) : Elements
 
 @Serializable
 data class Annotation(
     @XmlElement
-    @XmlSerialName("appinfo", XSD)
+    @XmlSerialName("appinfo", XSD_NAMESPACE)
     val appInfo: AppInfo? = null,
     @XmlElement
-    @XmlSerialName("documentation", XSD)
+    @XmlSerialName("documentation", XSD_NAMESPACE)
     val documentation: Documentation? = null,
 )
 
