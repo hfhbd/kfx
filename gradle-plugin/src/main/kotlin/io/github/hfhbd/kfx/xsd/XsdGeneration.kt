@@ -20,7 +20,7 @@ internal abstract class XsdGeneration : WorkAction<XsdGeneration.XsdParameters> 
                 if (xsdFile.nameWithoutExtension !in openStreams) {
                     xsdFile.inputStream().use {
                         openStreams[xsdFile.nameWithoutExtension] = it
-                        generate(
+                        generateXsd(
                             xsdFile = it,
                             import = { fileName ->
                                 val inputStream =

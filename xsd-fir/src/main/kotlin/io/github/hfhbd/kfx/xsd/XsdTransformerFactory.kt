@@ -4,5 +4,6 @@ import kotlinx.serialization.modules.SerializersModule
 
 interface XsdTransformerFactory {
     fun create(): XsdTransformer
+
     fun serializerModule(): SerializersModule
 }

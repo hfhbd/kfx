@@ -187,22 +187,22 @@ private fun toIr(
                 namespace = schema.targetNamespace,
                 documentation = element.annotation?.documentation(),
                 members = (
-                        element.complexType?.sequence?.elements?.map {
-                            when (it) {
-                                is Choice -> it.element
-                                is Element -> it
-                            }
-                        }?.mapToIr(
-                            qname,
-                            schema,
-                            xsdTransformers,
-                            irTypes,
-                        ) ?: emptyMap()
-                        ) + (
-                        element.complexType?.attributes?.map {
-                            it.mapToIr(schema, irTypes)
-                        } ?: emptyList()
-                        ),
+                    element.complexType?.sequence?.elements?.map {
+                        when (it) {
+                            is Choice -> it.element
+                            is Element -> it
+                        }
+                    }?.mapToIr(
+                        qname,
+                        schema,
+                        xsdTransformers,
+                        irTypes,
+                    ) ?: emptyMap()
+                    ) + (
+                    element.complexType?.attributes?.map {
+                        it.mapToIr(schema, irTypes)
+                    } ?: emptyList()
+                    ),
                 isFault = false,
                 allOf = null,
                 discriminator = null,
@@ -309,13 +309,13 @@ private fun toIr(
                 serialName = complexType.name,
                 members = if (includeMembers) {
                     (
-                            sequence?.elements?.map {
-                                when (it) {
-                                    is Choice -> it.element
-                                    is Element -> it
-                                }
-                            }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
-                            ) + complexType.attributes.map {
+                        sequence?.elements?.map {
+                            when (it) {
+                                is Choice -> it.element
+                                is Element -> it
+                            }
+                        }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
+                        ) + complexType.attributes.map {
                         it.mapToIr(schema, irTypes)
                     }
                 } else {
@@ -561,25 +561,25 @@ private fun List<Element>.mapToIr(
         val elementName = it.name ?: ref!!.localPart
 
         elementName.replaceFirstChar { it.lowercaseChar() } to
-                IRTree.Member(
-                    type = if (it.maxOccurs == "unbounded") {
-                        IRTree.Type.LIST(type)
-                    } else {
-                        type
-                    },
-                    nullable = it.nillable == true || it.minOccurs == "0",
-                    serialName = elementName,
-                    namespace = if (ref == null) {
-                        schema.targetNamespace
-                    } else {
-                        ref.namespace
-                    },
-                    documentation = it.annotation?.documentation(),
-                    xmlType = IRTree.XmlType.Element,
-                    requirements = emptyList(),
-                    isOverride = false,
-                    deprecated = false,
-                )
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = if (ref == null) {
+                    schema.targetNamespace
+                } else {
+                    ref.namespace
+                },
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            )
     }
 }
 
