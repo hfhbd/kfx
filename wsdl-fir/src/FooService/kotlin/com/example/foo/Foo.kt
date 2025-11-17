@@ -1,6 +1,7 @@
 package com.example.foo
 
 import com.example.bar.BarType
+import kotlin.Boolean
 import kotlin.Int
 import kotlin.jvm.JvmInline
 import kotlinx.serialization.Serializable
@@ -21,5 +22,12 @@ public value class Foo private constructor(
   public val foo: Int
     get() = _value.foo
 
-  public constructor(bar: BarType, foo: Int) : this(FooType(bar, foo))
+  public val baz: Boolean?
+    get() = _value.baz
+
+  public constructor(
+    bar: BarType,
+    foo: Int,
+    baz: Boolean? = null,
+  ) : this(FooType(bar, foo, baz))
 }

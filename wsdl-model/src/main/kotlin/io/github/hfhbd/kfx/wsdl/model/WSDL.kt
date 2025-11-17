@@ -323,7 +323,8 @@ data class SimpleContent(
 
 @Serializable
 data class Extension(
-    val base: String,
+    @Serializable(QNameSerializer::class)
+    val base: QName,
     @XmlElement
     @XmlSerialName("attribute", XSD_NAMESPACE)
     val attributes: List<Attribute> = emptyList(),

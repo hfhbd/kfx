@@ -265,12 +265,23 @@ private fun toIr(
                 serialName = elementName,
                 namespace = schema.targetNamespace,
                 documentation = element.annotation?.documentation(),
-                members = element.complexType?.sequence?.elements?.map {
-                    when (it) {
-                        is Choice -> it.element
-                        is Element -> it
-                    }
-                }?.mapToIr(qname, schema, wsdlTransformers, irTypes) ?: emptyMap(),
+                members = (
+                    element.complexType?.sequence?.elements?.map {
+                        when (it) {
+                            is Choice -> it.element
+                            is Element -> it
+                        }
+                    }?.mapToIr(
+                        qname,
+                        schema,
+                        wsdlTransformers,
+                        irTypes,
+                    ) ?: emptyMap()
+                    ) + (
+                    element.complexType?.attributes?.map {
+                        it.mapToIr(schema, irTypes)
+                    } ?: emptyList()
+                    ),
                 isFault = false,
                 allOf = null,
                 discriminator = null,
@@ -303,7 +314,9 @@ private fun toIr(
                                 is Choice -> it.element
                                 is Element -> it
                             }
-                        }.mapToIr(typeAlias, schema, wsdlTransformers, irTypes)
+                        }.mapToIr(typeAlias, schema, wsdlTransformers, irTypes) + complexType.attributes.map {
+                            it.mapToIr(schema, irTypes)
+                        }
                     } else {
                         emptyMap()
                     },
@@ -374,12 +387,16 @@ private fun toIr(
                 namespace = schema.targetNamespace,
                 serialName = complexType.name,
                 members = if (includeMembers) {
-                    sequence?.elements?.map {
-                        when (it) {
-                            is Choice -> it.element
-                            is Element -> it
-                        }
-                    }?.mapToIr(qName, schema, wsdlTransformers, irTypes) ?: emptyMap()
+                    (
+                        sequence?.elements?.map {
+                            when (it) {
+                                is Choice -> it.element
+                                is Element -> it
+                            }
+                        }?.mapToIr(qName, schema, wsdlTransformers, irTypes) ?: emptyMap()
+                        ) + complexType.attributes.map {
+                        it.mapToIr(schema, irTypes)
+                    }
                 } else {
                     emptyMap()
                 },
@@ -511,6 +528,11 @@ private fun List<Element>.mapToIr(
                         }?.mapToIr(qname, schema, wsdlTransformers, topLevel)
                         if (elements != null) {
                             putAll(elements)
+                        }
+
+                        for (attribute in complexType.attributes) {
+                            val ir = attribute.mapToIr(schema, topLevel)
+                            put(ir.first, ir.second)
                         }
 
                         val simpleType = complexType.simpleContent
@@ -653,7 +675,7 @@ private fun Attribute.mapToIr(
 ): Pair<String, IRTree.Member> {
     val type = requireNotNull(type)
     val irType = if (type.namespace == XSD_NAMESPACE) {
-        name.toBuiltin()
+        type.toBuiltin()
     } else {
         val namespace = (type.namespace ?: schema.targetNamespace).packageName
         val qname = IRTree.ClassName(namespace, name)
@@ -718,21 +740,19 @@ private fun SimpleType.resolve(schema: Schema, irTypes: Map<IRTree.ClassName, Cl
 
 private fun QName.toBuiltin(): IRTree.Type.Builtin {
     require(isXSD())
-    return localPart.toBuiltin()
-}
-
-private fun String.toBuiltin(): IRTree.Type.Builtin = when (this) {
-    "string" -> IRTree.Type.Builtin.STRING
-    "anyURI" -> IRTree.Type.Builtin.STRING
-    "normalizedString" -> IRTree.Type.Builtin.STRING
-    "dateTime" -> IRTree.Type.DateType.INSTANT
-    "date" -> IRTree.Type.DateType.DATE
-    "base64Binary" -> IRTree.Type.Builtin.STRING
-    "boolean" -> IRTree.Type.Builtin.BOOLEAN
-    "integer", "int" -> IRTree.Type.Builtin.INT
-    "long" -> IRTree.Type.Builtin.LONG
-    "decimal" -> IRTree.Type.Builtin.DOUBLE
-    else -> error("Not supported builtin: $this")
+    return when (localPart) {
+        "string" -> IRTree.Type.Builtin.STRING
+        "anyURI" -> IRTree.Type.Builtin.STRING
+        "normalizedString" -> IRTree.Type.Builtin.STRING
+        "dateTime" -> IRTree.Type.DateType.INSTANT
+        "date" -> IRTree.Type.DateType.DATE
+        "base64Binary" -> IRTree.Type.Builtin.STRING
+        "boolean" -> IRTree.Type.Builtin.BOOLEAN
+        "integer", "int" -> IRTree.Type.Builtin.INT
+        "long" -> IRTree.Type.Builtin.LONG
+        "decimal" -> IRTree.Type.Builtin.DOUBLE
+        else -> error("Not supported builtin: $this")
+    }
 }
 
 internal val QName.namespace get() = namespaceURI.takeUnless { it.isEmpty() }

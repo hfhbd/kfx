@@ -1,5 +1,6 @@
 package com.example.bar
 
+import kotlin.Long
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,4 +22,6 @@ public data class BarType(
   @XmlElement
   @SerialName(value = "ValidFrom")
   public val validFrom: LocalDate? = null,
+  @SerialName(value = "Baz")
+  public val baz: Long? = null,
 )
