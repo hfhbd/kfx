@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<Foo xmlns="http://example.com/foo">
+<Foo xmlns="http://example.com/foo" Baz="true">
     <Bar xmlns="http://example.com/bar">
         <ValidFrom>1970-02-12</ValidFrom>
     </Bar>

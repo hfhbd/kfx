@@ -159,6 +159,7 @@ class FooServiceTest {
         val foo = Foo(
             bar = BarType(validFrom = LocalDate.fromEpochDays(42)),
             foo = 42,
+            baz = true,
         )
         val fooXml = XML {
             repairNamespaces = false

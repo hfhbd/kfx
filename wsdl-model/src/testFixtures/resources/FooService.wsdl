@@ -24,6 +24,7 @@
                         </xsd:annotation>
                     </xsd:element>
                 </xsd:sequence>
+                <xsd:attribute name="Baz" type="xsd:long" default="0"/>
             </xsd:complexType>
         </xsd:schema>
         

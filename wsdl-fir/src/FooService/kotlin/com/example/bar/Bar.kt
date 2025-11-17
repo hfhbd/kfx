@@ -1,5 +1,6 @@
 package com.example.bar
 
+import kotlin.Long
 import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
@@ -23,5 +24,8 @@ public value class Bar private constructor(
   public val validFrom: LocalDate?
     get() = _value.validFrom
 
-  public constructor(validFrom: LocalDate? = null) : this(BarType(validFrom))
+  public val baz: Long?
+    get() = _value.baz
+
+  public constructor(validFrom: LocalDate? = null, baz: Long? = null) : this(BarType(validFrom, baz))
 }

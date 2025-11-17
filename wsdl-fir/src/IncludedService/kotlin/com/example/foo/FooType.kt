@@ -1,6 +1,7 @@
 package com.example.foo
 
 import com.example.bar.BarType
+import kotlin.Boolean
 import kotlin.Int
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,4 +23,6 @@ public data class FooType(
   @XmlElement
   @SerialName(value = "Foo")
   public val foo: Int,
+  @SerialName(value = "Baz")
+  public val baz: Boolean? = null,
 )
