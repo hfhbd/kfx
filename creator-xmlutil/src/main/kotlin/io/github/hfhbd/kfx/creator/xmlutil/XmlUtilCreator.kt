@@ -24,24 +24,16 @@ class XmlUtilCreator : KotlinxCoreCreator {
                     add(
                         CodeGenTree.Annotation("nl.adaptivity.xmlutil.serialization", listOf("XmlElement"), emptyMap()),
                     )
-                    if (ir.type is IRTree.Type.Builtin && ir.serialName != null) {
-                        if (ir.serialName != name) {
-                            add(
-                                serialName(ir.serialName!!),
-                            )
-                        }
-                    } else {
-                        add(
-                            CodeGenTree.Annotation(
-                                "nl.adaptivity.xmlutil.serialization",
-                                listOf("XmlSerialName"),
-                                mapOf(
-                                    "value" to StringLiteral(ir.serialName!!),
-                                    "namespace" to StringLiteral(ir.namespace!!),
-                                ),
+                    add(
+                        CodeGenTree.Annotation(
+                            "nl.adaptivity.xmlutil.serialization",
+                            listOf("XmlSerialName"),
+                            mapOf(
+                                "value" to StringLiteral(ir.serialName!!),
+                                "namespace" to StringLiteral(ir.namespace!!),
                             ),
-                        )
-                    }
+                        ),
+                    )
                 }
 
                 IRTree.XmlType.Value -> add(

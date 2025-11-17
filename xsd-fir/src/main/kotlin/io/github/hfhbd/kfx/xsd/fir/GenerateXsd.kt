@@ -580,11 +580,7 @@ private fun List<Element>.mapToIr(
                 },
                 nullable = it.nillable == true || it.minOccurs == "0",
                 serialName = elementName,
-                namespace = if (ref == null) {
-                    schema.targetNamespace
-                } else {
-                    ref.namespace
-                },
+                namespace = schema.targetNamespace,
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
                 requirements = emptyList(),

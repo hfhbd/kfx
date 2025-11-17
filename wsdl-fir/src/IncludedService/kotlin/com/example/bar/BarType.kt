@@ -20,7 +20,10 @@ public data class BarType(
    * Valid From
    */
   @XmlElement
-  @SerialName(value = "ValidFrom")
+  @XmlSerialName(
+    value = "ValidFrom",
+    namespace = "http://example.com/bar",
+  )
   public val validFrom: LocalDate? = null,
   @SerialName(value = "Baz")
   public val baz: Long? = null,
