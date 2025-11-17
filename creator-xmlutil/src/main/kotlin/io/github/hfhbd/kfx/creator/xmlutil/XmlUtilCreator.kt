@@ -1,10 +1,14 @@
 package io.github.hfhbd.kfx.creator.xmlutil
 
-import app.softwork.serviceloader.*
-import io.github.hfhbd.kfx.codegen.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
-import io.github.hfhbd.kfx.creator.kotlin.*
-import io.github.hfhbd.kfx.ir.*
+import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
+import io.github.hfhbd.kfx.creator.kotlin.DEPRECATED
+import io.github.hfhbd.kfx.creator.kotlin.KotlinxCoreCreator
+import io.github.hfhbd.kfx.creator.kotlin.SERIALIZABLE
+import io.github.hfhbd.kfx.creator.kotlin.serialName
+import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenCreator::class)
 class XmlUtilCreator : KotlinxCoreCreator {
