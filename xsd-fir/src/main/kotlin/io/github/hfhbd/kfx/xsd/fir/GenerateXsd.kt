@@ -191,22 +191,22 @@ private fun toIr(
                 documentation = element.annotation?.documentation(),
                 members = if (includeMembers) {
                     (
-                            element.complexType?.sequence?.elements?.map {
-                                when (it) {
-                                    is Choice -> it.element
-                                    is Element -> it
-                                }
-                            }?.mapToIr(
-                                qname,
-                                schema,
-                                xsdTransformers,
-                                irTypes,
-                            ) ?: emptyMap()
-                            ) + (
-                            element.complexType?.attributes?.map {
-                                it.mapToIr(schema, irTypes)
-                            } ?: emptyList()
-                            )
+                        element.complexType?.sequence?.elements?.map {
+                            when (it) {
+                                is Choice -> it.element
+                                is Element -> it
+                            }
+                        }?.mapToIr(
+                            qname,
+                            schema,
+                            xsdTransformers,
+                            irTypes,
+                        ) ?: emptyMap()
+                        ) + (
+                        element.complexType?.attributes?.map {
+                            it.mapToIr(schema, irTypes)
+                        } ?: emptyList()
+                        )
                 } else {
                     emptyMap()
                 },
@@ -324,13 +324,13 @@ private fun toIr(
                 serialName = complexType.name,
                 members = if (includeMembers) {
                     (
-                            sequence?.elements?.map {
-                                when (it) {
-                                    is Choice -> it.element
-                                    is Element -> it
-                                }
-                            }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
-                            ) + complexType.attributes.map {
+                        sequence?.elements?.map {
+                            when (it) {
+                                is Choice -> it.element
+                                is Element -> it
+                            }
+                        }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
+                        ) + complexType.attributes.map {
                         it.mapToIr(schema, irTypes)
                     }
                 } else {
@@ -433,10 +433,8 @@ private fun List<Element>.mapToIr(
     schema: Schema,
     xsdTransformers: Collection<XsdTransformer>,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
-): Map<String, IRTree.Member> {
-    return associate {
-        handleElement(it, prefix, schema, xsdTransformers, topLevel)
-    }
+): Map<String, IRTree.Member> = associate {
+    handleElement(it, prefix, schema, xsdTransformers, topLevel)
 }
 
 fun createCustomWrapper(
@@ -453,7 +451,7 @@ fun createCustomWrapper(
         packageName = qname.packageName,
         packageNameSuffix = "",
         name = qname.name,
-        serialName =  it.name ?: ref?.localPart!!,
+        serialName = it.name ?: ref?.localPart!!,
         namespace = schema.targetNamespace,
         isFault = false,
         members = buildMap {
@@ -517,14 +515,12 @@ private fun handleElement(
     schema: Schema,
     xsdTransformers: Collection<XsdTransformer>,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
-): Pair<String, IRTree.Member> {
-    return if (it.type != null) {
-        handleElementType(it, prefix, schema, xsdTransformers, topLevel)
-    } else if (it.ref != null) {
-        handleElementRef(it, prefix, schema, xsdTransformers, topLevel)
-    } else {
-        handleElementNormal(it, prefix, schema, xsdTransformers, topLevel)
-    }
+): Pair<String, IRTree.Member> = if (it.type != null) {
+    handleElementType(it, prefix, schema, xsdTransformers, topLevel)
+} else if (it.ref != null) {
+    handleElementRef(it, prefix, schema, xsdTransformers, topLevel)
+} else {
+    handleElementNormal(it, prefix, schema, xsdTransformers, topLevel)
 }
 
 fun handleElementNormal(
@@ -590,21 +586,21 @@ fun handleElementNormal(
     val elementName = it.name!!
 
     return elementName.replaceFirstChar { it.lowercaseChar() } to
-            IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
-                    IRTree.Type.LIST(type)
-                } else {
-                    type
-                },
-                nullable = it.nillable == true || it.minOccurs == "0",
-                serialName = elementName,
-                namespace = schema.targetNamespace,
-                documentation = it.annotation?.documentation(),
-                xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            )
+        IRTree.Member(
+            type = if (it.maxOccurs == "unbounded") {
+                IRTree.Type.LIST(type)
+            } else {
+                type
+            },
+            nullable = it.nillable == true || it.minOccurs == "0",
+            serialName = elementName,
+            namespace = schema.targetNamespace,
+            documentation = it.annotation?.documentation(),
+            xmlType = IRTree.XmlType.Element,
+            requirements = emptyList(),
+            isOverride = false,
+            deprecated = false,
+        )
 }
 
 fun handleElementType(
@@ -638,21 +634,21 @@ fun handleElementType(
     val elementName = it.name ?: ref.localPart
 
     return elementName.replaceFirstChar { it.lowercaseChar() } to
-            IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
-                    IRTree.Type.LIST(type)
-                } else {
-                    type
-                },
-                nullable = it.nillable == true || it.minOccurs == "0",
-                serialName = elementName,
-                namespace = schema.targetNamespace,
-                documentation = it.annotation?.documentation(),
-                xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            )
+        IRTree.Member(
+            type = if (it.maxOccurs == "unbounded") {
+                IRTree.Type.LIST(type)
+            } else {
+                type
+            },
+            nullable = it.nillable == true || it.minOccurs == "0",
+            serialName = elementName,
+            namespace = schema.targetNamespace,
+            documentation = it.annotation?.documentation(),
+            xmlType = IRTree.XmlType.Element,
+            requirements = emptyList(),
+            isOverride = false,
+            deprecated = false,
+        )
 }
 
 fun handleElementRef(
@@ -687,21 +683,21 @@ fun handleElementRef(
     val elementName = ref.localPart
 
     return elementName.replaceFirstChar { it.lowercaseChar() } to
-            IRTree.Member(
-                type = if (it.maxOccurs == "unbounded") {
-                    IRTree.Type.LIST(type)
-                } else {
-                    type
-                },
-                nullable = it.nillable == true || it.minOccurs == "0",
-                serialName = elementName,
-                namespace = ref.namespace!!,
-                documentation = it.annotation?.documentation(),
-                xmlType = IRTree.XmlType.Element,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            )
+        IRTree.Member(
+            type = if (it.maxOccurs == "unbounded") {
+                IRTree.Type.LIST(type)
+            } else {
+                type
+            },
+            nullable = it.nillable == true || it.minOccurs == "0",
+            serialName = elementName,
+            namespace = ref.namespace!!,
+            documentation = it.annotation?.documentation(),
+            xmlType = IRTree.XmlType.Element,
+            requirements = emptyList(),
+            isOverride = false,
+            deprecated = false,
+        )
 }
 
 @JvmName("mapToIrAttributes")
