@@ -1,15 +1,24 @@
 package io.github.hfhbd.kfx.xsd.fir
 
-import io.github.hfhbd.kfx.*
-import io.github.hfhbd.kfx.codegen.*
-import io.github.hfhbd.kfx.ir.*
-import io.github.hfhbd.kfx.xsd.model.*
+import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
+import io.github.hfhbd.kfx.codegen.CodeGenerator
+import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.kfx.ir.IrTransformer
+import io.github.hfhbd.kfx.toCodeGen
 import io.github.hfhbd.kfx.xsd.model.Annotation
-import nl.adaptivity.xmlutil.*
-import nl.adaptivity.xmlutil.core.*
-import java.io.*
-import java.nio.file.*
-import java.util.*
+import io.github.hfhbd.kfx.xsd.model.Attribute
+import io.github.hfhbd.kfx.xsd.model.Choice
+import io.github.hfhbd.kfx.xsd.model.Element
+import io.github.hfhbd.kfx.xsd.model.Schema
+import io.github.hfhbd.kfx.xsd.model.SimpleType
+import io.github.hfhbd.kfx.xsd.model.XSD_NAMESPACE
+import io.github.hfhbd.kfx.xsd.model.xml
+import nl.adaptivity.xmlutil.QName
+import nl.adaptivity.xmlutil.core.KtXmlReader
+import java.io.InputStream
+import java.nio.file.Path
+import java.util.ServiceLoader
 
 fun generateXsd(
     xsdFile: InputStream,
