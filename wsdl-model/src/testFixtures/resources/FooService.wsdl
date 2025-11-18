@@ -39,6 +39,9 @@
                 <xsd:sequence>
                     <xsd:element name="Bar" type="bar:BarType"/>
                     <xsd:element name="Foo" type="xsd:integer"/>
+                    <xsd:element name="ListEntries" type="tns:ListEntryType"/>
+                    <xsd:element name="ListEntriesWithOtherElements" type="tns:ListEntryWithOtherElementsType"/>
+                    <xsd:element name="ListRefs" type="tns:ListRefType"/>
                 </xsd:sequence>
                 <xsd:attribute name="Baz" type="xsd:boolean" default="false"/>
             </xsd:complexType>
@@ -46,6 +49,40 @@
                 <xsd:sequence>
                     <xsd:element name="message" type="xsd:string"/>
                 </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="SimpleType">
+                <xsd:sequence>
+                    <xsd:element name="someString" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ListEntryType">
+                <xsd:annotation>
+                    <xsd:documentation>ListEntryType details</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Bar" type="bar:BarType"/>
+                </xsd:sequence>
+                <xsd:attribute name="Size" type="xsd:long" default="0"/>
+            </xsd:complexType>
+            <xsd:complexType name="ListEntryWithOtherElementsType">
+                <xsd:annotation>
+                    <xsd:documentation>ListEntryType details</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Bars" type="bar:BarType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Bazs" type="bar:BarType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="SimpleTypes" type="tns:SimpleType"/>
+                </xsd:sequence>
+                <xsd:attribute name="Size" type="xsd:long" default="0"/>
+            </xsd:complexType>
+            <xsd:complexType name="ListRefType">
+                <xsd:annotation>
+                    <xsd:documentation>ListEntryType details</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" ref="bar:Bar"/>
+                </xsd:sequence>
+                <xsd:attribute name="Size" type="xsd:long" default="0"/>
             </xsd:complexType>
         </xsd:schema>
     </wsdl:types>

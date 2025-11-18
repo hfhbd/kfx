@@ -22,12 +22,24 @@ public value class Foo private constructor(
   public val foo: Int
     get() = _value.foo
 
+  public val listEntries: ListEntryType
+    get() = _value.listEntries
+
+  public val listEntriesWithOtherElements: ListEntryWithOtherElementsType
+    get() = _value.listEntriesWithOtherElements
+
+  public val listRefs: ListRefType
+    get() = _value.listRefs
+
   public val baz: Boolean?
     get() = _value.baz
 
   public constructor(
     bar: BarType,
     foo: Int,
+    listEntries: ListEntryType,
+    listEntriesWithOtherElements: ListEntryWithOtherElementsType,
+    listRefs: ListRefType,
     baz: Boolean? = null,
-  ) : this(FooType(bar, foo, baz))
+  ) : this(FooType(bar, foo, listEntries, listEntriesWithOtherElements, listRefs, baz))
 }

@@ -260,13 +260,11 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         isExtension = true,
     )
 
-    private fun getOutput(type: TypeName): CodeBlock = CodeBlock.builder().apply {
-        add(
-            "response.%M<%T>()",
-            MemberName("io.ktor.client.call", "body", isExtension = true),
-            type,
-        )
-    }.build()
+    private fun getOutput(type: TypeName): CodeBlock = CodeBlock.of(
+        "response.%M<%T>()",
+        MemberName("io.ktor.client.call", "body", isExtension = true),
+        type,
+    )
 
     private fun CodeGenTree.Operation.generateFunSpec(): FunSpec {
         val function = FunSpec.builder(name)
