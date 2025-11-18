@@ -2,6 +2,9 @@ import com.example.bar.Bar
 import com.example.bar.BarType
 import com.example.foo.Fault
 import com.example.foo.Foo
+import com.example.foo.ListEntryType
+import com.example.foo.ListEntryWithOtherElementsType
+import com.example.foo.ListRefType
 import com.example.foo.client.createFoo
 import com.example.foo.client.createFooWithoutFault
 import com.example.foo.results.CreateFooResult
@@ -61,6 +64,9 @@ class FooServiceTest {
             input = Foo(
                 bar = BarType(),
                 foo = 42,
+                listEntries = ListEntryType(),
+                listEntriesWithOtherElements = ListEntryWithOtherElementsType(),
+                listRefs = ListRefType(),
             )
         )
         assertTrue(response is CreateFooResult.Success)
@@ -104,6 +110,9 @@ class FooServiceTest {
             input = Foo(
                 bar = BarType(),
                 foo = 42,
+                listEntries = ListEntryType(),
+                listEntriesWithOtherElements = ListEntryWithOtherElementsType(),
+                listRefs = ListRefType(),
             )
         )
         assertTrue(response is CreateFooResult.Failure)
@@ -148,6 +157,9 @@ class FooServiceTest {
             input = Foo(
                 bar = BarType(),
                 foo = 42,
+                listEntries = ListEntryType(),
+                listEntriesWithOtherElements = ListEntryWithOtherElementsType(),
+                listRefs = ListRefType(),
             )
         )
         assertTrue(response is CreateFooWithoutFaultResult.Failure)
@@ -159,6 +171,13 @@ class FooServiceTest {
         val foo = Foo(
             bar = BarType(validFrom = LocalDate.fromEpochDays(42)),
             foo = 42,
+            listEntries = ListEntryType(),
+            listEntriesWithOtherElements = ListEntryWithOtherElementsType(),
+            listRefs = ListRefType(
+                listOf(
+                    BarType(validFrom = LocalDate.fromEpochDays(42)),
+                )
+            ),
             baz = true,
         )
         val fooXml = XML {

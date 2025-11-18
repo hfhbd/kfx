@@ -1,24 +1,15 @@
 package io.github.hfhbd.kfx.xsd.fir
 
-import io.github.hfhbd.kfx.codegen.CodeGenCreator
-import io.github.hfhbd.kfx.codegen.CodeGenTransformer
-import io.github.hfhbd.kfx.codegen.CodeGenerator
-import io.github.hfhbd.kfx.ir.IRTree
-import io.github.hfhbd.kfx.ir.IrTransformer
-import io.github.hfhbd.kfx.toCodeGen
+import io.github.hfhbd.kfx.*
+import io.github.hfhbd.kfx.codegen.*
+import io.github.hfhbd.kfx.ir.*
+import io.github.hfhbd.kfx.xsd.model.*
 import io.github.hfhbd.kfx.xsd.model.Annotation
-import io.github.hfhbd.kfx.xsd.model.Attribute
-import io.github.hfhbd.kfx.xsd.model.Choice
-import io.github.hfhbd.kfx.xsd.model.Element
-import io.github.hfhbd.kfx.xsd.model.Schema
-import io.github.hfhbd.kfx.xsd.model.SimpleType
-import io.github.hfhbd.kfx.xsd.model.XSD_NAMESPACE
-import io.github.hfhbd.kfx.xsd.model.xml
-import nl.adaptivity.xmlutil.QName
-import nl.adaptivity.xmlutil.core.KtXmlReader
-import java.io.InputStream
-import java.nio.file.Path
-import java.util.ServiceLoader
+import nl.adaptivity.xmlutil.*
+import nl.adaptivity.xmlutil.core.*
+import java.io.*
+import java.nio.file.*
+import java.util.*
 
 fun generateXsd(
     xsdFile: InputStream,
@@ -191,22 +182,22 @@ private fun toIr(
                 documentation = element.annotation?.documentation(),
                 members = if (includeMembers) {
                     (
-                        element.complexType?.sequence?.elements?.map {
-                            when (it) {
-                                is Choice -> it.element
-                                is Element -> it
-                            }
-                        }?.mapToIr(
-                            qname,
-                            schema,
-                            xsdTransformers,
-                            irTypes,
-                        ) ?: emptyMap()
-                        ) + (
-                        element.complexType?.attributes?.map {
-                            it.mapToIr(schema, irTypes)
-                        } ?: emptyList()
-                        )
+                            element.complexType?.sequence?.elements?.map {
+                                when (it) {
+                                    is Choice -> it.element
+                                    is Element -> it
+                                }
+                            }?.mapToIr(
+                                qname,
+                                schema,
+                                xsdTransformers,
+                                irTypes,
+                            ) ?: emptyMap()
+                            ) + (
+                            element.complexType?.attributes?.map {
+                                it.mapToIr(schema, irTypes)
+                            } ?: emptyList()
+                            )
                 } else {
                     emptyMap()
                 },
@@ -324,13 +315,13 @@ private fun toIr(
                 serialName = complexType.name,
                 members = if (includeMembers) {
                     (
-                        sequence?.elements?.map {
-                            when (it) {
-                                is Choice -> it.element
-                                is Element -> it
-                            }
-                        }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
-                        ) + complexType.attributes.map {
+                            sequence?.elements?.map {
+                                when (it) {
+                                    is Choice -> it.element
+                                    is Element -> it
+                                }
+                            }?.mapToIr(qName, schema, xsdTransformers, irTypes) ?: emptyMap()
+                            ) + complexType.attributes.map {
                         it.mapToIr(schema, irTypes)
                     }
                 } else {
@@ -448,12 +439,12 @@ fun createCustomWrapper(
     type: IRTree.Type,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
 ): IRTree.Class {
-    val qname = IRTree.ClassName(schema.targetNamespace.packageName, prefix.name + (ref?.localPart ?: it.name))
+    val qname = IRTree.ClassName(schema.targetNamespace.packageName, prefix.name + (it.name ?: ref?.localPart))
     var classe: IRTree.Class = IRTree.NormalClass(
         packageName = qname.packageName,
         packageNameSuffix = "",
         name = qname.name,
-        serialName = ref?.localPart ?: it.name!!,
+        serialName =  it.name ?: ref?.localPart!!,
         namespace = schema.targetNamespace,
         isFault = false,
         members = buildMap {
@@ -512,39 +503,34 @@ fun createCustomWrapper(
 }
 
 private fun handleElement(
-    it: Element, 
+    it: Element,
     prefix: IRTree.ClassName,
-    schema: Schema, 
+    schema: Schema,
+    xsdTransformers: Collection<XsdTransformer>,
+    topLevel: MutableMap<IRTree.ClassName, Classes>,
+): Pair<String, IRTree.Member> {
+    return if (it.type != null) {
+        handleElementType(it, prefix, schema, xsdTransformers, topLevel)
+    } else if (it.ref != null) {
+        handleElementRef(it, prefix, schema, xsdTransformers, topLevel)
+    } else {
+        handleElementNormal(it, prefix, schema, xsdTransformers, topLevel)
+    }
+}
+
+fun handleElementNormal(
+    it: Element,
+    prefix: IRTree.ClassName,
+    schema: Schema,
     xsdTransformers: Collection<XsdTransformer>,
     topLevel: MutableMap<IRTree.ClassName, Classes>,
 ): Pair<String, IRTree.Member> {
     val extension = it.complexType?.simpleContent?.extension
-    val ref = it.type ?: it.ref
 
-    val type: IRTree.Type = if (ref != null) {
-        if (ref.isXSD()) {
-            ref.toBuiltin().let { type ->
-                if (extension != null && extension.attributes.isNotEmpty()) {
-                    createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
-                } else {
-                    type
-                }
-            }
-        } else {
-            val namespace = (ref.namespace ?: schema.targetNamespace).packageName
-            val qname = IRTree.ClassName(namespace, ref.localPart)
-            topLevel.find(qname).let { type ->
-                if (extension != null && extension.attributes.isNotEmpty()) {
-                    createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
-                } else {
-                    type
-                }
-            }
-        }
-    } else if (it.simpleType != null) {
+    val type: IRTree.Type = if (it.simpleType != null) {
         it.simpleType!!.resolve(schema, topLevel).let { type ->
             if (extension != null && extension.attributes.isNotEmpty()) {
-                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+                createCustomWrapper(it, schema, prefix, ref = null, xsdTransformers, type, topLevel)
             } else {
                 type
             }
@@ -558,7 +544,7 @@ private fun handleElement(
     ) {
         topLevel.find(IRTree.ClassName(schema.targetNamespace.packageName, it.name!!)).let { type ->
             if (extension != null && extension.attributes.isNotEmpty()) {
-                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+                createCustomWrapper(it, schema, prefix, ref = null, xsdTransformers, type, topLevel)
             } else {
                 type
             }
@@ -592,7 +578,7 @@ private fun handleElement(
         classe
     }
 
-    val elementName = it.name ?: ref!!.localPart
+    val elementName = it.name!!
 
     return elementName.replaceFirstChar { it.lowercaseChar() } to
             IRTree.Member(
@@ -604,6 +590,103 @@ private fun handleElement(
                 nullable = it.nillable == true || it.minOccurs == "0",
                 serialName = elementName,
                 namespace = schema.targetNamespace,
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            )
+}
+
+fun handleElementType(
+    it: Element,
+    prefix: IRTree.ClassName,
+    schema: Schema,
+    xsdTransformers: Collection<XsdTransformer>,
+    topLevel: MutableMap<IRTree.ClassName, Classes>,
+): Pair<String, IRTree.Member> {
+    val extension = it.complexType?.simpleContent?.extension
+    val ref = it.type!!
+
+    val type: IRTree.Type = if (ref.isXSD()) {
+        ref.toBuiltin().let { type ->
+            if (extension != null && extension.attributes.isNotEmpty()) {
+                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+            } else {
+                type
+            }
+        }
+    } else {
+        val qname = IRTree.ClassName(ref.namespace!!.packageName, ref.localPart)
+        topLevel.find(qname).let { type ->
+            if (extension != null && extension.attributes.isNotEmpty()) {
+                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+            } else {
+                type
+            }
+        }
+    }
+    val elementName = it.name ?: ref.localPart
+
+    return elementName.replaceFirstChar { it.lowercaseChar() } to
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = schema.targetNamespace,
+                documentation = it.annotation?.documentation(),
+                xmlType = IRTree.XmlType.Element,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            )
+}
+
+fun handleElementRef(
+    it: Element,
+    prefix: IRTree.ClassName,
+    schema: Schema,
+    xsdTransformers: Collection<XsdTransformer>,
+    topLevel: MutableMap<IRTree.ClassName, Classes>,
+): Pair<String, IRTree.Member> {
+    val extension = it.complexType?.simpleContent?.extension
+    val ref = it.ref!!
+    val type: IRTree.Type = if (ref.isXSD()) {
+        ref.toBuiltin().let { type ->
+            if (extension != null && extension.attributes.isNotEmpty()) {
+                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+            } else {
+                type
+            }
+        }
+    } else {
+        val namespace = (ref.namespace ?: schema.targetNamespace).packageName
+        val qname = IRTree.ClassName(namespace, ref.localPart)
+        topLevel.find(qname).let { type ->
+            if (extension != null && extension.attributes.isNotEmpty()) {
+                createCustomWrapper(it, schema, prefix, ref, xsdTransformers, type, topLevel)
+            } else {
+                type
+            }
+        }
+    }
+
+    val elementName = ref.localPart
+
+    return elementName.replaceFirstChar { it.lowercaseChar() } to
+            IRTree.Member(
+                type = if (it.maxOccurs == "unbounded") {
+                    IRTree.Type.LIST(type)
+                } else {
+                    type
+                },
+                nullable = it.nillable == true || it.minOccurs == "0",
+                serialName = elementName,
+                namespace = ref.namespace!!,
                 documentation = it.annotation?.documentation(),
                 xmlType = IRTree.XmlType.Element,
                 requirements = emptyList(),

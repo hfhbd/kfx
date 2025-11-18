@@ -26,6 +26,24 @@ public data class FooType(
     namespace = "http://example.com/foo",
   )
   public val foo: Int,
+  @XmlElement
+  @XmlSerialName(
+    value = "ListEntries",
+    namespace = "http://example.com/foo",
+  )
+  public val listEntries: ListEntryType,
+  @XmlElement
+  @XmlSerialName(
+    value = "ListEntriesWithOtherElements",
+    namespace = "http://example.com/foo",
+  )
+  public val listEntriesWithOtherElements: ListEntryWithOtherElementsType,
+  @XmlElement
+  @XmlSerialName(
+    value = "ListRefs",
+    namespace = "http://example.com/foo",
+  )
+  public val listRefs: ListRefType,
   @SerialName(value = "Baz")
   public val baz: Boolean? = null,
 )

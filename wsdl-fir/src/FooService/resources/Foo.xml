@@ -4,4 +4,11 @@
         <ValidFrom xmlns="http://example.com/bar">1970-02-12</ValidFrom>
     </Bar>
     <Foo>42</Foo>
+    <ListEntries />
+    <ListEntriesWithOtherElements />
+    <ListRefs>
+        <Bar xmlns="http://example.com/bar">
+            <ValidFrom>1970-02-12</ValidFrom>
+        </Bar>
+    </ListRefs>
 </Foo>
