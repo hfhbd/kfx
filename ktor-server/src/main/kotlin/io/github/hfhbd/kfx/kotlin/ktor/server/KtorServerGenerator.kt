@@ -93,7 +93,9 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                             add(ParameterSpec.unnamed(input.toKtorPoetType(read = true)))
                         }
                     },
-                    returnType = returnType?.toKtorPoetType(read = false) ?: outputWrapperType?.toKtorPoetType(false) ?: output?.toKtorPoetType(false) ?: UNIT,
+                    returnType = returnType?.toKtorPoetType(
+                        read = false,
+                    ) ?: outputWrapperType?.toKtorPoetType(false) ?: output?.toKtorPoetType(false) ?: UNIT,
                 ).copy(
                     suspending = true,
                 ),
