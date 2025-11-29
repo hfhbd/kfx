@@ -6,6 +6,9 @@ import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.SourceDirectorySet
+import org.gradle.api.plugins.ExtensionAware
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import javax.inject.Inject
 
@@ -18,7 +21,16 @@ abstract class Xsd : Kfx {
     @get:Inject
     internal abstract val tasks: TaskContainer
 
-    override fun usingSourceSet(sourceSet: SourceDirectorySet) {
+    @get:Inject
+    internal abstract val sourceSets: SourceSetContainer
+
+    override fun usingKotlinSourceSet(sourceSetName: String) {
+        sourceSets.named(sourceSetName).configure {
+            usingKotlinSourceSet(it)
+        }
+    }
+
+    override fun usingKotlinSourceSet(sourceSet: SourceSet) {
         val serviceName: String = name
 
         dependencies.compiler.add("$GROUP:xsd-fir:$VERSION")
@@ -26,7 +38,8 @@ abstract class Xsd : Kfx {
         val kfxXsdClasspath = configurations.resolvable("kfxXsdClasspath$serviceName") {
             it.fromDependencyCollector(this@Xsd.dependencies.compiler)
         }
-        sourceSet.srcDir(
+        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName("kotlin") as SourceDirectorySet
+        kotlinSourceDirectorySet.srcDir(
             tasks.register("convertXsdFiles$serviceName", ConvertXsdFiles::class.java) {
                 it.classpath.from(kfxXsdClasspath)
                 it.schemaFiles.from(this@Xsd.schemaFiles)
