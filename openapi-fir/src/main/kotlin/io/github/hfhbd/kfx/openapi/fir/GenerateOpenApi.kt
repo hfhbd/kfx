@@ -564,7 +564,7 @@ private fun Schema.ARRAY.toIr(
         if (items is Schema.ARRAY) {
             items.toIr(parentName, suffix, irTypes)
         } else {
-            items?.toIr(parentName, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
+            items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
         },
     )
 }
