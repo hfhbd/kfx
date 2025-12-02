@@ -38,7 +38,9 @@ abstract class Xsd : Kfx {
         val kfxXsdClasspath = configurations.resolvable("kfxXsdClasspath$serviceName") {
             it.fromDependencyCollector(this@Xsd.dependencies.compiler)
         }
-        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName("kotlin") as SourceDirectorySet
+        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName(
+            "kotlin",
+        ) as SourceDirectorySet
         kotlinSourceDirectorySet.srcDir(
             tasks.register("convertXsdFiles$serviceName", ConvertXsdFiles::class.java) {
                 it.classpath.from(kfxXsdClasspath)

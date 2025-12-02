@@ -15,10 +15,12 @@ interface Kfx : Named {
     }
 
     fun usingKotlinSourceSet(sourceSet: SourceSet)
+
     fun usingKotlinSourceSet(sourceSet: NamedDomainObjectProvider<SourceSet>) {
         sourceSet.configure {
             usingKotlinSourceSet(it)
         }
     }
+
     fun usingKotlinSourceSet(sourceSetName: String)
 }

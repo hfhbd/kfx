@@ -42,7 +42,9 @@ abstract class OpenApi : Kfx {
         val kfxOpenApiClasspath = configurations.resolvable("kfxOpenApiClasspath$serviceName") {
             it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
         }
-        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName("kotlin") as SourceDirectorySet
+        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName(
+            "kotlin",
+        ) as SourceDirectorySet
         kotlinSourceDirectorySet.srcDir(
             tasks.register("convertOpenApiFiles$serviceName", ConvertOpenApiFiles::class.java) {
                 it.classpath.from(kfxOpenApiClasspath)

@@ -42,7 +42,9 @@ abstract class Swagger : Kfx {
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
             it.fromDependencyCollector(this@Swagger.dependencies.compiler)
         }
-        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName("kotlin") as SourceDirectorySet
+        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName(
+            "kotlin",
+        ) as SourceDirectorySet
         kotlinSourceDirectorySet.srcDir(
             tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {
                 it.classpath.from(kfxSwaggerClasspath)
