@@ -165,14 +165,17 @@
                     "enum": {
                         "type": "string",
                         "enum": [
-                            "A", "B.B"
+                            "A",
+                            "B.B"
                         ]
                     },
                     "arr": {
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "required": [ "byBar" ],
+                            "required": [
+                                "byBar"
+                            ],
                             "properties": {
                                 "byBar": {
                                     "type": "array",
@@ -188,10 +191,13 @@
                                 "byBaz": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "b": {
-                                                "type": "string"
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "b": {
+                                                    "type": "string"
+                                                }
                                             }
                                         }
                                     }
@@ -234,7 +240,8 @@
             "com.example.TestEnum": {
                 "type": "string",
                 "enum": [
-                    "A", "B.B"
+                    "A",
+                    "B.B"
                 ]
             }
         },
