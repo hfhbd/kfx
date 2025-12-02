@@ -20,6 +20,8 @@ testing.suites {
             implementation("org.springframework.boot:spring-boot-starter-webflux")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
             implementation("org.springframework.boot:spring-boot-starter-test")
+            implementation("org.springframework.boot:spring-boot-webmvc-test")
+            implementation("org.springframework.boot:spring-boot-webtestclient")
             implementation(libs.serialization.json)
 
             implementation(testFixtures(projects.openapiModel))
