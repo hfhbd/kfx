@@ -1,6 +1,7 @@
 import io.github.hfhbd.kfx.soap11.Envelope
 import io.github.hfhbd.kfx.soap11.Fault
 import io.github.hfhbd.kfx.soap11.Header
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
@@ -79,6 +80,73 @@ class SerializationTest {
             ),
         )
     }
+
+    @Test
+    fun faultExampleWithStringDetails() {
+        val xml = XML
+
+        val faultMessage = Envelope(
+            header = null,
+            body = Fault(
+                faultCode = "SOAP-ENV:Server",
+                faultString = "Server Error",
+                detail = "FooString"
+            ),
+        )
+
+        assertEquals(
+            expected = faultMessage,
+            actual = xml.decodeFromString(
+                Envelope.serializer(Fault.serializer()),
+                // language=xml
+                """<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>Server Error</faultstring>
+            <detail>FooString</detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>""",
+            ),
+        )
+    }
+
+    @Test
+    fun faultExampleWithTypedDetails() {
+        val xml = XML
+
+        val faultMessage = Envelope(
+            header = null,
+            body = Fault(
+                faultCode = "SOAP-ENV:Server",
+                faultString = "Server Error",
+                detail = "<FooString></FooString>",
+            ),
+        )
+
+        assertEquals(
+            expected = faultMessage,
+            actual = xml.decodeFromString(
+                Envelope.serializer(Fault.serializer()),
+                // language=xml
+                """<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>Server Error</faultstring>
+            <detail><FooString></FooString></detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>""",
+            ),
+        )
+    }
+
+    @Serializable
+    data object FooString
 
     @Test
     fun serializeWithCustomHeaders() {
