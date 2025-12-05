@@ -5,7 +5,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -83,14 +86,21 @@ class SerializationTest {
 
     @Test
     fun faultExampleWithStringDetails() {
-        val xml = XML
+        val xml = XML(serializersModule = SerializersModule {
+            include(Fault.serializerModule())
+        }) {
+            repairNamespaces = false
+            xmlVersion = XmlVersion.XML10
+            xmlDeclMode = XmlDeclMode.Charset
+            autoPolymorphic = true
+        }
 
         val faultMessage = Envelope(
             header = null,
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
-                detail = "FooString"
+                detail = Fault.Detail("FooString")
             ),
         )
 
@@ -115,14 +125,24 @@ class SerializationTest {
 
     @Test
     fun faultExampleWithTypedDetails() {
-        val xml = XML
+        val xml = XML(
+            serializersModule = SerializersModule {
+                include(Fault.serializerModule())
+                polymorphic(Any::class, FooString::class, FooString.serializer())
+            }
+        ) {
+            repairNamespaces = false
+            xmlVersion = XmlVersion.XML10
+            xmlDeclMode = XmlDeclMode.Charset
+            autoPolymorphic = true
+        }
 
         val faultMessage = Envelope(
             header = null,
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
-                detail = "<FooString></FooString>",
+                detail = Fault.Detail(FooString),
             ),
         )
 
@@ -146,6 +166,7 @@ class SerializationTest {
     }
 
     @Serializable
+    @XmlSerialName("FooString", "")
     data object FooString
 
     @Test
