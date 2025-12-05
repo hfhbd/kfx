@@ -23,7 +23,7 @@ public data class Envelope<T> private constructor(
 
     public val body: T get() = bodyHolder.body
 
-    public fun copy(header: Header? = this.header, body: T): Envelope<T> = copy(
+    public fun copy(header: Header? = this.header, body: T = this.body): Envelope<T> = copy(
         header = header,
         bodyHolder = Body(body),
     )

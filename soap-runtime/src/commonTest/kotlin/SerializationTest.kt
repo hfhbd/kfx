@@ -93,6 +93,8 @@ class SerializationTest {
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
             autoPolymorphic = true
+            
+            indentString = "    "
         }
 
         val faultMessage = Envelope(
@@ -100,7 +102,7 @@ class SerializationTest {
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
-                detail = Fault.Detail("FooString")
+                detail = "FooString",
             ),
         )
 
@@ -121,13 +123,30 @@ class SerializationTest {
 </SOAP-ENV:Envelope>""",
             ),
         )
+
+        assertEquals(
+            // language=xml
+            expected = """<?xml version='1.0' encoding='UTF-8' ?>
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <Fault>
+            <faultcode xmlns="">SOAP-ENV:Server</faultcode>
+            <faultstring xmlns="">Server Error</faultstring>
+            <detail xmlns="">FooString</detail>
+        </Fault>
+    </Body>
+</Envelope>""",
+            actual = xml.encodeToString(
+                Envelope.serializer(Fault.serializer()),
+                faultMessage,
+            ),
+        )
     }
 
     @Test
     fun faultExampleWithTypedDetails() {
         val xml = XML(
             serializersModule = SerializersModule {
-                include(Fault.serializerModule())
                 polymorphic(Any::class, FooString::class, FooString.serializer())
             }
         ) {
@@ -135,6 +154,8 @@ class SerializationTest {
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
             autoPolymorphic = true
+            
+            indentString = "    "
         }
 
         val faultMessage = Envelope(
@@ -142,7 +163,7 @@ class SerializationTest {
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
-                detail = Fault.Detail(FooString),
+                detail = FooString,
             ),
         )
 
@@ -157,16 +178,36 @@ class SerializationTest {
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Server</faultcode>
             <faultstring>Server Error</faultstring>
-            <detail><FooString></FooString></detail>
+            <detail><FooString xmlns="http://example.com"></FooString></detail>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>""",
             ),
         )
+
+        assertEquals(
+            // language=xml
+            expected = """<?xml version='1.0' encoding='UTF-8' ?>
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <Fault>
+            <faultcode xmlns="">SOAP-ENV:Server</faultcode>
+            <faultstring xmlns="">Server Error</faultstring>
+            <detail xmlns="">
+                <FooString xmlns="http://example.com" />
+            </detail>
+        </Fault>
+    </Body>
+</Envelope>""",
+            actual = xml.encodeToString(
+                Envelope.serializer(Fault.serializer()),
+                faultMessage,
+            ),
+        )
     }
 
     @Serializable
-    @XmlSerialName("FooString", "")
+    @XmlSerialName("FooString", "http://example.com")
     data object FooString
 
     @Test
