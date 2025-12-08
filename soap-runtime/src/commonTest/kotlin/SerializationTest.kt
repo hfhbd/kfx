@@ -1,10 +1,16 @@
 import io.github.hfhbd.kfx.soap11.Envelope
 import io.github.hfhbd.kfx.soap11.Fault
 import io.github.hfhbd.kfx.soap11.Header
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.modules.SerializersModule
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import kotlin.jvm.JvmInline
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -59,7 +65,7 @@ class SerializationTest {
 
         val faultMessage = Envelope(
             header = null,
-            body = Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error"),
+            body = Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error", faultActor = "John Doe"),
         )
 
         assertEquals(
@@ -73,12 +79,157 @@ class SerializationTest {
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Server</faultcode>
             <faultstring>Server Error</faultstring>
+            <faultactor>John Doe</faultactor>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>""",
             ),
         )
     }
+
+    @Test
+    fun faultExampleWithStringDetails() {
+        val xml = XML(serializersModule = SerializersModule {
+            include(Fault.serializerModule())
+        }) {
+            repairNamespaces = false
+            xmlVersion = XmlVersion.XML10
+            xmlDeclMode = XmlDeclMode.Charset
+            autoPolymorphic = true
+
+            indentString = "    "
+        }
+
+        val faultMessage = Envelope(
+            header = null,
+            body = Fault(
+                faultCode = "SOAP-ENV:Server",
+                faultString = "Server Error",
+                faultActor = "John Doe",
+                detail = "FooString",
+            ),
+        )
+
+        assertEquals(
+            expected = faultMessage,
+            actual = xml.decodeFromString(
+                Envelope.serializer(Fault.serializer()),
+                // language=xml
+                """<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>Server Error</faultstring>
+            <faultactor>John Doe</faultactor>
+            <detail>FooString</detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>""",
+            ),
+        )
+
+        assertEquals(
+            // language=xml
+            expected = """<?xml version='1.0' encoding='UTF-8' ?>
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <Fault>
+            <faultcode xmlns="">SOAP-ENV:Server</faultcode>
+            <faultstring xmlns="">Server Error</faultstring>
+            <faultactor xmlns="">John Doe</faultactor>
+            <detail xmlns="">FooString</detail>
+        </Fault>
+    </Body>
+</Envelope>""",
+            actual = xml.encodeToString(
+                Envelope.serializer(Fault.serializer()),
+                faultMessage,
+            ),
+        )
+    }
+
+    @Test
+    fun faultExampleWithTypedDetails() {
+        val xml = XML(
+            serializersModule = SerializersModule {
+                polymorphic(Any::class, FooString::class, FooString.serializer())
+            }
+        ) {
+            repairNamespaces = false
+            xmlVersion = XmlVersion.XML10
+            xmlDeclMode = XmlDeclMode.Charset
+            autoPolymorphic = true
+
+            indentString = "    "
+        }
+
+        val faultMessage = Envelope(
+            header = null,
+            body = Fault(
+                faultCode = "SOAP-ENV:Server",
+                faultString = "Server Error",
+                faultActor = "John Doe",
+                detail = FooString(FooStringType(42, "Foo")),
+            ),
+        )
+
+        assertEquals(
+            expected = faultMessage,
+            actual = xml.decodeFromString(
+                Envelope.serializer(Fault.serializer()),
+                // language=xml
+                """<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>Server Error</faultstring>
+            <faultactor>John Doe</faultactor>
+            <detail><FooString xmlns="http://example.com" i='42'><S xmlns="http://example.com/bar">Foo</S></FooString></detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>""",
+            ),
+        )
+
+        assertEquals(
+            // language=xml
+            expected = """<?xml version='1.0' encoding='UTF-8' ?>
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <Fault>
+            <faultcode xmlns="">SOAP-ENV:Server</faultcode>
+            <faultstring xmlns="">Server Error</faultstring>
+            <faultactor xmlns="">John Doe</faultactor>
+            <detail xmlns="">
+                <FooString xmlns="http://example.com" i="42">
+                    <S xmlns="http://example.com/bar">Foo</S>
+                </FooString>
+            </detail>
+        </Fault>
+    </Body>
+</Envelope>""",
+            actual = xml.encodeToString(
+                Envelope.serializer(Fault.serializer()),
+                faultMessage,
+            ),
+        )
+    }
+
+    @Serializable
+    @XmlSerialName("FooString", "http://example.com")
+    @JvmInline
+    value class FooString(val type: FooStringType)
+
+    @Serializable
+    @XmlSerialName("FooStringType", "http://example.com/bar")
+    data class FooStringType(
+        val i: Int,
+        @XmlSerialName("S", "http://example.com/bar")
+        @XmlElement
+        val s: String
+    )
 
     @Test
     fun serializeWithCustomHeaders() {
