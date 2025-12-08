@@ -1,16 +1,12 @@
-import io.github.hfhbd.kfx.soap11.Envelope
-import io.github.hfhbd.kfx.soap11.Fault
-import io.github.hfhbd.kfx.soap11.Header
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.PairSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.modules.SerializersModule
-import nl.adaptivity.xmlutil.XmlDeclMode
-import nl.adaptivity.xmlutil.core.XmlVersion
-import nl.adaptivity.xmlutil.serialization.XML
-import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.github.hfhbd.kfx.soap11.*
+import kotlinx.serialization.*
+import kotlinx.serialization.builtins.*
+import kotlinx.serialization.modules.*
+import nl.adaptivity.xmlutil.*
+import nl.adaptivity.xmlutil.core.*
+import nl.adaptivity.xmlutil.serialization.*
+import kotlin.jvm.*
+import kotlin.test.*
 
 class SerializationTest {
     @Test
@@ -63,7 +59,7 @@ class SerializationTest {
 
         val faultMessage = Envelope(
             header = null,
-            body = Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error"),
+            body = Fault(faultCode = "SOAP-ENV:Server", faultString = "Server Error", faultActor = "John Doe"),
         )
 
         assertEquals(
@@ -77,6 +73,7 @@ class SerializationTest {
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Server</faultcode>
             <faultstring>Server Error</faultstring>
+            <faultactor>John Doe</faultactor>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>""",
@@ -93,7 +90,7 @@ class SerializationTest {
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
             autoPolymorphic = true
-            
+
             indentString = "    "
         }
 
@@ -102,6 +99,7 @@ class SerializationTest {
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
+                faultActor = "John Doe",
                 detail = "FooString",
             ),
         )
@@ -117,6 +115,7 @@ class SerializationTest {
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Server</faultcode>
             <faultstring>Server Error</faultstring>
+            <faultactor>John Doe</faultactor>
             <detail>FooString</detail>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
@@ -132,6 +131,7 @@ class SerializationTest {
         <Fault>
             <faultcode xmlns="">SOAP-ENV:Server</faultcode>
             <faultstring xmlns="">Server Error</faultstring>
+            <faultactor xmlns="">John Doe</faultactor>
             <detail xmlns="">FooString</detail>
         </Fault>
     </Body>
@@ -154,7 +154,7 @@ class SerializationTest {
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
             autoPolymorphic = true
-            
+
             indentString = "    "
         }
 
@@ -163,7 +163,8 @@ class SerializationTest {
             body = Fault(
                 faultCode = "SOAP-ENV:Server",
                 faultString = "Server Error",
-                detail = FooString,
+                faultActor = "John Doe",
+                detail = FooString(FooStringType(42, "Foo")),
             ),
         )
 
@@ -178,7 +179,8 @@ class SerializationTest {
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Server</faultcode>
             <faultstring>Server Error</faultstring>
-            <detail><FooString xmlns="http://example.com"></FooString></detail>
+            <faultactor>John Doe</faultactor>
+            <detail><FooString xmlns="http://example.com" i='42'><S xmlns="http://example.com/bar">Foo</S></FooString></detail>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>""",
@@ -193,8 +195,11 @@ class SerializationTest {
         <Fault>
             <faultcode xmlns="">SOAP-ENV:Server</faultcode>
             <faultstring xmlns="">Server Error</faultstring>
+            <faultactor xmlns="">John Doe</faultactor>
             <detail xmlns="">
-                <FooString xmlns="http://example.com" />
+                <FooString xmlns="http://example.com" i="42">
+                    <S xmlns="http://example.com/bar">Foo</S>
+                </FooString>
             </detail>
         </Fault>
     </Body>
@@ -208,7 +213,17 @@ class SerializationTest {
 
     @Serializable
     @XmlSerialName("FooString", "http://example.com")
-    data object FooString
+    @JvmInline
+    value class FooString(val type: FooStringType)
+
+    @Serializable
+    @XmlSerialName("FooStringType", "http://example.com/bar")
+    data class FooStringType(
+        val i: Int,
+        @XmlSerialName("S", "http://example.com/bar")
+        @XmlElement
+        val s: String
+    )
 
     @Test
     fun serializeWithCustomHeaders() {
