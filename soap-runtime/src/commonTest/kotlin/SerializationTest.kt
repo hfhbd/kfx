@@ -1,12 +1,18 @@
-import io.github.hfhbd.kfx.soap11.*
-import kotlinx.serialization.*
-import kotlinx.serialization.builtins.*
-import kotlinx.serialization.modules.*
-import nl.adaptivity.xmlutil.*
-import nl.adaptivity.xmlutil.core.*
-import nl.adaptivity.xmlutil.serialization.*
-import kotlin.jvm.*
-import kotlin.test.*
+import io.github.hfhbd.kfx.soap11.Envelope
+import io.github.hfhbd.kfx.soap11.Fault
+import io.github.hfhbd.kfx.soap11.Header
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.PairSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.modules.SerializersModule
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
+import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import kotlin.jvm.JvmInline
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SerializationTest {
     @Test
