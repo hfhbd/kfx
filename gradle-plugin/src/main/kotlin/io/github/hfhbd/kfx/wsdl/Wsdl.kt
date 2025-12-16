@@ -6,6 +6,9 @@ import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.SourceDirectorySet
+import org.gradle.api.plugins.ExtensionAware
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import javax.inject.Inject
 
@@ -19,7 +22,16 @@ abstract class Wsdl : Kfx {
     @get:Inject
     internal abstract val tasks: TaskContainer
 
-    override fun usingSourceSet(sourceSet: SourceDirectorySet) {
+    @get:Inject
+    internal abstract val sourceSets: SourceSetContainer
+
+    override fun usingKotlinSourceSet(sourceSetName: String) {
+        sourceSets.named(sourceSetName).configure {
+            usingKotlinSourceSet(it)
+        }
+    }
+
+    override fun usingKotlinSourceSet(sourceSet: SourceSet) {
         val serviceName: String = name
 
         dependencies.compiler.add("$GROUP:wsdl-fir:$VERSION")
@@ -27,7 +39,10 @@ abstract class Wsdl : Kfx {
         val kfxWsdlClasspath = configurations.resolvable("kfxWsdlClasspath$serviceName") {
             it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
         }
-        sourceSet.srcDir(
+        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName(
+            "kotlin",
+        ) as SourceDirectorySet
+        kotlinSourceDirectorySet.srcDir(
             tasks.register("convertWsdlFiles$serviceName", ConvertWsdlFiles::class.java) {
                 it.classpath.from(kfxWsdlClasspath)
                 it.wsdlFiles.from(this@Wsdl.wsdlFiles)

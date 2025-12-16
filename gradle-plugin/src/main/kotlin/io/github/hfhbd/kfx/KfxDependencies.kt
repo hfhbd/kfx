@@ -7,7 +7,7 @@ import org.gradle.api.artifacts.dsl.DependencyCollector
 interface KfxDependencies : Dependencies {
     val compiler: DependencyCollector
 
-    fun kotlin(): ExternalModuleDependency = dependencyFactory.create("$GROUP:kotlin:$VERSION")
+    fun kotlinClasses(): ExternalModuleDependency = dependencyFactory.create("$GROUP:kotlin:$VERSION")
 
     fun ktorClient(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-client:$VERSION")
 

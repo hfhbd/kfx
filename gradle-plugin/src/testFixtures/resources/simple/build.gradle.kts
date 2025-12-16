@@ -13,7 +13,5 @@ kfx.grip {
 
     packageName.set(null)
 
-    sourceSets.main {
-        usingSourceSet(kotlin)
-    }
+    usingKotlinSourceSet(sourceSets.main)
 }
