@@ -558,9 +558,16 @@ private fun Schema.ARRAY.toIr(
     parentName: String,
     suffix: String,
     irTypes: MutableMap<String, IRTree.Class>,
-) = IRTree.Type.LIST(
-    items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!),
-)
+): IRTree.Type.LIST {
+    val items = items
+    return IRTree.Type.LIST(
+        if (items is Schema.ARRAY) {
+            items.toIr(parentName, suffix, irTypes)
+        } else {
+            items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
+        },
+    )
+}
 
 private fun Schema.INT.toIr() = when (format) {
     Schema.INT.Format.Int32 -> IRTree.Type.Builtin.INT

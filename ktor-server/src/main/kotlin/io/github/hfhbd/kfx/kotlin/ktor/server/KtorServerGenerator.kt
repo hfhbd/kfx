@@ -80,6 +80,15 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
         val inputWrapperType = inputWrapperType
         val input = input
         val inputContentType = inputContentType
+        val returnType = returnType
+
+        val lambdaReturnType = if (responseBranches == null) {
+            outputWrapperType?.toKtorPoetType(false) ?: output?.toKtorPoetType(false)
+        } else {
+            returnType?.toKtorPoetType(
+                read = false,
+            )
+        } ?: UNIT
 
         function.addParameter(
             ParameterSpec.builder(
@@ -93,9 +102,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                             add(ParameterSpec.unnamed(input.toKtorPoetType(read = true)))
                         }
                     },
-                    returnType = returnType?.toKtorPoetType(
-                        read = false,
-                    ) ?: outputWrapperType?.toKtorPoetType(false) ?: output?.toKtorPoetType(false) ?: UNIT,
+                    returnType = lambdaReturnType,
                 ).copy(
                     suspending = true,
                 ),

@@ -2,14 +2,16 @@ package io.github.hfhbd.kfx
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureWebTestClient
 internal class FooTest(@Autowired private val webClient: WebTestClient) {
     @Test
     fun bazA() {

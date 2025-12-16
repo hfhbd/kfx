@@ -227,45 +227,35 @@ private fun toIr(
         val qName = IRTree.ClassName(schema.targetNamespace.packageName, complexTypeName!!)
         val sequence = complexType.sequence
         if (sequence != null && sequence.elements.size == 1 && (sequence.elements[0] as Element).name == null) {
-            val element = sequence.elements[0] as Element
             val typeAlias = IRTree.ClassName(schema.targetNamespace.packageName, complexTypeName)
-            if (element.maxOccurs == "unbounded") {
-                var irClass: IRTree.Class = IRTree.NormalClass(
-                    packageName = typeAlias.packageName,
-                    packageNameSuffix = "",
-                    name = typeAlias.name,
-                    namespace = schema.targetNamespace,
-                    serialName = complexType.name,
-                    members = if (includeMembers) {
-                        sequence.elements.map {
-                            when (it) {
-                                is Choice -> it.element
-                                is Element -> it
-                            }
-                        }.mapToIr(typeAlias, schema, xsdTransformers, irTypes) + complexType.attributes.map {
-                            it.mapToIr(schema, irTypes)
+            var irClass: IRTree.Class = IRTree.NormalClass(
+                packageName = typeAlias.packageName,
+                packageNameSuffix = "",
+                name = typeAlias.name,
+                namespace = schema.targetNamespace,
+                serialName = complexType.name,
+                members = if (includeMembers) {
+                    sequence.elements.map {
+                        when (it) {
+                            is Choice -> it.element
+                            is Element -> it
                         }
-                    } else {
-                        emptyMap()
-                    },
-                    documentation = complexType.annotation?.documentation(),
-                    isFault = false,
-                    allOf = null,
-                    discriminator = null,
-                    deprecated = false,
-                )
-                for (xsdTransformer in xsdTransformers) {
-                    irClass = xsdTransformer(complexType, irClass)
-                }
-                irTypes[typeAlias] = Classes.ActualClass(irClass)
-            } else {
-                val ref = element.ref!!
-                val namespace = (ref.namespace ?: schema.targetNamespace).packageName
-                val resolved = IRTree.ClassName(namespace, ref.localPart)
-                if (resolved != typeAlias) {
-                    irTypes[typeAlias] = Classes.TypeAlias(resolved, ref.localPart, namespace, ignore = false)
-                }
+                    }.mapToIr(typeAlias, schema, xsdTransformers, irTypes) + complexType.attributes.map {
+                        it.mapToIr(schema, irTypes)
+                    }
+                } else {
+                    emptyMap()
+                },
+                documentation = complexType.annotation?.documentation(),
+                isFault = false,
+                allOf = null,
+                discriminator = null,
+                deprecated = false,
+            )
+            for (xsdTransformer in xsdTransformers) {
+                irClass = xsdTransformer(complexType, irClass)
             }
+            irTypes[typeAlias] = Classes.ActualClass(irClass)
         } else if (complexType.simpleContent != null) {
             var irClass: IRTree.Class = IRTree.NormalClass(
                 packageName = schema.targetNamespace.packageName,
