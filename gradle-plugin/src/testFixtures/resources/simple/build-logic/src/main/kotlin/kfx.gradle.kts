@@ -9,6 +9,6 @@ kfx.register("grip", OpenApi::class) {
         compiler(ktorClient())
         compiler(kotlinxJson())
         compiler(contextualDate())
-        compiler(kotlin())
+        compiler(kotlinClasses())
     }
 }
