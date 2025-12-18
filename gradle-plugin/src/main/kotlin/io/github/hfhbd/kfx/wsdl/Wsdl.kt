@@ -27,6 +27,7 @@ abstract class Wsdl : Kfx {
         val kfxWsdlClasspath = configurations.resolvable("kfxWsdlClasspath$serviceName") {
             it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
         }
+
         kotlinSourceSet.generatedKotlin.srcDir(
             tasks.register("convertWsdlFiles$serviceName", ConvertWsdlFiles::class.java) {
                 it.classpath.from(kfxWsdlClasspath)
