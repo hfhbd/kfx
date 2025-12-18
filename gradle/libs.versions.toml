@@ -28,7 +28,7 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.22" }
 
 dokka-mermaid = { module = "com.glureau:html-mermaid-dokka-plugin", version = "0.6.0" }
 
-spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.0" }
+spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.1" }
 
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 
