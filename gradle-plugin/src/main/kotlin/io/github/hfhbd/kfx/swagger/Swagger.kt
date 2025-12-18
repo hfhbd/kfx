@@ -31,7 +31,7 @@ abstract class Swagger : Kfx {
             it.fromDependencyCollector(this@Swagger.dependencies.compiler)
         }
 
-        kotlinSourceSet.generatedKotlin.srcDir(
+        kotlinSourceSet.kotlin.srcDir(
             tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {
                 it.classpath.from(kfxSwaggerClasspath)
                 it.swaggerFiles.from(files)

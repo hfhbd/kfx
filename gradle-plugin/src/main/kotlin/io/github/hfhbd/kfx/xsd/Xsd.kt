@@ -27,7 +27,7 @@ abstract class Xsd : Kfx {
             it.fromDependencyCollector(this@Xsd.dependencies.compiler)
         }
 
-        kotlinSourceSet.generatedKotlin.srcDir(
+        kotlinSourceSet.kotlin.srcDir(
             tasks.register("convertXsdFiles$serviceName", ConvertXsdFiles::class.java) {
                 it.classpath.from(kfxXsdClasspath)
                 it.schemaFiles.from(this@Xsd.schemaFiles)

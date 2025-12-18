@@ -31,7 +31,7 @@ abstract class OpenApi : Kfx {
             it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
         }
 
-        kotlinSourceSet.generatedKotlin.srcDir(
+        kotlinSourceSet.kotlin.srcDir(
             tasks.register("convertOpenApiFiles$serviceName", ConvertOpenApiFiles::class.java) {
                 it.classpath.from(kfxOpenApiClasspath)
                 it.openapiFiles.from(files)
