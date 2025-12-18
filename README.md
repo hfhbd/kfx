@@ -34,26 +34,24 @@ kfx {
     register("myApi", OpenApi::class) {
         files.from(file("myApi.json"))
         dependencies {
-            compiler(kotlin())
+            compiler(kotlinClasses())
             compiler(kotlinxJson())
             compiler(ktorClient())
         }
-        sourceSets.main {
-            usingSourceSet(kotlin)
-        }
+        usingKotlinSourceSet(kotlin.sourceSets.main)
     }
 }
 ```
 
 To generate code, you need to call register/create and configure the compilation.
 In the dependencies block, you define what code should be generated: 
-- kotlin: Kotlin classes only
+- kotlinClasses: Kotlin classes only
 - kotlinxJson: Adds `@Serializable` annotation to Kotlin classes
 - ktorClient: Generates ktor client functions
 - ktorServer: Generates ktor server `Route` functions
-- springServer(): Generates Spring webflux `CoRouterFunctionDsl` functional endpoints
+- springServer: Generates Spring webflux `CoRouterFunctionDsl` functional endpoints
 
-You also need to call `usingSourceSet` to connect the generated code to a Gradle SourceSet.
+You also need to call `usingKotlinSourceSet` to connect the generated code to a Gradle SourceSet.
 
 ## Custom Transformer
 
