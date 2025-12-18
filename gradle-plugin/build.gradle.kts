@@ -13,6 +13,8 @@ java {
 }
 
 dependencies {
+    api(libs.kotlin.gradle.plugin.api)
+
     compileOnly(projects.wsdlFir)
     compileOnly(projects.swaggerFir)
     compileOnly(projects.irPackagename)
