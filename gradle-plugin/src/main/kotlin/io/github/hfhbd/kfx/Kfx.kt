@@ -4,9 +4,11 @@ import org.gradle.api.Action
 import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.tasks.Nested
-import org.gradle.api.tasks.SourceSet
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 interface Kfx : Named {
+    override fun getName(): String
+
     @get:Nested
     val dependencies: KfxDependencies
 
@@ -14,13 +16,11 @@ interface Kfx : Named {
         action.execute(dependencies)
     }
 
-    fun usingKotlinSourceSet(sourceSet: SourceSet)
+    fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet)
 
-    fun usingKotlinSourceSet(sourceSet: NamedDomainObjectProvider<SourceSet>) {
-        sourceSet.configure {
+    fun usingKotlinSourceSet(kotlinSourceSet: NamedDomainObjectProvider<KotlinSourceSet>) {
+        kotlinSourceSet.configure {
             usingKotlinSourceSet(it)
         }
     }
-
-    fun usingKotlinSourceSet(sourceSetName: String)
 }

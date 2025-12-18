@@ -5,12 +5,9 @@ import io.github.hfhbd.kfx.Kfx
 import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import javax.inject.Inject
 
 abstract class Swagger : Kfx {
@@ -24,17 +21,8 @@ abstract class Swagger : Kfx {
     @get:Inject
     internal abstract val tasks: TaskContainer
 
-    @get:Inject
-    internal abstract val sourceSets: SourceSetContainer
-
-    override fun usingKotlinSourceSet(sourceSetName: String) {
-        sourceSets.named(sourceSetName).configure {
-            usingKotlinSourceSet(it)
-        }
-    }
-
-    override fun usingKotlinSourceSet(sourceSet: SourceSet) {
-        val serviceName: String = name
+    override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
+        val serviceName = name
 
         dependencies.compiler.add("$GROUP:swagger-fir:$VERSION")
         dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
@@ -42,10 +30,7 @@ abstract class Swagger : Kfx {
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
             it.fromDependencyCollector(this@Swagger.dependencies.compiler)
         }
-        val kotlinSourceDirectorySet = (sourceSet as ExtensionAware).extensions.getByName(
-            "kotlin",
-        ) as SourceDirectorySet
-        kotlinSourceDirectorySet.srcDir(
+        kotlinSourceSet.generatedKotlin.srcDir(
             tasks.register("convertSwaggerFiles$serviceName", ConvertSwaggerFiles::class.java) {
                 it.classpath.from(kfxSwaggerClasspath)
                 it.swaggerFiles.from(files)
