@@ -2,6 +2,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.github.hfhbd.mavencentral")
+    id("dev.sigstore.sign")
     id("app.cash.licensee")
     id("org.jetbrains.dokka")
     id("dev.detekt")
