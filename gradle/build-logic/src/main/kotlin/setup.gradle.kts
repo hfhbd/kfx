@@ -1,3 +1,6 @@
+import dev.sigstore.sign.tasks.SigstoreSignFilesTask
+import org.gradle.kotlin.dsl.support.serviceOf
+
 plugins {
     id("maven-publish")
     id("signing")
@@ -92,6 +95,11 @@ signing {
     )
     isRequired = providers.gradleProperty("signingKey").isPresent
     sign(publishing.publications)
+}
+
+// https://github.com/sigstore/sigstore-java/issues/1146
+tasks.withType<SigstoreSignFilesTask>().configureEach {
+    launcher.set(serviceOf<JavaToolchainService>().launcherFor { })
 }
 
 detekt {
