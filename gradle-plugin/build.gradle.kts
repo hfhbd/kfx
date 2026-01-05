@@ -25,7 +25,7 @@ tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
 
-configurations.apiElements {
+configurations.runtimeElements {
     attributes {
         attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("8.11"))
     }
