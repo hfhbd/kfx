@@ -414,7 +414,7 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
     is OpenApi.SecurityScheme.ApiKey if definition.position == OpenApi.SecurityScheme.ApiKey.Position.Header {
         listOf(
             IRTree.Auth.Http(
-                OpenApi.SecurityScheme.Http.Scheme.Header(),
+                IRTree.Auth.Http.Schema.Header(definition.name),
                 name = name,
                 packageName = "",
                 documentation = definition.description,
