@@ -3,6 +3,7 @@ package io.github.hfhbd.kfx.codegen
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -387,9 +388,17 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         data class Http(val schema: Schema, val name: String, val packageName: String, val documentation: String?) :
             Auth {
             @Serializable
-            enum class Schema {
-                Basic,
-                Bearer,
+            sealed interface Schema {
+                @Serializable
+                @SerialName("Basic")
+                data object Basic : Schema
+                @Serializable
+                @SerialName("Bearer")
+                data object Bearer : Schema
+
+                @Serializable
+                @SerialName("Header")
+                data class Header(val headerName: String) : Schema
             }
         }
     }

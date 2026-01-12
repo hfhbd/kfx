@@ -125,6 +125,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         val t = TypeVariableName("T", ClassName("io.ktor.client.engine", "HttpClientEngineConfig"))
         addTypeVariable(t)
         receiver(ClassName("io.ktor.client", "HttpClientConfig").parameterizedBy(t))
+        val schema = schema
         when (schema) {
             CodeGenTree.Auth.Http.Schema.Basic -> {
                 addParameter("userName", STRING)
@@ -133,6 +134,9 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
 
             CodeGenTree.Auth.Http.Schema.Bearer -> {
                 addParameter("token", STRING)
+            }
+            is CodeGenTree.Auth.Http.Schema.Header -> {
+                addParameter("apiKey", STRING)
             }
         }
 
@@ -147,6 +151,12 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
 
             CodeGenTree.Auth.Http.Schema.Bearer -> {
                 addStatement("%M(token)", MemberName("io.ktor.client.request", "bearerAuth", isExtension = true))
+            }
+            is CodeGenTree.Auth.Http.Schema.Header -> {
+                addStatement("%M(%S, apiKey)",
+                    MemberName("io.ktor.client.request", "header", isExtension = true),
+                    schema.headerName,
+                )
             }
         }
         endControlFlow()
