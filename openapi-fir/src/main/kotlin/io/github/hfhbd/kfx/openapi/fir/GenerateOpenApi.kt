@@ -79,17 +79,19 @@ private fun OpenApi.toIr(
                 }
             }
 
+            is Schema.STRING if type.enum.isNotEmpty() -> {
+                type.toIr(null, name, irTypes)
+            }
+            is Schema.INT if type.enum.isNotEmpty() -> {
+                type.toIr(null, name, irTypes)
+            }
+
             is Schema.ARRAY,
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
-            -> continue
-
             is Schema.STRING -> {
-                when (val irType = type.toIr(null, name, irTypes)) {
-                    is IRTree.Enum -> irTypes[name] = irType
-                    else -> continue
-                }
+                type.generateTypeAlias(name, irTypes)
             }
         }
     }
@@ -136,6 +138,73 @@ private fun OpenApi.toIr(
         irTree = openapiTransformer(this, irTree)
     }
     return irTree
+}
+
+private fun Schema.generateTypeAlias(name: String, irTypes: MutableMap<String, IRTree.Class>)  {
+    val irType = toIr(null, name, irTypes)
+    when (val irType = irType) {
+        is IRTree.Enum -> return
+        is IRTree.Type.LIST -> {
+
+            val typealiasClass = IRTree.NormalClass(
+                packageName = irType.,
+                packageNameSuffix = "",
+                name = className.name,
+                serialName = classes.serialName,
+                namespace = classes.namespace,
+                members = mapOf(
+                    "_value" to IRTree.Member(
+                        type = found,
+                        nullable = false,
+                        serialName = null,
+                        namespace = null,
+                        documentation = null,
+                        xmlType = null,
+                        requirements = emptyList(),
+                        isOverride = false,
+                        deprecated = false,
+                    ),
+                ),
+                documentation = (found as? IRTree.Class)?.documentation,
+                isFault = false,
+                isValue = true,
+                discriminator = null,
+                allOf = null,
+                deprecated = false,
+            )
+
+
+            irTypes[name] = irType
+        }
+        else -> {
+            IRTree.NormalClass(
+                packageName = irType.,
+                packageNameSuffix = "",
+                name = className.name,
+                serialName = classes.serialName,
+                namespace = classes.namespace,
+                members = mapOf(
+                    "_value" to IRTree.Member(
+                        type = found,
+                        nullable = false,
+                        serialName = null,
+                        namespace = null,
+                        documentation = null,
+                        xmlType = null,
+                        requirements = emptyList(),
+                        isOverride = false,
+                        deprecated = false,
+                    ),
+                ),
+                documentation = (found as? IRTree.Class)?.documentation,
+                isFault = false,
+                isValue = true,
+                discriminator = null,
+                allOf = null,
+                deprecated = false,
+            )
+        }
+    }
 }
 
 private fun OpenApi.Operation.toIr(
@@ -514,9 +583,9 @@ private fun Schema.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type = when (this) {
-    is Schema.ARRAY -> toIr(parentName!!, name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
+    is Schema.ARRAY -> toIr(parentName ?: "", name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
     is Schema.BOOLEAN -> toIr()
-    is Schema.INT -> toIr()
+    is Schema.INT -> toIr(parentName, name, irTypes)
     is Schema.NUMBER -> toIr()
     is Schema.OBJECT -> toIr(name, irTypes)
     is Schema.STRING -> toIr(parentName, name, irTypes)
@@ -550,11 +619,37 @@ private fun Schema.ARRAY.toIr(
     }
 }
 
-private fun Schema.INT.toIr() = when (format) {
-    Schema.INT.Format.Int32 -> IRTree.Type.Builtin.INT
-    Schema.INT.Format.Int64 -> IRTree.Type.Builtin.LONG
-    Schema.INT.Format.Int8 -> IRTree.Type.Builtin.BYTE
-    Schema.INT.Format.Int16 -> IRTree.Type.Builtin.SHORT
+private fun Schema.INT.toIr(
+    parentName: String?,
+    name: String?,
+    irTypes: MutableMap<String, IRTree.Class>,
+): IRTree.Type {
+    if (enum.isNotEmpty()) {
+        val name = (parentName ?: "") + name!!.toCamelCase().replaceFirstChar {
+            it.uppercaseChar()
+        }
+        val className = name.asClassName()
+        val enum = IRTree.Enum(
+            name = className.name,
+            packageName = className.packageName,
+            packageNameSuffix = "",
+            documentation = description,
+            deprecated = deprecated,
+            values = enum.filterNotNull().map {
+                IRTree.Enum.Value(it.toString(), null, it.toString())
+            },
+        )
+        irTypes[enum.name] = enum
+        return enum
+    } else {
+
+        return when (format) {
+            Schema.INT.Format.Int32 -> IRTree.Type.Builtin.INT
+            Schema.INT.Format.Int64 -> IRTree.Type.Builtin.LONG
+            Schema.INT.Format.Int8 -> IRTree.Type.Builtin.BYTE
+            Schema.INT.Format.Int16 -> IRTree.Type.Builtin.SHORT
+        }
+    }
 }
 
 private fun Schema.NUMBER.toIr() = when (format) {
