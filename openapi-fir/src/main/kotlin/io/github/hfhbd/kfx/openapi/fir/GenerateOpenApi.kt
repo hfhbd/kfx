@@ -89,7 +89,9 @@ private fun OpenApi.toIr(
                 irTypes[name] = enum
             }
 
-            is Schema.ARRAY,
+            is Schema.ARRAY -> {
+                type.generateTypeAlias(name, irTypes)
+            }
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
@@ -145,6 +147,13 @@ private fun OpenApi.toIr(
         irTree = openapiTransformer(this, irTree)
     }
     return irTree
+}
+
+private fun IRTree.Type.generateTypeAlias(name: String, irTypes: MutableMap<String, IRTree.Class>): IRTree.Class  {
+    when (val irType = type.toIr(null, name, irTypes)) {
+        is IRTree.Enum -> irTypes[name] = irType
+        else -> continue
+    }
 }
 
 private fun OpenApi.Operation.toIr(
