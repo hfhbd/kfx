@@ -153,7 +153,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 addStatement("%M(token)", MemberName("io.ktor.client.request", "bearerAuth", isExtension = true))
             }
             is CodeGenTree.Auth.Http.Schema.Header -> {
-                addStatement("%M(%S, apiKey)",
+                addStatement(
+                    "%M(%S, apiKey)",
                     MemberName("io.ktor.client.request", "header", isExtension = true),
                     schema.headerName,
                 )

@@ -7,7 +7,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
-import io.github.hfhbd.kfx.ir.IRTree.Auth.*
+import io.github.hfhbd.kfx.ir.IRTree.Auth.Http
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.swagger.model.Swagger
 import io.github.hfhbd.kfx.swagger.model.Swagger.Definition
@@ -338,23 +338,19 @@ private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
             grantType = IRTree.Auth.OAuth2.GrantType.ClientCredentials,
         )
 
-        is SecurityDefinition.ApiKey if definition.position == SecurityDefinition.ApiKey.Position.Header -> {
-            Http(
-                schema = IRTree.Auth.Http.Schema.Header(definition.name),
-                name = singleKey,
-                packageName = "",
-                documentation = definition.description,
-            )
-        }
+        is SecurityDefinition.ApiKey if definition.position == SecurityDefinition.ApiKey.Position.Header -> Http(
+            schema = Http.Schema.Header(definition.name),
+            name = singleKey,
+            packageName = "",
+            documentation = definition.description,
+        )
         is SecurityDefinition.ApiKey -> null
-        is SecurityDefinition.BasicAuthentication -> {
-            IRTree.Auth.Http(
-                schema = IRTree.Auth.Http.Schema.Basic,
-                name = singleKey,
-                packageName = "",
-                documentation = definition.description,
-            )
-        }
+        is SecurityDefinition.BasicAuthentication -> Http(
+            schema = Http.Schema.Basic,
+            name = singleKey,
+            packageName = "",
+            documentation = definition.description,
+        )
     }
 }
 
