@@ -392,6 +392,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
                 @Serializable
                 @SerialName("Basic")
                 data object Basic : Schema
+
                 @Serializable
                 @SerialName("Bearer")
                 data object Bearer : Schema
