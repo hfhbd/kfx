@@ -1,6 +1,6 @@
 package com.example
 
-import kotlin.Int
+import kotlin.Long
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,13 +10,13 @@ public data class ChunkInformation(
   /**
    * Index of the first data object in this chunk
    */
-  public val firstDataObject: Int? = null,
+  public val firstDataObject: Long? = null,
   /**
    * Index of the last data object in this chunk
    */
-  public val lastDataObject: Int? = null,
+  public val lastDataObject: Long? = null,
   /**
    * Index of the last data object over all chunks
    */
-  public val maxDataObject: Int? = null,
+  public val maxDataObject: Long? = null,
 )
