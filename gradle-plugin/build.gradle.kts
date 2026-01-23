@@ -25,9 +25,18 @@ tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
 
-configurations.apiElements {
+configurations.configureEach {
+   if (isCanBeConsumed) {
+       attributes {
+           attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("8.11"))
+       }
+   }
+}
+
+// Workaround for clash between `signature` and `archives`; remove when bumping to Gradle 10:
+configurations.archives {
     attributes {
-        attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("8.11"))
+        attribute(Attribute.of("deprecated", String::class.java), "true")
     }
 }
 
