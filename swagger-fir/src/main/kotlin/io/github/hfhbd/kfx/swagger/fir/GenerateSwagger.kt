@@ -493,11 +493,15 @@ private fun Definition.toIr(
     )
 
     Definition.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
-    Definition.Type.Integer -> IRTree.Type.Builtin.INT
-    Definition.Type.Number -> when (format) {
-        "int32" -> IRTree.Type.Builtin.INT
+    Definition.Type.Integer -> when (format) {
+        null, "int32" -> IRTree.Type.Builtin.INT
         "int64" -> IRTree.Type.Builtin.LONG
-        else -> error("Not supported $this")
+        else -> error("Not supported $format")
+    }
+    Definition.Type.Number -> when (format) {
+        null, "double" -> IRTree.Type.Builtin.DOUBLE
+        "float" -> IRTree.Type.Builtin.FLOAT
+        else -> error("Not supported $format")
     }
 
     Definition.Type.Object -> objectToIr(parentQName, name, irTypes, definitions)
