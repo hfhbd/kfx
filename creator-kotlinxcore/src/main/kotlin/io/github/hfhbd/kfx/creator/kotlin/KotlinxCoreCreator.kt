@@ -210,9 +210,10 @@ interface KotlinxCoreCreator : CodeGenCreator {
         )
 
         is IRTree.Auth.Http -> CodeGenTree.Auth.Http(
-            schema = when (ir.schema) {
+            schema = when (val schema = ir.schema) {
                 IRTree.Auth.Http.Schema.Basic -> CodeGenTree.Auth.Http.Schema.Basic
                 IRTree.Auth.Http.Schema.Bearer -> CodeGenTree.Auth.Http.Schema.Bearer
+                is IRTree.Auth.Http.Schema.Header -> CodeGenTree.Auth.Http.Schema.Header(schema.headerName)
             },
             name = ir.name,
             packageName = ir.packageName,

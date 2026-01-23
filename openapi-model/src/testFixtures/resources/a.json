@@ -249,6 +249,12 @@
             "Foo": {
                 "type": "mutualTLS",
                 "description": "Client Cert connected to the User Role Foo"
+            },
+            "Bar": {
+                "type": "apiKey",
+                "description": "Some",
+                "in": "header",
+                "name": "X-MY-API-KEY"
             }
         }
     }

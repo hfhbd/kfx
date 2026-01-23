@@ -3,6 +3,7 @@ package io.github.hfhbd.kfx.ir
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -159,24 +160,24 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
     data class Operation(
         val packageName: String,
         val name: String,
-        val documentation: String?,
+        val documentation: String? = null,
         val method: HttpMethod,
         val path: String?,
-        val parameters: List<Parameter>,
-        val headers: List<Parameter>,
-        val queryParameters: List<Parameter>,
-        val location: String?,
-        val soapAction: String?,
-        val success: StatusCode?,
+        val parameters: List<Parameter> = emptyList(),
+        val headers: List<Parameter> = emptyList(),
+        val queryParameters: List<Parameter> = emptyList(),
+        val location: String? = null,
+        val soapAction: String? = null,
+        val success: StatusCode? = null,
         val input: Type?,
         val inputContentType: ContentType?,
         val output: Type?,
         val outputContentType: ContentType?,
-        val outputHeaders: List<Parameter>,
+        val outputHeaders: List<Parameter> = emptyList(),
         val notFound: Boolean,
-        val fault: NormalClass?,
-        val faultHeaders: List<Parameter>,
-        val deprecated: Boolean,
+        val fault: NormalClass? = null,
+        val faultHeaders: List<Parameter> = emptyList(),
+        val deprecated: Boolean = false,
     ) {
         @Serializable
         enum class HttpMethod {
@@ -191,12 +192,12 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         @Serializable
         data class Parameter(
             val name: String,
-            val serialName: String?,
+            val serialName: String? = null,
             val type: Type,
             val nullable: Boolean,
-            val documentation: String?,
-            val defaultValue: Literal?,
-            val deprecated: Boolean,
+            val documentation: String? = null,
+            val defaultValue: Literal? = null,
+            val deprecated: Boolean = false,
         )
     }
 
@@ -261,9 +262,18 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         data class Http(val schema: Schema, val name: String, val packageName: String, val documentation: String?) :
             Auth {
             @Serializable
-            enum class Schema {
-                Basic,
-                Bearer,
+            sealed interface Schema {
+                @Serializable
+                @SerialName("Basic")
+                data object Basic : Schema
+
+                @Serializable
+                @SerialName("Bearer")
+                data object Bearer : Schema
+
+                @Serializable
+                @SerialName("Header")
+                data class Header(val headerName: String) : Schema
             }
         }
     }
