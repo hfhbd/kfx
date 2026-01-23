@@ -115,7 +115,7 @@ private fun Swagger.toIr(
     var ir = IRTree(
         irTypes.values.toSet(),
         irOperations,
-        auth = setOfNotNull(securityDefinitions?.toAuth()),
+        auth = securityDefinitions?.toAuth() ?: emptySet(),
     )
     for (swaggerTransformer in swaggerTransformers) {
         ir = swaggerTransformer(this, ir)
@@ -289,68 +289,58 @@ private fun generate(
     )
 }
 
-private fun Map<String, SecurityDefinition>.toAuth(): IRTree.Auth? {
-    val singleKey = keys.singleOrNull() ?: return null
-    return when (val definition = this[singleKey]!!) {
-        is SecurityDefinition.OAuth2 -> IRTree.Auth.OAuth2(
-            flow = IRTree.Auth.OAuth2.Flow.Application,
-            operation = IRTree.Operation(
-                packageName = "",
-                name = singleKey,
-                documentation = definition.description,
-                method = IRTree.Operation.HttpMethod.Post,
-                path = definition.tokenUrl,
-                parameters = listOf(
-                    IRTree.Operation.Parameter(
-                        "clientId",
-                        null,
-                        IRTree.Type.Builtin.STRING,
-                        false,
-                        null,
-                        defaultValue = null,
-                        deprecated = false,
+private fun Map<String, SecurityDefinition>.toAuth(): Set<IRTree.Auth> = buildSet {
+    for ((name, definition) in this@toAuth) {
+        val auth = when (definition) {
+            is SecurityDefinition.OAuth2 -> IRTree.Auth.OAuth2(
+                flow = IRTree.Auth.OAuth2.Flow.Application,
+                operation = IRTree.Operation(
+                    packageName = "",
+                    name = name,
+                    documentation = definition.description,
+                    method = IRTree.Operation.HttpMethod.Post,
+                    path = definition.tokenUrl,
+                    parameters = listOf(
+                        IRTree.Operation.Parameter(
+                            "clientId",
+                            type = IRTree.Type.Builtin.STRING,
+                            nullable = false,
+                        ),
+                        IRTree.Operation.Parameter(
+                            "clientSecret",
+                            type = IRTree.Type.Builtin.STRING,
+                            nullable = false,
+                        ),
                     ),
-                    IRTree.Operation.Parameter(
-                        "clientSecret",
-                        null,
-                        IRTree.Type.Builtin.STRING,
-                        false,
-                        null,
-                        defaultValue = null,
-                        deprecated = false,
-                    ),
+                    input = null,
+                    output = OAuth2Token,
+                    notFound = false,
+                    success = StatusCode.OK,
+                    inputContentType = null,
+                    outputContentType = ContentType.ApplicationJson,
                 ),
-                soapAction = null,
-                queryParameters = emptyList(),
-                fault = null,
-                input = null,
-                output = OAuth2Token,
-                outputHeaders = emptyList(),
-                faultHeaders = emptyList(),
-                notFound = false,
-                location = null,
-                success = StatusCode.OK,
-                headers = emptyList(),
-                inputContentType = null,
-                outputContentType = ContentType.ApplicationJson,
-                deprecated = false,
-            ),
-            grantType = IRTree.Auth.OAuth2.GrantType.ClientCredentials,
-        )
+                grantType = IRTree.Auth.OAuth2.GrantType.ClientCredentials,
+            )
 
-        is SecurityDefinition.ApiKey if definition.position == SecurityDefinition.ApiKey.Position.Header -> Http(
-            schema = Http.Schema.Header(definition.name),
-            name = singleKey,
-            packageName = "",
-            documentation = definition.description,
-        )
-        is SecurityDefinition.ApiKey -> null
-        is SecurityDefinition.BasicAuthentication -> Http(
-            schema = Http.Schema.Basic,
-            name = singleKey,
-            packageName = "",
-            documentation = definition.description,
-        )
+            is SecurityDefinition.ApiKey if definition.position == SecurityDefinition.ApiKey.Position.Header -> Http(
+                schema = Http.Schema.Header(definition.name),
+                name = name,
+                packageName = "",
+                documentation = definition.description,
+            )
+
+            is SecurityDefinition.ApiKey -> null
+            is SecurityDefinition.BasicAuthentication -> Http(
+                schema = Http.Schema.Basic,
+                name = name,
+                packageName = "",
+                documentation = definition.description,
+            )
+        }
+
+        if (auth != null) {
+            add(auth)
+        }
     }
 }
 
