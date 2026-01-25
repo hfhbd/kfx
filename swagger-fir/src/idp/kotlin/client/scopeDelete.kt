@@ -1,0 +1,35 @@
+package client
+
+import APIError
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.delete
+import io.ktor.http.isSuccess
+import kotlin.String
+import kotlin.Throws
+import kotlin.Unit
+
+/**
+ * @param serviceInstanceID ID of the service instance
+ * @param realm The realm of the client
+ * @param scopeName Name of the scope (inside the instance)
+ */
+@Throws(APIError::class)
+public suspend fun HttpClient.scopeDelete(
+  serviceInstanceID: String,
+  realm: String,
+  scopeName: String,
+  builder: suspend HttpRequestBuilder.() -> Unit = {},
+) {
+  val response = delete(urlString = """api/v1/instances/${serviceInstanceID}/scopes/${realm}/${scopeName}""") {
+    builder()
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<Unit>()
+    return output
+  } else {
+    val output = response.body<APIError>()
+    throw output
+  }
+}
