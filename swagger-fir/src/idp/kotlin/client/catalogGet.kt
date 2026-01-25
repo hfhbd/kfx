@@ -12,7 +12,7 @@ import kotlin.Unit
 /**
  * @param X_Broker_API_Version version number of the Service Broker API that the Platform will use
  * @param X_Broker_API_Originating_Identity identity of the user that initiated the request from the Platform
- * @param X_Broker_API_Request_Identity idenity of the request from the Platform
+ * @param X_Broker_API_Request_Identity identity of the request from the Platform
  */
 public suspend fun HttpClient.catalogGet(
   X_Broker_API_Version: String,

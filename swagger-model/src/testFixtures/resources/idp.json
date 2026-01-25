@@ -2007,7 +2007,7 @@
           }
         },
         "description": {
-          "description": "What this scopes does and for who it is indented",
+          "description": "What this scope does and for who it is intended",
           "type": "string",
           "maxLength": 255,
           "minLength": 1
@@ -2820,7 +2820,7 @@
     },
     "RequestIdentity": {
       "type": "string",
-      "description": "idenity of the request from the Platform",
+      "description": "identity of the request from the Platform",
       "name": "X-Broker-API-Request-Identity",
       "in": "header"
     },

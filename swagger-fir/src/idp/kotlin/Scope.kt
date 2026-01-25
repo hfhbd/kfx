@@ -12,7 +12,7 @@ public data class Scope(
    */
   public val audiences: List<String>,
   /**
-   * What this scopes does and for who it is indented
+   * What this scope does and for who it is intended
    */
   public val description: String,
   public val name: String? = null,

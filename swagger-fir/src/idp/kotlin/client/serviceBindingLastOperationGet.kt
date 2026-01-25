@@ -15,7 +15,7 @@ import kotlin.Unit
  * @param binding_id binding id of binding to create
  * @param X_Broker_API_Version version number of the Service Broker API that the Platform will use
  * @param X_Broker_API_Originating_Identity identity of the user that initiated the request from the Platform
- * @param X_Broker_API_Request_Identity idenity of the request from the Platform
+ * @param X_Broker_API_Request_Identity identity of the request from the Platform
  * @param service_id id of the service associated with the instance
  * @param plan_id id of the plan associated with the instance
  * @param operation a provided identifier for the operation
