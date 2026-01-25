@@ -87,8 +87,8 @@ private fun Swagger.toIr(
                     irTypes,
                     operations.parameters,
                     parameters,
-                    definitions
-                )
+                    definitions,
+                ),
             )
         }
         val get = operations.get
@@ -101,8 +101,8 @@ private fun Swagger.toIr(
                     irTypes,
                     operations.parameters,
                     parameters,
-                    definitions
-                )
+                    definitions,
+                ),
             )
         }
         val post = operations.post
@@ -115,8 +115,8 @@ private fun Swagger.toIr(
                     irTypes,
                     operations.parameters,
                     parameters,
-                    definitions
-                )
+                    definitions,
+                ),
             )
         }
         val put = operations.put
@@ -129,8 +129,8 @@ private fun Swagger.toIr(
                     irTypes,
                     operations.parameters,
                     parameters,
-                    definitions
-                )
+                    definitions,
+                ),
             )
         }
         val patch = operations.patch
@@ -143,8 +143,8 @@ private fun Swagger.toIr(
                     irTypes,
                     operations.parameters,
                     parameters,
-                    definitions
-                )
+                    definitions,
+                ),
             )
         }
         val delete = operations.delete
