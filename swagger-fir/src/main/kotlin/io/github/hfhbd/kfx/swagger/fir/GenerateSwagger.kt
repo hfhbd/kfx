@@ -288,7 +288,9 @@ private fun generate(
                     nullable = false,
                 )
             }
-        } + pathParameters.map {
+        } + pathParameters.filter {
+            it.position == Parameter.Position.Path
+        }.map {
             it.toParameter(
                 IRTree.ClassName("", name),
                 parameters,
@@ -321,6 +323,17 @@ private fun generate(
                 ).takeIf { it.first == Parameter.Position.Header }?.second
             }
             s
+        } + pathParameters.filter {
+            it.position == Parameter.Position.Header
+        }.map {
+            it.toParameter(
+                IRTree.ClassName("", name),
+                parameters,
+                irTypes,
+                definitions,
+            ).second.copy(
+                nullable = false,
+            )
         },
         deprecated = operation.deprecated,
         queryParameters = operation.parameters.mapNotNull {

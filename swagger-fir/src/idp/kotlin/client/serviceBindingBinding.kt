@@ -11,17 +11,11 @@ import kotlin.String
 import kotlin.Unit
 
 /**
- * @param X_Broker_API_Version version number of the Service Broker API that the Platform will use
- * @param X_Broker_API_Originating_Identity identity of the user that initiated the request from the Platform
- * @param X_Broker_API_Request_Identity idenity of the request from the Platform
  * @param instance_id instance id of instance to provision
  * @param binding_id binding id of binding to create
  * @param accepts_incomplete asynchronous operations supported
  */
 public suspend fun HttpClient.serviceBindingBinding(
-  X_Broker_API_Version: String,
-  X_Broker_API_Originating_Identity: String,
-  X_Broker_API_Request_Identity: String,
   instance_id: String,
   binding_id: String,
   accepts_incomplete: Boolean? = null,
