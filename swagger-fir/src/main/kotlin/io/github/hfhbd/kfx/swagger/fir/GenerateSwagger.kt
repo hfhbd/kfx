@@ -289,7 +289,14 @@ private fun generate(
                 )
             }
         } + pathParameters.filter {
-            it.position == Parameter.Position.Path
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Path
         }.map {
             it.toParameter(
                 IRTree.ClassName("", name),
@@ -324,7 +331,14 @@ private fun generate(
             }
             s
         } + pathParameters.filter {
-            it.position == Parameter.Position.Header
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Header
         }.map {
             it.toParameter(
                 IRTree.ClassName("", name),
