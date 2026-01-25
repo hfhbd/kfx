@@ -79,23 +79,73 @@ private fun Swagger.toIr(
     for ((path, operations) in paths) {
         val head = operations.head
         if (head != null) {
-            irOperations.add(generate(path, head, IRTree.Operation.HttpMethod.Head, irTypes, parameters, definitions))
+            irOperations.add(
+                generate(
+                    path,
+                    head,
+                    IRTree.Operation.HttpMethod.Head,
+                    irTypes,
+                    operations.parameters,
+                    parameters,
+                    definitions
+                )
+            )
         }
         val get = operations.get
         if (get != null) {
-            irOperations.add(generate(path, get, IRTree.Operation.HttpMethod.Get, irTypes, parameters, definitions))
+            irOperations.add(
+                generate(
+                    path,
+                    get,
+                    IRTree.Operation.HttpMethod.Get,
+                    irTypes,
+                    operations.parameters,
+                    parameters,
+                    definitions
+                )
+            )
         }
         val post = operations.post
         if (post != null) {
-            irOperations.add(generate(path, post, IRTree.Operation.HttpMethod.Post, irTypes, parameters, definitions))
+            irOperations.add(
+                generate(
+                    path,
+                    post,
+                    IRTree.Operation.HttpMethod.Post,
+                    irTypes,
+                    operations.parameters,
+                    parameters,
+                    definitions
+                )
+            )
         }
         val put = operations.put
         if (put != null) {
-            irOperations.add(generate(path, put, IRTree.Operation.HttpMethod.Put, irTypes, parameters, definitions))
+            irOperations.add(
+                generate(
+                    path,
+                    put,
+                    IRTree.Operation.HttpMethod.Put,
+                    irTypes,
+                    operations.parameters,
+                    parameters,
+                    definitions
+                )
+            )
         }
         val patch = operations.patch
         if (patch != null) {
-            irOperations.add(generate(path, patch, IRTree.Operation.HttpMethod.Patch, irTypes, parameters, definitions))
+            irOperations.add(
+                generate(
+                    path,
+                    patch,
+                    IRTree.Operation.HttpMethod.Patch,
+                    irTypes,
+                    operations.parameters,
+                    parameters,
+                    definitions
+                )
+            )
         }
         val delete = operations.delete
         if (delete != null) {
@@ -105,6 +155,7 @@ private fun Swagger.toIr(
                     delete,
                     IRTree.Operation.HttpMethod.Delete,
                     irTypes,
+                    operations.parameters,
                     parameters,
                     definitions,
                 ),
@@ -128,6 +179,7 @@ private fun generate(
     operation: Path,
     method: IRTree.Operation.HttpMethod,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
+    pathParameters: List<Parameter>,
     parameters: Map<String, Parameter>,
     definitions: Map<String, Definition>,
 ): IRTree.Operation {
@@ -236,6 +288,15 @@ private fun generate(
                     nullable = false,
                 )
             }
+        } + pathParameters.map {
+            it.toParameter(
+                IRTree.ClassName("", name),
+                parameters,
+                irTypes,
+                definitions,
+            ).second.copy(
+                nullable = false,
+            )
         },
         headers = operation.parameters.mapNotNull {
             val s = when (it.position) {

@@ -103,6 +103,7 @@ data class Swagger(
         val put: Path? = null,
         val patch: Path? = null,
         val delete: Path? = null,
+        val parameters: List<Parameter> = emptyList(),
     )
 
     @Serializable

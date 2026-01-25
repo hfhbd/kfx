@@ -35,6 +35,7 @@ testing.suites {
             implementation(projects.validation)
         }
     }
+    register("idp", JvmTestSuite::class)
     register("sapci", JvmTestSuite::class) {
         dependencies {
             implementation(projects.irPackagename)

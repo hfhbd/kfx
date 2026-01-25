@@ -1,0 +1,2913 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Some description",
+    "title": "IDP-Servicebroker",
+    "version": "master"
+  },
+  "paths": {
+    "/api/v1/instances/{serviceInstanceID}/available-scopes": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "Get a list of all the scopes (built-in and custom) that any OIDC-Client of this instance is allowed to use (either as optional or default)",
+        "operationId": "serviceInstancesAvailableScopes",
+        "responses": {
+          "200": {
+            "description": "List of available scopes for this instance",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AvailableScopeListEntry"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "List all clients of the given service instance",
+        "operationId": "clientList",
+        "responses": {
+          "200": {
+            "description": "List of clients",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Client"
+              }
+            },
+            "headers": {
+              "X-Max-Clients-For-Plan": {
+                "type": "integer",
+                "description": "The maximum number of clients that is allowed for the service-plan of this instance."
+              },
+              "X-Realms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "The realms which can be used by this instance"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get details of given client",
+        "operationId": "clientGet",
+        "responses": {
+          "200": {
+            "description": "List of clients",
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Create/update client",
+        "operationId": "clientPut",
+        "parameters": [
+          {
+            "description": "New configuration for client",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client successfully created/updated",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Delete client",
+        "operationId": "clientDelete",
+        "responses": {
+          "200": {
+            "description": "Empty",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}/available-scopes": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get a list of all the scopes (built-in and custom) that this OIDC-client is allowed to use (either as optional or default)",
+        "operationId": "clientAvailableScopes",
+        "responses": {
+          "200": {
+            "description": "List of available scopes for the client",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AvailableScopeListEntry"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}/example-tokens": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get examples for oidc tokens created with this client. Only available for oidc-clients! The tokens are created for the user making the API-Call.",
+        "operationId": "clientExampleTokens",
+        "responses": {
+          "200": {
+            "description": "Examples for oidc-tokens",
+            "schema": {
+              "$ref": "#/definitions/OidcTokenExample"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}/regenerate-secret": {
+      "put": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Regenerate the client-secret of the client",
+        "operationId": "clientRegenerateSecret",
+        "responses": {
+          "200": {
+            "description": "Client-secret successfully regenerated",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}/roles": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get a list of all Kira roles currently matched by the configured role-filter",
+        "operationId": "clientRoles",
+        "responses": {
+          "200": {
+            "description": "List of matched roles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/clients/{realm}/{clientName}/statistics": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get statistics about (the usage of) this client",
+        "operationId": "clientStatistics",
+        "responses": {
+          "200": {
+            "description": "Statistical data for the client",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "KPIs": {
+                  "description": "Various KPIs for the client. The exact KPIs are subject to change and can be added/removed without notice!",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ClientKPI"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "clientName",
+          "description": "Name of the client (inside the instance)",
+          "name": "clientName",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/scopes": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "scopes"
+        ],
+        "summary": "List all scopes of the given service instance",
+        "operationId": "scopeList",
+        "responses": {
+          "200": {
+            "description": "List of scopes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Scope"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/instances/{serviceInstanceID}/scopes/{realm}/{scopeName}": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "scopes"
+        ],
+        "summary": "Get details of given scope",
+        "operationId": "scopeGet",
+        "responses": {
+          "200": {
+            "description": "List of scopes",
+            "schema": {
+              "$ref": "#/definitions/Scope"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "scopes"
+        ],
+        "summary": "Create/update scope",
+        "operationId": "scopePut",
+        "parameters": [
+          {
+            "description": "New configuration for scope",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Scope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scope successfully created/updated",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "409": {
+            "description": "The scope's namespace is already owned by another instance",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "scopes"
+        ],
+        "summary": "Delete scope",
+        "operationId": "scopeDelete",
+        "responses": {
+          "200": {
+            "description": "Scope successfully deleted",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "serviceInstanceID",
+          "description": "ID of the service instance",
+          "name": "serviceInstanceID",
+          "in": "path",
+          "required": true
+        },
+        {
+          "pattern": "^[a-zA-Z0-9\\-]+$",
+          "type": "string",
+          "format": "realm",
+          "description": "The realm of the client",
+          "name": "realm",
+          "in": "path",
+          "required": true
+        },
+        {
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z]+(\\.[a-zA-Z]+)*:[a-zA-Z]+(\\.[a-zA-Z]+)*$",
+          "type": "string",
+          "format": "scopeName",
+          "description": "Name of the scope (inside the instance)",
+          "name": "scopeName",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/predefined-mappers/{protocol}": {
+      "get": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "mappers"
+        ],
+        "summary": "Lists available predefined mappers for the given protocol.",
+        "operationId": "mappersList",
+        "responses": {
+          "200": {
+            "description": "List of available predefined mappers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Uniquely identifies the mapper. Use this in the predefinedMappers-field of a client.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Describes what this mapper is doing.",
+                    "type": "string"
+                  }
+                }
+              },
+              "example": [
+                {
+                  "id": "002",
+                  "name": "Standard Preferred Username"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "pattern": "^(oidc|saml)$",
+          "type": "string",
+          "format": "protocol",
+          "description": "Protocol for which to retrieve the predefined mappers",
+          "name": "protocol",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/saml-metadata-converter": {
+      "put": {
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "util"
+        ],
+        "summary": "Convert a SAML Metadata XML to a client-representation that can be used for the API",
+        "operationId": "utilSamlmetadata",
+        "parameters": [
+          {
+            "description": "SAML XML Metadata file",
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A client-representation that matches the provided XML-File",
+            "schema": {
+              "$ref": "#/definitions/saml"
+            }
+          },
+          "default": {
+            "description": "An error occurred",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        }
+      }
+    },
+    "/v2/catalog": {
+      "get": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "get the catalog of services that the service broker offers",
+        "operationId": "catalogGet",
+        "responses": {
+          "200": {
+            "description": "catalog response",
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/APIVersion"
+        },
+        {
+          "$ref": "#/parameters/OriginatingIdentity"
+        },
+        {
+          "$ref": "#/parameters/RequestIdentity"
+        }
+      ]
+    },
+    "/v2/service_instances/{instance_id}": {
+      "get": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "gets a service instance",
+        "operationId": "serviceInstanceGet",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the service associated with the instance",
+            "name": "service_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "id of the plan associated with the instance",
+            "name": "plan_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceResource"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorNotFound"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "provision a service instance",
+        "operationId": "serviceInstanceProvision",
+        "parameters": [
+          {
+            "description": "parameters for the requested service instance provision",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceProvisionRequest"
+            }
+          },
+          {
+            "$ref": "#/parameters/accepts_incomplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceProvisionResponse"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceProvisionResponse"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceAsyncOperation"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "409": {
+            "$ref": "#/responses/ErrorConflict"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "422": {
+            "$ref": "#/responses/ErrorUnprocessableEntity"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "deprovision a service instance",
+        "operationId": "serviceInstanceDeprovision",
+        "parameters": [
+          {
+            "$ref": "#/parameters/accepts_incomplete"
+          },
+          {
+            "$ref": "#/parameters/service_id"
+          },
+          {
+            "$ref": "#/parameters/plan_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/AsyncOperation"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "410": {
+            "$ref": "#/responses/ErrorGone"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "422": {
+            "$ref": "#/responses/ErrorUnprocessableEntity"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "update a service instance",
+        "operationId": "serviceInstanceUpdate",
+        "parameters": [
+          {
+            "description": "parameters for the requested service instance update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceUpdateRequest"
+            }
+          },
+          {
+            "$ref": "#/parameters/accepts_incomplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/ServiceInstanceAsyncOperation"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "422": {
+            "$ref": "#/responses/ErrorUnprocessableEntity"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/APIVersion"
+        },
+        {
+          "$ref": "#/parameters/OriginatingIdentity"
+        },
+        {
+          "$ref": "#/parameters/RequestIdentity"
+        },
+        {
+          "type": "string",
+          "description": "instance id of instance to provision",
+          "name": "instance_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/v2/service_instances/{instance_id}/last_operation": {
+      "get": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceInstances"
+        ],
+        "summary": "last requested operation state for service instance",
+        "operationId": "serviceInstanceLastOperationGet",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the service associated with the instance",
+            "name": "service_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "id of the plan associated with the instance",
+            "name": "plan_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "a provided identifier for the operation",
+            "name": "operation",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LastOperationResource"
+            },
+            "headers": {
+              "RetryAfter": {
+                "type": "string",
+                "description": "Indicates when to retry the request"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorNotFound"
+          },
+          "410": {
+            "$ref": "#/responses/ErrorGone"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/APIVersion"
+        },
+        {
+          "$ref": "#/parameters/OriginatingIdentity"
+        },
+        {
+          "$ref": "#/parameters/RequestIdentity"
+        },
+        {
+          "type": "string",
+          "description": "instance id of instance to provision",
+          "name": "instance_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/v2/service_instances/{instance_id}/service_bindings/{binding_id}": {
+      "get": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceBindings"
+        ],
+        "summary": "gets a service binding",
+        "operationId": "serviceBindingGet",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the service associated with the instance",
+            "name": "service_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "id of the plan associated with the instance",
+            "name": "plan_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceBindingResource"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorNotFound"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceBindings"
+        ],
+        "summary": "generation of a service binding",
+        "operationId": "serviceBindingBinding",
+        "parameters": [
+          {
+            "description": "parameters for the requested service binding",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServiceBindingRequest"
+            }
+          },
+          {
+            "$ref": "#/parameters/accepts_incomplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ServiceBindingResponse"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ServiceBindingResponse"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/AsyncOperation"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "409": {
+            "$ref": "#/responses/ErrorConflict"
+          },
+          "410": {
+            "$ref": "#/responses/ErrorGone"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "422": {
+            "$ref": "#/responses/ErrorUnprocessableEntity"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceBindings"
+        ],
+        "summary": "deprovision of a service binding",
+        "operationId": "serviceBindingUnbinding",
+        "parameters": [
+          {
+            "$ref": "#/parameters/service_id"
+          },
+          {
+            "$ref": "#/parameters/plan_id"
+          },
+          {
+            "$ref": "#/parameters/accepts_incomplete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/AsyncOperation"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "410": {
+            "$ref": "#/responses/ErrorGone"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "422": {
+            "$ref": "#/responses/ErrorUnprocessableEntity"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/APIVersion"
+        },
+        {
+          "$ref": "#/parameters/OriginatingIdentity"
+        },
+        {
+          "$ref": "#/parameters/RequestIdentity"
+        },
+        {
+          "type": "string",
+          "description": "instance id of instance to provision",
+          "name": "instance_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "binding id of binding to create",
+          "name": "binding_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/v2/service_instances/{instance_id}/service_bindings/{binding_id}/last_operation": {
+      "get": {
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          }
+        ],
+        "tags": [
+          "ServiceBindings"
+        ],
+        "summary": "last requested operation state for service binding",
+        "operationId": "serviceBindingLastOperationGet",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the service associated with the instance",
+            "name": "service_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "id of the plan associated with the instance",
+            "name": "plan_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "a provided identifier for the operation",
+            "name": "operation",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LastOperationResource"
+            },
+            "headers": {
+              "RetryAfter": {
+                "type": "string",
+                "description": "Indicates when to retry the request"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorBadRequest"
+          },
+          "401": {
+            "$ref": "#/responses/ErrorUnauthorized"
+          },
+          "404": {
+            "$ref": "#/responses/ErrorNotFound"
+          },
+          "410": {
+            "$ref": "#/responses/ErrorGone"
+          },
+          "412": {
+            "$ref": "#/responses/ErrorPreconditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/ErrorUnexpected"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/parameters/APIVersion"
+        },
+        {
+          "$ref": "#/parameters/OriginatingIdentity"
+        },
+        {
+          "$ref": "#/parameters/RequestIdentity"
+        },
+        {
+          "type": "string",
+          "description": "instance id of instance to provision",
+          "name": "instance_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "binding id of binding to create",
+          "name": "binding_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "APIError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "A machine-readable error-code",
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "description": "A human-readable error-description",
+          "type": "string"
+        }
+      }
+    },
+    "AsyncOperation": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string"
+        }
+      }
+    },
+    "AvailableScopeListEntry": {
+      "description": "An entry in the list of available scopes",
+      "type": "object",
+      "properties": {
+        "builtin": {
+          "description": "Whether this is a built-in or a custom scope",
+          "type": "boolean",
+          "x-omitempty": false
+        },
+        "name": {
+          "description": "Name of the scope",
+          "type": "string"
+        }
+      }
+    },
+    "Catalog": {
+      "type": "object",
+      "properties": {
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Service"
+          }
+        }
+      }
+    },
+    "Client": {
+      "type": "object",
+      "required": [
+        "description",
+        "contactEmail",
+        "protocol"
+      ],
+      "properties": {
+        "contactEmail": {
+          "description": "Email, which can be used to announce breaking changes. Can be a semicolon separated list. Make sure this is always up-to-date so we can reach you on important topics!",
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[a-zA-Z0-9!#$%\u0026'*+/=?^_.{|}~-]+@[a-z0-9-]+(\\.[a-z0-9-]+)+(;[a-zA-Z0-9!#$%\u0026'*+/=?^_.{|}~-]+@[a-z0-9-]+(\\.[a-z0-9-]+)+)*$"
+        },
+        "description": {
+          "description": "Short summary about your client",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 10
+        },
+        "minRequiredAuthenticationLevel": {
+          "description": "The minimal authentication level",
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "aal1",
+            "aal2",
+            "aal3"
+          ]
+        },
+        "name": {
+          "description": "Name for the idp-client. Unique per service-instance. Can NOT be changed later.",
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9\\\\-]+$",
+          "readOnly": true,
+          "example": "mysuperapp-prod"
+        },
+        "protocol": {
+          "description": "Determines if this is an oidc or saml-client",
+          "type": "string",
+          "default": "oidc",
+          "enum": [
+            "oidc",
+            "saml"
+          ],
+          "example": "oidc"
+        },
+        "realm": {
+          "description": "Authentication-Realm in which the client exists. Different realms have different global settings.",
+          "type": "string",
+          "maxLength": 255,
+          "readOnly": true
+        },
+        "roleNameMappings": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "$ref": "#/definitions/RoleNameMapping"
+          },
+          "x-omitempty": true
+        },
+        "skipCertificateConfirmation": {
+          "type": "boolean",
+          "default": false
+        },
+        "rolesApplicationName": {
+          "description": "roles",
+          "type": "array",
+          "default": null,
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "x-omitempty": true,
+          "example": [
+            "mysuperapp"
+          ]
+        },
+        "rolesObjectID": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "x-omitempty": true,
+          "example": [
+            "725496749"
+          ]
+        },
+        "rolesRoleName": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "x-omitempty": true,
+          "example": [
+            "mysuperapp_foo"
+          ]
+        }
+      },
+      "discriminator": "protocol"
+    },
+    "ClientKPI": {
+      "description": "A single KPI for a client",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "Human-Readable description of this KPI",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique id for this KPI",
+          "type": "string"
+        },
+        "unit": {
+          "description": "The unit the value is in",
+          "type": "string"
+        },
+        "value": {
+          "description": "The current numerical value for this KPI",
+          "type": "number",
+          "format": "double",
+          "x-omitempty": false
+        }
+      }
+    },
+    "Context": {
+      "description": "See [Context Conventions](https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#context-object) for more details.",
+      "type": "object"
+    },
+    "DashboardClient": {
+      "type": "object",
+      "required": [
+        "id",
+        "secret"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "redirect_uri": {
+          "type": "string"
+        },
+        "secret": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "instance_usable": {
+          "type": "boolean"
+        },
+        "update_repeatable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "JSONSchemaObject": {
+      "type": "object"
+    },
+    "LastOperationResource": {
+      "type": "object",
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "instance_usable": {
+          "type": "boolean"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "in progress",
+            "succeeded",
+            "failed"
+          ]
+        },
+        "update_repeatable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MaintenanceInfo": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "Metadata": {
+      "description": "See [Service Metadata Conventions](https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#service-metadata) for more details.",
+      "type": "object"
+    },
+    "OIDCHardcodedClaimMapper": {
+      "type": "object",
+      "required": [
+        "claimName",
+        "value"
+      ],
+      "properties": {
+        "claimName": {
+          "description": "Name of the claim to set",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "myclaim"
+        },
+        "value": {
+          "description": "Value to set for the claim",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "abcd"
+        },
+        "valueType": {
+          "description": "As which data-type to set the value",
+          "type": "string",
+          "default": "String",
+          "enum": [
+            "String",
+            "long",
+            "int",
+            "boolean",
+            "JSON"
+          ]
+        }
+      }
+    },
+    "OIDCUserAttributeMapper": {
+      "type": "object",
+      "required": [
+        "claimName",
+        "userAttribute"
+      ],
+      "properties": {
+        "claimName": {
+          "description": "Name of the claim to set",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "myclaim"
+        },
+        "userAttribute": {
+          "description": "User attribute to take the value from",
+          "type": "string",
+          "enum": [
+            "username"
+          ]
+        },
+        "valueType": {
+          "description": "As which data-type to set the value",
+          "type": "string",
+          "default": "String",
+          "enum": [
+            "String",
+            "long",
+            "int",
+            "boolean",
+            "JSON"
+          ]
+        }
+      }
+    },
+    "Object": {
+      "type": "object"
+    },
+    "OidcTokenExample": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "description": "An already decoded access token",
+          "type": "object"
+        },
+        "idToken": {
+          "description": "An already decoded id token",
+          "type": "object"
+        }
+      }
+    },
+    "Plan": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description"
+      ],
+      "properties": {
+        "bindable": {
+          "type": "boolean"
+        },
+        "binding_rotatable": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": {
+          "type": "string"
+        },
+        "free": {
+          "type": "boolean",
+          "default": true
+        },
+        "id": {
+          "type": "string"
+        },
+        "maintenance_info": {
+          "$ref": "#/definitions/MaintenanceInfo"
+        },
+        "maximum_polling_duration": {
+          "type": "integer"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "name": {
+          "type": "string"
+        },
+        "plan_updateable": {
+          "type": "boolean"
+        },
+        "schemas": {
+          "$ref": "#/definitions/SchemasObject"
+        }
+      }
+    },
+    "RoleNameMapping": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      }
+    },
+    "SAMLHardcodedAttributeMapper": {
+      "type": "object",
+      "required": [
+        "attributeName",
+        "value",
+        "attributeFriendlyName"
+      ],
+      "properties": {
+        "attributeFriendlyName": {
+          "description": "Friendly Name of the attribute to set",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "My Attribute"
+        },
+        "attributeName": {
+          "description": "Name of the attribute to set",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "myattribute"
+        },
+        "nameFormat": {
+          "description": "As which data-type to set the value",
+          "type": "string",
+          "default": "Unspecified",
+          "enum": [
+            "Basic",
+            "URI Reference",
+            "Unspecified"
+          ]
+        },
+        "value": {
+          "description": "Value to set for the claim",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "abcd"
+        }
+      }
+    },
+    "SAMLUserAttributeMapper": {
+      "type": "object",
+      "required": [
+        "attributeName",
+        "attributeFriendlyName",
+        "userAttribute"
+      ],
+      "properties": {
+        "attributeFriendlyName": {
+          "description": "Friendly Name of the attribute to set",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "My Attribute"
+        },
+        "attributeName": {
+          "description": "Name of the SAML attribute to map to",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "example": "myattribute"
+        },
+        "nameFormat": {
+          "description": "As which data-type to set the value",
+          "type": "string",
+          "default": "Unspecified",
+          "enum": [
+            "Basic",
+            "URI Reference",
+            "Unspecified"
+          ]
+        },
+        "userAttribute": {
+          "description": "User attribute to take the value from",
+          "type": "string",
+          "enum": [
+            "username"
+          ]
+        }
+      }
+    },
+    "SchemaParameters": {
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "$ref": "#/definitions/JSONSchemaObject"
+        }
+      }
+    },
+    "SchemasObject": {
+      "type": "object",
+      "properties": {
+        "service_binding": {
+          "$ref": "#/definitions/ServiceBindingSchemaObject"
+        },
+        "service_instance": {
+          "$ref": "#/definitions/ServiceInstanceSchemaObject"
+        }
+      }
+    },
+    "Scope": {
+      "description": "An OAUTH2-Scope, which allows an application to perform actions in another application on behalf of a user",
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "audiences": {
+          "description": "A list of clientIDs that should be included in the aud-claim of the access-token if this scope is used",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        "description": {
+          "description": "What this scopes does and for who it is indented",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 5,
+          "pattern": "^[a-zA-Z]+(\\.[a-zA-Z]+)*:[a-zA-Z]+(\\.[a-zA-Z]+)*$",
+          "readOnly": true,
+          "example": "myapp.com:read"
+        },
+        "predefinedMappers": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "type": "string"
+          }
+        },
+        "realm": {
+          "description": "Realm in which the scope exists",
+          "type": "string",
+          "readOnly": true
+        },
+        "roles": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z_-]+$"
+          }
+        },
+        "whitelist": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "^\\*$|^[a-zA-Z0-9-]+$"
+          }
+        }
+      }
+    },
+    "Service": {
+      "type": "object",
+      "required": [
+        "name",
+        "id",
+        "description",
+        "bindable",
+        "plans"
+      ],
+      "properties": {
+        "allow_context_updates": {
+          "type": "boolean"
+        },
+        "bindable": {
+          "type": "boolean"
+        },
+        "binding_rotatable": {
+          "type": "boolean"
+        },
+        "bindings_retrievable": {
+          "type": "boolean"
+        },
+        "dashboard_client": {
+          "$ref": "#/definitions/DashboardClient"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "instances_retrievable": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "name": {
+          "type": "string"
+        },
+        "plan_updateable": {
+          "type": "boolean"
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Plan"
+          }
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "syslog_drain",
+              "route_forwarding",
+              "volume_mount"
+            ]
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ServiceBindingEndpoint": {
+      "type": "object",
+      "required": [
+        "host",
+        "ports"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "protocol": {
+          "type": "string",
+          "default": "tcp",
+          "enum": [
+            "tcp",
+            "udp",
+            "all"
+          ]
+        }
+      }
+    },
+    "ServiceBindingMetadata": {
+      "type": "object",
+      "properties": {
+        "expires_at": {
+          "type": "string"
+        },
+        "renew_before": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceBindingRequest": {
+      "type": "object",
+      "required": [
+        "service_id",
+        "plan_id"
+      ],
+      "properties": {
+        "app_guid": {
+          "type": "string",
+          "x-deprecated": true
+        },
+        "bind_resource": {
+          "$ref": "#/definitions/ServiceBindingResourceObject"
+        },
+        "context": {
+          "$ref": "#/definitions/Context"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "predecessor_binding_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceBindingResource": {
+      "type": "object",
+      "properties": {
+        "credentials": {
+          "type": "object"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ServiceBindingEndpoint"
+          }
+        },
+        "metadata": {
+          "$ref": "#/definitions/ServiceBindingMetadata"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "route_service_url": {
+          "type": "string"
+        },
+        "syslog_drain_url": {
+          "type": "string"
+        },
+        "volume_mounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ServiceBindingVolumeMount"
+          }
+        }
+      }
+    },
+    "ServiceBindingResourceObject": {
+      "type": "object",
+      "properties": {
+        "app_guid": {
+          "type": "string"
+        },
+        "route": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceBindingResponse": {
+      "type": "object",
+      "properties": {
+        "credentials": {
+          "type": "object"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ServiceBindingEndpoint"
+          }
+        },
+        "metadata": {
+          "$ref": "#/definitions/ServiceBindingMetadata"
+        },
+        "route_service_url": {
+          "type": "string"
+        },
+        "syslog_drain_url": {
+          "type": "string"
+        },
+        "volume_mounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ServiceBindingVolumeMount"
+          }
+        }
+      }
+    },
+    "ServiceBindingSchemaObject": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "$ref": "#/definitions/SchemaParameters"
+        }
+      }
+    },
+    "ServiceBindingVolumeMount": {
+      "type": "object",
+      "required": [
+        "driver",
+        "container_dir",
+        "mode",
+        "device_type",
+        "device"
+      ],
+      "properties": {
+        "container_dir": {
+          "type": "string"
+        },
+        "device": {
+          "$ref": "#/definitions/ServiceBindingVolumeMountDevice"
+        },
+        "device_type": {
+          "type": "string",
+          "enum": [
+            "shared"
+          ]
+        },
+        "driver": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "r",
+            "rw"
+          ]
+        }
+      }
+    },
+    "ServiceBindingVolumeMountDevice": {
+      "type": "object",
+      "required": [
+        "volume_id"
+      ],
+      "properties": {
+        "mount_config": {
+          "type": "object"
+        },
+        "volume_id": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceInstanceAsyncOperation": {
+      "type": "object",
+      "properties": {
+        "dashboard_url": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/ServiceInstanceMetadata"
+        },
+        "operation": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceInstanceMetadata": {
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "object"
+        },
+        "labels": {
+          "type": "object"
+        }
+      }
+    },
+    "ServiceInstancePreviousValues": {
+      "type": "object",
+      "properties": {
+        "maintenance_info": {
+          "$ref": "#/definitions/MaintenanceInfo"
+        },
+        "organization_id": {
+          "type": "string",
+          "x-deprecated": true
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string",
+          "x-deprecated": true
+        },
+        "space_id": {
+          "type": "string",
+          "x-deprecated": true
+        }
+      }
+    },
+    "ServiceInstanceProvisionRequest": {
+      "type": "object",
+      "required": [
+        "service_id",
+        "plan_id",
+        "organization_guid",
+        "space_guid"
+      ],
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/Context"
+        },
+        "maintenance_info": {
+          "$ref": "#/definitions/MaintenanceInfo"
+        },
+        "organization_guid": {
+          "type": "string",
+          "x-deprecated": true
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "space_guid": {
+          "type": "string",
+          "x-deprecated": true
+        }
+      }
+    },
+    "ServiceInstanceProvisionResponse": {
+      "type": "object",
+      "properties": {
+        "dashboard_url": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/ServiceInstanceMetadata"
+        }
+      }
+    },
+    "ServiceInstanceResource": {
+      "type": "object",
+      "properties": {
+        "dashboard_url": {
+          "type": "string"
+        },
+        "maintenance_info": {
+          "$ref": "#/definitions/MaintenanceInfo"
+        },
+        "metadata": {
+          "$ref": "#/definitions/ServiceInstanceMetadata"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceInstanceSchemaObject": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "$ref": "#/definitions/SchemaParameters"
+        },
+        "update": {
+          "$ref": "#/definitions/SchemaParameters"
+        }
+      }
+    },
+    "ServiceInstanceUpdateRequest": {
+      "type": "object",
+      "required": [
+        "service_id"
+      ],
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/Context"
+        },
+        "maintenance_info": {
+          "$ref": "#/definitions/MaintenanceInfo"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "previous_values": {
+          "$ref": "#/definitions/ServiceInstancePreviousValues"
+        },
+        "service_id": {
+          "type": "string"
+        }
+      }
+    },
+    "oidc": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Client"
+        },
+        {
+          "properties": {
+            "accessType": {
+              "description": "When public, no clientsecret is required to perform logins using this client. Clients that have the Client Credentials Flow enabled can not be public.",
+              "type": "string",
+              "default": "confidential",
+              "enum": [
+                "confidential",
+                "public"
+              ]
+            },
+            "adminURL": {
+              "description": "URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "authorizationCodeFlowEnabled": {
+              "description": "Enable the [authorization code flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-auth-code-flow) for this client. The standard and preferred Oauth/OIDC-Flow.",
+              "type": "boolean",
+              "default": true
+            },
+            "baseURL": {
+              "description": "Default URL to use when the auth server needs to redirect or link back to the client.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "clientCredentialsFlowEnabled": {
+              "description": "Enable the [client credentials flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow). Used for machine-to-machine Authentication. (Can not be enabled for public clients).",
+              "type": "boolean"
+            },
+            "clientID": {
+              "description": "The clientId, as used for OAUTH-Flows.",
+              "type": "string",
+              "readOnly": true
+            },
+            "clientSecret": {
+              "description": "The clientSecret, as used for OAUTH-Flows.",
+              "type": "string",
+              "readOnly": true
+            },
+            "defaultClientScopes": {
+              "description": "Default client scopes are always applied when issuing tokens for this client. Scope mappings are always applied regardless of value of used scope parameter in OIDC Authorization request.",
+              "type": "array",
+              "default": [
+                "web-origins",
+                "profile",
+                "email",
+                "basic"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "deviceAuthorizationFlowEnabled": {
+              "description": "Enable the [device authorization flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/device-authorization-flow). Used when the device that needs authentication does not have a suitable browser (Smart-Devices, CLI-Tools etc.).",
+              "type": "boolean"
+            },
+            "discoveryURL": {
+              "description": "The OIDC-Discovery-URL for this client. Used to automatically configure most OIDC-Client-Applications.",
+              "type": "string",
+              "readOnly": true
+            },
+            "frontchannelLogoutURL": {
+              "description": "URL for [OIDC frontchannel logout](https://openid.net/specs/openid-connect-frontchannel-1_0.html).",
+              "type": "string",
+              "maxLength": 255,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9-+.]+:\\/\\/[a-zA-Z0-9]+[^\\s]*$"
+            },
+            "hardcodedClaimMappers": {
+              "description": "Hardcoded Mappers can be used to set a claim in the ID token \u0026 userinfo-endpoint (NOT to the access token) to a fixed value.",
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/OIDCHardcodedClaimMapper"
+              },
+              "x-omitempty": true
+            },
+            "implicitFlowEnabled": {
+              "description": "Enable the [implicit flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow). Has historically been used for frontend-applications that can't keep a clientSecret confidential. DEPRECATED! Use Authorization Code Flow with PKCE instead if possible!",
+              "type": "boolean"
+            },
+            "optionalClientScopes": {
+              "description": "Optional client scopes are applied when issuing tokens for this client when they are requested by scope parameter in OIDC Authorization request.",
+              "type": "array",
+              "default": [
+                "address",
+                "phone",
+                "offline_access"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "resourceOwnerPasswordFlowEnabled": {
+              "description": "Enable the [resource owner password flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow).",
+              "type": "boolean"
+            },
+            "rootURL": {
+              "description": "Root URL appended to relative URLs.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "validRedirectURIs": {
+              "description": "Allowed redirect URIs for authorization code flow. Supports custom schemes. HTTP-URLs (no TLS) are only allowed for the domain \"localhost\". You can use a '*' as wildcard at the end of a string. (If you don't have/need a redirect URI, just disable the authorization code flow below)",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 255,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9-+.]+:\\/\\/[a-zA-Z0-9]+[^\\s]*$"
+              },
+              "x-omitempty": true,
+              "example": [
+                "https://mysuperapp.com/login*"
+              ]
+            },
+            "webOrigins": {
+              "description": "Allowed CORS origins. Enter the string \"+\" to automatically treat all validRedirectURIs as allowed CORS origins. Required when doing Token-Requests from Clientside-Javascript.",
+              "type": "array",
+              "default": null,
+              "items": {
+                "type": "string",
+                "maxLength": 255,
+                "pattern": "^http:\\/\\/localhost[^\\s]*$|^https:\\/\\/[a-zA-Z0-9]+[^\\s]*$|^\\+$"
+              },
+              "x-omitempty": true,
+              "example": [
+                "https://mysuperapp.com"
+              ]
+            }
+          }
+        }
+      ],
+      "x-go-name": "OidcClient"
+    },
+    "saml": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Client"
+        },
+        {
+          "required": [
+            "entityIdentifier"
+          ],
+          "properties": {
+            "baseURL": {
+              "description": "Default URL to use when the auth server needs to redirect or link back to the client.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "canoncializationMethod": {
+              "description": "Canonicalization method which should be used.",
+              "type": "string",
+              "default": "EXCLUSIVE",
+              "enum": [
+                "EXCLUSIVE",
+                "EXCLUSIVE_WITH_COMMENTS",
+                "INCLUSIVE",
+                "INCLUSIVE_WITH_COMMENTS"
+              ]
+            },
+            "clientSignatureRequired": {
+              "description": "Will the client sign their saml requests and responses? And should they be validated?",
+              "type": "boolean"
+            },
+            "clientSigningCertificate": {
+              "description": "Base64 encoded client signing certificate without any spaces. Request-Signatures will be validated using this.",
+              "type": "string",
+              "maxLength": 10000,
+              "pattern": "^[a-zA-Z0-9+\\\\/=]*$"
+            },
+            "defaultClientScopes": {
+              "description": "Default client scopes are always applied when issuing tokens for this client. Scope mappings are always applied regardless of value of used scope parameter in OIDC Authorization request.",
+              "type": "array",
+              "default": null,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ad_saml",
+                  "role_list"
+                ]
+              }
+            },
+            "encryptAssertion": {
+              "description": "Should SAML assertions be encrypted with client's public key using AES?",
+              "type": "boolean"
+            },
+            "encryptionCertificate": {
+              "description": "Base64 encoded client encryption certificate without any spaces",
+              "type": "string",
+              "maxLength": 10000,
+              "pattern": "^[a-zA-Z0-9+\\\\/=]*$"
+            },
+            "entityIdentifier": {
+              "description": "UNIQUE identifier for this SAML-Client. It is recommended that a system entity use a URL containing its own domain name to identify itself and avoid collisions.",
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 6,
+              "pattern": "^[-a-zA-Z0-9()@:%_\\+.~#?\u0026\\/=]+$",
+              "example": "mysuperapp.com"
+            },
+            "forceNameIDFormat": {
+              "description": "Ignore requested Name ID subject format and use Name ID format configured below.",
+              "type": "boolean"
+            },
+            "forcePostBinding": {
+              "description": "Always use POST binding for responses.",
+              "type": "boolean",
+              "default": true
+            },
+            "hardcodedAttributeMappers": {
+              "description": "Hardcoded Mappers can be used to set an attribute in the SAML response to a fixed value.",
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/SAMLHardcodedAttributeMapper"
+              },
+              "x-omitempty": true
+            },
+            "includeAuthnStatement": {
+              "description": "Should a statement specifying the method and timestamp be included in login responses?",
+              "type": "boolean",
+              "default": true
+            },
+            "logoutPostBindingURL": {
+              "description": "SAML POST Binding URL for the client's single logout service. You can leave this blank if you are using a different binding.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "logoutRedirectBindingURL": {
+              "description": "SAML Redirect Binding URL for the client's single logout service. You can leave this blank if you are using a different binding.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "metadataURL": {
+              "description": "The URL where you can download the SAML-Metadata for your client. Used for auto-configuration of client-applications.",
+              "type": "string",
+              "readOnly": true
+            },
+            "nameIDFormat": {
+              "description": "Name ID Format which should be used.",
+              "type": "string",
+              "default": "username",
+              "enum": [
+                "username",
+                "email",
+                "transient",
+                "persistent"
+              ]
+            },
+            "postBindingURL": {
+              "description": "SAML POST Binding URL for the client's assertion consumer service (login responses). You can leave this blank if you do not have a URL for this binding.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "predefinedMappers": {
+              "description": "Mappers allow you to add additional user attributes to the SAML response. These are predefined mappers for the most common use-cases.",
+              "type": "array",
+              "default": [
+                "002",
+                "003",
+                "004",
+                "005"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "redirectBindingURL": {
+              "description": "SAML Redirect Binding URL for the client's assertion consumer service (login responses). You can leave this blank if you do not have a URL for this binding.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "rootURL": {
+              "description": "Root URL appended to relative URLs.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "signAssertion": {
+              "description": "Should assertions inside SAML documents be signed? This setting is not needed if document is already being signed.",
+              "type": "boolean"
+            },
+            "signDocuments": {
+              "description": "When turned on, Cloud IDP will sign the document using the realm’s private key.",
+              "type": "boolean",
+              "default": true
+            },
+            "signatureKeyName": {
+              "type": "string",
+              "default": "KEY_ID",
+              "enum": [
+                "NONE",
+                "KEY_ID",
+                "CERT_SUBJECT"
+              ]
+            },
+            "ssoURLName": {
+              "description": "URL fragment name to reference client when you want to do IDP Initiated SSO.",
+              "type": "string",
+              "maxLength": 255
+            },
+            "userAttributeMappers": {
+              "description": "User Attribute Mappers allow you to add additional user attributes to the SAML response. Use these custom mappers if no predefined mapper fits your use-case.",
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/SAMLUserAttributeMapper"
+              },
+              "x-omitempty": true
+            },
+            "validRedirectURIs": {
+              "description": "Allowed redirect URIs for SAML-Logins. Supports custom schemes. HTTP-URLs (no TLS) are only allowed for the domain \"localhost\". You can use a '*' as wildcard at the end of a string. Required when Authorization Code Flow is enabled.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 255,
+                "pattern": "^http:\\/\\/localhost[^\\s]*$|^https:\\/\\/[a-zA-Z0-9]+[^\\s]*$"
+              },
+              "x-omitempty": true,
+              "example": [
+                "https://mysuperapp.com/login"
+              ]
+            }
+          }
+        }
+      ],
+      "x-go-name": "SamlClient"
+    }
+  },
+  "parameters": {
+    "APIVersion": {
+      "type": "string",
+      "description": "version number of the Service Broker API that the Platform will use",
+      "name": "X-Broker-API-Version",
+      "in": "header",
+      "required": true
+    },
+    "OriginatingIdentity": {
+      "type": "string",
+      "description": "identity of the user that initiated the request from the Platform",
+      "name": "X-Broker-API-Originating-Identity",
+      "in": "header"
+    },
+    "RequestIdentity": {
+      "type": "string",
+      "description": "idenity of the request from the Platform",
+      "name": "X-Broker-API-Request-Identity",
+      "in": "header"
+    },
+    "accepts_incomplete": {
+      "type": "boolean",
+      "description": "asynchronous operations supported",
+      "name": "accepts_incomplete",
+      "in": "query"
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "id of the plan associated with the instance being deleted",
+      "name": "plan_id",
+      "in": "query",
+      "required": true
+    },
+    "service_id": {
+      "type": "string",
+      "description": "id of the service associated with the instance being deleted",
+      "name": "service_id",
+      "in": "query",
+      "required": true
+    }
+  },
+  "responses": {
+    "ErrorBadRequest": {
+      "description": "Bad Request",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorConflict": {
+      "description": "Conflict",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorGone": {
+      "description": "Gone",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorNotFound": {
+      "description": "Not Found",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorPreconditionFailed": {
+      "description": "Precondition Failed",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorUnauthorized": {
+      "description": "Unauthorized",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorUnexpected": {
+      "description": "Unexpected",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
+    "ErrorUnprocessableEntity": {
+      "description": "Unprocessable Entity",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    },
+    "tokenAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}
