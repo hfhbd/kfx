@@ -4,6 +4,7 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +17,7 @@ public data class SubscriptionDeletionScope(
   /**
    * The combinations of type and roles for subscriptions
    */
-  public val subscriptionScopes: List<SubscriptionScopes>,
+  public val subscriptionScopes: List<SubscriptionScopes> = emptyList(),
   /**
    * The scope for fact sheets where subscriptions are taken from
    */

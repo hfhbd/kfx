@@ -6,6 +6,7 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -39,7 +40,7 @@ public data class OutboundProcessor(
   /**
    * A list of fields that are required to get from Fact Sheet
    */
-  public val fields: List<String>,
+  public val fields: List<String> = emptyList(),
   /**
    * An object describing what relations and which relation fields to retrieve.
    */
@@ -67,7 +68,7 @@ public data class OutboundProcessor(
   /**
    * A list of fields that are constructed an exported Fact Sheet
    */
-  public val output: List<OutboundFieldTemplate>,
+  public val output: List<OutboundFieldTemplate> = emptyList(),
   /**
    * A flag to determine the fallback response in the function lx.toOrdinal(...). A true (default if absent) makes the value returned by lx.toOrdinal(...) to be zero for non-found cases. False will make the returned value equals NULL.
    */

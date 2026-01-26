@@ -1,6 +1,7 @@
 package com.example
 
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,7 +14,7 @@ public data class TargetLdifConfiguration(
   /**
    * A list of key-value pairs that evaluates to be the keys of the new LDIF
    */
-  public val ldifKeys: List<KeyValueTemplate>,
+  public val ldifKeys: List<KeyValueTemplate> = emptyList(),
   /**
    * Define the target location to which the created LDIF should be uploaded to
    */

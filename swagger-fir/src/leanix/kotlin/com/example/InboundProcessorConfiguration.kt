@@ -4,6 +4,7 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,7 +34,7 @@ public data class InboundProcessorConfiguration(
   /**
    * The list of processors used to evaluate the LDIF data
    */
-  public val processors: List<InboundProcessor>,
+  public val processors: List<InboundProcessor> = emptyList(),
   /**
    * The deletion scope definition used to delete untouched entities on a 'full' sync mode
    */

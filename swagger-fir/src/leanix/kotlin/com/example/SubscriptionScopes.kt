@@ -2,6 +2,7 @@ package com.example
 
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,7 +15,7 @@ public data class SubscriptionScopes(
   /**
    * List of role names
    */
-  public val roles: List<String>,
+  public val roles: List<String> = emptyList(),
   /**
    * Type of role, like RESPONSIBLE
    */

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetIntegrationPackages")
 public data class GetIntegrationPackages(
-  public val `value`: IntegrationPackage,
+  public val `value`: IntegrationPackage? = null,
 )

@@ -5,6 +5,7 @@ import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,7 +22,7 @@ public data class ReadFactSheetSection(
   /**
    * A list of fields that are required to get from Fact Sheet
    */
-  public val fields: List<String>,
+  public val fields: List<String> = emptyList(),
   /**
    * An object describing what relations and which relation fields to retrieve.
    */

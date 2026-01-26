@@ -4,6 +4,7 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -32,7 +33,7 @@ public data class ValueTemplate(
   /**
    * A list of key-value pairs that evaluates to a json object. Use 'expr' to evaluate to a single value
    */
-  public val map: List<KeyValueTemplate>,
+  public val map: List<KeyValueTemplate> = emptyList(),
   /**
    * An EL expression evaluating to a list or a single value. Expands this single value template to a list of value templates.
    */

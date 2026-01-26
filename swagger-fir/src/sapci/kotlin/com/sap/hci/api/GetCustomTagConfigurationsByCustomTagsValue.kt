@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetCustomTagConfigurations('CustomTags')${'$'}value")
 public data class GetCustomTagConfigurationsByCustomTagsValue(
-  public val `value`: CustomTagsConfiguration,
+  public val `value`: CustomTagsConfiguration? = null,
 )

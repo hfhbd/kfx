@@ -768,10 +768,7 @@ private fun MutableMap<String, IRTree.Member>.convertProperty(
 
     val member = IRTree.Member(
         type = type,
-        nullable = when {
-            type is IRTree.Type.LIST -> false
-            else -> propertyName !in required
-        },
+        nullable = propertyName !in required,
         namespace = null,
         serialName = null,
         documentation = property.description,

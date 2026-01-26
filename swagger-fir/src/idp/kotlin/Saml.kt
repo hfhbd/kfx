@@ -1,6 +1,7 @@
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,14 +28,14 @@ public data class Saml(
    * Authentication-Realm in which the client exists. Different realms have different global settings.
    */
   public override val realm: String? = null,
-  public override val roleNameMappings: List<RoleNameMapping>,
+  public override val roleNameMappings: List<RoleNameMapping> = emptyList(),
   public override val skipCertificateConfirmation: Boolean? = null,
   /**
    * roles
    */
-  public override val rolesApplicationName: List<String>,
-  public override val rolesObjectID: List<String>,
-  public override val rolesRoleName: List<String>,
+  public override val rolesApplicationName: List<String> = emptyList(),
+  public override val rolesObjectID: List<String> = emptyList(),
+  public override val rolesRoleName: List<String> = emptyList(),
   /**
    * Default URL to use when the auth server needs to redirect or link back to the client.
    */
@@ -54,7 +55,7 @@ public data class Saml(
   /**
    * Default client scopes are always applied when issuing tokens for this client. Scope mappings are always applied regardless of value of used scope parameter in OIDC Authorization request.
    */
-  public val defaultClientScopes: List<SamlDefaultClientScopes>,
+  public val defaultClientScopes: List<SamlDefaultClientScopes> = emptyList(),
   /**
    * Should SAML assertions be encrypted with client's public key using AES?
    */
@@ -78,7 +79,7 @@ public data class Saml(
   /**
    * Hardcoded Mappers can be used to set an attribute in the SAML response to a fixed value.
    */
-  public val hardcodedAttributeMappers: List<SAMLHardcodedAttributeMapper>,
+  public val hardcodedAttributeMappers: List<SAMLHardcodedAttributeMapper> = emptyList(),
   /**
    * Should a statement specifying the method and timestamp be included in login responses?
    */
@@ -106,7 +107,7 @@ public data class Saml(
   /**
    * Mappers allow you to add additional user attributes to the SAML response. These are predefined mappers for the most common use-cases.
    */
-  public val predefinedMappers: List<String>,
+  public val predefinedMappers: List<String> = emptyList(),
   /**
    * SAML Redirect Binding URL for the client's assertion consumer service (login responses). You can leave this blank if you do not have a URL for this binding.
    */
@@ -131,9 +132,9 @@ public data class Saml(
   /**
    * User Attribute Mappers allow you to add additional user attributes to the SAML response. Use these custom mappers if no predefined mapper fits your use-case.
    */
-  public val userAttributeMappers: List<SAMLUserAttributeMapper>,
+  public val userAttributeMappers: List<SAMLUserAttributeMapper> = emptyList(),
   /**
    * Allowed redirect URIs for SAML-Logins. Supports custom schemes. HTTP-URLs (no TLS) are only allowed for the domain "localhost". You can use a '*' as wildcard at the end of a string. Required when Authorization Code Flow is enabled.
    */
-  public val validRedirectURIs: List<String>,
+  public val validRedirectURIs: List<String> = emptyList(),
 ) : Client

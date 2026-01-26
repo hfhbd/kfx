@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "IntegrationDesigntimeArtifactConfigurations")
 public data class IntegrationDesigntimeArtifactConfigurations(
-  public val results: Configuration,
+  public val results: Configuration? = null,
 )

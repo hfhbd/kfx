@@ -6,6 +6,7 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -45,7 +46,7 @@ public data class RelationInboundProcessor(
   /**
    * A list of variables. Each variable consists of a key and a value. Both fields can contain EL expressions. The expression in key must be evaluated to a single element while the expression in value will be evaluated to a list. The EL expressions are evaluated after a processor has run for a data object and the values will be provided in the next run of the running synchronization.
    */
-  public override val variables: List<VariableKeyValueTemplate>,
+  public override val variables: List<VariableKeyValueTemplate> = emptyList(),
   /**
    * The operation mode of this processor. It can be either 'delete', or 'createOrUpdate'.
    */
@@ -71,11 +72,11 @@ public data class RelationInboundProcessor(
   /**
    * A list of changes that are performed to the specified relation
    */
-  public val updates: List<PatchTemplate>,
+  public val updates: List<PatchTemplate> = emptyList(),
   /**
    * Multiple components to be read for factsheet in from section and made available as part of the Juel evaluation context. They are referenced under the symbol 'lx'
    */
-  public val read: List<ReadFactSheetSection>,
+  public val read: List<ReadFactSheetSection> = emptyList(),
   /**
    * Make warnings just informative messages when any of the factsheets in the relation (from or to sides) does not exist. By default is False 
    */

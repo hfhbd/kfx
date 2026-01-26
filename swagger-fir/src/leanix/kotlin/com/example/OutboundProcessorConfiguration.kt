@@ -4,6 +4,7 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -37,7 +38,7 @@ public data class OutboundProcessorConfiguration(
   /**
    * The list of processors used to evaluate the LDIF data
    */
-  public val processors: List<OutboundProcessor>,
+  public val processors: List<OutboundProcessor> = emptyList(),
   /**
    * Define the target location to which the created LDIF should be uploaded to
    */
