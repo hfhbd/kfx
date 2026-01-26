@@ -1,5 +1,6 @@
 package client
 
+import ServiceInstanceProvisionRequest
 import ServiceInstanceProvisionResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -7,6 +8,9 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
 import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
@@ -19,6 +23,7 @@ import kotlin.Unit
  * @param accepts_incomplete asynchronous operations supported
  */
 public suspend fun HttpClient.serviceInstanceProvision(
+  input: ServiceInstanceProvisionRequest,
   instance_id: String,
   X_Broker_API_Version: String,
   X_Broker_API_Originating_Identity: String,
@@ -31,6 +36,8 @@ public suspend fun HttpClient.serviceInstanceProvision(
     `header`("X-Broker-API-Originating-Identity", X_Broker_API_Originating_Identity)
     `header`("X-Broker-API-Request-Identity", X_Broker_API_Request_Identity)
     parameter("accepts_incomplete", accepts_incomplete)
+    contentType(Json)
+    setBody(input)
     builder()
   }
   val output = response.body<ServiceInstanceProvisionResponse>()

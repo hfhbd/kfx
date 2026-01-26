@@ -7,6 +7,8 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -38,6 +40,7 @@ public suspend fun HttpClient.serviceBindingLastOperationGet(
     parameter("service_id", service_id)
     parameter("plan_id", plan_id)
     parameter("operation", operation)
+    contentType(Json)
     builder()
   }
   if (response.status.value == 404) {

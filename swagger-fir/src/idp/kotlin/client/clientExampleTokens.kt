@@ -6,6 +6,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -24,6 +26,7 @@ public suspend fun HttpClient.clientExampleTokens(
   builder: suspend HttpRequestBuilder.() -> Unit = {},
 ): OidcTokenExample {
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/example-tokens""") {
+    contentType(Json)
     builder()
   }
   if (response.status.isSuccess()) {

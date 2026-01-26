@@ -6,6 +6,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -18,6 +20,7 @@ import kotlin.collections.List
 @Throws(APIError::class)
 public suspend fun HttpClient.serviceInstancesAvailableScopes(serviceInstanceID: String, builder: suspend HttpRequestBuilder.() -> Unit = {}): List<AvailableScopeListEntry> {
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/available-scopes""") {
+    contentType(Json)
     builder()
   }
   if (response.status.isSuccess()) {

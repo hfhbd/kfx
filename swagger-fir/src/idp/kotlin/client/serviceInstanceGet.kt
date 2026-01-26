@@ -7,6 +7,8 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -33,6 +35,7 @@ public suspend fun HttpClient.serviceInstanceGet(
     `header`("X-Broker-API-Request-Identity", X_Broker_API_Request_Identity)
     parameter("service_id", service_id)
     parameter("plan_id", plan_id)
+    contentType(Json)
     builder()
   }
   if (response.status.value == 404) {

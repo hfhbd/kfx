@@ -86,6 +86,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Head,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -100,6 +102,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Get,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -114,6 +118,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Post,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -128,6 +134,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Put,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -142,6 +150,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Patch,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -156,6 +166,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Delete,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -180,6 +192,8 @@ private fun generate(
     method: IRTree.Operation.HttpMethod,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     pathParameters: List<Parameter>,
+    globalConsumes: List<String>,
+    globalProduces: List<String>,
     parameters: Map<String, Parameter>,
     definitions: Map<String, Definition>,
 ): IRTree.Operation {
@@ -191,7 +205,7 @@ private fun generate(
         }.replaceFirstChar { it.uppercaseChar() }
         )
 
-    return IRTree.Operation(
+    val op = IRTree.Operation(
         packageName = "",
         name = name.replaceFirstChar { it.lowercaseChar() },
         documentation = operation.description,
@@ -199,7 +213,7 @@ private fun generate(
         location = null,
         soapAction = null,
         path = path.replace("{", "\${"),
-        input = operation.parameters.mapNotNull {
+        input = (operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> it
                 Parameter.Position.Query,
@@ -208,9 +222,18 @@ private fun generate(
                 null,
                 -> null
             }
-        }.singleOrNull()
+        } + pathParameters.filter {
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Body
+        }).singleOrNull()
             ?.toType(IRTree.ClassName("", name), irTypes, definitions),
-        inputContentType = operation.consumes.firstOrNull()?.let {
+        inputContentType = (operation.consumes.firstOrNull() ?: globalConsumes.firstOrNull())?.let {
             ContentType.fromString(it)
         },
         success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
@@ -226,7 +249,7 @@ private fun generate(
                 )
             }
         },
-        outputContentType = operation.produces.firstOrNull()?.let {
+        outputContentType = (operation.produces.firstOrNull() ?: globalProduces.firstOrNull())?.let {
             ContentType.fromString(it)
         },
         outputHeaders = operation.responses[statusCodes.success]?.headers?.map { (name, it) ->
@@ -375,6 +398,7 @@ private fun generate(
             }
         },
     )
+    return op
 }
 
 private fun Map<String, SecurityDefinition>.toAuth(): Set<IRTree.Auth> = buildSet {
