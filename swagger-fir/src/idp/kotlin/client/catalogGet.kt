@@ -6,8 +6,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.`header`
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -26,7 +24,6 @@ public suspend fun HttpClient.catalogGet(
     `header`("X-Broker-API-Version", X_Broker_API_Version)
     `header`("X-Broker-API-Originating-Identity", X_Broker_API_Originating_Identity)
     `header`("X-Broker-API-Request-Identity", X_Broker_API_Request_Identity)
-    contentType(Json)
     builder()
   }
   val output = response.body<Catalog>()

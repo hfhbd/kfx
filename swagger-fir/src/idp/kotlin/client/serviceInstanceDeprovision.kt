@@ -6,8 +6,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.delete
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
@@ -38,7 +36,6 @@ public suspend fun HttpClient.serviceInstanceDeprovision(
     parameter("accepts_incomplete", accepts_incomplete)
     parameter("service_id", service_id)
     parameter("plan_id", plan_id)
-    contentType(Json)
     builder()
   }
   val output = response.body<Unit>()
