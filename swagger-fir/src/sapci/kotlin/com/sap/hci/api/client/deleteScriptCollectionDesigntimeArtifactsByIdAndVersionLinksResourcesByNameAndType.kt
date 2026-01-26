@@ -8,8 +8,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.delete
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -45,7 +43,6 @@ public suspend fun HttpClient.deleteScriptCollectionDesigntimeArtifactsByIdAndVe
   val response = delete(urlString = """ScriptCollectionDesigntimeArtifacts(Id='${id}',Version='${version}')/${'$'}links/Resources(Name='${name}',ResourceType='${type}')""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     parameter("referencedResourceType", referencedResourceType)
-    contentType(Json)
     builder()
   }
   if (response.status.isSuccess()) {

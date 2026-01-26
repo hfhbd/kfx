@@ -205,6 +205,41 @@ private fun generate(
         }.replaceFirstChar { it.uppercaseChar() }
         )
 
+    val input = (operation.parameters.mapNotNull {
+                when (it.position) {
+                    Parameter.Position.Body -> it
+                    Parameter.Position.Query,
+                    Parameter.Position.Path,
+                    Parameter.Position.Header,
+                    null,
+                        -> null
+                }
+            } + pathParameters.filter {
+                val position = if (it.ref != null) {
+                    val name = it.ref!!.removePrefix("#/parameters/")
+                    val found = parameters[name]!!
+                    found.position
+                } else {
+                    it.position
+                }
+                position == Parameter.Position.Body
+            }
+            ).singleOrNull()
+        ?.toType(IRTree.ClassName("", name), irTypes, definitions)
+
+    val output = operation.responses[statusCodes.success]?.schema?.let {
+        if (it.isUnit()) {
+            IRTree.Type.Builtin.UNIT
+        } else {
+            it.toIr(
+                null,
+                name,
+                irTypes,
+                definitions = definitions,
+            )
+        }
+    }
+
     val op = IRTree.Operation(
         packageName = "",
         name = name.replaceFirstChar { it.lowercaseChar() },
@@ -213,45 +248,19 @@ private fun generate(
         location = null,
         soapAction = null,
         path = path.replace("{", "\${"),
-        input = (operation.parameters.mapNotNull {
-            when (it.position) {
-                Parameter.Position.Body -> it
-                Parameter.Position.Query,
-                Parameter.Position.Path,
-                Parameter.Position.Header,
-                null,
-                -> null
+        input = input,
+        inputContentType = if (input != null) {
+            (operation.consumes.firstOrNull() ?: globalConsumes.firstOrNull())?.let {
+                ContentType.fromString(it)
             }
-        } + pathParameters.filter {
-            val position = if (it.ref != null) {
-                val name = it.ref!!.removePrefix("#/parameters/")
-                val found = parameters[name]!!
-                found.position
-            } else {
-                it.position
-            }
-            position == Parameter.Position.Body
-        }).singleOrNull()
-            ?.toType(IRTree.ClassName("", name), irTypes, definitions),
-        inputContentType = (operation.consumes.firstOrNull() ?: globalConsumes.firstOrNull())?.let {
-            ContentType.fromString(it)
-        },
+        } else null,
         success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
-        output = operation.responses[statusCodes.success]?.schema?.let {
-            if (it.isUnit()) {
-                IRTree.Type.Builtin.UNIT
-            } else {
-                it.toIr(
-                    null,
-                    name,
-                    irTypes,
-                    definitions = definitions,
-                )
+        output = output,
+        outputContentType = if (output != null) {
+            (operation.produces.firstOrNull() ?: globalProduces.firstOrNull())?.let {
+                ContentType.fromString(it)
             }
-        },
-        outputContentType = (operation.produces.firstOrNull() ?: globalProduces.firstOrNull())?.let {
-            ContentType.fromString(it)
-        },
+        } else null,
         outputHeaders = operation.responses[statusCodes.success]?.headers?.map { (name, it) ->
             it.toParameter(
                 name,
@@ -714,7 +723,9 @@ private fun Definition.objectToIr(
         name = qname.name,
         serialName = if (allOf.isNotEmpty()) {
             name
-        } else null,
+        } else {
+            null
+        },
         namespace = null,
         members = members,
         documentation = description,

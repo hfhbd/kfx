@@ -4,8 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.delete
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -28,7 +26,6 @@ public suspend fun HttpClient.deleteIntegrationDesigntimeArtifactsByIdAndVersion
 ) {
   val response = delete(urlString = """IntegrationDesigntimeArtifacts(Id='${id}',Version='${version}')""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
-    contentType(Json)
     builder()
   }
 }

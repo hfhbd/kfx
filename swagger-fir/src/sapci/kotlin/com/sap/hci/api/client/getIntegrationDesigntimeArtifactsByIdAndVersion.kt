@@ -7,8 +7,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -34,7 +32,6 @@ public suspend fun HttpClient.getIntegrationDesigntimeArtifactsByIdAndVersion(
 ): GetIntegrationDesigntimeArtifactsByIdAndVersion? {
   val response = `get`(urlString = """IntegrationDesigntimeArtifacts(Id='${id}',Version='${version}')""") {
     parameter("select", select)
-    contentType(Json)
     builder()
   }
   if (response.status.value == 404) {

@@ -1,6 +1,7 @@
 package com.sap.hci.api.client
 
 import com.sap.hci.api.IntegrationPackage
+import com.sap.hci.api.IntegrationPackageCreate
 import com.sap.hci.api.PostIntegrationPackagesOverwrite
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -8,6 +9,9 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -18,12 +22,12 @@ import odata.Error
  * You can use the following request to create/import an integration package.<br>
  *
  * In API sandbox, only read APIs can be tested. You need to configure an API endpoint for your account, where you have the required write permissions to create integration package.
- *
  * @param X_CSRF_Token CSRF token that is valid for the current session (see resource 'CSRF Token Handling')
  * @param overwrite You can use the Overwrite parameter to overwrite an existing package.
  */
 @Throws(Error::class)
 public suspend fun HttpClient.postIntegrationPackages(
+  input: IntegrationPackageCreate,
   X_CSRF_Token: String,
   overwrite: PostIntegrationPackagesOverwrite? = null,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
@@ -31,6 +35,8 @@ public suspend fun HttpClient.postIntegrationPackages(
   val response = post(urlString = """IntegrationPackages""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     parameter("overwrite", overwrite)
+    contentType(Json)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

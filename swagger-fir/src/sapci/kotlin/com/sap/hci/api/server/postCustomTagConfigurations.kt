@@ -7,7 +7,6 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.accept
 import io.ktor.server.routing.contentType
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
@@ -21,12 +20,10 @@ import kotlin.Unit
 public fun Route.postCustomTagConfigurations(action: suspend ApplicationCall.(CustomTagsConfigurationCreate) -> Unit) {
   route(path = """/CustomTagConfigurations""") {
     contentType(Json) {
-      accept(Json) {
-        post {
-          val body = call.receive<CustomTagsConfigurationCreate>()
-          call.action(body)
-          call.respond(Created)
-        }
+      post {
+        val body = call.receive<CustomTagsConfigurationCreate>()
+        call.action(body)
+        call.respond(Created)
       }
     }
   }

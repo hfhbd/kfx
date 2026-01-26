@@ -7,7 +7,6 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.accept
-import io.ktor.server.routing.contentType
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
@@ -18,13 +17,11 @@ import io.ktor.server.routing.route
  */
 public fun Route.postCopyIntegrationPackage(action: suspend ApplicationCall.() -> PostCopyIntegrationPackage) {
   route(path = """/CopyIntegrationPackage""") {
-    contentType(Json) {
-      accept(Json) {
-        post {
-          val response = call.action()
-          call.response.status(Created)
-          call.respond(response)
-        }
+    accept(Json) {
+      post {
+        val response = call.action()
+        call.response.status(Created)
+        call.respond(response)
       }
     }
   }

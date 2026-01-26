@@ -5,8 +5,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -31,7 +29,6 @@ public suspend fun HttpClient.postIntegrationDesigntimeArtifactSaveAsVersion(
     `header`("X-CSRF-Token", X_CSRF_Token)
     parameter("id", id)
     parameter("saveAsVersion", saveAsVersion)
-    contentType(Json)
     builder()
   }
 }
