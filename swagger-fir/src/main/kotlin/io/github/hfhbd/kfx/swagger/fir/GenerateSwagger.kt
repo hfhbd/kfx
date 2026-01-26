@@ -688,7 +688,9 @@ private fun Definition.objectToIr(
         packageName = qname.packageName,
         packageNameSuffix = "",
         name = qname.name,
-        serialName = null,
+        serialName = if (allOf.isNotEmpty()) {
+            name
+        } else null,
         namespace = null,
         members = members,
         documentation = description,

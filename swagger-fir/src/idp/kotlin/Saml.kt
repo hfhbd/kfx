@@ -1,9 +1,11 @@
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "saml")
 public data class Saml(
   /**
    * Email, which can be used to announce breaking changes. Can be a semicolon separated list. Make sure this is always up-to-date so we can reach you on important topics!
