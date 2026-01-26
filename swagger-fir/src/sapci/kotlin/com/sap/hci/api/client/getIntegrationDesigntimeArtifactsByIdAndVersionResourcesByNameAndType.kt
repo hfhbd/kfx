@@ -9,8 +9,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -40,7 +38,6 @@ public suspend fun HttpClient.getIntegrationDesigntimeArtifactsByIdAndVersionRes
   val response = `get`(urlString = """IntegrationDesigntimeArtifacts(Id='${id}',Version='${version}')/Resources(Name='${name}',ResourceType='${type}')""") {
     parameter("referencedResourceType", referencedResourceType)
     parameter("select", select)
-    contentType(Json)
     builder()
   }
   val output = response.body<GetIntegrationDesigntimeArtifactsByIdAndVersionResourcesByNameAndType>()

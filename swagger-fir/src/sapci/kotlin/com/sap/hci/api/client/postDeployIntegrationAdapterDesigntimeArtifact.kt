@@ -6,8 +6,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -32,7 +30,6 @@ public suspend fun HttpClient.postDeployIntegrationAdapterDesigntimeArtifact(
   val response = post(urlString = """DeployIntegrationAdapterDesigntimeArtifact""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
     parameter("id", id)
-    contentType(Json)
     builder()
   }
   if (response.status.isSuccess()) {

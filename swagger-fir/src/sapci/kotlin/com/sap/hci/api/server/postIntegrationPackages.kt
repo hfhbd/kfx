@@ -2,11 +2,14 @@ package com.sap.hci.api.server
 
 import com.sap.hci.api.IntegrationPackage
 import com.sap.hci.api.IntegrationPackageCreate
+import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.accept
+import io.ktor.server.routing.contentType
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
@@ -17,11 +20,15 @@ import io.ktor.server.routing.route
  */
 public fun Route.postIntegrationPackages(action: suspend ApplicationCall.(IntegrationPackageCreate) -> IntegrationPackage) {
   route(path = """/IntegrationPackages""") {
-    post {
-      val body = call.receive<IntegrationPackageCreate>()
-      val response = call.action(body)
-      call.response.status(Created)
-      call.respond(response)
+    contentType(Json) {
+      accept(Json) {
+        post {
+          val body = call.receive<IntegrationPackageCreate>()
+          val response = call.action(body)
+          call.response.status(Created)
+          call.respond(response)
+        }
+      }
     }
   }
 }

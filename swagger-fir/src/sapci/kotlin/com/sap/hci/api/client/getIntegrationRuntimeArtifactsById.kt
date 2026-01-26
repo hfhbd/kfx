@@ -5,8 +5,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -22,7 +20,6 @@ import kotlin.Unit
  */
 public suspend fun HttpClient.getIntegrationRuntimeArtifactsById(id: String, builder: suspend HttpRequestBuilder.() -> Unit = {}): GetIntegrationRuntimeArtifactsById {
   val response = `get`(urlString = """IntegrationRuntimeArtifacts('${id}')""") {
-    contentType(Json)
     builder()
   }
   val output = response.body<GetIntegrationRuntimeArtifactsById>()

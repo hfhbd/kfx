@@ -6,8 +6,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
@@ -35,7 +33,6 @@ public suspend fun HttpClient.getProcessorConfigurations(
     parameter("connectorVersion", connectorVersion)
     parameter("processingDirection", processingDirection)
     parameter("processingMode", processingMode)
-    contentType(Json)
     builder()
   }
   val output = response.body<List<ProcessorConfiguration>>()

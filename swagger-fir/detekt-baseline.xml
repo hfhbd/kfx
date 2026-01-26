@@ -4,9 +4,9 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.toIr( parentQName: IRTree.ClassName?, name: String?, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, ): IRTree.Type</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Parameter.toParameter( parentQName: IRTree.ClassName, parameters: Map&lt;String, Parameter>, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, definitions: Map&lt;String, Definition>, ): Pair&lt;Parameter.Position?, IRTree.Operation.Parameter></ID>
-    <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, pathParameters: List&lt;Parameter>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, pathParameters: List&lt;Parameter>, globalConsumes: List&lt;String>, globalProduces: List&lt;String>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>LongMethod:GenerateSwagger.kt:private fun Swagger.toIr( swaggerTransformers: Iterable&lt;SwaggerTransformer>, ): IRTree</ID>
-    <ID>LongMethod:GenerateSwagger.kt:private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, pathParameters: List&lt;Parameter>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
+    <ID>LongMethod:GenerateSwagger.kt:private fun generate( path: String, operation: Path, method: IRTree.Operation.HttpMethod, irTypes: MutableMap&lt;IRTree.ClassName, IRTree.Class>, pathParameters: List&lt;Parameter>, globalConsumes: List&lt;String>, globalProduces: List&lt;String>, parameters: Map&lt;String, Parameter>, definitions: Map&lt;String, Definition>, ): IRTree.Operation</ID>
     <ID>TooManyFunctions:GenerateSwagger.kt:io.github.hfhbd.kfx.swagger.fir.GenerateSwagger.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

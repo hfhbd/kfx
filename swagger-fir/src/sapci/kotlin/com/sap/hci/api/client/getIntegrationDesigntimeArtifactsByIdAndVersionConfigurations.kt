@@ -9,8 +9,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -44,7 +42,6 @@ public suspend fun HttpClient.getIntegrationDesigntimeArtifactsByIdAndVersionCon
     parameter("select", select)
     parameter("orderby", orderby)
     parameter("format", format)
-    contentType(Json)
     builder()
   }
   val output = response.body<GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurations>()

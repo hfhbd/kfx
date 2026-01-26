@@ -4,8 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.parameter
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.contentType
 import kotlin.String
 import kotlin.Unit
 
@@ -32,7 +30,6 @@ public suspend fun HttpClient.deleteProcessorConfiguration(
     parameter("connectorVersion", connectorVersion)
     parameter("processingDirection", processingDirection)
     parameter("processingMode", processingMode)
-    contentType(Json)
     builder()
   }
 }

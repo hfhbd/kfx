@@ -1,10 +1,14 @@
 package com.sap.hci.api.client
 
+import com.sap.hci.api.CustomTagsUpdate
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
 import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -15,7 +19,6 @@ import odata.Error
  * You can use the following request to update a Custom Tag.<br>
  *
  * In API sandbox, only read APIs can be tested. You need to configure an API endpoint for your account, where you have the required  permissions to update Custom Tags.
- *
  * @param id ID of integration package. <br>
  * Example: ```CloudPlatformAPITestPackage```
  * @param name Name of the Custom Tag which values are to be updated.
@@ -23,6 +26,7 @@ import odata.Error
  */
 @Throws(Error::class)
 public suspend fun HttpClient.putIntegrationPackagesByIdLinksCustomTagsByName(
+  input: CustomTagsUpdate,
   id: String,
   name: String,
   X_CSRF_Token: String,
@@ -30,6 +34,8 @@ public suspend fun HttpClient.putIntegrationPackagesByIdLinksCustomTagsByName(
 ) {
   val response = put(urlString = """IntegrationPackages('${id}')/${'$'}links/CustomTags('${name}')""") {
     `header`("X-CSRF-Token", X_CSRF_Token)
+    contentType(Json)
+    setBody(input)
     builder()
   }
   if (response.status.isSuccess()) {

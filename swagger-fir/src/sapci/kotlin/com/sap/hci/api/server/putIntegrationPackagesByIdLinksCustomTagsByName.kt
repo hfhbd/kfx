@@ -1,11 +1,13 @@
 package com.sap.hci.api.server
 
 import com.sap.hci.api.CustomTagsUpdate
+import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.HttpStatusCode.Companion.Accepted
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.contentType
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import kotlin.Unit
@@ -17,10 +19,12 @@ import kotlin.Unit
  */
 public fun Route.putIntegrationPackagesByIdLinksCustomTagsByName(action: suspend ApplicationCall.(CustomTagsUpdate) -> Unit) {
   route(path = """/IntegrationPackages('{id}')/{$}links/CustomTags('{name}')""") {
-    put {
-      val body = call.receive<CustomTagsUpdate>()
-      call.action(body)
-      call.respond(Accepted)
+    contentType(Json) {
+      put {
+        val body = call.receive<CustomTagsUpdate>()
+        call.action(body)
+        call.respond(Accepted)
+      }
     }
   }
 }

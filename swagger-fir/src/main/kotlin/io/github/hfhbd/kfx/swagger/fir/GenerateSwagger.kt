@@ -86,6 +86,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Head,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -100,6 +102,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Get,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -114,6 +118,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Post,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -128,6 +134,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Put,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -142,6 +150,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Patch,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -156,6 +166,8 @@ private fun Swagger.toIr(
                     IRTree.Operation.HttpMethod.Delete,
                     irTypes,
                     operations.parameters,
+                    consumes,
+                    produces,
                     parameters,
                     definitions,
                 ),
@@ -180,6 +192,8 @@ private fun generate(
     method: IRTree.Operation.HttpMethod,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     pathParameters: List<Parameter>,
+    globalConsumes: List<String>,
+    globalProduces: List<String>,
     parameters: Map<String, Parameter>,
     definitions: Map<String, Definition>,
 ): IRTree.Operation {
@@ -191,15 +205,8 @@ private fun generate(
         }.replaceFirstChar { it.uppercaseChar() }
         )
 
-    return IRTree.Operation(
-        packageName = "",
-        name = name.replaceFirstChar { it.lowercaseChar() },
-        documentation = operation.description,
-        method = method,
-        location = null,
-        soapAction = null,
-        path = path.replace("{", "\${"),
-        input = operation.parameters.mapNotNull {
+    val input = (
+        operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> it
                 Parameter.Position.Query,
@@ -208,26 +215,56 @@ private fun generate(
                 null,
                 -> null
             }
-        }.singleOrNull()
-            ?.toType(IRTree.ClassName("", name), irTypes, definitions),
-        inputContentType = operation.consumes.firstOrNull()?.let {
-            ContentType.fromString(it)
+        } + pathParameters.filter {
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Body
+        }
+        ).singleOrNull()
+        ?.toType(IRTree.ClassName("", name), irTypes, definitions)
+
+    val output = operation.responses[statusCodes.success]?.schema?.let {
+        if (it.isUnit()) {
+            IRTree.Type.Builtin.UNIT
+        } else {
+            it.toIr(
+                null,
+                name,
+                irTypes,
+                definitions = definitions,
+            )
+        }
+    }
+
+    val op = IRTree.Operation(
+        packageName = "",
+        name = name.replaceFirstChar { it.lowercaseChar() },
+        documentation = operation.description,
+        method = method,
+        location = null,
+        soapAction = null,
+        path = path.replace("{", "\${"),
+        input = input,
+        inputContentType = if (input != null) {
+            (operation.consumes.firstOrNull() ?: globalConsumes.firstOrNull())?.let {
+                ContentType.fromString(it)
+            }
+        } else {
+            null
         },
         success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
-        output = operation.responses[statusCodes.success]?.schema?.let {
-            if (it.isUnit()) {
-                IRTree.Type.Builtin.UNIT
-            } else {
-                it.toIr(
-                    null,
-                    name,
-                    irTypes,
-                    definitions = definitions,
-                )
+        output = output,
+        outputContentType = if (output != null) {
+            (operation.produces.firstOrNull() ?: globalProduces.firstOrNull())?.let {
+                ContentType.fromString(it)
             }
-        },
-        outputContentType = operation.produces.firstOrNull()?.let {
-            ContentType.fromString(it)
+        } else {
+            null
         },
         outputHeaders = operation.responses[statusCodes.success]?.headers?.map { (name, it) ->
             it.toParameter(
@@ -375,6 +412,7 @@ private fun generate(
             }
         },
     )
+    return op
 }
 
 private fun Map<String, SecurityDefinition>.toAuth(): Set<IRTree.Auth> = buildSet {
@@ -688,7 +726,11 @@ private fun Definition.objectToIr(
         packageName = qname.packageName,
         packageNameSuffix = "",
         name = qname.name,
-        serialName = null,
+        serialName = if (allOf.isNotEmpty()) {
+            name
+        } else {
+            null
+        },
         namespace = null,
         members = members,
         documentation = description,
