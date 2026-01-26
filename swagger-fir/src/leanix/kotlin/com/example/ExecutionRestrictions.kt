@@ -3,6 +3,7 @@ package com.example
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,5 +20,5 @@ public data class ExecutionRestrictions(
   /**
    * Execution is restricted to the specified users
    */
-  public val userIds: List<String>,
+  public val userIds: List<String> = emptyList(),
 )

@@ -5,6 +5,7 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -63,5 +64,5 @@ public data class LeanIxDataInterchangeFormat(
   /**
    * The list of content changes that are applied within this LDIF
    */
-  public val content: List<Content>,
+  public val content: List<Content> = emptyList(),
 ) : Input

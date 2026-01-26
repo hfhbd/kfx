@@ -5,6 +5,7 @@ import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +25,7 @@ public data class OutboundFieldTemplate(
   /**
    * A list of expressions for multiple values, e.g. for multi select fields
    */
-  public val values: List<ValueTemplate>,
+  public val values: List<ValueTemplate> = emptyList(),
   /**
    * An EL expression evaluating to a list or a single value. Expands this single value template to a list of value templates available under the JUEL expressions ${integration.updates.keyOfForEach} and ${integration.updates.valueOfForEach}
    */

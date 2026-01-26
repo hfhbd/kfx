@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetIntegrationRuntimeArtifactsD")
 public data class GetIntegrationRuntimeArtifactsD(
-  public val results: IntegrationRuntimeArtifact,
+  public val results: IntegrationRuntimeArtifact? = null,
 )

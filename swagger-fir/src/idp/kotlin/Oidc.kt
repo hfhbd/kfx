@@ -1,6 +1,7 @@
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,14 +28,14 @@ public data class Oidc(
    * Authentication-Realm in which the client exists. Different realms have different global settings.
    */
   public override val realm: String? = null,
-  public override val roleNameMappings: List<RoleNameMapping>,
+  public override val roleNameMappings: List<RoleNameMapping> = emptyList(),
   public override val skipCertificateConfirmation: Boolean? = null,
   /**
    * roles
    */
-  public override val rolesApplicationName: List<String>,
-  public override val rolesObjectID: List<String>,
-  public override val rolesRoleName: List<String>,
+  public override val rolesApplicationName: List<String> = emptyList(),
+  public override val rolesObjectID: List<String> = emptyList(),
+  public override val rolesRoleName: List<String> = emptyList(),
   /**
    * When public, no clientsecret is required to perform logins using this client. Clients that have the Client Credentials Flow enabled can not be public.
    */
@@ -66,7 +67,7 @@ public data class Oidc(
   /**
    * Default client scopes are always applied when issuing tokens for this client. Scope mappings are always applied regardless of value of used scope parameter in OIDC Authorization request.
    */
-  public val defaultClientScopes: List<String>,
+  public val defaultClientScopes: List<String> = emptyList(),
   /**
    * Enable the [device authorization flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/device-authorization-flow). Used when the device that needs authentication does not have a suitable browser (Smart-Devices, CLI-Tools etc.).
    */
@@ -82,7 +83,7 @@ public data class Oidc(
   /**
    * Hardcoded Mappers can be used to set a claim in the ID token & userinfo-endpoint (NOT to the access token) to a fixed value.
    */
-  public val hardcodedClaimMappers: List<OIDCHardcodedClaimMapper>,
+  public val hardcodedClaimMappers: List<OIDCHardcodedClaimMapper> = emptyList(),
   /**
    * Enable the [implicit flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow). Has historically been used for frontend-applications that can't keep a clientSecret confidential. DEPRECATED! Use Authorization Code Flow with PKCE instead if possible!
    */
@@ -90,7 +91,7 @@ public data class Oidc(
   /**
    * Optional client scopes are applied when issuing tokens for this client when they are requested by scope parameter in OIDC Authorization request.
    */
-  public val optionalClientScopes: List<String>,
+  public val optionalClientScopes: List<String> = emptyList(),
   /**
    * Enable the [resource owner password flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow).
    */
@@ -102,9 +103,9 @@ public data class Oidc(
   /**
    * Allowed redirect URIs for authorization code flow. Supports custom schemes. HTTP-URLs (no TLS) are only allowed for the domain "localhost". You can use a '*' as wildcard at the end of a string. (If you don't have/need a redirect URI, just disable the authorization code flow below)
    */
-  public val validRedirectURIs: List<String>,
+  public val validRedirectURIs: List<String> = emptyList(),
   /**
    * Allowed CORS origins. Enter the string "+" to automatically treat all validRedirectURIs as allowed CORS origins. Required when doing Token-Requests from Clientside-Javascript.
    */
-  public val webOrigins: List<String>,
+  public val webOrigins: List<String> = emptyList(),
 ) : Client

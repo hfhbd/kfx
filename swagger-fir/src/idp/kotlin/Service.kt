@@ -1,6 +1,7 @@
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,6 +18,6 @@ public data class Service(
   public val name: String,
   public val plan_updateable: Boolean? = null,
   public val plans: List<Plan>,
-  public val requires: List<ServiceRequires>,
-  public val tags: List<String>,
+  public val requires: List<ServiceRequires> = emptyList(),
+  public val tags: List<String> = emptyList(),
 )

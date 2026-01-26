@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetServiceEndpoints")
 public data class GetServiceEndpoints(
-  public val `value`: ServiceEndpoint,
+  public val `value`: ServiceEndpoint? = null,
 )

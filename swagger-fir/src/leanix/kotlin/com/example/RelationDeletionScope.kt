@@ -4,6 +4,7 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +17,7 @@ public data class RelationDeletionScope(
   /**
    * A list of relation types like 'relToParent', 'relToChild'
    */
-  public val relationTypes: List<String>,
+  public val relationTypes: List<String> = emptyList(),
   /**
    * The fact sheet selections where the relation scope is evaluated from
    */

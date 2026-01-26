@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "MessageMappingDesigntimeArtifactResources")
 public data class MessageMappingDesigntimeArtifactResources(
-  public val results: Resource,
+  public val results: Resource? = null,
 )

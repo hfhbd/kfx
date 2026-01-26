@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "IntegrationDesigntimeArtifactResources")
 public data class IntegrationDesigntimeArtifactResources(
-  public val results: Resource,
+  public val results: Resource? = null,
 )

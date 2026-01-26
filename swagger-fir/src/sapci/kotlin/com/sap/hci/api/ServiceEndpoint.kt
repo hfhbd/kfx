@@ -15,6 +15,6 @@ public data class ServiceEndpoint(
   public val Description: String? = null,
   public val LastUpdated: String? = null,
   public val Protocol: String? = null,
-  public val EntryPoints: EntryPoint,
-  public val ApiDefinitions: Definition,
+  public val EntryPoints: EntryPoint? = null,
+  public val ApiDefinitions: Definition? = null,
 )

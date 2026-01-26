@@ -3,6 +3,7 @@ package com.example
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +17,7 @@ public data class FastRunResponse(
   /**
    * A list of error/warnings messages found during the execution.
    */
-  public val warnings: List<Warning>,
+  public val warnings: List<Warning> = emptyList(),
   /**
    * Statistics about the execution of the run.
    */

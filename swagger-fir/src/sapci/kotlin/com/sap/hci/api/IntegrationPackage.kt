@@ -24,5 +24,5 @@ public data class IntegrationPackage(
   public val Countries: String? = null,
   public val Industries: String? = null,
   public val LineOfBusiness: String? = null,
-  public val IntegrationDesigntimeArtifacts: IntegrationDesigntimeArtifact,
+  public val IntegrationDesigntimeArtifacts: IntegrationDesigntimeArtifact? = null,
 )

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetIntegrationPackages('{Id}')MessageMappingDesigntimeArtifacts")
 public data class GetIntegrationPackagesByIdMessageMappingDesigntimeArtifacts(
-  public val `value`: MessageMappingDesigntimeArtifact,
+  public val `value`: MessageMappingDesigntimeArtifact? = null,
 )

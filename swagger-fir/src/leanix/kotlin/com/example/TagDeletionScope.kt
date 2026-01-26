@@ -4,6 +4,7 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +17,7 @@ public data class TagDeletionScope(
   /**
    * A list of tag and tag group combinations.
    */
-  public val tagScopes: List<TagScope>,
+  public val tagScopes: List<TagScope> = emptyList(),
   /**
    * The fact sheet selection where the tag scopes are evaluated from
    */

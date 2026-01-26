@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "ValMapSchemaDefaultValMaps")
 public data class ValMapSchemaDefaultValMaps(
-  public val results: ValMaps,
+  public val results: ValMaps? = null,
 )

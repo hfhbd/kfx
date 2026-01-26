@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "GetIntegrationPackages('{Id}')ScriptCollectionDesigntimeArtifacts")
 public data class GetIntegrationPackagesByIdScriptCollectionDesigntimeArtifacts(
-  public val `value`: ScriptCollectionDesigntimeArtifact,
+  public val `value`: ScriptCollectionDesigntimeArtifact? = null,
 )

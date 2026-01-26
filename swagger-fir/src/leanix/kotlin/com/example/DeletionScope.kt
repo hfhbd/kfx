@@ -2,6 +2,7 @@ package com.example
 
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,29 +19,29 @@ public data class DeletionScope(
   /**
    * The scopes for fact sheet entities
    */
-  public val factSheets: List<FactSheetDeletionScope>,
+  public val factSheets: List<FactSheetDeletionScope> = emptyList(),
   /**
    * The scopes for fact sheet entities
    */
-  public val relations: List<RelationDeletionScope>,
+  public val relations: List<RelationDeletionScope> = emptyList(),
   /**
    * The scopes for fact sheet entities
    */
-  public val tags: List<TagDeletionScope>,
+  public val tags: List<TagDeletionScope> = emptyList(),
   /**
    * The scopes for subscriptions entities
    */
-  public val subscriptions: List<SubscriptionDeletionScope>,
+  public val subscriptions: List<SubscriptionDeletionScope> = emptyList(),
   /**
    * The scopes for document entities
    */
-  public val documents: List<DocumentDeletionScope>,
+  public val documents: List<DocumentDeletionScope> = emptyList(),
   /**
    * The scopes for impact entities
    */
-  public val impacts: List<ImpactDeletionScope>,
+  public val impacts: List<ImpactDeletionScope> = emptyList(),
   /**
    * The scopes for To-dos entities
    */
-  public val todos: List<TodoDeletionScope>,
+  public val todos: List<TodoDeletionScope> = emptyList(),
 )
