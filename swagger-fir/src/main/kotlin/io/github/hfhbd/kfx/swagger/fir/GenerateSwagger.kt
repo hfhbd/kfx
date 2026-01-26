@@ -205,26 +205,27 @@ private fun generate(
         }.replaceFirstChar { it.uppercaseChar() }
         )
 
-    val input = (operation.parameters.mapNotNull {
-                when (it.position) {
-                    Parameter.Position.Body -> it
-                    Parameter.Position.Query,
-                    Parameter.Position.Path,
-                    Parameter.Position.Header,
-                    null,
-                        -> null
-                }
-            } + pathParameters.filter {
-                val position = if (it.ref != null) {
-                    val name = it.ref!!.removePrefix("#/parameters/")
-                    val found = parameters[name]!!
-                    found.position
-                } else {
-                    it.position
-                }
-                position == Parameter.Position.Body
+    val input = (
+        operation.parameters.mapNotNull {
+            when (it.position) {
+                Parameter.Position.Body -> it
+                Parameter.Position.Query,
+                Parameter.Position.Path,
+                Parameter.Position.Header,
+                null,
+                -> null
             }
-            ).singleOrNull()
+        } + pathParameters.filter {
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Body
+        }
+        ).singleOrNull()
         ?.toType(IRTree.ClassName("", name), irTypes, definitions)
 
     val output = operation.responses[statusCodes.success]?.schema?.let {
@@ -253,14 +254,18 @@ private fun generate(
             (operation.consumes.firstOrNull() ?: globalConsumes.firstOrNull())?.let {
                 ContentType.fromString(it)
             }
-        } else null,
+        } else {
+            null
+        },
         success = statusCodes.success?.toIntOrNull()?.let { StatusCode.fromValue(it) },
         output = output,
         outputContentType = if (output != null) {
             (operation.produces.firstOrNull() ?: globalProduces.firstOrNull())?.let {
                 ContentType.fromString(it)
             }
-        } else null,
+        } else {
+            null
+        },
         outputHeaders = operation.responses[statusCodes.success]?.headers?.map { (name, it) ->
             it.toParameter(
                 name,
