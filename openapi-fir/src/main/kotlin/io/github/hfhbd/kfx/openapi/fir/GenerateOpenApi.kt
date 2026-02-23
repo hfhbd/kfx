@@ -149,10 +149,43 @@ private fun OpenApi.toIr(
     return irTree
 }
 
-private fun IRTree.Type.generateTypeAlias(name: String, irTypes: MutableMap<String, IRTree.Class>): IRTree.Class  {
-    when (val irType = type.toIr(null, name, irTypes)) {
+private fun Schema.generateTypeAlias(name: String, irTypes: MutableMap<String, IRTree.Class>)  {
+    val irType = toIr(null, name, irTypes)
+    when (val irType = irType) {
         is IRTree.Enum -> irTypes[name] = irType
-        else -> continue
+        is IRTree.Type.LIST -> {
+
+            IRTree.NormalClass(
+                packageName = n,
+                packageNameSuffix = "",
+                name = className.name,
+                serialName = classes.serialName,
+                namespace = classes.namespace,
+                members = mapOf(
+                    "_value" to IRTree.Member(
+                        type = found,
+                        nullable = false,
+                        serialName = null,
+                        namespace = null,
+                        documentation = null,
+                        xmlType = null,
+                        requirements = emptyList(),
+                        isOverride = false,
+                        deprecated = false,
+                    ),
+                ),
+                documentation = (found as? IRTree.Class)?.documentation,
+                isFault = false,
+                isValue = true,
+                discriminator = null,
+                allOf = null,
+                deprecated = false,
+            ),
+
+
+            irTypes[name] = irType
+        }
+        else -> return
     }
 }
 

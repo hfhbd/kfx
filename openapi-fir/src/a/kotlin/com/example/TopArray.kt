@@ -1,3 +1,9 @@
 package com.example
 
-public typealias TopArray = List<String>
+import kotlinx.serialization.Serializable
+
+@Serializable
+@JvmInline
+public value class TopArray(
+    public val value: List<String>,
+)
