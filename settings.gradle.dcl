@@ -39,6 +39,7 @@ include(":response-classes")
 include(":oauth2-runtime")
 
 include(":gradle-plugin")
+include(":gradle-feature")
 
 include(":openapi-model")
 include(":openapi-fir")
