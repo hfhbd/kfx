@@ -11,6 +11,7 @@ class ContextualDate : CodeGenTransformer {
         classes = codeGen.classes.mapTo(mutableSetOf()) {
             when (it) {
                 is CodeGenTree.Enum -> it
+
                 is CodeGenTree.NormalClass -> it.copy(
                     members = it.members.map {
                         it.copy(

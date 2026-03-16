@@ -2,13 +2,13 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentHeaders: Map&lt;String, OpenApi.Operation.Header>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
-    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
-    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Schema.toIrDefault(): IRTree.Literal?</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr( path: String, pathParameters: List&lt;OpenApi.Parameter>, componentParameters: Map&lt;String, OpenApi.Parameter>, componentHeaders: Map&lt;String, OpenApi.Operation.Header>, componentsResponses: Map&lt;String, OpenApi.Operation.Response>, irTypes: MutableMap&lt;String, IRTree.Class>, method: IRTree.Operation.HttpMethod, ): IRTree.Operation</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.toIr( openapiTransformers: Iterable&lt;OpenApiTransformer>, ): IRTree</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun Schema.OBJECT.toIr( name: String?, irTypes: MutableMap&lt;String, IRTree.Class>, ): IRTree.Type</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List&lt;IRTree.Auth></ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.toIr: IRTree</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Schema.toIrDefault: IRTree.Literal?</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.toIr: IRTree</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun Schema.OBJECT.toIr: IRTree.Type</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun toAuth: List&lt;IRTree.Auth></ID>
     <ID>LoopWithTooManyJumpStatements:GenerateOpenApi.kt:for</ID>
     <ID>TooManyFunctions:GenerateOpenApi.kt:io.github.hfhbd.kfx.openapi.fir.GenerateOpenApi.kt</ID>
   </CurrentIssues>

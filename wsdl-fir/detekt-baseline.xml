@@ -2,8 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: List&lt;WsdlTransformer>, xsdTransformers: List&lt;XsdTransformer>, import: (String) -> Schema, ): IRTree</ID>
-    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: List&lt;WsdlTransformer>, xsdTransformers: List&lt;XsdTransformer>, import: (String) -> Schema, ): IRTree</ID>
+    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr: IRTree</ID>
+    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr: IRTree</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateWsdl.kt:for</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -273,6 +273,7 @@ private fun OpenApi.Operation.toIr(
         parameters = parameters.mapNotNull {
             when (it.position) {
                 OpenApi.Parameter.Position.Cookie -> null
+
                 OpenApi.Parameter.Position.Query -> null
 
                 OpenApi.Parameter.Position.Header -> null
@@ -303,8 +304,11 @@ private fun OpenApi.Operation.toIr(
         queryParameters = parameters.mapNotNull {
             when (it.position) {
                 OpenApi.Parameter.Position.Header -> null
+
                 OpenApi.Parameter.Position.Cookie -> null
+
                 OpenApi.Parameter.Position.Path -> null
+
                 OpenApi.Parameter.Position.Query -> it.toParameter(
                     componentParameters,
                     irTypes,
@@ -326,8 +330,11 @@ private fun OpenApi.Operation.toIr(
         headers = parameters.mapNotNull {
             when (it.position) {
                 OpenApi.Parameter.Position.Query -> null
+
                 OpenApi.Parameter.Position.Cookie -> null
+
                 OpenApi.Parameter.Position.Path -> null
+
                 OpenApi.Parameter.Position.Header -> it.toParameter(componentParameters, irTypes).second
 
                 null -> it.toParameter(
@@ -421,7 +428,9 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
             ),
         )
     }
+
     is OpenApi.SecurityScheme.ApiKey -> emptyList()
+
     is OpenApi.SecurityScheme.Http -> listOf(
         IRTree.Auth.Http(
             schema = when (definition.scheme) {
@@ -435,6 +444,7 @@ private fun toAuth(name: String, definition: OpenApi.SecurityScheme): List<IRTre
     )
 
     is OpenApi.SecurityScheme.MutualTLS -> emptyList()
+
     is OpenApi.SecurityScheme.OpenIdConnect -> TODO()
 }
 
@@ -533,8 +543,11 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
     }
 
     is Schema.BOOLEAN -> default?.let { BOOLEAN(it) }
+
     is Schema.OBJECT -> null
+
     is Schema.ARRAY -> null
+
     is Schema.NUMBER -> when (format) {
         Schema.NUMBER.Format.Float -> default?.let { FLOAT(it.toFloat()) }
         Schema.NUMBER.Format.Double -> default?.let { DOUBLE(it) }
@@ -781,7 +794,9 @@ private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>
         }
 
         is IRTree.Type.Builtin -> return
+
         is IRTree.Type.LIST -> addToIr(type.list, irTypes)
+
         is IRTree.Type.MAP -> addToIr(type.value, irTypes)
     }
 }
@@ -789,6 +804,7 @@ private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>
 private val Schema.hasNoRef: Boolean
     get() = when (this) {
         is Schema.ARRAY -> items?.hasNoRef == true
+
         is Schema.BOOLEAN,
         is Schema.INT,
         is Schema.NUMBER,

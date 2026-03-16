@@ -195,7 +195,9 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
                         returnType,
                         ClassName("java.net", "URI"),
                     )
+
                     returnType != null -> returnType
+
                     else -> UNIT
                 },
             ).copy(suspending = true),

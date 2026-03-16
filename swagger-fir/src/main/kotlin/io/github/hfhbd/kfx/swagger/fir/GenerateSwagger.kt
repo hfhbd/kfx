@@ -209,6 +209,7 @@ private fun generate(
         operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> it
+
                 Parameter.Position.Query,
                 Parameter.Position.Path,
                 Parameter.Position.Header,
@@ -305,8 +306,11 @@ private fun generate(
         parameters = operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> null
+
                 Parameter.Position.Query -> null
+
                 Parameter.Position.Header -> null
+
                 Parameter.Position.Path -> it.toParameter(
                     IRTree.ClassName("", name),
                     parameters,
@@ -347,8 +351,11 @@ private fun generate(
         headers = operation.parameters.mapNotNull {
             val s = when (it.position) {
                 Parameter.Position.Body -> null
+
                 Parameter.Position.Path -> null
+
                 Parameter.Position.Query -> null
+
                 Parameter.Position.Header -> {
                     val a = it.toParameter(
                         IRTree.ClassName("", name),
@@ -390,8 +397,11 @@ private fun generate(
         queryParameters = operation.parameters.mapNotNull {
             when (it.position) {
                 Parameter.Position.Body -> null
+
                 Parameter.Position.Path -> null
+
                 Parameter.Position.Header -> null
+
                 Parameter.Position.Query -> it.toParameter(
                     IRTree.ClassName("", name),
                     parameters,
@@ -456,6 +466,7 @@ private fun Map<String, SecurityDefinition>.toAuth(): Set<IRTree.Auth> = buildSe
             )
 
             is SecurityDefinition.ApiKey -> null
+
             is SecurityDefinition.BasicAuthentication -> Http(
                 schema = Http.Schema.Basic,
                 name = name,
@@ -504,8 +515,11 @@ private fun Parameter.toParameter(
         name = found.name!!,
         type = when (found.type!!) {
             Parameter.Types.String -> IRTree.Type.Builtin.STRING
+
             Parameter.Types.Int -> IRTree.Type.Builtin.INT
+
             Parameter.Types.Boolean -> IRTree.Type.Builtin.BOOLEAN
+
             Parameter.Types.Array -> IRTree.Type.LIST(
                 list = found.items!!.toIr(
                     parentQName,
@@ -531,8 +545,11 @@ private fun Parameter.toParameter(
         name = name!!,
         type = when (type!!) {
             Parameter.Types.String -> IRTree.Type.Builtin.STRING
+
             Parameter.Types.Int -> IRTree.Type.Builtin.INT
+
             Parameter.Types.Boolean -> IRTree.Type.Builtin.BOOLEAN
+
             Parameter.Types.Array -> IRTree.Type.LIST(
                 list = items!!.toIr(
                     parentQName,
@@ -563,9 +580,13 @@ private fun Header.toParameter(
     name = headerName,
     type = when (type) {
         Header.Type.String -> IRTree.Type.Builtin.STRING
+
         Header.Type.Integer -> IRTree.Type.Builtin.INT
+
         Header.Type.Number -> IRTree.Type.Builtin.DOUBLE
+
         Header.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
+
         Header.Type.Array -> IRTree.Type.LIST(
             list = items!!.toIr(
                 parentQName,
@@ -584,6 +605,7 @@ private fun Header.toParameter(
 
 private fun Parameter.defaultValue(): IRTree.Literal? = when (val primitive = default?.jsonPrimitive) {
     null -> null
+
     else -> when (type!!) {
         Parameter.Types.String -> IRTree.Literal.STRING(primitive.content)
         Parameter.Types.Int -> IRTree.Literal.INT(primitive.int)
@@ -619,11 +641,13 @@ private fun Definition.toIr(
     )
 
     Definition.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
+
     Definition.Type.Integer -> when (format) {
         null, "int32" -> IRTree.Type.Builtin.INT
         "int64" -> IRTree.Type.Builtin.LONG
         else -> error("Not supported $format")
     }
+
     Definition.Type.Number -> when (format) {
         null, "double" -> IRTree.Type.Builtin.DOUBLE
         "float" -> IRTree.Type.Builtin.FLOAT
@@ -633,7 +657,9 @@ private fun Definition.toIr(
     Definition.Type.Object -> objectToIr(parentQName, name, irTypes, definitions)
 
     Definition.Type.String -> stringToIr(parentQName, name, irTypes)
+
     Definition.Type.File -> IRTree.Type.Builtin.FILE
+
     Definition.Type.Null -> error("Not supported $this")
 }
 

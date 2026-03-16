@@ -2,11 +2,11 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateXsd.kt:fun handleElementNormal( it: Element, prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Pair&lt;String, IRTree.Member></ID>
-    <ID>CyclomaticComplexMethod:GenerateXsd.kt:private fun toIr( schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
-    <ID>LongMethod:GenerateXsd.kt:fun createCustomWrapper( it: Element, schema: Schema, prefix: IRTree.ClassName, ref: QName?, xsdTransformers: Collection&lt;XsdTransformer>, type: IRTree.Type, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): IRTree.Class</ID>
-    <ID>LongMethod:GenerateXsd.kt:fun handleElementNormal( it: Element, prefix: IRTree.ClassName, schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, topLevel: MutableMap&lt;IRTree.ClassName, Classes>, ): Pair&lt;String, IRTree.Member></ID>
-    <ID>LongMethod:GenerateXsd.kt:private fun toIr( schema: Schema, xsdTransformers: Collection&lt;XsdTransformer>, includeMembers: Boolean, irTypes: MutableMap&lt;IRTree.ClassName, Classes>, )</ID>
+    <ID>CyclomaticComplexMethod:GenerateXsd.kt:fun handleElementNormal: Pair&lt;String, IRTree.Member></ID>
+    <ID>CyclomaticComplexMethod:GenerateXsd.kt:private fun toIr</ID>
+    <ID>LongMethod:GenerateXsd.kt:fun createCustomWrapper: IRTree.Class</ID>
+    <ID>LongMethod:GenerateXsd.kt:fun handleElementNormal: Pair&lt;String, IRTree.Member></ID>
+    <ID>LongMethod:GenerateXsd.kt:private fun toIr</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateXsd.kt:for</ID>
     <ID>TooManyFunctions:GenerateXsd.kt:io.github.hfhbd.kfx.xsd.fir.GenerateXsd.kt</ID>
   </CurrentIssues>

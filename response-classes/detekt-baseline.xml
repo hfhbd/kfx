@@ -2,6 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongMethod:ResponseClasses.kt:ResponseClasses$override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree</ID>
+    <ID>LongMethod:ResponseClasses.kt:ResponseClasses$override operator fun invoke: CodeGenTree</ID>
   </CurrentIssues>
 </SmellBaseline>

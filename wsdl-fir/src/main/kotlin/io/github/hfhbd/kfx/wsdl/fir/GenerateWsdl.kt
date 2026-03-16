@@ -191,6 +191,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
     for ((className, classes) in this@resolveMembers) {
         when (classes) {
             is Classes.TypeAlias if classes.ignore -> continue
+
             is Classes.TypeAlias -> {
                 val found = this@resolveMembers.find(classes.actual) as IRTree.NormalClass
                 add(
@@ -225,9 +226,13 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
 
             is Classes.ActualClass -> when (val forClass = classes.forClass) {
                 is IRTree.Type.Builtin -> continue
+
                 is IRTree.Type.LIST -> continue
+
                 is IRTree.Type.MAP -> continue
+
                 is IRTree.Enum -> add(forClass)
+
                 is IRTree.NormalClass -> {
                     val isFault = IRTree.ClassName(forClass.packageName, forClass.name) in resolvedFaults
                     add(

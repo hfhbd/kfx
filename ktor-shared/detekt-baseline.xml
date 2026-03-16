@@ -2,7 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:KtorTypes.kt:fun StatusCode.toHttpCode(): MemberName</ID>
-    <ID>LongMethod:ContentType.kt:fun ContentType.toKtor(): CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:KtorTypes.kt:fun StatusCode.toHttpCode: MemberName</ID>
+    <ID>LongMethod:ContentType.kt:fun ContentType.toKtor: CodeBlock</ID>
   </CurrentIssues>
 </SmellBaseline>

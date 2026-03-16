@@ -7,6 +7,7 @@ internal fun handleSealedClassMapping(irTree: IRTree, openapi: OpenApi): IRTree 
     classes = irTree.classes.mapTo(mutableSetOf()) {
         when (it) {
             is IRTree.Enum -> it
+
             is IRTree.NormalClass -> if (it.allOf != null) {
                 handleSealedClassMapping(
                     it,

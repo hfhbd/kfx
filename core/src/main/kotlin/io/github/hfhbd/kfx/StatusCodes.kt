@@ -9,10 +9,14 @@ fun Set<String>.getStatusCodes(): StatusCodes {
         setOf("default") == this -> StatusCodes(
             null,
             null,
-        ) // not possible to decide if default is a successful or an error response
+        )
+
+        // not possible to decide if default is a successful or an error response
         // No default handling, so use the first status codes
         "default" !in this -> StatusCodes(successCodes.firstOrNull(), handlebarRequestErrors.firstOrNull())
+
         successCodes.isEmpty() -> StatusCodes("default", (handlebarRequestErrors - "default").firstOrNull())
+
         else -> StatusCodes(successCodes.firstOrNull(), "default")
     }
 }
