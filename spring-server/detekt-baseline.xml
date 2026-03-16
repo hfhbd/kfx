@@ -2,9 +2,10 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
-    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun StatusCode.toHttpCode(): CodeBlock</ID>
-    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec(): FunSpec</ID>
-    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun ContentType.toMediaType(): CodeBlock</ID>
+    <ID>BlankLineBetweenWhenConditions:SpringServerGenerator.kt:SpringServerGenerator$when { success == StatusCode.Created &amp;&amp; returnType != null -> ClassName( "kotlin", "Pair", ).parameterizedBy( returnType, ClassName("java.net", "URI"), ) returnType != null -> returnType else -> UNIT }</ID>
+    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec: FunSpec</ID>
+    <ID>CyclomaticComplexMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun StatusCode.toHttpCode: CodeBlock</ID>
+    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun CodeGenTree.Operation.generateInterfaceSpec: FunSpec</ID>
+    <ID>LongMethod:SpringServerGenerator.kt:SpringServerGenerator$private fun ContentType.toMediaType: CodeBlock</ID>
   </CurrentIssues>
 </SmellBaseline>

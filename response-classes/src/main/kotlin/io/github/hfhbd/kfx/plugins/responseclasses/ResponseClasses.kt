@@ -15,6 +15,7 @@ class ResponseClasses : CodeGenTransformer {
                 is CodeGenTree.NormalClass -> it.copy(
                     isFault = false,
                 )
+
                 is CodeGenTree.Enum -> it
             }
         }

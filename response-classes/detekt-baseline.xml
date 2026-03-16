@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongMethod:ResponseClasses.kt:ResponseClasses$override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree</ID>
+    <ID>BlankLineBetweenWhenConditions:ResponseClasses.kt:ResponseClasses$when (it) { is CodeGenTree.NormalClass -> it.copy( isFault = false, ) is CodeGenTree.Enum -> it }</ID>
+    <ID>LongMethod:ResponseClasses.kt:ResponseClasses$override operator fun invoke: CodeGenTree</ID>
   </CurrentIssues>
 </SmellBaseline>

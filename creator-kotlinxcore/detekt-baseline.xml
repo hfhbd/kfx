@@ -2,6 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt:KotlinxCoreCreator$override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type</ID>
+    <ID>CyclomaticComplexMethod:KotlinxCoreCreator.kt:KotlinxCoreCreator$override fun toCodeGen: CodeGenTree.Type</ID>
   </CurrentIssues>
 </SmellBaseline>

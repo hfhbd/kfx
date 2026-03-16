@@ -2,8 +2,10 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: List&lt;WsdlTransformer>, xsdTransformers: List&lt;XsdTransformer>, import: (String) -> Schema, ): IRTree</ID>
-    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr( wsdlTransformers: List&lt;WsdlTransformer>, xsdTransformers: List&lt;XsdTransformer>, import: (String) -> Schema, ): IRTree</ID>
+    <ID>BlankLineBetweenWhenConditions:GenerateWsdl.kt:when (classes) { is Classes.TypeAlias if classes.ignore -> continue is Classes.TypeAlias -> { val found = this@resolveMembers.find(classes.actual) as IRTree.NormalClass add( IRTree.NormalClass( packageName = className.packageName, packageNameSuffix = "", name = className.name, serialName = classes.serialName, namespace = classes.namespace, members = mapOf( "_value" to IRTree.Member( type = found, nullable = false, serialName = null, namespace = null, documentation = null, xmlType = null, requirements = emptyList(), isOverride = false, deprecated = false, ), ), documentation = found.documentation, isFault = false, isValue = true, discriminator = null, allOf = null, deprecated = false, ), ) } is Classes.ActualClass -> when (val forClass = classes.forClass) { is IRTree.Type.Builtin -> continue is IRTree.Type.LIST -> continue is IRTree.Type.MAP -> continue is IRTree.Enum -> add(forClass) is IRTree.NormalClass -> { val isFault = IRTree.ClassName(forClass.packageName, forClass.name) in resolvedFaults add( forClass.copy( members = forClass.members.mapValues { (_, it) -> it.resolve(this@resolveMembers) }, isFault = isFault, ), ) } } }</ID>
+    <ID>BlankLineBetweenWhenConditions:GenerateWsdl.kt:when (val forClass = classes.forClass) { is IRTree.Type.Builtin -> continue is IRTree.Type.LIST -> continue is IRTree.Type.MAP -> continue is IRTree.Enum -> add(forClass) is IRTree.NormalClass -> { val isFault = IRTree.ClassName(forClass.packageName, forClass.name) in resolvedFaults add( forClass.copy( members = forClass.members.mapValues { (_, it) -> it.resolve(this@resolveMembers) }, isFault = isFault, ), ) } }</ID>
+    <ID>CyclomaticComplexMethod:GenerateWsdl.kt:private fun WSDL.toIr: IRTree</ID>
+    <ID>LongMethod:GenerateWsdl.kt:private fun WSDL.toIr: IRTree</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateWsdl.kt:for</ID>
   </CurrentIssues>
 </SmellBaseline>

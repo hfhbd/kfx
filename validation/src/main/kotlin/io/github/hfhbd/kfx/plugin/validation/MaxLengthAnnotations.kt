@@ -12,6 +12,7 @@ class MaxLengthAnnotations : CodeGenTransformer {
         classes = codeGen.classes.mapTo(mutableSetOf()) { codeGenClass ->
             when (codeGenClass) {
                 is CodeGenTree.Enum -> codeGenClass
+
                 is CodeGenTree.NormalClass -> {
                     val irClass = ir.classes.singleOrNull {
                         it.packageName == codeGenClass.packageName && it.name == codeGenClass.names.singleOrNull()

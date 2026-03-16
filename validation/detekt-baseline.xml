@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
   <ManuallySuppressedIssues/>
-  <CurrentIssues/>
+  <CurrentIssues>
+    <ID>BlankLineBetweenWhenConditions:MaxLengthAnnotations.kt:MaxLengthAnnotations$when (codeGenClass) { is CodeGenTree.Enum -> codeGenClass is CodeGenTree.NormalClass -> { val irClass = ir.classes.singleOrNull { it.packageName == codeGenClass.packageName &amp;&amp; it.name == codeGenClass.names.singleOrNull() } as IRTree.NormalClass? if (irClass != null) { codeGenClass.copy( members = codeGenClass.members.updateMembers(irClass), ) } else { codeGenClass } } }</ID>
+  </CurrentIssues>
 </SmellBaseline>

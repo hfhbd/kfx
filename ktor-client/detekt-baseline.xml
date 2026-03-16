@@ -2,9 +2,11 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
-    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec(): FunSpec</ID>
-    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun FunSpec.Builder.getResponse( operation: CodeGenTree.Operation, nameAllocator: NameAllocator, builderName: String, withReceiver: CodeBlock? = null, custom: FunSpec.Builder.() -> Unit = {}, )</ID>
+    <ID>BlankLineBetweenWhenConditions:KtorClientGenerator.kt:KtorClientGenerator$when (schema) { CodeGenTree.Auth.Http.Schema.Basic -> { addParameter("userName", STRING) addParameter("password", STRING) } CodeGenTree.Auth.Http.Schema.Bearer -> { addParameter("token", STRING) } is CodeGenTree.Auth.Http.Schema.Header -> { addParameter("apiKey", STRING) } }</ID>
+    <ID>BlankLineBetweenWhenConditions:KtorClientGenerator.kt:KtorClientGenerator$when (schema) { CodeGenTree.Auth.Http.Schema.Basic -> { addStatement( "%M(userName, password)", MemberName("io.ktor.client.request", "basicAuth", isExtension = true), ) } CodeGenTree.Auth.Http.Schema.Bearer -> { addStatement("%M(token)", MemberName("io.ktor.client.request", "bearerAuth", isExtension = true)) } is CodeGenTree.Auth.Http.Schema.Header -> { addStatement( "%M(%S, apiKey)", MemberName("io.ktor.client.request", "header", isExtension = true), schema.headerName, ) } }</ID>
+    <ID>CyclomaticComplexMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec: FunSpec</ID>
+    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun CodeGenTree.Operation.generateFunSpec: FunSpec</ID>
+    <ID>LongMethod:KtorClientGenerator.kt:KtorClientGenerator$private fun FunSpec.Builder.getResponse</ID>
     <ID>TooManyFunctions:KtorClientGenerator.kt:KtorClientGenerator : KotlinPoetCodeGenerator</ID>
   </CurrentIssues>
 </SmellBaseline>

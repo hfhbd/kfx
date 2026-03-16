@@ -357,6 +357,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
     for ((className, classes) in this@resolveMembers) {
         when (classes) {
             is Classes.TypeAlias if classes.ignore -> continue
+
             is Classes.TypeAlias -> {
                 val found = this@resolveMembers.find(classes.actual)
                 add(
@@ -391,9 +392,13 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
 
             is Classes.ActualClass -> when (val forClass = classes.forClass) {
                 is IRTree.Type.Builtin -> continue
+
                 is IRTree.Type.LIST -> continue
+
                 is IRTree.Type.MAP -> continue
+
                 is IRTree.Enum -> add(forClass)
+
                 is IRTree.NormalClass -> {
                     add(
                         forClass.copy(

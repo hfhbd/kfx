@@ -39,6 +39,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         for (klass in codeGenTree.classes) {
             when (klass) {
                 is CodeGenTree.Enum -> fileSpecs.add(klass.generateFile())
+
                 is CodeGenTree.NormalClass -> {
                     fileSpecs.add(klass.generateFile())
                 }

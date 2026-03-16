@@ -2,8 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
-    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Type.Builtin.toPoetType(): ClassName</ID>
-    <ID>LongMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock( nameAllocator: NameAllocator, ): CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock: CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Type.Builtin.toPoetType: ClassName</ID>
+    <ID>LongMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock: CodeBlock</ID>
   </CurrentIssues>
 </SmellBaseline>

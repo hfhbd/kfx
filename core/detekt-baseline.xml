@@ -2,7 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:ContentType.kt:ContentType.Companion$fun fromString(contentType: String): ContentType?</ID>
+    <ID>CyclomaticComplexMethod:ContentType.kt:ContentType.Companion$fun fromString: ContentType?</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.Accepted$202</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.BadRequest$400</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.Conflict$409</ID>

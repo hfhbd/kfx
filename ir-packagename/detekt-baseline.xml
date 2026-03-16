@@ -2,6 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>FunctionNaming:PackageName.kt:fun PackageName(packageName: String)</ID>
+    <ID>FunctionNaming:PackageName.kt:fun PackageName</ID>
   </CurrentIssues>
 </SmellBaseline>

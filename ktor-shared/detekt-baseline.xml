@@ -2,7 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:KtorTypes.kt:fun StatusCode.toHttpCode(): MemberName</ID>
-    <ID>LongMethod:ContentType.kt:fun ContentType.toKtor(): CodeBlock</ID>
+    <ID>BlankLineBetweenWhenConditions:KtorTypes.kt:when (this) { CodeGenTree.Type.Builtin.FILE, CodeGenTree.Type.Builtin.BYTEARRAY, -> if (read) { ClassName("kotlinx.io", "Sink") } else { ClassName("kotlinx.io", "Source") } else -> toPoetType() }</ID>
+    <ID>CyclomaticComplexMethod:KtorTypes.kt:fun StatusCode.toHttpCode: MemberName</ID>
+    <ID>LongMethod:ContentType.kt:fun ContentType.toKtor: CodeBlock</ID>
   </CurrentIssues>
 </SmellBaseline>

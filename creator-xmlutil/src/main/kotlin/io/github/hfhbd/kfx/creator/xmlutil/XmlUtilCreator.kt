@@ -20,6 +20,7 @@ class XmlUtilCreator : KotlinxCoreCreator {
         annotations = buildList {
             when (ir.xmlType) {
                 null -> {}
+
                 IRTree.XmlType.Element -> {
                     add(
                         CodeGenTree.Annotation("nl.adaptivity.xmlutil.serialization", listOf("XmlElement"), emptyMap()),

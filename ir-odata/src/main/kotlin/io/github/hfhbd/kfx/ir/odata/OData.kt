@@ -42,8 +42,11 @@ class OData : IrTransformer {
 
     private fun IRTree.Type.transform(): IRTree.Type = when (this) {
         is IRTree.Type.Builtin -> this
+
         is IRTree.Class -> transform()
+
         is IRTree.Type.LIST -> list.transform()
+
         is IRTree.Type.MAP -> copy(
             key.transform(),
             value.transform(),
@@ -61,7 +64,6 @@ class OData : IrTransformer {
 
     private fun IRTree.Class.transform(): IRTree.Class = when (this) {
         is IRTree.Enum -> copy(name = name.transform())
-
         is IRTree.NormalClass -> transform()
     }
 }

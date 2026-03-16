@@ -33,19 +33,28 @@ interface KotlinPoetCodeGenerator : CodeGenerator {
 
 fun CodeGenTree.Expression.ConstExpression.toCodeBlock(): CodeBlock = when (this) {
     is CodeGenTree.Expression.StringLiteral -> CodeBlock.of("%S", value)
+
     is CodeGenTree.Expression.IntLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.LongLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.FloatLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.DoubleLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.BooleanLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.ClassLiteral -> CodeBlock.of("%T::class", value.toKotlinPoet())
+
     is CodeGenTree.Expression.EnumLiteral -> CodeBlock.of(
         "%M",
         MemberName(qualifiedName.toKotlinPoet() as ClassName, member),
     )
 
     is CodeGenTree.Expression.ByteLiteral -> CodeBlock.of("%L", value)
+
     is CodeGenTree.Expression.CharLiteral -> CodeBlock.of("'%L'", value)
+
     is CodeGenTree.Expression.ShortLiteral -> CodeBlock.of("%L", value)
 }
 
@@ -53,6 +62,7 @@ fun CodeGenTree.Expression.toCodeBlock(
     nameAllocator: NameAllocator,
 ): CodeBlock = when (this) {
     is CodeGenTree.Expression.ConstExpression -> toCodeBlock()
+
     is CodeGenTree.Expression.UuidLiteral -> CodeBlock.of(
         "%T.parse(%S).",
         ClassName("kotlin.uuid", "Uuid"),
@@ -78,6 +88,7 @@ fun CodeGenTree.Expression.toCodeBlock(
     )
 
     is CodeGenTree.Expression.CallMember -> CodeBlock.of("%N", member.name)
+
     is CodeGenTree.Expression.Create -> {
         val block = CodeBlock.builder()
         block.add("%T(", normalClass.toPoetType())
@@ -96,14 +107,19 @@ fun CodeGenTree.Expression.toCodeBlock(
     }
 
     is CodeGenTree.Expression.Parameter -> CodeBlock.of("%L", nameAllocator[parameter.name])
+
     is CodeGenTree.Expression.Input -> CodeBlock.of("input")
+
     is CodeGenTree.Expression.Output -> CodeBlock.of("output")
+
     is CodeGenTree.Expression.Response -> CodeBlock.of("response")
+
     is CodeGenTree.Expression.Chain -> CodeBlock.of(
         "%L.%L",
         lhs.toCodeBlock(nameAllocator),
         rhs.toCodeBlock(nameAllocator),
     )
+
     is CodeGenTree.Expression.Plus -> CodeBlock.of(
         "%L + %L",
         lhs.toCodeBlock(nameAllocator),
@@ -111,6 +127,7 @@ fun CodeGenTree.Expression.toCodeBlock(
     )
 
     CodeGenTree.Expression.NullLiteral -> CodeBlock.of("null")
+
     is CodeGenTree.Expression.ListOf -> CodeBlock.Builder().apply {
         add("%M(", MemberName("kotlin.collections", "listOf", isExtension = true))
         for (expr in expressions) {
@@ -139,6 +156,7 @@ fun CodeGenTree.Expression.toCodeBlock(
     }.build()
 
     is CodeGenTree.Expression.CallStatic -> CodeBlock.of("%T", type.toPoetType())
+
     is CodeGenTree.Expression.CallFunction -> CodeBlock.Builder().apply {
         if (function.packageName != null) {
             add("%M", MemberName(function.packageName!!, function.name, isExtension = true))
@@ -152,6 +170,7 @@ fun CodeGenTree.Expression.toCodeBlock(
         }
         add(")")
     }.build()
+
     is CodeGenTree.Expression.Is -> CodeBlock.of("is %T", type.toPoetType())
 }
 
@@ -159,6 +178,7 @@ fun String.toKdoc() = CodeBlock.of("%L", replace("*/*", "* / *").replace("/*", "
 
 fun CodeGenTree.Type.toPoetType(includeGenerics: Boolean = true): TypeName = when (this) {
     is CodeGenTree.Type.Builtin -> toPoetType()
+
     is CodeGenTree.NormalClass -> if (includeGenerics && types.isNotEmpty()) {
         ClassName(packageName, names).parameterizedBy(
             types.map {
@@ -170,6 +190,7 @@ fun CodeGenTree.Type.toPoetType(includeGenerics: Boolean = true): TypeName = whe
     }
 
     is CodeGenTree.Enum -> ClassName(packageName, names)
+
     is CodeGenTree.Type.LIST -> if (includeGenerics) {
         LIST.parameterizedBy(item.toPoetType())
     } else {
@@ -207,7 +228,6 @@ fun CodeGenTree.Type.Builtin.toPoetType(): ClassName = when (this) {
     CodeGenTree.Type.Builtin.STRING -> STRING
     CodeGenTree.Type.DateType.DATE -> ClassName("kotlinx.datetime", "LocalDate")
     CodeGenTree.Type.DateType.INSTANT -> ClassName("kotlin.time", "Instant")
-
     CodeGenTree.Type.Builtin.FILE -> error("This class needs special support")
     CodeGenTree.Type.Builtin.BYTEARRAY -> BYTE_ARRAY
     CodeGenTree.Type.Builtin.BYTESTRING -> STRING
