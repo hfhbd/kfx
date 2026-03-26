@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Set environment for version
-        uses: hfhbd/actions/setup-version@main
+        uses: hfhbd/actions/setup-version@d782b0962c65733283de8488b55e37164a98c572 # main
         id: version
-      - uses: actions/checkout@v6
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         with:
           build-scan-publish: true
           build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
@@ -49,10 +49,10 @@ jobs:
 
     steps:
       - name: Set environment for version
-        uses: hfhbd/actions/setup-version@main
+        uses: hfhbd/actions/setup-version@d782b0962c65733283de8488b55e37164a98c572 # main
         id: version
-      - uses: actions/checkout@v6
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         with:
           build-scan-publish: true
           build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
