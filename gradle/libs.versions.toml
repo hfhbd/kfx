@@ -28,7 +28,7 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.32" }
 
 dokka-mermaid = { module = "com.glureau:html-mermaid-dokka-plugin", version = "0.6.0" }
 
-spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.4" }
+spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.5" }
 
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 
@@ -36,7 +36,7 @@ kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
-dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
+dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.2" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.22" }
