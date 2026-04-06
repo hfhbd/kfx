@@ -9,7 +9,7 @@ serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "0.91.3" }
 
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.1" }
-kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.2.0" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.3.0" }
 
 ktor-serialization-kotlinx-xml = { module = "io.ktor:ktor-serialization-kotlinx-xml", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
