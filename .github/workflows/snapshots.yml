@@ -17,6 +17,7 @@ jobs:
 
     environment:
       name: mavenCentral
+      deployment: false
 
     steps:
       - name: Set environment for version
@@ -46,6 +47,7 @@ jobs:
 
     environment:
       name: GPR
+      deployment: false
 
     steps:
       - name: Set environment for version
