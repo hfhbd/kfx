@@ -60,7 +60,6 @@ testing.suites {
         dependencies {
             implementation(testFixtures(project()))
             implementation(gradleTestKit())
-            implementation(testFixtures(projects.openapiModel))
         }
 
         gradlePlugin.testSourceSets(sources)
