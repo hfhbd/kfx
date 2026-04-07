@@ -24,7 +24,11 @@ jobs:
           build-scan-terms-of-use-agree: 'yes'
 
       - name: Build with Gradle
-        run: ./gradlew build integrationTest
+        run: ./gradlew build
+      - name: Build with Gradle
+        run: ./gradlew :gradle-plugin:integrationTest
+      - name: Build with Gradle
+        run: ./gradlew :gradle-feature:integrationTest
 
       - name: Detekt
         run: ./gradlew :mergeDetektSarif

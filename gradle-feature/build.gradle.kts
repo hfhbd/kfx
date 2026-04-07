@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.*
+
 plugins {
     id("java-gradle-plugin")
     kotlin("jvm")
@@ -13,12 +15,7 @@ java {
 }
 
 dependencies {
-    api(libs.kotlin.gradle.plugin.api)
-
-    compileOnly(projects.wsdlFir)
-    compileOnly(projects.swaggerFir)
-    compileOnly(projects.irPackagename)
-    compileOnly(projects.openapiFir)
+    implementation(projects.gradlePlugin)
 }
 
 tasks.validatePlugins {
@@ -28,7 +25,7 @@ tasks.validatePlugins {
 configurations.configureEach {
    if (isCanBeConsumed) {
        attributes {
-           attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("8.11"))
+           attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("9.5.0"))
        }
    }
 }
@@ -38,17 +35,6 @@ configurations.archives {
     attributes {
         attribute(Attribute.of("deprecated", String::class.java), "true")
     }
-}
-
-val storeVersion by tasks.registering(StoreVersion::class)
-sourceSets.main {
-    kotlin.srcDir(storeVersion)
-}
-
-gradlePlugin.plugins.register("io.github.hfhbd.kfx") {
-    implementationClass = "io.github.hfhbd.kfx.KfxPlugin"
-    displayName = "kfx Gradle Plugin"
-    description = "kfx Gradle Plugin"
 }
 
 testing.suites {

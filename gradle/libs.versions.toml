@@ -31,6 +31,7 @@ dokka-mermaid = { module = "com.glureau:html-mermaid-dokka-plugin", version = "0
 spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.5" }
 
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
+kotlin-gradle-plugin-impl = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
