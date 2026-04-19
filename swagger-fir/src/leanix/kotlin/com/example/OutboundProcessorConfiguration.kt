@@ -7,6 +7,7 @@ import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 @SerialName(value = "OutboundProcessorConfiguration")
@@ -34,7 +35,7 @@ public data class OutboundProcessorConfiguration(
   /**
    * A list of facet filters to limit which Fact Sheets are considered for output
    */
-  public val scope: Unit,
+  public val scope: JsonObject,
   /**
    * The list of processors used to evaluate the LDIF data
    */

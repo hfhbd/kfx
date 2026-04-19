@@ -491,7 +491,8 @@ private val OAuth2Token = IRTree.NormalClass(
 
 private fun Definition.isUnit(): Boolean {
     val additionalProperties = additionalProperties
-    return type == Definition.Type.Object && properties.isEmpty() && additionalProperties == null && ref == null && allOf.isEmpty()
+    return type == Definition.Type.Object && properties.isEmpty() && additionalProperties == null && ref == null &&
+        allOf.isEmpty()
 }
 
 private fun Parameter.toParameter(
@@ -749,7 +750,7 @@ private fun Definition.objectToIr(
 ): IRTree.Type {
     val qname = ref?.toIRTreeClassName() ?: toIRTreeClassName(parentQName, name)
 
-    if (additionalProperties != null && properties.isNotEmpty()) {
+    if (additionalProperties != null && properties.isEmpty()) {
         return handleAdditionalProperties(parentQName, name, irTypes, definitions)
     }
 
