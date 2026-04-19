@@ -59,19 +59,13 @@ private fun Swagger.toIr(
 ): IRTree {
     val irTypes = mutableMapOf<IRTree.ClassName, IRTree.Class>()
     for ((fullName, type) in definitions) {
-        when (type.type) {
-            Definition.Type.Object -> {
-                val ir = type.objectToIr(null, fullName, irTypes, definitions)
+        val ir = type.toIr(parentQName = null, name = fullName, irTypes = irTypes, definitions)
+        when (ir) {
+            is IRTree.Class -> {
                 irTypes[IRTree.ClassName(ir.packageName, ir.name)] = ir
             }
 
-            Definition.Type.Array,
-            Definition.Type.Boolean,
-            Definition.Type.Integer,
-            Definition.Type.Number,
-            Definition.Type.String,
-            Definition.Type.Null, Definition.Type.File,
-            -> continue
+            else -> {}
         }
     }
 
@@ -497,10 +491,8 @@ private val OAuth2Token = IRTree.NormalClass(
 
 private fun Definition.isUnit(): Boolean {
     val additionalProperties = additionalProperties
-    return type == Definition.Type.Object &&
-        properties.isEmpty() &&
-        (additionalProperties == null || additionalProperties.isUnit()) &&
-        ref == null && allOf.isEmpty()
+    return type == Definition.Type.Object && properties.isEmpty() && additionalProperties == null && ref == null &&
+        allOf.isEmpty()
 }
 
 private fun Parameter.toParameter(
@@ -706,13 +698,62 @@ private fun toIRTreeClassName(parentQName: IRTree.ClassName?, name: String?): IR
 )
     ?: name!!.toIRTreeClassName()
 
+private fun Definition.handleAdditionalProperties(
+    parentQName: IRTree.ClassName?,
+    name: String?,
+    irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
+    definitions: Map<String, Definition>,
+): IRTree.Type = when (additionalProperties!!.type) {
+    Definition.Type.Array -> IRTree.Type.MAP(
+        IRTree.Type.Builtin.STRING,
+        items?.toIr(parentQName, name, irTypes, definitions) ?: irTypes.find(ref!!),
+    )
+
+    Definition.Type.Boolean -> IRTree.Type.MAP(IRTree.Type.Builtin.STRING, IRTree.Type.Builtin.BOOLEAN)
+
+    Definition.Type.Integer -> IRTree.Type.MAP(
+        IRTree.Type.Builtin.STRING,
+        when (format) {
+            null, "int32" -> IRTree.Type.Builtin.INT
+            "int64" -> IRTree.Type.Builtin.LONG
+            else -> error("Not supported $format")
+        },
+    )
+
+    Definition.Type.Number -> IRTree.Type.MAP(
+        IRTree.Type.Builtin.STRING,
+        when (format) {
+            null, "double" -> IRTree.Type.Builtin.DOUBLE
+            "float" -> IRTree.Type.Builtin.FLOAT
+            else -> error("Not supported $format")
+        },
+    )
+
+    Definition.Type.Object -> if (this.ref == null) {
+        IRTree.Type.Unknown
+    } else {
+        IRTree.Type.MAP(IRTree.Type.Builtin.STRING, objectToIr(parentQName, name, irTypes, definitions))
+    }
+
+    Definition.Type.String -> IRTree.Type.MAP(IRTree.Type.Builtin.STRING, stringToIr(parentQName, name, irTypes))
+
+    Definition.Type.File -> IRTree.Type.MAP(IRTree.Type.Builtin.STRING, IRTree.Type.Builtin.FILE)
+
+    Definition.Type.Null -> error("Not supported $this")
+}
+
 private fun Definition.objectToIr(
     parentQName: IRTree.ClassName?,
     name: String?,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     definitions: Map<String, Definition>,
-): IRTree.NormalClass {
+): IRTree.Type {
     val qname = ref?.toIRTreeClassName() ?: toIRTreeClassName(parentQName, name)
+
+    if (additionalProperties != null && properties.isEmpty()) {
+        return handleAdditionalProperties(parentQName, name, irTypes, definitions)
+    }
+
     val members = buildMap {
         var sealedDiscriminator: String? = null
         for (allOf in allOf) {
@@ -726,8 +767,11 @@ private fun Definition.objectToIr(
                             irTypes,
                             mapOf(),
                         ).also {
+                            it as IRTree.NormalClass
                             irTypes[IRTree.ClassName(it.packageName, it.name)] = it
                         }
+
+                allOfClass as IRTree.NormalClass
 
                 sealedDiscriminator = allOfClass.discriminator
 

@@ -62,7 +62,10 @@ interface KotlinxCoreCreator : CodeGenCreator {
         IRTree.Type.Builtin.BYTE -> Builtin.BYTE
         IRTree.Type.Builtin.CHAR -> Builtin.CHAR
         IRTree.Type.Builtin.SHORT -> Builtin.SHORT
+        IRTree.Type.Unknown -> unknown()
     }
+
+    fun unknown(): CodeGenTree.Type
 
     override fun toCodeGen(ir: IRTree.Class): CodeGenTree.Class = when (ir) {
         is IRTree.Enum -> toCodeGen(ir)

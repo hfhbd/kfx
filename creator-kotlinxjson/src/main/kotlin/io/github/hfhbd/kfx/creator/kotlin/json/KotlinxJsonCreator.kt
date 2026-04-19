@@ -50,4 +50,10 @@ class KotlinxJsonCreator : KotlinxCoreCreator {
         isSealed = ir.discriminator != null,
         superInterfaces = listOfNotNull(ir.allOf?.let { toCodeGen(it) }),
     )
+
+    override fun unknown(): CodeGenTree.Type = CodeGenTree.NormalClass(
+        packageName = "kotlinx.serialization.json",
+        names = listOf("JsonObject"),
+        provided = true,
+    )
 }

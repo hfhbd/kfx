@@ -3,11 +3,11 @@ package com.example
 import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Represents a LeanIX Data Interchange Format (LDIF)
@@ -60,7 +60,7 @@ public data class LeanIxDataInterchangeFormat(
   /**
    * Global variables accessible from all data processors.
    */
-  public val customFields: Unit? = null,
+  public val customFields: JsonObject? = null,
   /**
    * The list of content changes that are applied within this LDIF
    */

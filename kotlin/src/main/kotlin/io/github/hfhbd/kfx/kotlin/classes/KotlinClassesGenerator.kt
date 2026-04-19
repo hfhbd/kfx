@@ -36,7 +36,9 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
 
     override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> {
         val fileSpecs = mutableListOf<FileSpec>()
-        for (klass in codeGenTree.classes) {
+        for (klass in codeGenTree.classes.filter {
+            !it.provided
+        }) {
             when (klass) {
                 is CodeGenTree.Enum -> fileSpecs.add(klass.generateFile())
 
@@ -79,6 +81,13 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                                 CodeBlock.of(
                                     "%M()",
                                     MemberName("kotlin.collections", "emptyList", isExtension = true),
+                                ),
+                            )
+
+                            is CodeGenTree.Type.MAP -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptyMap", isExtension = true),
                                 ),
                             )
 
@@ -149,6 +158,13 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                                 ),
                             )
 
+                            is CodeGenTree.Type.MAP -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptyMap", isExtension = true),
+                                ),
+                            )
+
                             else -> defaultValue("null")
                         }
                     }
@@ -181,7 +197,13 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         custom: PropertySpec.Builder.() -> Unit = {},
     ): TypeName {
         val type = member.type.toPoetType().copy(
-            nullable = if (member.type is CodeGenTree.Type.LIST) false else member.nullable,
+            nullable = if (member.type is CodeGenTree.Type.LIST ||
+                member.type is CodeGenTree.Type.MAP
+            ) {
+                false
+            } else {
+                member.nullable
+            },
         )
 
         val prop = PropertySpec.builder(name = member.name, type = type)

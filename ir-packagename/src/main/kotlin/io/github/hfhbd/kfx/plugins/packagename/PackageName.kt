@@ -29,6 +29,8 @@ fun PackageName(packageName: String) = IrTransformer { irTree ->
 private fun IRTree.Type.changePackageName(packageName: String): IRTree.Type = when (this) {
     is IRTree.Type.Builtin -> this
 
+    is IRTree.Type.Unknown -> this
+
     is IRTree.Enum -> copy(
         packageName = if (this.packageName == "") packageName else this.packageName,
     )

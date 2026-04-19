@@ -3,6 +3,7 @@ package com.jira
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.Map
+import kotlin.collections.emptyMap
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +11,7 @@ import kotlinx.serialization.Serializable
 @SerialName(value = "UserJsonBean")
 public data class UserJsonBean(
   public val active: Boolean? = null,
-  public val avatarUrls: Map<String, String>? = null,
+  public val avatarUrls: Map<String, String> = emptyMap(),
   public val displayName: String? = null,
   public val emailAddress: String? = null,
   public val key: String? = null,

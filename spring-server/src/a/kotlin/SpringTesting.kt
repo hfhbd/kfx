@@ -1,5 +1,4 @@
 import kotlin.test.Test
-import testOpenApi
 
 class SpringTesting {
     @Test

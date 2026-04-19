@@ -75,6 +75,12 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
 
         @Serializable
         data class MAP(val key: Type, val value: Type) : Type
+
+        /**
+         * Like JsonObject when using kotlinx-serialization-json
+         */
+        @Serializable
+        data object Unknown : Type
     }
 
     @Serializable

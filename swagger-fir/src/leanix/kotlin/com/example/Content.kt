@@ -1,9 +1,9 @@
 package com.example
 
 import kotlin.String
-import kotlin.Unit
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * An object containing all necessary information about changes that are going to be made by the processors
@@ -22,5 +22,5 @@ public data class Content(
   /**
    * Processor specific fields that correspond to changes
    */
-  public val `data`: Unit,
+  public val `data`: JsonObject,
 )
