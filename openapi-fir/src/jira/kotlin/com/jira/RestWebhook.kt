@@ -5,6 +5,7 @@ import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.emptyList
+import kotlin.collections.emptyMap
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,7 +13,7 @@ import kotlinx.serialization.Serializable
 @SerialName(value = "RestWebhook")
 public data class RestWebhook(
   public val active: Boolean? = null,
-  public val configuration: Map<String, String>? = null,
+  public val configuration: Map<String, String> = emptyMap(),
   public val credentials: RestWebhookCredentials? = null,
   public val empty: Boolean? = null,
   public val events: List<String> = emptyList(),

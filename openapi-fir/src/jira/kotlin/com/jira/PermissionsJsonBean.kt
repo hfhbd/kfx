@@ -2,6 +2,7 @@ package com.jira
 
 import kotlin.String
 import kotlin.collections.Map
+import kotlin.collections.emptyMap
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,5 +12,5 @@ public data class PermissionsJsonBean(
   /**
    * A map of permission keys to permission objects.
    */
-  public val permissions: Map<String, PermissionJsonBean>? = null,
+  public val permissions: Map<String, PermissionJsonBean> = emptyMap(),
 )
