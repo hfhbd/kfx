@@ -4,11 +4,11 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 @SerialName(value = "OutboundProcessor")
@@ -36,7 +36,7 @@ public data class OutboundProcessor(
   /**
    * A list of facet filters which limit which Fact Sheets are considered for output
    */
-  public val scope: Unit? = null,
+  public val scope: JsonObject? = null,
   /**
    * A list of fields that are required to get from Fact Sheet
    */

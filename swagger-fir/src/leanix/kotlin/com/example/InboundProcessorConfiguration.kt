@@ -7,6 +7,7 @@ import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 @SerialName(value = "InboundProcessorConfiguration")
@@ -42,7 +43,7 @@ public data class InboundProcessorConfiguration(
   /**
    * The global variable definition used to define default values
    */
-  public val variables: Unit? = null,
+  public val variables: JsonObject? = null,
   /**
    * Definition of the provider which provides the inbound LDIF.
    */
