@@ -3,6 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:GenerateXsd.kt:fun handleElementNormal: Pair&lt;String, IRTree.Member></ID>
+    <ID>CyclomaticComplexMethod:GenerateXsd.kt:private fun Map&lt;IRTree.ClassName, Classes>.resolveMembers: Set&lt;IRTree.Class></ID>
     <ID>CyclomaticComplexMethod:GenerateXsd.kt:private fun toIr</ID>
     <ID>LongMethod:GenerateXsd.kt:fun createCustomWrapper: IRTree.Class</ID>
     <ID>LongMethod:GenerateXsd.kt:fun handleElementNormal: Pair&lt;String, IRTree.Member></ID>

@@ -660,6 +660,60 @@ private fun String.asClassName(): IRTree.ClassName = if ("." in this) {
     IRTree.ClassName("", replaceFirstChar { it.uppercaseChar() })
 }
 
+private fun Schema.OBJECT.handleAdditionalProperties(
+    name: String?,
+    irTypes: MutableMap<String, IRTree.Class>,
+): IRTree.Type {
+    val irType = when (val additionalPropertiesSchema = additionalPropertiesSchema!!) {
+        is Schema.ARRAY -> IRTree.Type.MAP(
+            IRTree.Type.Builtin.STRING,
+            additionalPropertiesSchema.toIr(
+                parentName = name,
+                name = null,
+                irTypes = irTypes,
+            ),
+        )
+
+        is Schema.BOOLEAN -> IRTree.Type.MAP(
+            IRTree.Type.Builtin.STRING,
+            additionalPropertiesSchema.toIr(),
+        )
+
+        is Schema.INT -> IRTree.Type.MAP(
+            IRTree.Type.Builtin.STRING,
+            additionalPropertiesSchema.toIr(),
+        )
+
+        is Schema.NUMBER -> IRTree.Type.MAP(
+            IRTree.Type.Builtin.STRING,
+            additionalPropertiesSchema.toIr(),
+        )
+
+        is Schema.OBJECT -> if (additionalPropertiesSchema.ref == null) {
+            IRTree.Type.Unknown
+        } else {
+            IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(
+                    name = name,
+                    irTypes,
+                ),
+            )
+        }
+
+        is Schema.STRING -> IRTree.Type.MAP(
+            IRTree.Type.Builtin.STRING,
+            additionalPropertiesSchema.toIr(
+                parentName = null,
+                name = name,
+                irTypes,
+            ),
+        )
+    }
+
+    return irType
+}
+
 private fun Schema.OBJECT.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
@@ -667,54 +721,7 @@ private fun Schema.OBJECT.toIr(
     val resolvedRef = asClassName(name)
     val discriminator = discriminator?.propertyName
     if (additionalPropertiesSchema != null && properties.isEmpty()) {
-        val irType = when (val additionalPropertiesSchema = additionalPropertiesSchema!!) {
-            is Schema.ARRAY -> IRTree.Type.MAP(
-                IRTree.Type.Builtin.STRING,
-                additionalPropertiesSchema.toIr(
-                    parentName = name,
-                    name = null,
-                    irTypes = irTypes,
-                ),
-            )
-
-            is Schema.BOOLEAN -> IRTree.Type.MAP(
-                IRTree.Type.Builtin.STRING,
-                additionalPropertiesSchema.toIr(),
-            )
-
-            is Schema.INT -> IRTree.Type.MAP(
-                IRTree.Type.Builtin.STRING,
-                additionalPropertiesSchema.toIr(),
-            )
-
-            is Schema.NUMBER -> IRTree.Type.MAP(
-                IRTree.Type.Builtin.STRING,
-                additionalPropertiesSchema.toIr(),
-            )
-
-            is Schema.OBJECT -> if (additionalPropertiesSchema.ref == null) {
-                IRTree.Type.Unknown
-            } else {
-                IRTree.Type.MAP(
-                    IRTree.Type.Builtin.STRING,
-                    additionalPropertiesSchema.toIr(
-                        name = name,
-                        irTypes,
-                    ),
-                )
-            }
-
-            is Schema.STRING -> IRTree.Type.MAP(
-                IRTree.Type.Builtin.STRING,
-                additionalPropertiesSchema.toIr(
-                    parentName = null,
-                    name = name,
-                    irTypes,
-                ),
-            )
-        }
-
-        return irType
+        return handleAdditionalProperties(name, irTypes)
     } else {
         return IRTree.NormalClass(
             packageName = resolvedRef.packageName,
