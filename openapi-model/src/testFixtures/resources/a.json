@@ -350,12 +350,12 @@
                     "intEnum": {
                         "$ref": "#/components/schemas/com.example.TestEnumInt"
                     },
-                  "topArr": {
-                    "$ref": "#/components/schemas/com.example.TopArray"
-                  },
-                  "topIntEnumArr": {
-                    "$ref": "#/components/schemas/com.example.TopIntEnumArray"
-                  }
+                    "topArr": {
+                        "$ref": "#/components/schemas/com.example.TopArray"
+                    },
+                    "topIntEnumArr": {
+                        "$ref": "#/components/schemas/com.example.TopIntEnumArray"
+                    }
                 },
                 "description": "Foo input sample"
             },
@@ -401,13 +401,6 @@
                 "enum": [
                     1,
                     2
-                ]
-            },
-            "com.example.TestEnumInt": {
-                "type": "integer",
-                "enum": [
-                    "1",
-                    "2"
                 ]
             },
             "com.example.TopArray": {
