@@ -667,14 +667,54 @@ private fun Schema.OBJECT.toIr(
     val resolvedRef = asClassName(name)
     val discriminator = discriminator?.propertyName
     if (additionalPropertiesSchema != null && properties.isEmpty()) {
-        return IRTree.Type.MAP(
-            key = IRTree.Type.Builtin.STRING,
-            value = additionalPropertiesSchema!!.toIr(
-                parentName = resolvedRef.name,
-                name = resolvedRef.name,
-                irTypes = irTypes,
-            ),
-        )
+        val irType = when (val additionalPropertiesSchema = additionalPropertiesSchema!!) {
+            is Schema.ARRAY -> IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(
+                    parentName = name,
+                    name = null,
+                    irTypes = irTypes,
+                ),
+            )
+
+            is Schema.BOOLEAN -> IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(),
+            )
+
+            is Schema.INT -> IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(),
+            )
+
+            is Schema.NUMBER -> IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(),
+            )
+
+            is Schema.OBJECT -> if (additionalPropertiesSchema.ref == null) {
+                IRTree.Type.Unknown
+            } else {
+                IRTree.Type.MAP(
+                    IRTree.Type.Builtin.STRING,
+                    additionalPropertiesSchema.toIr(
+                        name = name,
+                        irTypes,
+                    ),
+                )
+            }
+
+            is Schema.STRING -> IRTree.Type.MAP(
+                IRTree.Type.Builtin.STRING,
+                additionalPropertiesSchema.toIr(
+                    parentName = null,
+                    name = name,
+                    irTypes,
+                ),
+            )
+        }
+
+        return irType
     } else {
         return IRTree.NormalClass(
             packageName = resolvedRef.packageName,
@@ -798,6 +838,8 @@ private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>
         is IRTree.Type.LIST -> addToIr(type.list, irTypes)
 
         is IRTree.Type.MAP -> addToIr(type.value, irTypes)
+
+        IRTree.Type.Unknown -> return
     }
 }
 

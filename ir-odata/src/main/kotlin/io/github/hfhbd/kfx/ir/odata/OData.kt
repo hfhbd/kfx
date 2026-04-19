@@ -43,6 +43,8 @@ class OData : IrTransformer {
     private fun IRTree.Type.transform(): IRTree.Type = when (this) {
         is IRTree.Type.Builtin -> this
 
+        is IRTree.Type.Unknown -> this
+
         is IRTree.Class -> transform()
 
         is IRTree.Type.LIST -> list.transform()

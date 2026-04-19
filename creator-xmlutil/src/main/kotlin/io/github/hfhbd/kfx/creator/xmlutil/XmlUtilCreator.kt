@@ -102,4 +102,10 @@ class XmlUtilCreator : KotlinxCoreCreator {
         functions = emptyList(),
         superInterfaces = listOfNotNull(ir.allOf?.let { toCodeGen(it) }),
     )
+
+    override fun unknown(): CodeGenTree.Type = CodeGenTree.NormalClass(
+        packageName = "nl.adaptivity.xmlutil.util",
+        names = listOf("CompactFragment"),
+        provided = true,
+    )
 }

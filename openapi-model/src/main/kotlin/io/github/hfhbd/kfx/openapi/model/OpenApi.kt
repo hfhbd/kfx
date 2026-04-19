@@ -11,6 +11,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.KeepGeneratedSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
@@ -18,6 +19,7 @@ import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 
 @KeepGeneratedSerializer
@@ -229,9 +231,19 @@ public data class OpenApi(
                 override val deprecated: Boolean = false,
                 override val readOnly: Boolean = false,
             ) : Schema {
-                val additionalPropertiesSchema
+                val additionalPropertiesSchema: Schema?
                     get() = if (additionalProperties == null) {
                         null
+                    } else if (additionalProperties is JsonPrimitive) {
+                        val additionalProperties = json.decodeFromJsonElement(
+                            Boolean.serializer(),
+                            additionalProperties,
+                        )
+                        if (additionalProperties) {
+                            OBJECT()
+                        } else {
+                            null
+                        }
                     } else {
                         json.decodeFromJsonElement(
                             Schema.serializer(),
@@ -317,6 +329,7 @@ public data class OpenApi(
                 val default: Long? = null,
                 val minimum: Long? = null,
                 val maximum: Long? = null,
+                val enum: List<Long?> = emptyList(),
                 override val extensions: Map<String, JsonElement> = emptyMap(),
                 val example: Long? = null,
                 override val deprecated: Boolean = false,

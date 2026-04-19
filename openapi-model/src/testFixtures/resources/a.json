@@ -204,6 +204,30 @@
                                 }
                             }
                         }
+                    },
+                    "unknown": {
+                        "additionalProperties": true
+                    },
+                    "mapStringString": {
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "mapStringInt": {
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    "mapStringObject": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/com.example.TestEnum"
+                        }
+                    },
+                    "unknownObject": {
+                        "additionalProperties": {
+                            "type": "object"
+                        }
                     }
                 },
                 "description": "Foo input sample"

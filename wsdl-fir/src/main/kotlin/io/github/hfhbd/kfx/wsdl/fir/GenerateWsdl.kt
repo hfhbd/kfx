@@ -226,6 +226,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
 
             is Classes.ActualClass -> when (val forClass = classes.forClass) {
                 is IRTree.Type.Builtin -> continue
+                IRTree.Type.Unknown -> continue
 
                 is IRTree.Type.LIST -> continue
 

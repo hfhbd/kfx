@@ -103,6 +103,8 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         }
 
         val innerClasses: List<Class>
+
+        val provided: Boolean
     }
 
     @Serializable
@@ -130,6 +132,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val superClassName: ClassName? = null,
         val superInterfaces: List<ClassName> = emptyList(),
         override val innerClasses: List<Class> = emptyList(),
+        override val provided: Boolean = false,
     ) : Class
 
     @Serializable
@@ -188,6 +191,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         override val documentation: String? = null,
         override val annotations: List<Annotation> = emptyList(),
         override val innerClasses: List<Class> = emptyList(),
+        override val provided: Boolean = false,
     ) : Class {
         @Serializable
         data class Value(
