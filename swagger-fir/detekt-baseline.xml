@@ -2,7 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>BinaryExpressionWrapping:GenerateSwagger.kt:type == Definition.Type.Object &amp;&amp; properties.isEmpty() &amp;&amp; additionalProperties == null &amp;&amp; ref == null &amp;&amp; allOf.isEmpty()</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.handleAdditionalProperties: IRTree.Type</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.objectToIr: IRTree.Type</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.toIr: IRTree.Type</ID>
@@ -11,7 +10,6 @@
     <ID>LongMethod:GenerateSwagger.kt:private fun Definition.objectToIr: IRTree.Type</ID>
     <ID>LongMethod:GenerateSwagger.kt:private fun Swagger.toIr: IRTree</ID>
     <ID>LongMethod:GenerateSwagger.kt:private fun generate: IRTree.Operation</ID>
-    <ID>MaxLineLength:GenerateSwagger.kt:return type == Definition.Type.Object &amp;&amp; properties.isEmpty() &amp;&amp; additionalProperties == null &amp;&amp; ref == null &amp;&amp; allOf.isEmpty()</ID>
     <ID>TooManyFunctions:GenerateSwagger.kt:io.github.hfhbd.kfx.swagger.fir.GenerateSwagger.kt</ID>
   </CurrentIssues>
 </SmellBaseline>
