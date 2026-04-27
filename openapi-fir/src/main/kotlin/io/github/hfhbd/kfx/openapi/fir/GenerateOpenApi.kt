@@ -91,7 +91,10 @@ private fun OpenApi.toIr(
             is Schema.INT,
             is Schema.NUMBER,
             is Schema.STRING -> {
-                type.generateTypeAlias(name, irTypes)
+                when (type.toIr(null, name, irTypes)) {
+                    is IRTree.Enum -> error("Should be handled before!")
+                    else -> continue
+                }
             }
         }
     }
@@ -138,73 +141,6 @@ private fun OpenApi.toIr(
         irTree = openapiTransformer(this, irTree)
     }
     return irTree
-}
-
-private fun Schema.generateTypeAlias(name: String, irTypes: MutableMap<String, IRTree.Class>)  {
-    val irType = toIr(null, name, irTypes)
-    when (val irType = irType) {
-        is IRTree.Enum -> return
-        is IRTree.Type.LIST -> {
-
-            val typealiasClass = IRTree.NormalClass(
-                packageName = irType.,
-                packageNameSuffix = "",
-                name = className.name,
-                serialName = classes.serialName,
-                namespace = classes.namespace,
-                members = mapOf(
-                    "_value" to IRTree.Member(
-                        type = found,
-                        nullable = false,
-                        serialName = null,
-                        namespace = null,
-                        documentation = null,
-                        xmlType = null,
-                        requirements = emptyList(),
-                        isOverride = false,
-                        deprecated = false,
-                    ),
-                ),
-                documentation = (found as? IRTree.Class)?.documentation,
-                isFault = false,
-                isValue = true,
-                discriminator = null,
-                allOf = null,
-                deprecated = false,
-            )
-
-
-            irTypes[name] = irType
-        }
-        else -> {
-            IRTree.NormalClass(
-                packageName = irType.,
-                packageNameSuffix = "",
-                name = className.name,
-                serialName = classes.serialName,
-                namespace = classes.namespace,
-                members = mapOf(
-                    "_value" to IRTree.Member(
-                        type = found,
-                        nullable = false,
-                        serialName = null,
-                        namespace = null,
-                        documentation = null,
-                        xmlType = null,
-                        requirements = emptyList(),
-                        isOverride = false,
-                        deprecated = false,
-                    ),
-                ),
-                documentation = (found as? IRTree.Class)?.documentation,
-                isFault = false,
-                isValue = true,
-                discriminator = null,
-                allOf = null,
-                deprecated = false,
-            )
-        }
-    }
 }
 
 private fun OpenApi.Operation.toIr(
@@ -734,7 +670,11 @@ private fun Schema.OBJECT.handleAdditionalProperties(
 
         is Schema.INT -> IRTree.Type.MAP(
             IRTree.Type.Builtin.STRING,
-            additionalPropertiesSchema.toIr(),
+            additionalPropertiesSchema.toIr(
+                parentName = name,
+                name = null,
+                irTypes = irTypes,
+            ),
         )
 
         is Schema.NUMBER -> IRTree.Type.MAP(

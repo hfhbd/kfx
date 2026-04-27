@@ -348,7 +348,7 @@
                         }
                     },
                     "intEnum": {
-                        "$ref:": "#/components/schemas/com.example.TestEnumInt"
+                        "$ref": "#/components/schemas/com.example.TestEnumInt"
                     }
                 },
                 "description": "Foo input sample"
@@ -393,8 +393,8 @@
             "com.example.TestEnumInt": {
                 "type": "integer",
                 "enum": [
-                    "1",
-                    "2"
+                    1,
+                    2
                 ]
             }
         },
