@@ -40,7 +40,9 @@ fun generateOpenApi(
     outputDirectory: Path,
     firTransformers: Iterable<OpenApiTransformer> = ServiceLoader.load(OpenApiTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
-    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
+    codeGenCreator: CodeGenCreator = requireNotNull(ServiceLoader.load(CodeGenCreator::class.java).singleOrNull()) {
+        "Please specify at least one code generator."
+    },
     codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
 ) {
