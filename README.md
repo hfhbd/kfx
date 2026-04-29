@@ -26,6 +26,8 @@ Code generators:
 ## Gradle plugin
 
 ```kotlin
+import io.github.hfhbd.kfx.openapi.OpenApi
+
 plugins {
     id("io.github.hfhbd.kfx") version "LATEST"
 }
