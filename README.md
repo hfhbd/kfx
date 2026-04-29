@@ -33,7 +33,7 @@ plugins {
 }
 
 kfx {
-    register("myApi", OpenApi::class) {
+    register<OpenApi>("myApi") {
         files.from(file("myApi.json"))
         dependencies {
             compiler(kotlinClasses())
