@@ -400,9 +400,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
         } else {
             val nullableOutput = notFound
             if (output != null && nullableOutput) {
-                function.beginControlFlow(
-                    "if (response.status.value == 404)",
-                )
+                val httpStatusCode = MemberName("io.ktor.http", "HttpStatusCode")
+                function.beginControlFlow("if (response.status == %M.NotFound)", httpStatusCode)
                 function.addStatement("return null")
                 function.endControlFlow()
             }
