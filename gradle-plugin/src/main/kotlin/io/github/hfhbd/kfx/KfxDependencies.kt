@@ -9,9 +9,9 @@ interface KfxDependencies : Dependencies {
 
     fun kotlinClasses(): ExternalModuleDependency = dependencyFactory.create("$GROUP:kotlin:$VERSION")
 
-    fun ktorClient(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-client:$VERSION")
+    fun ktorClient(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-client-core:$VERSION")
 
-    fun ktorServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-server:$VERSION")
+    fun ktorServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:ktor-server-core:$VERSION")
 
     fun springServer(): ExternalModuleDependency = dependencyFactory.create("$GROUP:spring-server:$VERSION")
 
