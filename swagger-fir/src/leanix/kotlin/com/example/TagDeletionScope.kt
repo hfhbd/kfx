@@ -5,14 +5,12 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria for selection of tags.
  */
 @Serializable
-@SerialName(value = "TagDeletionScope")
 public data class TagDeletionScope(
   /**
    * A list of tag and tag group combinations.

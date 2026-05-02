@@ -1,11 +1,9 @@
 package com.example
 
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "StatusResponse")
 public data class StatusResponse(
   /**
    * The ID of the synchronization run

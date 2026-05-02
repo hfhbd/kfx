@@ -41,7 +41,7 @@ class KotlinxCoreCreator : CodeGenTransformer {
                             annotations = buildList {
                                 addAll(it.annotations)
                                 val serialName = it.ir?.serialName
-                                if (serialName != null) {
+                                if (serialName != null && serialName != it.name) {
                                     add(serialName(serialName))
                                 }
                             },

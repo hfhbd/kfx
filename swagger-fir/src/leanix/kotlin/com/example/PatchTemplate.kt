@@ -5,14 +5,12 @@ import app.softwork.validation.MinLength
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The template of a key/value pair that defines an abstract change to the data
  */
 @Serializable
-@SerialName(value = "PatchTemplate")
 public data class PatchTemplate(
   /**
    * The expression that is used to evaluate the 'json key' of the data entry

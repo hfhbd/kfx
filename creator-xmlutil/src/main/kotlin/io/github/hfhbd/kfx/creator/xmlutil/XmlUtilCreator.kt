@@ -33,7 +33,8 @@ class XmlUtilCreator : CodeGenTransformer {
                             for (member in it.members) {
                                 val newType = member.type.replaceUnknown()
 
-                                val annotations = member.annotations + buildList {
+                                val annotations = buildList {
+                                    addAll(member.annotations)
                                     when (member.ir?.xmlType) {
                                         null -> {}
 
@@ -82,15 +83,7 @@ class XmlUtilCreator : CodeGenTransformer {
                                             )
                                         }
 
-                                        IRTree.XmlType.Attribute -> {
-                                            if (member.ir!!.serialName != null &&
-                                                member.ir!!.serialName != member.name
-                                            ) {
-                                                add(
-                                                    serialName(member.ir!!.serialName!!),
-                                                )
-                                            }
-                                        }
+                                        IRTree.XmlType.Attribute -> {}
                                     }
                                 }
 

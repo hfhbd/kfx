@@ -5,12 +5,10 @@ import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-@SerialName(value = "OutboundProcessorConfiguration")
 public data class OutboundProcessorConfiguration(
   /**
    * The type of connector that is used

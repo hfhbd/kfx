@@ -1,14 +1,12 @@
 package com.example
 
 import kotlin.Int
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The ratio limits for each type of deletion scope
  */
 @Serializable
-@SerialName(value = "MaximumDeletionRatio")
 public data class MaximumDeletionRatio(
   /**
    * The maximum ratio for deletion in fact sheets

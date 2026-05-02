@@ -6,14 +6,12 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Define the components that will be available for JUEL expression under the symbol 'lx'.
  */
 @Serializable
-@SerialName(value = "ReadFactSheetSection")
 public data class ReadFactSheetSection(
   /**
    * Specify metrics measurements that can be linked with the processing Fact Sheet

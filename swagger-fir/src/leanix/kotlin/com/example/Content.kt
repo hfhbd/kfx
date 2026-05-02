@@ -1,7 +1,6 @@
 package com.example
 
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -9,7 +8,6 @@ import kotlinx.serialization.json.JsonObject
  * An object containing all necessary information about changes that are going to be made by the processors
  */
 @Serializable
-@SerialName(value = "Content")
 public data class Content(
   /**
    * The type of content defined by this entry

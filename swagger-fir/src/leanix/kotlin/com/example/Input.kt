@@ -1,13 +1,11 @@
 package com.example
 
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processingDirection")
-@SerialName(value = "Input")
+@Serializable
 public sealed interface Input {
   /**
    * The type of connector that is used

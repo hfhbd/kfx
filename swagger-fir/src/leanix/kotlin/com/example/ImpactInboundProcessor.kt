@@ -7,11 +7,9 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ImpactInboundProcessor")
 public data class ImpactInboundProcessor(
   /**
    * A not necessarily unique name for this processor

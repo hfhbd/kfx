@@ -3,14 +3,12 @@ package com.example
 import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria to select To-dos for deletion
  */
 @Serializable
-@SerialName(value = "TodoDeletionScope")
 public data class TodoDeletionScope(
   public val filterObject: TodoFilterObject? = null,
   /**

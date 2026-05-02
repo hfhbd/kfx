@@ -4,13 +4,11 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processorType")
-@SerialName(value = "InboundProcessor")
+@Serializable
 public sealed interface InboundProcessor {
   /**
    * A not necessarily unique name for this processor

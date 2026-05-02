@@ -1,11 +1,9 @@
 package com.example
 
 import kotlin.Int
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "SyncRunInboundProgressReport")
 public data class SyncRunInboundProgressReport(
   /**
    * Number of elements processed from content in the current run level for Inbound processing.

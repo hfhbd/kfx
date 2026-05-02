@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Serializable
 @XmlSerialName(
   value = "FooType",
   namespace = "http://example.com/foo",
 )
+@Serializable
 public data class FooType(
   @XmlElement
   @XmlSerialName(

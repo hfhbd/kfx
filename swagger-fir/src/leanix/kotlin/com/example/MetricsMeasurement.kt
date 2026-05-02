@@ -1,14 +1,12 @@
 package com.example
 
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Specify multiple measurements that are fetched along with the processing Fact Sheet, it is possible to use juel expression in any of the values
  */
 @Serializable
-@SerialName(value = "MetricsMeasurement")
 public data class MetricsMeasurement(
   /**
    * The name to be used for this measurement in the context of 'lx.metrics.<name>'.

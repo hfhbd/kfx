@@ -5,14 +5,12 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * A value template describes the mapping from an incoming object to a single value or a json object
  */
 @Serializable
-@SerialName(value = "ValueTemplate")
 public data class ValueTemplate(
   /**
    * An EL expression that evaluates to a single value. Use 'map' to evaluate to whole json object

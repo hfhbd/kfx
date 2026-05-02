@@ -3,14 +3,12 @@ package com.example
 import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Defines a filter for the content data that this processor is able to evaluate
  */
 @Serializable
-@SerialName(value = "FilterConfig")
 public data class FilterConfig(
   /**
    * The regular expression of the content type this filter config should accept

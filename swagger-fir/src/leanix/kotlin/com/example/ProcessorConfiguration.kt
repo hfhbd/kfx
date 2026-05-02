@@ -2,13 +2,11 @@ package com.example
 
 import kotlin.Boolean
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processingDirection")
-@SerialName(value = "ProcessorConfiguration")
+@Serializable
 public sealed interface ProcessorConfiguration {
   /**
    * The type of connector that is used
