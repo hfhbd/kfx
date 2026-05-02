@@ -43,6 +43,7 @@ data object CodeGenCreator {
             }
         },
         ir = ir,
+        overrideable = ir.isOverride,
     )
 
     fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type = when (ir) {
