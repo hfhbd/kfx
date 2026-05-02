@@ -3,11 +3,9 @@ package dev.central
 import kotlin.Double
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "BrowseDeploymentsResponse")
 public data class BrowseDeploymentsResponse(
   public val deployments: List<DeploymentResponseFiles> = emptyList(),
   public val page: Double? = null,
