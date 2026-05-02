@@ -2,6 +2,7 @@ package com.example.foo
 
 import kotlin.String
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
@@ -11,6 +12,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "http://example.com/foo",
 )
 @Serializable
+@SerialName(value = "Fault")
 public value class Fault private constructor(
   private val _value: FaultType,
 ) {

@@ -4,9 +4,11 @@ import kotlin.Double
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "DeploymentResponseFiles")
 public data class DeploymentResponseFiles(
   public val deploymentId: String? = null,
   public val deploymentName: String? = null,

@@ -13,6 +13,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "http://example.com/foo",
 )
 @Serializable
+@SerialName(value = "FooType")
 public data class FooType(
   @XmlElement
   @XmlSerialName(

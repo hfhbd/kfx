@@ -15,6 +15,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "http://example.com/bar",
 )
 @Serializable
+@SerialName(value = "BarType")
 public data class BarType(
   /**
    * Valid From

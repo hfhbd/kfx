@@ -17,6 +17,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
   namespace = "http://example.com/foo",
 )
 @Serializable
+@SerialName(value = "ListEntryWithOtherElementsType")
 public data class ListEntryWithOtherElementsType(
   @XmlElement
   @XmlSerialName(
