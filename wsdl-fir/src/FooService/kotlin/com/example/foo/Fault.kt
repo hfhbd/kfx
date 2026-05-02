@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @JvmInline
-@Serializable
 @XmlSerialName(
   value = "Fault",
   namespace = "http://example.com/foo",
 )
+@Serializable
 public value class Fault private constructor(
   private val _value: FaultType,
 ) {

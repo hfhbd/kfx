@@ -10,11 +10,11 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
  * Bar details
  */
 @JvmInline
-@Serializable
 @XmlSerialName(
   value = "Bar",
   namespace = "http://example.com/bar",
 )
+@Serializable
 public value class Bar private constructor(
   private val _value: BarType,
 ) {
