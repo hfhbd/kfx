@@ -26,10 +26,16 @@ class KotlinxCoreCreator : CodeGenTransformer {
                 )
 
                 is CodeGenTree.NormalClass -> it.copy(
-                    annotations = it.annotations + SERIALIZABLE,
+                    annotations = buildList {
+                        addAll(it.annotations)
+                        if (!it.isResultClass) {
+                            add(SERIALIZABLE)
+                        }
+                    },
                     members = it.members.map {
                         it.copy(
                             annotations = buildList {
+                                addAll(it.annotations)
                                 val serialName = it.ir?.serialName
                                 if (serialName != null) {
                                     add(serialName(serialName))

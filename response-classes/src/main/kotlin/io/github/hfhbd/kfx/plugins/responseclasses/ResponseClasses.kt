@@ -84,6 +84,7 @@ class ResponseClasses : CodeGenTransformer {
                         ),
                     )
                 },
+                isResultClass = true,
             )
 
             classes.add(newReturnType)

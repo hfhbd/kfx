@@ -139,6 +139,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         override val innerClasses: List<Class> = emptyList(),
         override val provided: Boolean = false,
         @Transient val ir: IRTree.NormalClass? = null,
+        val isResultClass: Boolean = false,
     ) : Class
 
     @Serializable
