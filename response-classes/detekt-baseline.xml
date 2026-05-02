@@ -3,6 +3,5 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>LongMethod:ResponseClasses.kt:ResponseClasses$override operator fun invoke: CodeGenTree</ID>
-    <ID>NoUnusedImports:ResponseClasses.kt:io.github.hfhbd.kfx.plugins.responseclasses.ResponseClasses.kt</ID>
   </CurrentIssues>
 </SmellBaseline>
