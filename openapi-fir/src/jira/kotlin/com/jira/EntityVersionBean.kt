@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.time.Instant
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "EntityVersionBean")
 public data class EntityVersionBean(
   public val deleted: Boolean? = null,
   public val entityId: Long? = null,

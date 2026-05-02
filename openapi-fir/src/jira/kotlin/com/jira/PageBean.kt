@@ -6,11 +6,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "PageBean")
 public data class PageBean(
   public val isLast: Boolean? = null,
   public val maxResults: Int? = null,

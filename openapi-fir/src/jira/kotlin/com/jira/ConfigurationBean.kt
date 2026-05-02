@@ -1,11 +1,9 @@
 package com.jira
 
 import kotlin.Boolean
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ConfigurationBean")
 public data class ConfigurationBean(
   public val attachmentsEnabled: Boolean? = null,
   public val issueLinkingEnabled: Boolean? = null,

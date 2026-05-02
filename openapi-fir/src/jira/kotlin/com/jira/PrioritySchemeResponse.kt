@@ -4,11 +4,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "PrioritySchemeResponse")
 public data class PrioritySchemeResponse(
   public val defaultPriority: String? = null,
   public val description: String? = null,

@@ -4,11 +4,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "CustomFieldDefinitionJsonBean")
 public data class CustomFieldDefinitionJsonBean(
   public val description: String? = null,
   public val id: String? = null,

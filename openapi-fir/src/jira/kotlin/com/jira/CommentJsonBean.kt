@@ -3,11 +3,9 @@ package com.jira
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "CommentJsonBean")
 public data class CommentJsonBean(
   public val author: UserJsonBean? = null,
   public val body: String? = null,

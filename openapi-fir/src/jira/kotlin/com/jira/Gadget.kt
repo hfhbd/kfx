@@ -4,11 +4,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "Gadget")
 public data class Gadget(
   public val filterId: Long? = null,
   public val filterName: String? = null,

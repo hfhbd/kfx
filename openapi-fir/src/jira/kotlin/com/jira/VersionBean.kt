@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.time.Instant
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "VersionBean")
 public data class VersionBean(
   public val archived: Boolean? = null,
   public val description: String? = null,

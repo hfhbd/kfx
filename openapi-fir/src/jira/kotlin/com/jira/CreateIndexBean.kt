@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "CreateIndexBean")
 public data class CreateIndexBean(
   public val entityName: String? = null,
   public val fieldNameToColumnName: Map<String, String> = emptyMap(),

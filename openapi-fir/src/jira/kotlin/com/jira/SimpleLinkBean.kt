@@ -4,11 +4,9 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "SimpleLinkBean")
 public data class SimpleLinkBean(
   public val href: String? = null,
   public val iconClass: String? = null,

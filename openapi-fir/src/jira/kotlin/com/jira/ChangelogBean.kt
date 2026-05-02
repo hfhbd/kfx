@@ -3,11 +3,9 @@ package com.jira
 import kotlin.Int
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ChangelogBean")
 public data class ChangelogBean(
   public val histories: List<ChangeHistoryBean> = emptyList(),
   public val maxResults: Int? = null,

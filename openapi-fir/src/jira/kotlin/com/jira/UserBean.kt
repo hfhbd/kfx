@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "UserBean")
 public data class UserBean(
   public val active: Boolean? = null,
   public val applicationRoles: SimpleListWrapperApplicationRoleBean? = null,

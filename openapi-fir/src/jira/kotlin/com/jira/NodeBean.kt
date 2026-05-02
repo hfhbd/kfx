@@ -3,11 +3,9 @@ package com.jira
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "NodeBean")
 public data class NodeBean(
   public val alive: Boolean? = null,
   public val cacheListenerPort: Long? = null,

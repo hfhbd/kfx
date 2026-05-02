@@ -3,11 +3,9 @@ package com.jira
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "HistoryMetadata")
 public data class HistoryMetadata(
   public val activityDescription: String? = null,
   public val activityDescriptionKey: String? = null,

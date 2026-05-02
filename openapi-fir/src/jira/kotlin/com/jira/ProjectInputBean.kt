@@ -2,11 +2,9 @@ package com.jira
 
 import kotlin.Long
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ProjectInputBean")
 public data class ProjectInputBean(
   public val assigneeType: ProjectInputBeanAssigneeType? = null,
   public val avatarId: Long? = null,

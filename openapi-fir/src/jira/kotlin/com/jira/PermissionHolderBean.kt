@@ -1,11 +1,9 @@
 package com.jira
 
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "PermissionHolderBean")
 public data class PermissionHolderBean(
   public val `field`: FieldBean? = null,
   public val group: GroupJsonBean? = null,

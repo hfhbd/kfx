@@ -5,11 +5,9 @@ import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "FieldMetaBean")
 public data class FieldMetaBean(
   public val allowedValues: List<String> = emptyList(),
   public val autoCompleteUrl: String? = null,

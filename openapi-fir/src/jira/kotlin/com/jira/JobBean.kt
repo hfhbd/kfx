@@ -3,11 +3,9 @@ package com.jira
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "JobBean")
 public data class JobBean(
   public val cronExpression: String? = null,
   public val firstRunTime: Long? = null,

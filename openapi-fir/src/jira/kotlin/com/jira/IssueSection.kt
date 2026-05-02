@@ -3,11 +3,9 @@ package com.jira
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "IssueSection")
 public data class IssueSection(
   public val id: String? = null,
   public val issues: List<IssuePickerIssue> = emptyList(),

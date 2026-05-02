@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.time.Instant
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ReindexBean")
 public data class ReindexBean(
   public val currentProgress: Long? = null,
   public val currentSubTask: String? = null,

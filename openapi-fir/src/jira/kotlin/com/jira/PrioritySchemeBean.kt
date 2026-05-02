@@ -5,11 +5,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "PrioritySchemeBean")
 public data class PrioritySchemeBean(
   public val defaultOptionId: String? = null,
   public val defaultScheme: Boolean? = null,

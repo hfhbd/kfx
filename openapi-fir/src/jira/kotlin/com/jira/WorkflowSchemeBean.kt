@@ -5,11 +5,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.Map
 import kotlin.collections.emptyMap
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "WorkflowSchemeBean")
 public data class WorkflowSchemeBean(
   public val defaultWorkflow: String? = null,
   public val description: String? = null,

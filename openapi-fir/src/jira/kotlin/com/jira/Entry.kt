@@ -5,11 +5,9 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "Entry")
 public data class Entry(
   public val errors: List<String> = emptyList(),
   public val issueId: Long? = null,

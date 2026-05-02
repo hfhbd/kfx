@@ -4,11 +4,9 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "FilePart")
 public data class FilePart(
   public val contentType: String? = null,
   public val formField: Boolean? = null,

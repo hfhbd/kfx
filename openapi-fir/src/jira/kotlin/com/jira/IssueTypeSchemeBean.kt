@@ -3,11 +3,9 @@ package com.jira
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "IssueTypeSchemeBean")
 public data class IssueTypeSchemeBean(
   public val defaultIssueType: IssueTypeJsonBean? = null,
   public val description: String? = null,
