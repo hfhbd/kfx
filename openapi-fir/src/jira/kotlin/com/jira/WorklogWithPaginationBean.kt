@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Int
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "WorklogWithPaginationBean")
 public data class WorklogWithPaginationBean(
   public val maxResults: Int? = null,
   public val startAt: Int? = null,

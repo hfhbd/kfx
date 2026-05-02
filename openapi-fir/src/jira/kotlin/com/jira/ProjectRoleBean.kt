@@ -4,9 +4,11 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "ProjectRoleBean")
 public data class ProjectRoleBean(
   public val actors: List<RoleActorBean> = emptyList(),
   public val description: String? = null,

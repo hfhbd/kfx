@@ -1,9 +1,11 @@
 package com.jira
 
 import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "NavigableField")
 public data class NavigableField(
   public val columnCssClass: String? = null,
   public val columnHeadingKey: String? = null,

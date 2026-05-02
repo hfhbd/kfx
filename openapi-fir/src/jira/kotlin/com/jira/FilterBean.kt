@@ -4,9 +4,11 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "FilterBean")
 public data class FilterBean(
   public val description: String? = null,
   public val editable: Boolean? = null,

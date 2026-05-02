@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Int
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "CommentsWithPaginationJsonBean")
 public data class CommentsWithPaginationJsonBean(
   public val comments: List<CommentJsonBean> = emptyList(),
   public val maxResults: Int? = null,

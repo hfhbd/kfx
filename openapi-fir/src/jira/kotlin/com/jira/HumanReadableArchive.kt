@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "HumanReadableArchive")
 public data class HumanReadableArchive(
   public val entries: Unit? = null,
   public val id: Long? = null,

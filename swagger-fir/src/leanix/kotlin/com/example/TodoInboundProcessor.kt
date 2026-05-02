@@ -7,9 +7,11 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "TodoInboundProcessor")
 public data class TodoInboundProcessor(
   /**
    * A not necessarily unique name for this processor

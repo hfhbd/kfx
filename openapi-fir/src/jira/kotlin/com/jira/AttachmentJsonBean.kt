@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Long
 import kotlin.String
 import kotlin.time.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "AttachmentJsonBean")
 public data class AttachmentJsonBean(
   public val author: UserJsonBean? = null,
   public val content: String? = null,

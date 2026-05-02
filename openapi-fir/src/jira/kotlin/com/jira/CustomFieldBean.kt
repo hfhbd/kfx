@@ -7,9 +7,11 @@ import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlin.time.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "CustomFieldBean")
 public data class CustomFieldBean(
   public val description: String? = null,
   public val id: String? = null,

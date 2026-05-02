@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "NotificationSchemeBean")
 public data class NotificationSchemeBean(
   public val description: String? = null,
   public val expand: String? = null,

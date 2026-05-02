@@ -2,12 +2,14 @@ package com.example
 
 import kotlin.Boolean
 import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Credential settting for synchronization run
  */
 @Serializable
+@SerialName(value = "Credentials")
 public data class Credentials(
   /**
    * The API token that is used for executing the synchronization run

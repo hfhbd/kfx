@@ -1,12 +1,14 @@
 package com.example
 
 import kotlin.Unit
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria for selecting fact sheets and filter in combination with LDIF data
  */
 @Serializable
+@SerialName(value = "SearchScope")
 public data class SearchScope(
   /**
    * The filter with conditions for obtaining fact sheets from your workspace

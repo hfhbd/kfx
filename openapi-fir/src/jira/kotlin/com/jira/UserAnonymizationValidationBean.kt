@@ -6,9 +6,11 @@ import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.emptyList
 import kotlin.collections.emptyMap
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "UserAnonymizationValidationBean")
 public data class UserAnonymizationValidationBean(
   public val affectedEntities: Map<String, List<AffectedEntityBean>> = emptyMap(),
   public val businessLogicValidationFailed: Boolean? = null,

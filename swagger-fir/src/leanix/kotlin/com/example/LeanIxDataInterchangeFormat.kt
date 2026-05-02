@@ -5,6 +5,7 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -12,6 +13,7 @@ import kotlinx.serialization.json.JsonObject
  * Represents a LeanIX Data Interchange Format (LDIF)
  */
 @Serializable
+@SerialName(value = "LeanIxDataInterchangeFormat")
 public data class LeanIxDataInterchangeFormat(
   /**
    * The type of connector that is used

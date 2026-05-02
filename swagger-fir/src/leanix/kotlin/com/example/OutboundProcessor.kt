@@ -6,10 +6,12 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
+@SerialName(value = "OutboundProcessor")
 public data class OutboundProcessor(
   /**
    * The type that identifies this processor ('outboundFactSheet')

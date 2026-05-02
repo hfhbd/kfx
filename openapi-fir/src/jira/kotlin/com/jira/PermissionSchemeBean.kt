@@ -4,9 +4,11 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "PermissionSchemeBean")
 public data class PermissionSchemeBean(
   public val description: String? = null,
   public val expand: String? = null,

@@ -2,9 +2,11 @@ package com.jira
 
 import kotlin.Long
 import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "WorklogResponse")
 public data class WorklogResponse(
   public val author: UserJsonBean? = null,
   public val comment: String? = null,

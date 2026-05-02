@@ -4,12 +4,14 @@ import app.softwork.validation.MaxLength
 import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.Unit
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria for selection of documents.
  */
 @Serializable
+@SerialName(value = "DocumentDeletionScope")
 public data class DocumentDeletionScope(
   /**
    * A list of matching patterns that document names have to match to be considered for deletion

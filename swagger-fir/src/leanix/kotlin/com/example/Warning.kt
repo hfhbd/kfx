@@ -1,9 +1,11 @@
 package com.example
 
 import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "Warning")
 public data class Warning(
   /**
    * The error message

@@ -3,12 +3,14 @@ package com.example
 import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Definition of the entities to be removed if they are not touched by the processor configuration
  */
 @Serializable
+@SerialName(value = "DeletionScope")
 public data class DeletionScope(
   /**
    * Maximum Ratio (percentage) between elements to be deleted compared to size of the scope. If this limit is violated the deletion is canceled

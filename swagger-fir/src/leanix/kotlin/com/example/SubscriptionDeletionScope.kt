@@ -5,12 +5,14 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria to select subscriptions
  */
 @Serializable
+@SerialName(value = "SubscriptionDeletionScope")
 public data class SubscriptionDeletionScope(
   /**
    * The combinations of type and roles for subscriptions

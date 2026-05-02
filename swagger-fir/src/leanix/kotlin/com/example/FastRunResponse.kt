@@ -4,9 +4,11 @@ import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "FastRunResponse")
 public data class FastRunResponse(
   /**
    * The status result of the run, like FINISHED, FAILED.

@@ -3,9 +3,11 @@ package com.example
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "TagFilter")
 public data class TagFilter(
   /**
    * The tag groups to retrieve

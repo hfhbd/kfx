@@ -3,9 +3,11 @@ package com.jira
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "SprintBean")
 public data class SprintBean(
   public val activatedDate: String? = null,
   public val autoStartStop: Boolean? = null,

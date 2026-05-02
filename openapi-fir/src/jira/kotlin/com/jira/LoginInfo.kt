@@ -2,9 +2,11 @@ package com.jira
 
 import kotlin.Long
 import kotlin.time.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "LoginInfo")
 public data class LoginInfo(
   public val failedLoginCount: Long? = null,
   public val lastFailedLoginTime: Instant? = null,

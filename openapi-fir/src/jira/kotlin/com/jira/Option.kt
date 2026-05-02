@@ -4,9 +4,11 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "Option")
 public data class Option(
   public val childOptions: List<Option> = emptyList(),
   public val id: Long? = null,

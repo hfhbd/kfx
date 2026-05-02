@@ -5,12 +5,14 @@ import app.softwork.validation.MinLength
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * The criteria for selection of relations.
  */
 @Serializable
+@SerialName(value = "RelationDeletionScope")
 public data class RelationDeletionScope(
   /**
    * A list of relation types like 'relToParent', 'relToChild'

@@ -6,9 +6,11 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "OutboundFieldTemplate")
 public data class OutboundFieldTemplate(
   /**
    * The expression that is used to evaluate the 'json key' of the data entry

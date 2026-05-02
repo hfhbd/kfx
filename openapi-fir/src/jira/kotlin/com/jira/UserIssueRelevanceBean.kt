@@ -7,9 +7,11 @@ import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.collections.emptyList
 import kotlin.collections.emptyMap
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName(value = "UserIssueRelevanceBean")
 public data class UserIssueRelevanceBean(
   public val avatarUrls: Map<String, String> = emptyMap(),
   public val displayName: String? = null,
