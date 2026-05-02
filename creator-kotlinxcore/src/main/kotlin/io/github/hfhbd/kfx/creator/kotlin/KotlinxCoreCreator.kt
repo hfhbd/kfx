@@ -31,6 +31,10 @@ class KotlinxCoreCreator : CodeGenTransformer {
                         if (!it.isResultClass) {
                             add(SERIALIZABLE)
                         }
+                        val serialName = it.ir?.serialName
+                        if (serialName != null && it.names.last() != serialName) {
+                            add(serialName(serialName))
+                        }
                     },
                     members = it.members.map {
                         it.copy(

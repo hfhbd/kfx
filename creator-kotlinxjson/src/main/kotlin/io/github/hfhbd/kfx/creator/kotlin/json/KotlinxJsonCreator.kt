@@ -18,7 +18,7 @@ class KotlinxJsonCreator : CodeGenTransformer {
                         annotations = buildList {
                             addAll(it.annotations)
 
-                            if (discriminator != null) {
+                            if (discriminator != null && discriminator != "type") {
                                 add(
                                     CodeGenTree.Annotation(
                                         "kotlinx.serialization.json",
@@ -40,6 +40,7 @@ class KotlinxJsonCreator : CodeGenTransformer {
                                 }
                             }
                         },
+                        isSealed = discriminator != null,
                     )
                 }
             }
