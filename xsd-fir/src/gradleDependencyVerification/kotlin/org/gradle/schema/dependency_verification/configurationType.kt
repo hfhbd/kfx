@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Serializable
 @XmlSerialName(
   value = "configurationType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
+@Serializable
 public data class configurationType(
   @XmlElement
   @XmlSerialName(

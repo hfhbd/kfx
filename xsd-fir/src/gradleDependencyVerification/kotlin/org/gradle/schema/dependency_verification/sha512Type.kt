@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Serializable
 @XmlSerialName(
   value = "sha512Type",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
+@Serializable
 public data class sha512Type(
   @XmlElement
   @XmlSerialName(

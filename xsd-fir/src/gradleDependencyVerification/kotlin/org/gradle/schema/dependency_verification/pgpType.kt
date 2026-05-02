@@ -4,11 +4,11 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Serializable
 @XmlSerialName(
   value = "pgpType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
+@Serializable
 public data class pgpType(
   public val `value`: String,
 )
