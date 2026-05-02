@@ -50,8 +50,8 @@ class OData : IrTransformer {
         is IRTree.Type.LIST -> list.transform()
 
         is IRTree.Type.MAP -> copy(
-            key.transform(),
-            value.transform(),
+            key = key.transform(),
+            value = value.transform(),
         )
     }
 

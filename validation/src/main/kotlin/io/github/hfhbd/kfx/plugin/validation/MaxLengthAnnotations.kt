@@ -8,16 +8,13 @@ import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenTransformer::class)
 class MaxLengthAnnotations : CodeGenTransformer {
-    override fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree = codeGen.copy(
+    override fun invoke(codeGen: CodeGenTree): CodeGenTree = codeGen.copy(
         classes = codeGen.classes.mapTo(mutableSetOf()) { codeGenClass ->
             when (codeGenClass) {
                 is CodeGenTree.Enum -> codeGenClass
 
                 is CodeGenTree.NormalClass -> {
-                    val irClass = ir.classes.singleOrNull {
-                        it.packageName == codeGenClass.packageName && it.name == codeGenClass.names.singleOrNull()
-                    } as IRTree.NormalClass?
-
+                    val irClass = codeGenClass.ir
                     if (irClass != null) {
                         codeGenClass.copy(
                             members = codeGenClass.members.updateMembers(irClass),

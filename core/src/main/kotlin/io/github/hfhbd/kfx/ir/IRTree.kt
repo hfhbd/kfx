@@ -3,87 +3,60 @@ package io.github.hfhbd.kfx.ir
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-@Serializable
 data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val auth: Set<Auth>) {
-    @Serializable
     sealed interface Type {
-        @Serializable
         sealed interface Builtin : Type {
-            @Serializable
             data object CHAR : Builtin
 
-            @Serializable
             data object STRING : Builtin
 
-            @Serializable
             data object BINARY : Builtin
 
-            @Serializable
             data object BYTESTRING : Builtin
 
-            @Serializable
             data object BOOLEAN : Builtin
 
-            @Serializable
             data object BYTE : Builtin
 
-            @Serializable
             data object SHORT : Builtin
 
-            @Serializable
             data object INT : Builtin
 
-            @Serializable
             data object LONG : Builtin
 
-            @Serializable
             data object DOUBLE : Builtin
 
-            @Serializable
             data object FLOAT : Builtin
 
-            @Serializable
             data object DURATION : Builtin
 
-            @Serializable
             data object UUID : Builtin
 
-            @Serializable
             data object UNIT : Builtin
 
-            @Serializable
             data object FILE : Builtin
         }
 
-        @Serializable
         sealed interface DateType : Builtin {
-            @Serializable
             data object DATE : DateType
 
-            @Serializable
             data object INSTANT : DateType
         }
 
-        @Serializable
         data class LIST(val list: Type) : Type
 
-        @Serializable
         data class MAP(val key: Type, val value: Type) : Type
 
         /**
          * Like JsonObject when using kotlinx-serialization-json
          */
-        @Serializable
         data object Unknown : Type
     }
 
-    @Serializable
     sealed interface Class : Type {
         val packageName: String
         val packageNameSuffix: String
@@ -92,7 +65,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         val deprecated: Boolean
     }
 
-    @Serializable
     data class NormalClass(
         override val packageName: String,
         override val packageNameSuffix: String,
@@ -108,7 +80,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         override val deprecated: Boolean,
     ) : Class
 
-    @Serializable
     data class ClassName(val packageName: String, val name: String) {
         val qname = if (packageName.isEmpty()) name else "$packageName.$name"
 
@@ -119,7 +90,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         override fun toString(): String = qname
     }
 
-    @Serializable
     data class Member(
         val type: Type,
         val nullable: Boolean,
@@ -131,17 +101,13 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         val isOverride: Boolean,
         val deprecated: Boolean,
     ) {
-        @Serializable
         sealed interface Requirement {
-            @Serializable
             data class MinLength(val inclusive: Int) : Requirement
 
-            @Serializable
             data class MaxLength(val inclusive: Int) : Requirement
         }
     }
 
-    @Serializable
     enum class XmlType {
         Element,
         Value,
@@ -149,7 +115,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         CData,
     }
 
-    @Serializable
     data class Enum(
         override val packageName: String,
         override val packageNameSuffix: String,
@@ -158,11 +123,9 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         override val documentation: String?,
         override val deprecated: Boolean,
     ) : Class {
-        @Serializable
         data class Value(val value: String, val documentation: String?, val serialName: String?)
     }
 
-    @Serializable
     data class Operation(
         val packageName: String,
         val name: String,
@@ -185,7 +148,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         val faultHeaders: List<Parameter> = emptyList(),
         val deprecated: Boolean = false,
     ) {
-        @Serializable
         enum class HttpMethod {
             Head,
             Get,
@@ -195,7 +157,6 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
             Delete,
         }
 
-        @Serializable
         data class Parameter(
             val name: String,
             val serialName: String? = null,
@@ -207,78 +168,52 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         )
     }
 
-    @Serializable
     sealed interface Literal {
-        @Serializable
         data class CHAR(val value: Char) : Literal
 
-        @Serializable
         data class STRING(val value: String) : Literal
 
-        @Serializable
         data class BYTE(val value: Byte) : Literal
 
-        @Serializable
         data class SHORT(val value: Short) : Literal
 
-        @Serializable
         data class INT(val value: Int) : Literal
 
-        @Serializable
         data class LONG(val value: Long) : Literal
 
-        @Serializable
         data class FLOAT(val value: Float) : Literal
 
-        @Serializable
         data class DOUBLE(val value: Double) : Literal
 
-        @Serializable
         data class DURATION(val value: Duration) : Literal
 
-        @Serializable
         data class DATE(val value: LocalDate) : Literal
 
-        @Serializable
         data class INSTANT(val value: Instant) : Literal
 
-        @Serializable
         data class UUID(val value: Uuid) : Literal
 
-        @Serializable
         data class BOOLEAN(val value: Boolean) : Literal
     }
 
-    @Serializable
     sealed interface Auth {
-        @Serializable
         data class OAuth2(val flow: Flow, val operation: Operation, val grantType: GrantType) : Auth {
-            @Serializable
             enum class Flow {
                 Application,
             }
 
-            @Serializable
             enum class GrantType {
                 ClientCredentials,
             }
         }
 
-        @Serializable
         data class Http(val schema: Schema, val name: String, val packageName: String, val documentation: String?) :
             Auth {
-            @Serializable
             sealed interface Schema {
-                @Serializable
-                @SerialName("Basic")
                 data object Basic : Schema
 
-                @Serializable
-                @SerialName("Bearer")
                 data object Bearer : Schema
 
-                @Serializable
-                @SerialName("Header")
                 data class Header(val headerName: String) : Schema
             }
         }

@@ -217,6 +217,10 @@ fun CodeGenTree.Type.toPoetType(includeGenerics: Boolean = true): TypeName = whe
     )
 
     CodeGenTree.Type.STAR -> STAR
+
+    CodeGenTree.Type.Unknown -> error(
+        "Format specific type needs to be transformed first by adding a format transformer.",
+    )
 }
 
 fun CodeGenTree.Type.Builtin.toPoetType(): ClassName = when (this) {

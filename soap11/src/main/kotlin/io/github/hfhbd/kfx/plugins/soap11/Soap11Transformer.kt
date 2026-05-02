@@ -31,7 +31,7 @@ class Soap11FaultTransformer : IrTransformer {
 
 @ServiceLoader(CodeGenTransformer::class)
 class Soap11Transformer : CodeGenTransformer {
-    override fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree = codeGen.copy(
+    override fun invoke(codeGen: CodeGenTree): CodeGenTree = codeGen.copy(
         operations = codeGen.operations.mapTo(mutableSetOf()) {
             it.addSoapWrapper()
         },

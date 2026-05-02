@@ -4,12 +4,11 @@ import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.toCamelCase
 
 @ServiceLoader(CodeGenTransformer::class)
 class ResponseClasses : CodeGenTransformer {
-    override operator fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree {
+    override operator fun invoke(codeGen: CodeGenTree): CodeGenTree {
         val classes = codeGen.classes.mapTo(mutableSetOf()) {
             when (it) {
                 is CodeGenTree.NormalClass -> it.copy(

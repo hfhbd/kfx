@@ -1,228 +1,46 @@
 package io.github.hfhbd.kfx.creator.kotlin
 
-import io.github.hfhbd.kfx.StatusCode
-import io.github.hfhbd.kfx.codegen.CodeGenCreator
+import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.BooleanLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.ByteLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.CharLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DateLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DoubleLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.DurationLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.FloatLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.InstantLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.IntLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.LongLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.ShortLiteral
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.UuidLiteral
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.Builtin
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.DateType
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.LIST
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.MAP
-import io.github.hfhbd.kfx.ir.IRTree
-import io.github.hfhbd.kfx.toPascalCaseEnumValue
 
-interface KotlinxCoreCreator : CodeGenCreator {
-    override fun toCodeGen(ir: IRTree.Member, name: String): CodeGenTree.Member = CodeGenTree.Member(
-        name = name,
-        type = toCodeGen(ir.type),
-        nullable = ir.nullable,
-        documentation = ir.documentation,
-        annotations = buildList {
-            if (ir.serialName != null) {
-                add(serialName(ir.serialName!!))
-            }
-            if (ir.deprecated) {
-                add(DEPRECATED)
-            }
-        },
-        overrideable = ir.isOverride,
-    )
+@ServiceLoader(CodeGenTransformer::class)
+class KotlinxCoreCreator : CodeGenTransformer {
+    override fun invoke(codeGen: CodeGenTree): CodeGenTree = codeGen.copy(
+        classes = codeGen.classes.mapTo(mutableSetOf()) {
+            when (it) {
+                is CodeGenTree.Enum -> it.copy(
+                    annotations = it.annotations + SERIALIZABLE,
+                    values = it.values.map {
+                        it.copy(
+                            annotations = buildList {
+                                addAll(it.annotations)
+                                val serialName = it.ir?.serialName
+                                if (serialName != null) {
+                                    add(serialName(serialName))
+                                }
+                            },
+                        )
+                    },
+                )
 
-    override fun toCodeGen(ir: IRTree.Type): CodeGenTree.Type = when (ir) {
-        is IRTree.Enum -> toCodeGen(ir)
-        is IRTree.NormalClass -> toCodeGen(ir)
-        IRTree.Type.Builtin.BOOLEAN -> Builtin.BOOLEAN
-        IRTree.Type.Builtin.DOUBLE -> Builtin.DOUBLE
-        IRTree.Type.Builtin.INT -> Builtin.INT
-        IRTree.Type.Builtin.LONG -> Builtin.LONG
-        IRTree.Type.Builtin.STRING -> Builtin.STRING
-        IRTree.Type.DateType.DATE -> DateType.DATE
-        IRTree.Type.DateType.INSTANT -> DateType.INSTANT
-        is IRTree.Type.LIST -> LIST(toCodeGen(ir.list))
-        is IRTree.Type.MAP -> MAP(toCodeGen(ir.key), toCodeGen(ir.value))
-        IRTree.Type.Builtin.UNIT -> Builtin.UNIT
-        IRTree.Type.Builtin.FILE -> Builtin.FILE
-        IRTree.Type.Builtin.BINARY -> Builtin.BYTEARRAY
-        IRTree.Type.Builtin.BYTESTRING -> Builtin.BYTESTRING
-        IRTree.Type.Builtin.FLOAT -> Builtin.FLOAT
-        IRTree.Type.Builtin.UUID -> Builtin.UUID
-        IRTree.Type.Builtin.DURATION -> Builtin.DURATION
-        IRTree.Type.Builtin.BYTE -> Builtin.BYTE
-        IRTree.Type.Builtin.CHAR -> Builtin.CHAR
-        IRTree.Type.Builtin.SHORT -> Builtin.SHORT
-        IRTree.Type.Unknown -> unknown()
-    }
-
-    fun unknown(): CodeGenTree.Type
-
-    override fun toCodeGen(ir: IRTree.Class): CodeGenTree.Class = when (ir) {
-        is IRTree.Enum -> toCodeGen(ir)
-        is IRTree.NormalClass -> toCodeGen(ir)
-    }
-
-    override fun toCodeGen(ir: IRTree.Enum) = CodeGenTree.Enum(
-        packageName = ir.packageName + if (ir.packageNameSuffix != "") ".${ir.packageNameSuffix}" else "",
-        names = listOf(ir.name),
-        values = ir.values.map {
-            CodeGenTree.Enum.Value(
-                name = it.value.toPascalCaseEnumValue(),
-                documentation = it.documentation,
-                annotations = listOf(serialName(it.serialName ?: it.value)),
-            )
-        },
-        documentation = ir.documentation,
-        annotations = buildList {
-            add(SERIALIZABLE)
-
-            if (ir.deprecated) {
-                add(DEPRECATED)
+                is CodeGenTree.NormalClass -> it.copy(
+                    annotations = it.annotations + SERIALIZABLE,
+                    members = it.members.map {
+                        it.copy(
+                            annotations = buildList {
+                                val serialName = it.ir?.serialName
+                                if (serialName != null) {
+                                    add(serialName(serialName))
+                                }
+                            },
+                        )
+                    },
+                )
             }
         },
     )
-
-    override fun toCodeGen(ir: IRTree.NormalClass): CodeGenTree.NormalClass = CodeGenTree.NormalClass(
-        packageName = ir.packageName + if (ir.packageNameSuffix != "") ".${ir.packageNameSuffix}" else "",
-        names = listOf(ir.name),
-        members = ir.members.map {
-            toCodeGen(it.value, name = it.key)
-        },
-        computedProperties = if (ir.isValue) {
-            val singleMember = ir.members[ir.members.keys.single()]!!
-            (singleMember.type as IRTree.NormalClass).members.map {
-                toCodeGen(it.value, name = it.key)
-            }
-        } else {
-            emptyList()
-        },
-        functions = emptyList(),
-        documentation = ir.documentation,
-        isFault = ir.isFault,
-        isValue = ir.isValue,
-        annotations = buildList {
-            add(SERIALIZABLE)
-            val irSerialName = ir.serialName
-            if (irSerialName != null) {
-                add(serialName(irSerialName))
-            }
-            if (ir.deprecated) {
-                add(DEPRECATED)
-            }
-        },
-        types = emptyList(),
-        superClassName = null,
-        superInterfaces = listOfNotNull(ir.allOf?.let { toCodeGen(it) }),
-    )
-
-    override fun toCodeGen(ir: IRTree.Operation): CodeGenTree.Operation = CodeGenTree.Operation(
-        packageName = ir.packageName,
-        name = ir.name,
-        documentation = ir.documentation,
-        location = ir.location,
-        soapAction = ir.soapAction,
-        input = ir.input?.let { toCodeGen(it) },
-        output = ir.output?.let { toCodeGen(it) },
-        returnType = ir.output?.let { toCodeGen(it) },
-        fault = ir.fault?.let { toCodeGen(it) },
-        method = when (ir.method) {
-            IRTree.Operation.HttpMethod.Head -> CodeGenTree.Operation.HttpMethod.Head
-            IRTree.Operation.HttpMethod.Get -> CodeGenTree.Operation.HttpMethod.Get
-            IRTree.Operation.HttpMethod.Post -> CodeGenTree.Operation.HttpMethod.Post
-            IRTree.Operation.HttpMethod.Put -> CodeGenTree.Operation.HttpMethod.Put
-            IRTree.Operation.HttpMethod.Patch -> CodeGenTree.Operation.HttpMethod.Patch
-            IRTree.Operation.HttpMethod.Delete -> CodeGenTree.Operation.HttpMethod.Delete
-        },
-        parameters = ir.parameters.map {
-            it.toCodeGen(defaultNull = false)
-        },
-        queryParameters = ir.queryParameters.map { it.toCodeGen(defaultNull = true) },
-        path = ir.path,
-        inputContentType = ir.inputContentType,
-        outputContentType = ir.outputContentType,
-        inputWrapper = null,
-        inputWrapperType = null,
-        outputWrapperType = null,
-        outputMember = null,
-        outputHeaders = ir.outputHeaders.map {
-            it.toCodeGen(defaultNull = false)
-        },
-        notFound = ir.notFound,
-        faultWrapper = null,
-        faultHeaders = ir.faultHeaders.map {
-            it.toCodeGen(defaultNull = false)
-        },
-        success = ir.success ?: StatusCode.OK,
-        headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
-        deprecated = ir.deprecated,
-        responseBranches = null,
-    )
-
-    private fun IRTree.Operation.Parameter.toCodeGen(defaultNull: Boolean): CodeGenTree.Operation.Parameter =
-        CodeGenTree.Operation.Parameter(
-            name = name,
-            nullable = nullable,
-            type = toCodeGen(type),
-            documentation = documentation,
-            serialName = serialName,
-            defaultValue =
-            defaultValue?.toCodeGen() ?: if (nullable && defaultNull) CodeGenTree.Expression.NullLiteral else null,
-        )
-
-    private fun IRTree.Literal.toCodeGen(): CodeGenTree.Expression = when (this) {
-        is IRTree.Literal.BOOLEAN -> BooleanLiteral(value)
-        is IRTree.Literal.INT -> IntLiteral(value)
-        is IRTree.Literal.LONG -> LongLiteral(value)
-        is IRTree.Literal.STRING -> StringLiteral(value)
-        is IRTree.Literal.UUID -> UuidLiteral(value)
-        is IRTree.Literal.DATE -> DateLiteral(value)
-        is IRTree.Literal.DOUBLE -> DoubleLiteral(value)
-        is IRTree.Literal.DURATION -> DurationLiteral(value)
-        is IRTree.Literal.FLOAT -> FloatLiteral(value)
-        is IRTree.Literal.INSTANT -> InstantLiteral(value)
-        is IRTree.Literal.BYTE -> ByteLiteral(value)
-        is IRTree.Literal.CHAR -> CharLiteral(value)
-        is IRTree.Literal.SHORT -> ShortLiteral(value)
-    }
-
-    override fun toCodeGen(ir: IRTree.ClassName): CodeGenTree.ClassName = CodeGenTree.ClassName(
-        packageName = ir.packageName,
-        names = ir.name.split("."),
-        runtimeTypes = listOf(),
-    )
-
-    override fun toCodeGen(ir: IRTree.Auth): CodeGenTree.Auth = when (ir) {
-        is IRTree.Auth.OAuth2 -> CodeGenTree.Auth.OAuth2(
-            operation = toCodeGen(ir.operation),
-            flow = when (ir.flow) {
-                IRTree.Auth.OAuth2.Flow.Application -> CodeGenTree.Auth.OAuth2.Flow.Application
-            },
-            grantType = when (ir.grantType) {
-                IRTree.Auth.OAuth2.GrantType.ClientCredentials -> CodeGenTree.Auth.OAuth2.GrantType.ClientCredentials
-            },
-        )
-
-        is IRTree.Auth.Http -> CodeGenTree.Auth.Http(
-            schema = when (val schema = ir.schema) {
-                IRTree.Auth.Http.Schema.Basic -> CodeGenTree.Auth.Http.Schema.Basic
-                IRTree.Auth.Http.Schema.Bearer -> CodeGenTree.Auth.Http.Schema.Bearer
-                is IRTree.Auth.Http.Schema.Header -> CodeGenTree.Auth.Http.Schema.Header(schema.headerName)
-            },
-            name = ir.name,
-            packageName = ir.packageName,
-            documentation = ir.documentation,
-        )
-    }
 }
 
 val SERIALIZABLE = CodeGenTree.Annotation("kotlinx.serialization", listOf("Serializable"), emptyMap())
@@ -231,10 +49,4 @@ fun serialName(value: String) = CodeGenTree.Annotation(
     "kotlinx.serialization",
     listOf("SerialName"),
     mapOf("value" to StringLiteral(value)),
-)
-
-val DEPRECATED = CodeGenTree.Annotation(
-    "kotlin",
-    listOf("Deprecated"),
-    mapOf("message" to StringLiteral("")),
 )

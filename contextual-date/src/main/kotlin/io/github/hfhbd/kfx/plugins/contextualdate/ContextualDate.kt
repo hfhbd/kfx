@@ -3,11 +3,10 @@ package io.github.hfhbd.kfx.plugins.contextualdate
 import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.ir.IRTree
 
 @ServiceLoader(CodeGenTransformer::class)
 class ContextualDate : CodeGenTransformer {
-    override fun invoke(codeGen: CodeGenTree, ir: IRTree): CodeGenTree = codeGen.copy(
+    override fun invoke(codeGen: CodeGenTree): CodeGenTree = codeGen.copy(
         classes = codeGen.classes.mapTo(mutableSetOf()) {
             when (it) {
                 is CodeGenTree.Enum -> it
