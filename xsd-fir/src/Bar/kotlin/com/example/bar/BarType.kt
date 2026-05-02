@@ -10,11 +10,11 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 /**
  * Bar details
  */
-@Serializable
 @XmlSerialName(
   value = "BarType",
   namespace = "http://example.com/bar",
 )
+@Serializable
 public data class BarType(
   /**
    * Valid From
@@ -24,6 +24,7 @@ public data class BarType(
     value = "ValidFrom",
     namespace = "http://example.com/bar",
   )
+  @SerialName(value = "ValidFrom")
   public val validFrom: LocalDate? = null,
   @SerialName(value = "Baz")
   public val baz: Long? = null,

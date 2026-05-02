@@ -19,12 +19,14 @@ public data class FooType(
     value = "Bar",
     namespace = "http://example.com/foo",
   )
+  @SerialName(value = "Bar")
   public val bar: BarType,
   @XmlElement
   @XmlSerialName(
     value = "Foo",
     namespace = "http://example.com/foo",
   )
+  @SerialName(value = "Foo")
   public val foo: Int,
   @SerialName(value = "Baz")
   public val baz: Boolean? = null,
