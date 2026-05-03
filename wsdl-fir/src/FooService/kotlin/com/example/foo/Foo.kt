@@ -4,15 +4,17 @@ import com.example.bar.BarType
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @JvmInline
-@Serializable
 @XmlSerialName(
   value = "Foo",
   namespace = "http://example.com/foo",
 )
+@Serializable
+@SerialName(value = "Foo")
 public value class Foo private constructor(
   private val _value: FooType,
 ) {

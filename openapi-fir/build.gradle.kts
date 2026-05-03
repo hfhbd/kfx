@@ -10,7 +10,7 @@ dependencies {
 }
 
 testing.suites {
-    withType(JvmTestSuite::class) {
+    withType(JvmTestSuite::class).configureEach {
         dependencies {
             implementation(testFixtures(project()))
 

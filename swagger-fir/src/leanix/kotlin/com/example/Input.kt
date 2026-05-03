@@ -5,8 +5,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processingDirection")
+@Serializable
 @SerialName(value = "Input")
 public sealed interface Input {
   /**

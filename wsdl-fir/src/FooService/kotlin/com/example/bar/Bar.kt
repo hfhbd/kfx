@@ -3,6 +3,7 @@ package com.example.bar
 import kotlin.Long
 import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
@@ -10,11 +11,12 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
  * Bar details
  */
 @JvmInline
-@Serializable
 @XmlSerialName(
   value = "Bar",
   namespace = "http://example.com/bar",
 )
+@Serializable
+@SerialName(value = "Bar")
 public value class Bar private constructor(
   private val _value: BarType,
 ) {

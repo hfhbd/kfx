@@ -2,20 +2,23 @@ package org.gradle.schema.dependency_verification
 
 import kotlin.collections.List
 import kotlin.collections.emptyList
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Serializable
 @XmlSerialName(
   value = "ignored-keysType",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
+@Serializable
+@SerialName(value = "ignored-keysType")
 public data class `ignored-keysType`(
   @XmlElement
   @XmlSerialName(
     value = "ignored-key",
     namespace = "https://schema.gradle.org/dependency-verification",
   )
+  @SerialName(value = "ignored-key")
   public val `ignored-key`: List<`ignored-keyType`> = emptyList(),
 )

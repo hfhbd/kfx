@@ -6,8 +6,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processingDirection")
+@Serializable
 @SerialName(value = "ProcessorConfiguration")
 public sealed interface ProcessorConfiguration {
   /**

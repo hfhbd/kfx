@@ -30,7 +30,6 @@ fun generateSwagger(
     codeGenerators: Iterable<CodeGenerator> = ServiceLoader.load(CodeGenerator::class.java),
     firTransformers: Iterable<SwaggerTransformer> = ServiceLoader.load(SwaggerTransformer::class.java),
     transformerFactories: Iterable<IrTransformer> = ServiceLoader.load(IrTransformer::class.java),
-    codeGenCreator: CodeGenCreator = ServiceLoader.load(CodeGenCreator::class.java).single(),
     codeGenTransformer: Iterable<CodeGenTransformer> = ServiceLoader.load(CodeGenTransformer::class.java),
 ) {
     val irTree = swaggerFile.createIr(
@@ -38,7 +37,7 @@ fun generateSwagger(
     )
     val codeGenerator = irTree.toCodeGen(
         transformerFactories,
-        codeGenCreator,
+        CodeGenCreator,
         codeGenTransformer,
     )
     for (codeGeneratorFactory in codeGenerators) {

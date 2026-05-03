@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
   <ManuallySuppressedIssues/>
-  <CurrentIssues/>
+  <CurrentIssues>
+    <ID>PropertyName:KotlinxJsonCreator.kt:KotlinxJsonCreator$val JsonObject = CodeGenTree.NormalClass( packageName = "kotlinx.serialization.json", names = listOf("JsonObject"), provided = true, )</ID>
+    <ID>VariableNaming:KotlinxJsonCreator.kt:KotlinxJsonCreator$val JsonObject = CodeGenTree.NormalClass( packageName = "kotlinx.serialization.json", names = listOf("JsonObject"), provided = true, )</ID>
+  </CurrentIssues>
 </SmellBaseline>

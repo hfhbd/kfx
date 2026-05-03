@@ -12,29 +12,33 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 /**
  * ListEntryType details
  */
-@Serializable
 @XmlSerialName(
   value = "ListEntryWithOtherElementsType",
   namespace = "http://example.com/foo",
 )
+@Serializable
+@SerialName(value = "ListEntryWithOtherElementsType")
 public data class ListEntryWithOtherElementsType(
   @XmlElement
   @XmlSerialName(
     value = "Bars",
     namespace = "http://example.com/foo",
   )
+  @SerialName(value = "Bars")
   public val bars: List<BarType> = emptyList(),
   @XmlElement
   @XmlSerialName(
     value = "Bazs",
     namespace = "http://example.com/foo",
   )
+  @SerialName(value = "Bazs")
   public val bazs: List<BarType> = emptyList(),
   @XmlElement
   @XmlSerialName(
     value = "SimpleTypes",
     namespace = "http://example.com/foo",
   )
+  @SerialName(value = "SimpleTypes")
   public val simpleTypes: List<SimpleType> = emptyList(),
   @SerialName(value = "Size")
   public val size: Long? = null,

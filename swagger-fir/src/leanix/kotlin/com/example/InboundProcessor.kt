@@ -8,8 +8,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "processorType")
+@Serializable
 @SerialName(value = "InboundProcessor")
 public sealed interface InboundProcessor {
   /**

@@ -1,15 +1,17 @@
 package org.gradle.schema.dependency_verification
 
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 @JvmInline
-@Serializable
 @XmlSerialName(
   value = "verification-metadata",
   namespace = "https://schema.gradle.org/dependency-verification",
 )
+@Serializable
+@SerialName(value = "verification-metadata")
 public value class `verification-metadata` private constructor(
   private val _value: `verification-metadataType`,
 ) {

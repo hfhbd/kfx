@@ -4,6 +4,7 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock: CodeBlock</ID>
     <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Type.Builtin.toPoetType: ClassName</ID>
+    <ID>CyclomaticComplexMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Type.toPoetType: TypeName</ID>
     <ID>LongMethod:KotlinPoetCodeGenerator.kt:fun CodeGenTree.Expression.toCodeBlock: CodeBlock</ID>
   </CurrentIssues>
 </SmellBaseline>

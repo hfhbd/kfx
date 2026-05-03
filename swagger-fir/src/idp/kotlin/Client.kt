@@ -4,8 +4,8 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-@Serializable
 @JsonClassDiscriminator(discriminator = "protocol")
+@Serializable
 public sealed interface Client {
   /**
    * Email, which can be used to announce breaking changes. Can be a semicolon separated list. Make sure this is always up-to-date so we can reach you on important topics!

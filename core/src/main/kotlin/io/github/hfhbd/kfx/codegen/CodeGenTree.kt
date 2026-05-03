@@ -2,9 +2,11 @@ package io.github.hfhbd.kfx.codegen
 
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
+import io.github.hfhbd.kfx.ir.IRTree
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -87,6 +89,9 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
 
         @Serializable
         data object STAR : Type
+
+        @Serializable
+        data object Unknown : Type
     }
 
     @Serializable
@@ -133,6 +138,8 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val superInterfaces: List<ClassName> = emptyList(),
         override val innerClasses: List<Class> = emptyList(),
         override val provided: Boolean = false,
+        @Transient val ir: IRTree.NormalClass? = null,
+        val isResultClass: Boolean = false,
     ) : Class
 
     @Serializable
@@ -144,6 +151,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val annotations: List<Annotation> = emptyList(),
         val mutable: Boolean = false,
         val overrideable: Boolean = false,
+        @Transient val ir: IRTree.Member? = null,
     )
 
     @Serializable
@@ -192,12 +200,16 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         override val annotations: List<Annotation> = emptyList(),
         override val innerClasses: List<Class> = emptyList(),
         override val provided: Boolean = false,
+
+        @Transient
+        val ir: IRTree.Enum? = null,
     ) : Class {
         @Serializable
         data class Value(
             val name: String,
             val documentation: String? = null,
             val annotations: List<Annotation> = emptyList(),
+            @Transient val ir: IRTree.Enum.Value? = null,
         )
     }
 
@@ -230,6 +242,8 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val responseBranches: ResponseBranches?,
         val faultWrapper: Type?,
         val deprecated: Boolean,
+        @Transient
+        val ir: IRTree.Operation? = null,
     ) {
         @Serializable
         data class ResponseBranches(val success: Branch?, val notFound: Branch?, val fault: Branch) {
