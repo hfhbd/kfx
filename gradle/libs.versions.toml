@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.3.20"
-ktor = "3.4.2"
+kotlin = "2.3.21"
+ktor = "3.4.3"
 serialization = "1.11.0"
 
 [libraries]
@@ -28,7 +28,7 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.32" }
 
 dokka-mermaid = { module = "com.glureau:html-mermaid-dokka-plugin", version = "0.6.0" }
 
-spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.5" }
+spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", version = "4.0.6" }
 
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-gradle-plugin-impl = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -38,7 +38,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
-detekt = { id = "dev.detekt", version = "2.0.0-alpha.2" }
+detekt = { id = "dev.detekt", version = "2.0.0-alpha.3" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.22" }
 validation = { id = "app.softwork.validation", version = "0.0.16" }

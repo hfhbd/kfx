@@ -26,13 +26,15 @@ Code generators:
 ## Gradle plugin
 
 ```kotlin
+import io.github.hfhbd.kfx.openapi.OpenApi
+
 plugins {
     id("io.github.hfhbd.kfx") version "LATEST"
 }
 
 kfx {
-    register("myApi", OpenApi::class) {
-        files.from(file("myApi.json"))
+    register<OpenApi>("myApi") {
+        files.from("myApi.json")
         dependencies {
             compiler(kotlinClasses())
             compiler(kotlinxJson())
