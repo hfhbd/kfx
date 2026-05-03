@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.String
 import kotlin.Unit
 
@@ -17,7 +18,7 @@ public suspend fun HttpClient.getSynchronizationRunStatus(id: String, builder: s
   val response = `get`(urlString = """synchronizationRuns/${id}/status""") {
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<StatusResponse>()

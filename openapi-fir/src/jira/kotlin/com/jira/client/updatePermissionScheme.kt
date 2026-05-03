@@ -8,6 +8,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.contentType
 import kotlin.Long
 import kotlin.String
@@ -29,7 +30,7 @@ public suspend fun HttpClient.updatePermissionScheme(
     setBody(input)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<PermissionSchemeBean>()

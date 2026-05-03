@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Throws
@@ -31,7 +32,7 @@ public suspend fun HttpClient.getMDIDeltaTokenByOperationAndEntityAndVersion(
   val response = `get`(urlString = """MDIDeltaToken(Operation='${operation}',Entity='${entity}',Version='${version}')""") {
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   if (response.status.isSuccess()) {

@@ -6,6 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
@@ -25,7 +26,7 @@ public suspend fun HttpClient.deleteProjectRoleActorsFromRole(
     parameter("group", group)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<ProjectRoleActorsBean>()

@@ -6,6 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.Long
 import kotlin.Unit
 
@@ -18,7 +19,7 @@ public suspend fun HttpClient.getReindexInfo(taskId: Long? = null, builder: susp
     parameter("taskId", taskId)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<ReindexBean>()

@@ -9,6 +9,7 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.NameAllocator
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
@@ -401,7 +402,10 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             val nullableOutput = notFound
             if (output != null && nullableOutput) {
                 function.beginControlFlow(
-                    "if (response.status.value == 404)",
+                    "if (response.status == %M)",
+                    ClassName("io.ktor.http", "HttpStatusCode")
+                        .nestedClass("Companion")
+                        .member("NotFound"),
                 )
                 function.addStatement("return null")
                 function.endControlFlow()

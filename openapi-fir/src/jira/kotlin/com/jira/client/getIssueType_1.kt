@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.String
 import kotlin.Unit
 
@@ -18,7 +19,7 @@ public suspend fun HttpClient.getIssueType_1(id: String, builder: suspend HttpRe
   val response = `get`(urlString = """api/2/issuetype/${id}""") {
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<IssueTypeJsonBean>()
