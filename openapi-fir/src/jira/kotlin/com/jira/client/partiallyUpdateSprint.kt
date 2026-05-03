@@ -7,6 +7,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.contentType
 import kotlin.Long
 import kotlin.Unit
@@ -34,7 +35,7 @@ public suspend fun HttpClient.partiallyUpdateSprint(
     setBody(input)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<SprintBean>()

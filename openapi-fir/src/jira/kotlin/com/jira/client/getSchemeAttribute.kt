@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
@@ -21,7 +22,7 @@ public suspend fun HttpClient.getSchemeAttribute(
   val response = `get`(urlString = """api/2/permissionscheme/${permissionSchemeId}/attribute/${attributeKey}""") {
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<PermissionSchemeAttributeBean>()

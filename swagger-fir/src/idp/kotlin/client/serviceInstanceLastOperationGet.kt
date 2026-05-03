@@ -7,6 +7,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.`header`
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.String
 import kotlin.Unit
 
@@ -38,7 +39,7 @@ public suspend fun HttpClient.serviceInstanceLastOperationGet(
     parameter("operation", operation)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<LastOperationResource>()

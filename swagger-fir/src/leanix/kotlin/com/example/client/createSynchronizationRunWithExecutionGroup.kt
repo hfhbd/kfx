@@ -9,6 +9,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.contentType
 import kotlin.Boolean
 import kotlin.String
@@ -35,7 +36,7 @@ public suspend fun HttpClient.createSynchronizationRunWithExecutionGroup(
     setBody(input)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<SynchronizationRunWithConfiguration>()

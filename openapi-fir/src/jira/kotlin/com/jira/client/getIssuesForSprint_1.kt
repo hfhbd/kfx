@@ -7,6 +7,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -37,7 +38,7 @@ public suspend fun HttpClient.getIssuesForSprint_1(
     parameter("startAt", startAt)
     builder()
   }
-  if (response.status.value == 404) {
+  if (response.status == NotFound) {
     return null
   }
   val output = response.body<SearchResultsBean>()
