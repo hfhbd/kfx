@@ -277,7 +277,7 @@ private fun toIr(
                             IRTree.Member(
                                 type = type,
                                 nullable = false,
-                                serialName = "",
+                                serialName = null,
                                 namespace = "",
                                 documentation = "",
                                 xmlType = IRTree.XmlType.Value,
