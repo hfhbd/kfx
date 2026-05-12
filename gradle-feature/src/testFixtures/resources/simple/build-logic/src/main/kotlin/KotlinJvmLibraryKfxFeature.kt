@@ -27,7 +27,7 @@ class KotlinJvmLibraryKfxFeature : Plugin<Project> {
                 targetDefinition: KotlinJvmLibraryDefinition,
             ) {
                 val kotlinBuildModel = context.getBuildModel(targetDefinition)
-                apply(definition, kotlinBuildModel.sourceSets.getByName("main"))
+                apply(definition, kotlinBuildModel.sourceSets.getByName("main").kotlin)
             }
         }
     }

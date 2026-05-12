@@ -4,10 +4,10 @@ import io.github.hfhbd.kfx.openapi.ConvertOpenApiFiles
 import io.github.hfhbd.kfx.swagger.ConvertSwaggerFiles
 import io.github.hfhbd.kfx.wsdl.ConvertWsdlFiles
 import io.github.hfhbd.kfx.xsd.ConvertXsdFiles
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import javax.inject.Inject
 
 abstract class KfxApplyAction {
@@ -22,14 +22,14 @@ abstract class KfxApplyAction {
 
     fun apply(
         definition: KfxDefinition,
-        kotlinSourceSet: KotlinSourceSet,
+        sourceDirectorySet: SourceDirectorySet,
     ) {
         definition.openApi.all { openApi ->
-            configure(openApi, kotlinSourceSet)
+            configure(openApi, sourceDirectorySet)
         }
 
         definition.xsd.all { xsd ->
-            configure(xsd, kotlinSourceSet)
+            configure(xsd, sourceDirectorySet)
         }
 
         definition.wsdl.all { wsdl ->
@@ -40,7 +40,7 @@ abstract class KfxApplyAction {
                 it.fromDependencyCollector(wsdl.dependencies.compiler)
             }
 
-            kotlinSourceSet.kotlin.srcDir(
+            sourceDirectorySet.srcDir(
                 tasks.register("convertWsdlFiles${wsdl.name}", ConvertWsdlFiles::class.java) {
                     @Suppress("INVISIBLE_REFERENCE")
                     it.classpath.from(kfxWsdlClasspath)
@@ -63,7 +63,7 @@ abstract class KfxApplyAction {
                 it.fromDependencyCollector(swagger.dependencies.compiler)
             }
 
-            kotlinSourceSet.kotlin.srcDir(
+            sourceDirectorySet.srcDir(
                 tasks.register("convertSwaggerFiles${swagger.name}", ConvertSwaggerFiles::class.java) {
                     @Suppress("INVISIBLE_REFERENCE")
                     it.classpath.from(kfxSwaggerClasspath)
@@ -77,7 +77,7 @@ abstract class KfxApplyAction {
         }
     }
 
-    private fun configure(openApi: OpenApi, kotlinSourceSet: KotlinSourceSet) {
+    private fun configure(openApi: OpenApi, sourceDirectorySet: SourceDirectorySet) {
         @Suppress("INVISIBLE_REFERENCE")
         openApi.dependencies.compiler.add("$GROUP:openapi-fir:$VERSION")
         @Suppress("INVISIBLE_REFERENCE")
@@ -87,7 +87,7 @@ abstract class KfxApplyAction {
             it.fromDependencyCollector(openApi.dependencies.compiler)
         }
 
-        kotlinSourceSet.kotlin.srcDir(
+        sourceDirectorySet.srcDir(
             tasks.register("convertOpenApiFiles${openApi.name}", ConvertOpenApiFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(kfxOpenApiClasspath)
@@ -100,7 +100,7 @@ abstract class KfxApplyAction {
         )
     }
 
-    private fun configure(xsd: Xsd, kotlinSourceSet: KotlinSourceSet) {
+    private fun configure(xsd: Xsd, sourceDirectorySet: SourceDirectorySet) {
         @Suppress("INVISIBLE_REFERENCE")
         xsd.dependencies.compiler.add("$GROUP:xsd-fir:$VERSION")
 
@@ -108,7 +108,7 @@ abstract class KfxApplyAction {
             it.fromDependencyCollector(xsd.dependencies.compiler)
         }
 
-        kotlinSourceSet.kotlin.srcDir(
+        sourceDirectorySet.srcDir(
             tasks.register("convertXsdFiles${xsd.name}", ConvertXsdFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(kfxXsdClasspath)
