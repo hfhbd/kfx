@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.github.hfhbd.mavencentral")
-    id("dev.sigstore.sign")
+   // id("dev.sigstore.sign") https://github.com/sigstore/sigstore-java/issues/1187
     id("app.cash.licensee")
     id("org.jetbrains.dokka")
     id("dev.detekt")
