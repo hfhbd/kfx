@@ -14,6 +14,8 @@ class XmlUtilCreator : CodeGenTransformer {
             when (it) {
                 is CodeGenTree.Enum -> it
 
+                is CodeGenTree.NormalClass if it.isResultClass -> it
+
                 is CodeGenTree.NormalClass -> {
                     it.copy(
                         annotations = buildList {
