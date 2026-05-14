@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.21"
-ktor = "3.4.3"
+ktor = "3.5.0"
 serialization = "1.11.0"
 
 [libraries]
