@@ -264,6 +264,9 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
             Put,
             Patch,
             Delete,
+            Options,
+            Trace,
+            Query,
         }
 
         @Serializable

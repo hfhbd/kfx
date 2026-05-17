@@ -11,29 +11,29 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.accept
 import io.ktor.server.routing.contentType
-import io.ktor.server.routing.patch
+import io.ktor.server.routing.query
 import io.ktor.server.routing.route
-import results.PatchHttpFooBarBazResult
+import results.QueryHttpFooBarBazResult
 
 /**
  * Foo Bar API
  */
-public fun Route.patchHttpFooBarBaz(action: suspend ApplicationCall.(FooInput) -> PatchHttpFooBarBazResult) {
+public fun Route.queryHttpFooBarBaz(action: suspend ApplicationCall.(FooInput) -> QueryHttpFooBarBazResult) {
   route(path = """/http/foo/bar/baz""") {
     contentType(Json) {
       accept(Json) {
-        patch {
+        query {
           val body = call.receive<FooInput>()
           val response = call.action(body)
           when (response) {
-            is PatchHttpFooBarBazResult.Success -> {
+            is QueryHttpFooBarBazResult.Success -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
               call.response.status(Created)
               call.respond(response.body)
             }
-            is PatchHttpFooBarBazResult.Failure -> {
+            is QueryHttpFooBarBazResult.Failure -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }

@@ -118,6 +118,9 @@ private fun OpenApi.toIr(
         pathObject.put?.add(IRTree.Operation.HttpMethod.Put)
         pathObject.patch?.add(IRTree.Operation.HttpMethod.Patch)
         pathObject.delete?.add(IRTree.Operation.HttpMethod.Delete)
+        pathObject.options?.add(IRTree.Operation.HttpMethod.Options)
+        pathObject.trace?.add(IRTree.Operation.HttpMethod.Trace)
+        pathObject.query?.add(IRTree.Operation.HttpMethod.Query)
     }
 
     var irTree = IRTree(

@@ -57,6 +57,9 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             CodeGenTree.Operation.HttpMethod.Put -> "put"
             CodeGenTree.Operation.HttpMethod.Patch -> "patch"
             CodeGenTree.Operation.HttpMethod.Delete -> "delete"
+            CodeGenTree.Operation.HttpMethod.Options -> "options"
+            CodeGenTree.Operation.HttpMethod.Trace -> "trace"
+            CodeGenTree.Operation.HttpMethod.Query -> "query"
         },
         isExtension = true,
     )

@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>CyclomaticComplexMethod:CodeGenCreator.kt:CodeGenCreator$fun toCodeGen: CodeGenTree.Operation</ID>
     <ID>CyclomaticComplexMethod:CodeGenCreator.kt:CodeGenCreator$fun toCodeGen: CodeGenTree.Type</ID>
     <ID>CyclomaticComplexMethod:ContentType.kt:ContentType.Companion$fun fromString: ContentType?</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.Accepted$202</ID>
