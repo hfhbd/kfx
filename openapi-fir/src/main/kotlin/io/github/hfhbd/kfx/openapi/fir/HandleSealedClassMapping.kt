@@ -24,7 +24,7 @@ private fun handleSealedClassMapping(
     irClass: IRTree.NormalClass,
     sealedClass: OpenApi.Components.Schema.OBJECT,
 ): IRTree.NormalClass {
-    val serialName = sealedClass.discriminator!!.mapping.entries.singleOrNull {
+    val serialName = sealedClass.discriminator?.mapping?.entries?.singleOrNull {
         val s = "#/components/schemas/" + irClass.qName
         it.value == s
     }?.key

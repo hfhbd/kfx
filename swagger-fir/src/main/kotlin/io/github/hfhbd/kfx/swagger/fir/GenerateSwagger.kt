@@ -232,6 +232,54 @@ private fun generate(
         }
     }
 
+    val operationParameters = (
+        operation.parameters.mapNotNull {
+            when (it.position) {
+                Parameter.Position.Body -> null
+
+                Parameter.Position.Query -> null
+
+                Parameter.Position.Header -> null
+
+                Parameter.Position.Path -> it.toParameter(
+                    IRTree.ClassName("", name),
+                    parameters,
+                    irTypes,
+                    definitions,
+                ).second.copy(
+                    nullable = false,
+                )
+
+                null -> it.toParameter(
+                    IRTree.ClassName("", name),
+                    parameters,
+                    irTypes,
+                    definitions,
+                ).takeIf { it.first == Parameter.Position.Path }?.second?.copy(
+                    nullable = false,
+                )
+            }
+        } + pathParameters.filter {
+            val position = if (it.ref != null) {
+                val name = it.ref!!.removePrefix("#/parameters/")
+                val found = parameters[name]!!
+                found.position
+            } else {
+                it.position
+            }
+            position == Parameter.Position.Path
+        }.map {
+            it.toParameter(
+                IRTree.ClassName("", name),
+                parameters,
+                irTypes,
+                definitions,
+            ).second.copy(
+                nullable = false,
+            )
+        }
+        ).distinctBy { it.name }
+
     val op = IRTree.Operation(
         packageName = "",
         name = name.replaceFirstChar { it.lowercaseChar() },
@@ -293,15 +341,45 @@ private fun generate(
                 definitions,
             )
         } ?: emptyList(),
-        parameters = operation.parameters.mapNotNull {
-            when (it.position) {
-                Parameter.Position.Body -> null
+        parameters = operationParameters,
+        headers = (
+            operation.parameters.mapNotNull {
+                val s = when (it.position) {
+                    Parameter.Position.Body -> null
 
-                Parameter.Position.Query -> null
+                    Parameter.Position.Path -> null
 
-                Parameter.Position.Header -> null
+                    Parameter.Position.Query -> null
 
-                Parameter.Position.Path -> it.toParameter(
+                    Parameter.Position.Header -> {
+                        val a = it.toParameter(
+                            IRTree.ClassName("", name),
+                            parameters,
+                            irTypes,
+                            definitions,
+                        ).second
+                        a
+                    }
+
+                    null -> it.toParameter(
+                        IRTree.ClassName("", name),
+                        parameters,
+                        irTypes,
+                        definitions,
+                    ).takeIf { it.first == Parameter.Position.Header }?.second
+                }
+                s
+            } + pathParameters.filter {
+                val position = if (it.ref != null) {
+                    val name = it.ref!!.removePrefix("#/parameters/")
+                    val found = parameters[name]!!
+                    found.position
+                } else {
+                    it.position
+                }
+                position == Parameter.Position.Header
+            }.map {
+                it.toParameter(
                     IRTree.ClassName("", name),
                     parameters,
                     irTypes,
@@ -309,80 +387,8 @@ private fun generate(
                 ).second.copy(
                     nullable = false,
                 )
-
-                null -> it.toParameter(
-                    IRTree.ClassName("", name),
-                    parameters,
-                    irTypes,
-                    definitions,
-                ).takeIf { it.first == Parameter.Position.Path }?.second?.copy(
-                    nullable = false,
-                )
             }
-        } + pathParameters.filter {
-            val position = if (it.ref != null) {
-                val name = it.ref!!.removePrefix("#/parameters/")
-                val found = parameters[name]!!
-                found.position
-            } else {
-                it.position
-            }
-            position == Parameter.Position.Path
-        }.map {
-            it.toParameter(
-                IRTree.ClassName("", name),
-                parameters,
-                irTypes,
-                definitions,
-            ).second.copy(
-                nullable = false,
-            )
-        },
-        headers = operation.parameters.mapNotNull {
-            val s = when (it.position) {
-                Parameter.Position.Body -> null
-
-                Parameter.Position.Path -> null
-
-                Parameter.Position.Query -> null
-
-                Parameter.Position.Header -> {
-                    val a = it.toParameter(
-                        IRTree.ClassName("", name),
-                        parameters,
-                        irTypes,
-                        definitions,
-                    ).second
-                    a
-                }
-
-                null -> it.toParameter(
-                    IRTree.ClassName("", name),
-                    parameters,
-                    irTypes,
-                    definitions,
-                ).takeIf { it.first == Parameter.Position.Header }?.second
-            }
-            s
-        } + pathParameters.filter {
-            val position = if (it.ref != null) {
-                val name = it.ref!!.removePrefix("#/parameters/")
-                val found = parameters[name]!!
-                found.position
-            } else {
-                it.position
-            }
-            position == Parameter.Position.Header
-        }.map {
-            it.toParameter(
-                IRTree.ClassName("", name),
-                parameters,
-                irTypes,
-                definitions,
-            ).second.copy(
-                nullable = false,
-            )
-        },
+            ).distinctBy { it.name },
         deprecated = operation.deprecated,
         queryParameters = operation.parameters.mapNotNull {
             when (it.position) {

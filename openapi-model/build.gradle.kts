@@ -30,8 +30,16 @@ val downloadJiraApi by tasks.registering(Copy::class) {
     into(testFixturesResources)
 }
 
+val downloadYouTrackApi by tasks.registering(Copy::class) {
+    from(resources.text.fromUri("https://youtrack.jetbrains.com/api/openapi.json")) {
+        rename { "youtrack.json" }
+    }
+    into(testFixturesResources)
+}
+
 val updateExternalAPIs by tasks.registering {
     dependsOn(downloadGitHubApi)
     dependsOn(downloadConfluence)
     dependsOn(downloadJiraApi)
+    dependsOn(downloadYouTrackApi)
 }

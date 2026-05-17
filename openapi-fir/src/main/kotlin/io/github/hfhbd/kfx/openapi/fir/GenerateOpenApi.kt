@@ -145,7 +145,7 @@ private fun OpenApi.Operation.toIr(
     irTypes: MutableMap<String, IRTree.Class>,
     method: IRTree.Operation.HttpMethod,
 ): IRTree.Operation {
-    val parameters = parameters + pathParameters
+    val parameters = (parameters + pathParameters).distinctBy { it.name }
 
     val statusCodes = responses.keys.getStatusCodes()
 
@@ -693,6 +693,7 @@ private fun Schema.OBJECT.toIr(
                     if (it.ref == null) {
                         putAll(
                             it.properties.toMembers(
+                                name = name,
                                 irTypes = irTypes,
                                 required = it.required,
                             ),
