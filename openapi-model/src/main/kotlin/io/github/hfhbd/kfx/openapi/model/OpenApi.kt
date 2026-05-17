@@ -49,22 +49,22 @@ public data class OpenApi(
     private fun checkUniqueId() {
         val operationIds = mutableSetOf<String>()
         paths.values.forEach {
-            if (it.head != null) {
+            if (it.head?.id != null) {
                 operationIds.checkId(it.head.id)
             }
-            if (it.get != null) {
+            if (it.get?.id != null) {
                 operationIds.checkId(it.get.id)
             }
-            if (it.post != null) {
+            if (it.post?.id != null) {
                 operationIds.checkId(it.post.id)
             }
-            if (it.put != null) {
+            if (it.put?.id != null) {
                 operationIds.checkId(it.put.id)
             }
-            if (it.patch != null) {
+            if (it.patch?.id != null) {
                 operationIds.checkId(it.patch.id)
             }
-            if (it.delete != null) {
+            if (it.delete?.id != null) {
                 operationIds.checkId(it.delete.id)
             }
         }
@@ -134,7 +134,7 @@ public data class OpenApi(
     @Serializable(with = Operation.CustomSerializer::class)
     public data class Operation(
         @SerialName("operationId")
-        val id: String,
+        val id: String? = null,
         val summary: String? = null,
         val description: String? = null,
         val tags: List<String> = emptyList(),

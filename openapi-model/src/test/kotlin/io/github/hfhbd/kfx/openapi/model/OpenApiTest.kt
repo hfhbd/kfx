@@ -25,6 +25,12 @@ class OpenApiTest {
     }
 
     @Test
+    fun decodeYoutrack() {
+        val input = OpenApiTest::class.java.getResourceAsStream("/youtrack.json")!!.bufferedReader().readText()
+        json.decodeFromString(OpenApi.serializer(), input)
+    }
+
+    @Test
     fun decodeCentral() {
         val input = OpenApiTest::class.java.getResourceAsStream("/central.json")!!.bufferedReader().readText()
         json.decodeFromString(OpenApi.serializer(), input)

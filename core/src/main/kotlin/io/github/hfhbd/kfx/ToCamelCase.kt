@@ -29,11 +29,13 @@ fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(this) {
         .uppercase()
 }
 
-fun String.toPascalCase() = toCamelCase().replaceFirstChar { it.uppercaseChar() }
-
 fun String.operationIdToCamelCase() = "[_\\-][a-zA-Z]".toRegex().replace(this) {
     it.value
         .replace("_", "")
         .replace("-", "")
         .uppercase()
 }
+
+fun String.pathToOperationId() = split("/").joinToString("") {
+    it.replaceFirstChar { it.uppercaseChar() }
+}.replaceFirstChar { it.uppercaseChar() }

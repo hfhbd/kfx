@@ -144,6 +144,85 @@
                         "Foo": []
                     }
                 ]
+            },
+            "patch": {
+                "summary": "Foo Bar API",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "requestBody": {
+                    "description": "",
+                    "required": true,
+                    "content": {
+                        "application/json; charset=utf-8": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/com.example.FooInput"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "required": true,
+                        "description": "The CSRF Token fetched by executing BazA_CsrfToken first.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "B",
+                        "in": "header",
+                        "description": "some Header",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "headers": {
+                            "logid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected Error",
+                        "headers": {
+                            "logid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
             }
         }
     },
