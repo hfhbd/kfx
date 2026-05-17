@@ -9,6 +9,7 @@ import io.github.hfhbd.kfx.getStatusCodes
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IRTree.Auth.Http
 import io.github.hfhbd.kfx.ir.IrTransformer
+import io.github.hfhbd.kfx.pathToOperationId
 import io.github.hfhbd.kfx.swagger.model.Swagger
 import io.github.hfhbd.kfx.swagger.model.Swagger.Definition
 import io.github.hfhbd.kfx.swagger.model.Swagger.Header
@@ -192,11 +193,7 @@ private fun generate(
 ): IRTree.Operation {
     val statusCodes = operation.responses.keys.getStatusCodes()
 
-    val name = operation.operationId ?: (
-        method.toString() + path.split("/").joinToString("") {
-            it.replaceFirstChar { it.uppercaseChar() }
-        }.replaceFirstChar { it.uppercaseChar() }
-        )
+    val name = operation.operationId ?: (method.name + path.pathToOperationId())
 
     val input = (
         operation.parameters.mapNotNull {

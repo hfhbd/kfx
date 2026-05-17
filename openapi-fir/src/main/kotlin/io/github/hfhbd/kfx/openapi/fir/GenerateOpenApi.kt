@@ -24,6 +24,7 @@ import io.github.hfhbd.kfx.openapi.model.OpenApi
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema
 import io.github.hfhbd.kfx.openapi.model.json
 import io.github.hfhbd.kfx.operationIdToCamelCase
+import io.github.hfhbd.kfx.pathToOperationId
 import io.github.hfhbd.kfx.toCamelCase
 import io.github.hfhbd.kfx.toCodeGen
 import kotlinx.datetime.LocalDate
@@ -95,84 +96,28 @@ private fun OpenApi.toIr(
 
     val irOperations = mutableSetOf<IRTree.Operation>()
     for ((path, pathObject) in paths) {
-        pathObject.head?.let {
+        fun OpenApi.Operation.add(method: IRTree.Operation.HttpMethod) {
+            val name = id?.operationIdToCamelCase() ?: (method.name + path.pathToOperationId())
             irOperations.add(
-                it.toIr(
+                toIr(
+                    name,
                     path,
                     pathObject.parameters,
                     components.parameters,
                     components.headers,
                     components.responses,
                     irTypes,
-                    IRTree.Operation.HttpMethod.Head,
+                    method,
                 ),
             )
         }
-        pathObject.get?.let {
-            irOperations.add(
-                it.toIr(
-                    path,
-                    pathObject.parameters,
-                    components.parameters,
-                    components.headers,
-                    components.responses,
-                    irTypes,
-                    IRTree.Operation.HttpMethod.Get,
-                ),
-            )
-        }
-        pathObject.post?.let {
-            irOperations.add(
-                it.toIr(
-                    path,
-                    pathObject.parameters,
-                    components.parameters,
-                    components.headers,
-                    components.responses,
-                    irTypes,
-                    IRTree.Operation.HttpMethod.Post,
-                ),
-            )
-        }
-        pathObject.put?.let {
-            irOperations.add(
-                it.toIr(
-                    path,
-                    pathObject.parameters,
-                    components.parameters,
-                    components.headers,
-                    components.responses,
-                    irTypes,
-                    IRTree.Operation.HttpMethod.Put,
-                ),
-            )
-        }
-        pathObject.patch?.let {
-            irOperations.add(
-                it.toIr(
-                    path,
-                    pathObject.parameters,
-                    components.parameters,
-                    components.headers,
-                    components.responses,
-                    irTypes,
-                    IRTree.Operation.HttpMethod.Patch,
-                ),
-            )
-        }
-        pathObject.delete?.let {
-            irOperations.add(
-                it.toIr(
-                    path,
-                    pathObject.parameters,
-                    components.parameters,
-                    components.headers,
-                    components.responses,
-                    irTypes,
-                    IRTree.Operation.HttpMethod.Delete,
-                ),
-            )
-        }
+
+        pathObject.head?.add(IRTree.Operation.HttpMethod.Head)
+        pathObject.get?.add(IRTree.Operation.HttpMethod.Get)
+        pathObject.post?.add(IRTree.Operation.HttpMethod.Post)
+        pathObject.put?.add(IRTree.Operation.HttpMethod.Put)
+        pathObject.patch?.add(IRTree.Operation.HttpMethod.Patch)
+        pathObject.delete?.add(IRTree.Operation.HttpMethod.Delete)
     }
 
     var irTree = IRTree(
@@ -191,7 +136,8 @@ private fun OpenApi.toIr(
 }
 
 private fun OpenApi.Operation.toIr(
-    path: String,
+    name: String,
+    path: String?,
     pathParameters: List<OpenApi.Parameter>,
     componentParameters: Map<String, OpenApi.Parameter>,
     componentHeaders: Map<String, OpenApi.Operation.Header>,
@@ -210,7 +156,6 @@ private fun OpenApi.Operation.toIr(
         else -> "$summary\n$description"
     }
 
-    val name = id.operationIdToCamelCase()
     val inputSchema = requestBody?.content?.entries?.firstOrNull()?.value?.schema?.takeUnless { it.isUnit() }
     var input = inputSchema?.toIr(
         parentName = name,
@@ -243,7 +188,7 @@ private fun OpenApi.Operation.toIr(
         method = method,
         location = null,
         soapAction = null,
-        path = path.replace("{", "\${"),
+        path = path?.replace("{", "\${"),
         input = input,
         inputContentType = requestBody?.content?.entries?.first()?.key?.let { ContentType.fromString(it) },
         output = output,
