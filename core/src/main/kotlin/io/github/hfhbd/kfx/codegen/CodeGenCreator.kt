@@ -142,6 +142,9 @@ data object CodeGenCreator {
             IRTree.Operation.HttpMethod.Put -> CodeGenTree.Operation.HttpMethod.Put
             IRTree.Operation.HttpMethod.Patch -> CodeGenTree.Operation.HttpMethod.Patch
             IRTree.Operation.HttpMethod.Delete -> CodeGenTree.Operation.HttpMethod.Delete
+            IRTree.Operation.HttpMethod.Options -> CodeGenTree.Operation.HttpMethod.Options
+            IRTree.Operation.HttpMethod.Trace -> CodeGenTree.Operation.HttpMethod.Trace
+            IRTree.Operation.HttpMethod.Query -> CodeGenTree.Operation.HttpMethod.Query
         },
         parameters = ir.parameters.map {
             it.toCodeGen(defaultNull = false)

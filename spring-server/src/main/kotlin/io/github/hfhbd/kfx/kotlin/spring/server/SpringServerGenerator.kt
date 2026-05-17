@@ -16,6 +16,7 @@ import com.squareup.kotlinpoet.UNIT
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Operation.HttpMethod
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
 import io.github.hfhbd.kfx.kotlin.toKdoc
@@ -230,32 +231,8 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         }
 
         function.beginControlFlow(
-            "method(%M) { request ->",
-            MemberName(
-                ClassName(
-                    "org.springframework.http",
-                    "HttpMethod",
-                ),
-                when (method) {
-                    CodeGenTree.Operation.HttpMethod.Head ->
-                        "HEAD"
-
-                    CodeGenTree.Operation.HttpMethod.Get ->
-                        "GET"
-
-                    CodeGenTree.Operation.HttpMethod.Post ->
-                        "POST"
-
-                    CodeGenTree.Operation.HttpMethod.Put ->
-                        "PUT"
-
-                    CodeGenTree.Operation.HttpMethod.Patch ->
-                        "PATCH"
-
-                    CodeGenTree.Operation.HttpMethod.Delete ->
-                        "DELETE"
-                },
-            ),
+            "method(%L) { request ->",
+            method.toSpring(),
         )
 
         if (input != null && inputContentType?.supportedBySerialization() != false) {
@@ -322,6 +299,25 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         }
 
         return function.build()
+    }
+}
+
+private fun HttpMethod.toSpring(): CodeBlock {
+    val httpMethodClassName = ClassName(
+        "org.springframework.http",
+        "HttpMethod",
+    )
+
+    return when (this) {
+        HttpMethod.Head -> CodeBlock.of("%M", httpMethodClassName.member("HEAD"))
+        HttpMethod.Get -> CodeBlock.of("%M", httpMethodClassName.member("GET"))
+        HttpMethod.Post -> CodeBlock.of("%M", httpMethodClassName.member("POST"))
+        HttpMethod.Put -> CodeBlock.of("%M", httpMethodClassName.member("PUT"))
+        HttpMethod.Patch -> CodeBlock.of("%M", httpMethodClassName.member("PATCH"))
+        HttpMethod.Delete -> CodeBlock.of("%M", httpMethodClassName.member("DELETE"))
+        HttpMethod.Options -> CodeBlock.of("%M", httpMethodClassName.member("OPTIONS"))
+        HttpMethod.Trace -> CodeBlock.of("%M", httpMethodClassName.member("TRACE"))
+        HttpMethod.Query -> CodeBlock.of("%M(%S)", httpMethodClassName.member("valueOf"), "QUERY")
     }
 }
 

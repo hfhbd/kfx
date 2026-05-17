@@ -155,6 +155,9 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
             Put,
             Patch,
             Delete,
+            Options,
+            Trace,
+            Query,
         }
 
         data class Parameter(

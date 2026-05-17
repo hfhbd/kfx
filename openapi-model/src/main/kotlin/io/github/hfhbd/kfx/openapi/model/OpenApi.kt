@@ -67,6 +67,15 @@ public data class OpenApi(
             if (it.delete?.id != null) {
                 operationIds.checkId(it.delete.id)
             }
+            if (it.options?.id != null) {
+                operationIds.checkId(it.options.id)
+            }
+            if (it.trace?.id != null) {
+                operationIds.checkId(it.trace.id)
+            }
+            if (it.query?.id != null) {
+                operationIds.checkId(it.query.id)
+            }
         }
     }
 
@@ -128,6 +137,9 @@ public data class OpenApi(
         val put: Operation? = null,
         val patch: Operation? = null,
         val delete: Operation? = null,
+        val options: Operation? = null,
+        val trace: Operation? = null,
+        val query: Operation? = null,
     )
 
     @KeepGeneratedSerializer
