@@ -44,4 +44,4 @@ serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.22"
 validation = { id = "app.softwork.validation", version = "0.0.16" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
-sigstore = { id = "dev.sigstore.sign", version = "2.0.0" }
+sigstore = { id = "dev.sigstore.sign", version = "2.1.0" }
