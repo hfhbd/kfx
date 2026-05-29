@@ -8,7 +8,7 @@ fun String.toPascalCaseEnumValue(): String {
         this
     }
 
-    return "[\\-/._\\s][a-zA-Z]".toRegex().replace(input) {
+    return "[\\-/._\\s]\\w".toRegex().replace(input) {
         it.value
             .replace("-", "")
             .replace("/", "")
@@ -21,7 +21,7 @@ fun String.toPascalCaseEnumValue(): String {
     }
 }
 
-fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(this) {
+fun String.toCamelCase(): String = "[_\\-/]\\w".toRegex().replace(this) {
     it.value
         .replace("_", "")
         .replace("-", "")
@@ -29,7 +29,7 @@ fun String.toCamelCase(): String = "[_\\-/][a-zA-Z]".toRegex().replace(this) {
         .uppercase()
 }
 
-fun String.operationIdToCamelCase() = "[_\\-][a-zA-Z]".toRegex().replace(this) {
+fun String.operationIdToCamelCase() = "[_\\-]\\w".toRegex().replace(this) {
     it.value
         .replace("_", "")
         .replace("-", "")
