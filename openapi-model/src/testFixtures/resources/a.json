@@ -245,7 +245,8 @@
                         "type": "string",
                         "enum": [
                             "A",
-                            "B.B"
+                            "B.B",
+                            "C.1"
                         ]
                     },
                     "arr": {
@@ -344,7 +345,8 @@
                 "type": "string",
                 "enum": [
                     "A",
-                    "B.B"
+                    "B.B",
+                    "C.1"
                 ]
             }
         },
