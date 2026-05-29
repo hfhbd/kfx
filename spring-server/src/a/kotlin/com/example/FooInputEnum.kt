@@ -10,6 +10,8 @@ public enum class FooInputEnum {
   A,
   @SerialName(value = "B.B")
   BB,
+  @SerialName(value = "C.1")
+  C1,
   ;
 
   override fun toString(): String = serializer().descriptor.getElementName(ordinal)
