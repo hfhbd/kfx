@@ -24,7 +24,7 @@ jobs:
         uses: hfhbd/actions/setup-version@d782b0962c65733283de8488b55e37164a98c572 # main
         id: version
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
           build-scan-publish: true
           build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
@@ -54,7 +54,7 @@ jobs:
         uses: hfhbd/actions/setup-version@d782b0962c65733283de8488b55e37164a98c572 # main
         id: version
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
           build-scan-publish: true
           build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
@@ -82,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
           build-scan-publish: true
           build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
