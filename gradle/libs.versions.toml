@@ -33,6 +33,8 @@ spring-bom = { module = "org.springframework.boot:spring-boot-dependencies", ver
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-gradle-plugin-impl = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
+kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
