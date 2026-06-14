@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 ktor = "3.5.0"
 serialization = "1.11.0"
 
@@ -40,8 +40,8 @@ kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotl
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.3" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
-serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.22" }
-validation = { id = "app.softwork.validation", version = "0.0.16" }
+serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
+validation = { id = "app.softwork.validation", version = "0.0.17" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
 sigstore = { id = "dev.sigstore.sign", version = "2.2.0" }
