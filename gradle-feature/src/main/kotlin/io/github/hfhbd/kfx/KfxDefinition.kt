@@ -4,6 +4,7 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.Definition
 
+// ideally, it extends PDOC
 interface KfxDefinition : Definition<KfxBuildModel> {
     @get:Nested val openApi: NamedDomainObjectContainer<OpenApi>
 

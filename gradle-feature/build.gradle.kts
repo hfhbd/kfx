@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.*
-
 plugins {
     id("java-gradle-plugin")
     kotlin("jvm")
@@ -7,7 +5,7 @@ plugins {
     id("java-test-fixtures")
 }
 
-kotlin.jvmToolchain(8)
+kotlin.jvmToolchain(17)
 
 java {
     withSourcesJar()
@@ -16,6 +14,13 @@ java {
 
 dependencies {
     implementation(projects.gradlePlugin)
+    compileOnly(libs.kotlin.ecosystem)
+}
+
+gradlePlugin.plugins.register("io.github.hfhbd.kfx-kotlin-features") {
+    implementationClass = "io.github.hfhbd.kfx.KfxFeaturesSettingsPlugin"
+    displayName = "kfx Declarative Kotlin Features"
+    description = "kfx Declarative Kotlin Features"
 }
 
 tasks.validatePlugins {
@@ -25,7 +30,7 @@ tasks.validatePlugins {
 configurations.configureEach {
    if (isCanBeConsumed) {
        attributes {
-           attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("9.5.0"))
+           attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("9.6.0"))
        }
    }
 }

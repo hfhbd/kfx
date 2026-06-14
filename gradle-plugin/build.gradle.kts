@@ -40,7 +40,7 @@ configurations.archives {
     }
 }
 
-val storeVersion by tasks.registering(StoreVersion::class)
+val storeVersion = tasks.register("storeVersion", StoreVersion::class)
 sourceSets.main {
     kotlin.srcDir(storeVersion)
 }
