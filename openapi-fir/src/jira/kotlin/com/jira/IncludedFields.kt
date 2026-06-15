@@ -1,13 +1,13 @@
 package com.jira
 
 import kotlin.String
-import kotlin.collections.List
-import kotlin.collections.emptyList
+import kotlin.collections.Set
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "IncludedFields")
 public data class IncludedFields(
-  public val included: List<String> = emptyList(),
+  public val included: Set<String>? = emptySet(),
 )

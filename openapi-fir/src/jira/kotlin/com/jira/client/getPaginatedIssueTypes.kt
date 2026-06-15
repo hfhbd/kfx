@@ -11,7 +11,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
-import kotlin.collections.List
+import kotlin.collections.Set
 
 /**
  * Get paginated list of filtered issue types
@@ -21,7 +21,7 @@ public suspend fun HttpClient.getPaginatedIssueTypes(
   X_Requested_With: String? = null,
   maxResults: Int? = 100,
   query: String? = "",
-  projectIds: List<Long>? = null,
+  projectIds: Set<Long>? = null,
   startAt: Long? = 0,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
 ): IssueTypeJsonBean {

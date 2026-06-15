@@ -10,7 +10,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
-import kotlin.collections.List
+import kotlin.collections.Set
 
 /**
  * Get paginated issue priorities
@@ -19,7 +19,7 @@ import kotlin.collections.List
 public suspend fun HttpClient.getPriorities1(
   maxResults: Int? = 100,
   query: String? = "",
-  projectIds: List<Long>? = null,
+  projectIds: Set<Long>? = null,
   startAt: Long? = 0,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
 ): PriorityJsonBean {

@@ -10,7 +10,7 @@ dokka {
 
     dependencies {
         for (project in subprojects) {
-            dokka(project)
+            dokka(dependencyFactory.create(project))
         }
         dokkaPlugin(libs.dokka.mermaid)
     }

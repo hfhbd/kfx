@@ -1,13 +1,13 @@
 package com.jira
 
 import kotlin.String
-import kotlin.collections.List
-import kotlin.collections.emptyList
+import kotlin.collections.Set
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "AvailableIssueTypesRequestBean")
 public data class AvailableIssueTypesRequestBean(
-  public val ignoredIssueTypeIds: List<String> = emptyList(),
+  public val ignoredIssueTypeIds: Set<String>? = emptySet(),
 )
