@@ -38,7 +38,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
-detekt = { id = "dev.detekt", version = "2.0.0-alpha.3" }
+detekt = { id = "dev.detekt", version = "2.0.0-alpha.4" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
 validation = { id = "app.softwork.validation", version = "0.0.17" }
