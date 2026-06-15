@@ -395,6 +395,7 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(): Set<IRTree.Class> =
                 IRTree.Type.Unknown -> continue
 
                 is IRTree.Type.LIST -> continue
+
                 is IRTree.Type.SET -> continue
 
                 is IRTree.Type.MAP -> continue
