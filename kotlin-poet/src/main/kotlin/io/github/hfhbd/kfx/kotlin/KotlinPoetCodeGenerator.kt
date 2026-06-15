@@ -18,6 +18,7 @@ import com.squareup.kotlinpoet.MAP
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.NameAllocator
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.SET
 import com.squareup.kotlinpoet.SHORT
 import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.STRING
@@ -195,6 +196,12 @@ fun CodeGenTree.Type.toPoetType(includeGenerics: Boolean = true): TypeName = whe
         LIST.parameterizedBy(item.toPoetType())
     } else {
         LIST
+    }
+
+    is CodeGenTree.Type.SET -> if (includeGenerics) {
+        SET.parameterizedBy(item.toPoetType())
+    } else {
+        SET
     }
 
     is CodeGenTree.Type.MAP -> if (includeGenerics) {

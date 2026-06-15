@@ -84,6 +84,13 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                                 ),
                             )
 
+                            is CodeGenTree.Type.SET -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptySet", isExtension = true),
+                                ),
+                            )
+
                             is CodeGenTree.Type.MAP -> defaultValue(
                                 CodeBlock.of(
                                     "%M()",

@@ -285,6 +285,44 @@
                             }
                         }
                     },
+                    "set": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "byBar"
+                            ],
+                            "properties": {
+                                "byBar": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "a": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "byBaz": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "b": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "unknown": {
                         "additionalProperties": true
                     },

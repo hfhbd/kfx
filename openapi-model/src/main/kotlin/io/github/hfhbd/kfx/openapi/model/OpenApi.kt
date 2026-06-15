@@ -446,6 +446,7 @@ public data class OpenApi(
                 override val readOnly: Boolean = false,
                 override val title: String? = null,
                 override val additionalProperties: JsonElement? = null,
+                val uniqueItems: Boolean = false,
                 val required: List<String>? = null,
             ) : Schema {
                 internal object CustomSerializer : KSerializerWithExtensions<ARRAY>(

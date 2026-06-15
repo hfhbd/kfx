@@ -3,17 +3,17 @@ package com.jira
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
-import kotlin.collections.List
-import kotlin.collections.emptyList
+import kotlin.collections.Set
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName(value = "ApplicationRoleBean")
 public data class ApplicationRoleBean(
-  public val defaultGroups: List<String> = emptyList(),
+  public val defaultGroups: Set<String>? = emptySet(),
   public val defined: Boolean? = null,
-  public val groups: List<String> = emptyList(),
+  public val groups: Set<String>? = emptySet(),
   public val hasUnlimitedSeats: Boolean? = null,
   public val key: String? = null,
   public val name: String? = null,
