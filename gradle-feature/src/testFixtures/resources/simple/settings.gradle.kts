@@ -1,17 +1,28 @@
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("../../../../../")
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri("https://raw.githubusercontent.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/refs/heads/maven2")
+                }
+            }
+            filter {
+                includeGroup("org.jetbrains.ecosystem")
+            }
+        }
     }
 }
 
 plugins {
-    id("ecosystem")
+    id("org.jetbrains.ecosystem").version("0.117.0")
+    id("io.github.hfhbd.kfx-kotlin-features")
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
         mavenCentral()
     }

@@ -9,7 +9,7 @@ class DeclarativeTest {
     @Test
     fun simpleDeclarativeWorks() {
         val projectDir = File("src/testFixtures/resources/simple")
-        build(projectDir, ":assemble")
+        build(projectDir, ":assemble", "--stacktrace", "--no-build-cache")
     }
 
     private fun build(projectDir: File, vararg tasks: String): BuildResult {

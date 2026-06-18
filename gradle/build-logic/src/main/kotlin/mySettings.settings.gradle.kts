@@ -19,5 +19,15 @@ dependencyResolutionManagement {
             }
             filter { includeGroup("org.nodejs") }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri("https://raw.githubusercontent.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/refs/heads/maven2")
+                }
+            }
+            filter {
+                includeGroup("org.jetbrains.ecosystem")
+            }
+        }
     }
 }
