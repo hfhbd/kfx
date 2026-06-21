@@ -1,8 +1,8 @@
 package com.jira
 
 import kotlin.String
-import kotlin.collections.List
-import kotlin.collections.emptyList
+import kotlin.collections.Set
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,12 +15,12 @@ public data class Locale(
   public val displayName: String? = null,
   public val displayScript: String? = null,
   public val displayVariant: String? = null,
-  public val extensionKeys: List<String> = emptyList(),
+  public val extensionKeys: Set<String>? = emptySet(),
   public val iso3Country: String? = null,
   public val iso3Language: String? = null,
   public val language: String? = null,
   public val script: String? = null,
-  public val unicodeLocaleAttributes: List<String> = emptyList(),
-  public val unicodeLocaleKeys: List<String> = emptyList(),
+  public val unicodeLocaleAttributes: Set<String>? = emptySet(),
+  public val unicodeLocaleKeys: Set<String>? = emptySet(),
   public val variant: String? = null,
 )

@@ -230,6 +230,8 @@ private fun Map<IRTree.ClassName, Classes>.resolveMembers(faults: Set<IRTree.Cla
 
                 is IRTree.Type.LIST -> continue
 
+                is IRTree.Type.SET -> continue
+
                 is IRTree.Type.MAP -> continue
 
                 is IRTree.Enum -> add(forClass)

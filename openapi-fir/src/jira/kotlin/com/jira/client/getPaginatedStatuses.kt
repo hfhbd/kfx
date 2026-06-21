@@ -10,17 +10,17 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Unit
-import kotlin.collections.List
+import kotlin.collections.Set
 
 /**
  * Get paginated filtered statuses
  * Returns paginated list of filtered statuses
  */
 public suspend fun HttpClient.getPaginatedStatuses(
-  issueTypeIds: List<String>? = null,
+  issueTypeIds: Set<String>? = null,
   maxResults: Int? = 100,
   query: String? = "",
-  projectIds: List<Long>? = null,
+  projectIds: Set<Long>? = null,
   startAt: Long? = 0,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
 ): StatusJsonBean {

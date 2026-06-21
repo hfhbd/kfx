@@ -1,0 +1,9 @@
+package com.example
+
+import kotlin.String
+import kotlinx.serialization.Serializable
+
+@Serializable
+public data class FooInputSetByBar(
+  public val a: String? = null,
+)

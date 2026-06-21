@@ -18,6 +18,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.Builtin
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.DateType
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.LIST
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.MAP
+import io.github.hfhbd.kfx.codegen.CodeGenTree.Type.SET
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.toPascalCaseEnumValue
 
@@ -57,6 +58,7 @@ data object CodeGenCreator {
         IRTree.Type.DateType.DATE -> DateType.DATE
         IRTree.Type.DateType.INSTANT -> DateType.INSTANT
         is IRTree.Type.LIST -> LIST(toCodeGen(ir.list))
+        is IRTree.Type.SET -> SET(toCodeGen(ir.set))
         is IRTree.Type.MAP -> MAP(toCodeGen(ir.key), toCodeGen(ir.value))
         IRTree.Type.Builtin.UNIT -> Builtin.UNIT
         IRTree.Type.Builtin.FILE -> Builtin.FILE

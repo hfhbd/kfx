@@ -1,8 +1,5 @@
-@file:OptIn(InternalSerializationApi::class)
-
 package io.github.hfhbd.kfx.openapi.model
 
-import kotlinx.serialization.InternalSerializationApi
 import kotlin.test.Test
 
 class OpenApiTest {

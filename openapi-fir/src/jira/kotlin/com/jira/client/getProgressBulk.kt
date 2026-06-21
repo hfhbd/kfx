@@ -8,13 +8,13 @@ import io.ktor.client.request.`get`
 import io.ktor.client.request.parameter
 import kotlin.Long
 import kotlin.Unit
-import kotlin.collections.List
+import kotlin.collections.Set
 
 /**
  * Get progress of multiple reindex requests
  * Retrieves the progress of multiple reindex requests. Only reindex requests that actually exist will be returned in the results.
  */
-public suspend fun HttpClient.getProgressBulk(requestId: List<Long>? = null, builder: suspend HttpRequestBuilder.() -> Unit = {}): ReindexRequestBean {
+public suspend fun HttpClient.getProgressBulk(requestId: Set<Long>? = null, builder: suspend HttpRequestBuilder.() -> Unit = {}): ReindexRequestBean {
   val response = `get`(urlString = """api/2/reindex/request/bulk""") {
     parameter("requestId", requestId)
     builder()

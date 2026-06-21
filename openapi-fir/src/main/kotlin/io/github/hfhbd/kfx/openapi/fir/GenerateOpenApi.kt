@@ -528,15 +528,26 @@ private fun Schema.ARRAY.toIr(
     parentName: String,
     suffix: String,
     irTypes: MutableMap<String, IRTree.Class>,
-): IRTree.Type.LIST {
+): IRTree.Type {
     val items = items
-    return IRTree.Type.LIST(
-        if (items is Schema.ARRAY) {
-            items.toIr(parentName, suffix, irTypes)
-        } else {
-            items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
-        },
-    )
+
+    if (uniqueItems) {
+        return IRTree.Type.SET(
+            if (items is Schema.ARRAY) {
+                items.toIr(parentName, suffix, irTypes)
+            } else {
+                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
+            },
+        )
+    } else {
+        return IRTree.Type.LIST(
+            if (items is Schema.ARRAY) {
+                items.toIr(parentName, suffix, irTypes)
+            } else {
+                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
+            },
+        )
+    }
 }
 
 private fun Schema.INT.toIr() = when (format) {
@@ -791,6 +802,8 @@ private fun addToIr(type: IRTree.Type, irTypes: MutableMap<String, IRTree.Class>
         is IRTree.Type.Builtin -> return
 
         is IRTree.Type.LIST -> addToIr(type.list, irTypes)
+
+        is IRTree.Type.SET -> addToIr(type.set, irTypes)
 
         is IRTree.Type.MAP -> addToIr(type.value, irTypes)
 

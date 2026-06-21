@@ -50,6 +50,10 @@ private fun IRTree.Type.changePackageName(packageName: String): IRTree.Type = wh
         list = list.changePackageName(packageName),
     )
 
+    is IRTree.Type.SET -> copy(
+        set = set.changePackageName(packageName),
+    )
+
     is IRTree.Type.MAP -> copy(
         key = key.changePackageName(packageName),
         value = value.changePackageName(packageName),

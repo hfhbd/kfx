@@ -4,8 +4,10 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.collections.Set
 import kotlin.collections.emptyList
 import kotlin.collections.emptyMap
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,5 +21,5 @@ public data class SearchResultsBean(
   public val schema: Map<String, JsonTypeBean> = emptyMap(),
   public val startAt: Int? = null,
   public val total: Int? = null,
-  public val warningMessages: List<String> = emptyList(),
+  public val warningMessages: Set<String>? = emptySet(),
 )

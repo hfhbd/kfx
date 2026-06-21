@@ -48,6 +48,7 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         }
 
         data class LIST(val list: Type) : Type
+        data class SET(val set: Type) : Type
 
         data class MAP(val key: Type, val value: Type) : Type
 

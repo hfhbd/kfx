@@ -2,8 +2,8 @@ package com.jira
 
 import kotlin.Boolean
 import kotlin.String
-import kotlin.collections.List
-import kotlin.collections.emptyList
+import kotlin.collections.Set
+import kotlin.collections.emptySet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,6 +11,6 @@ import kotlinx.serialization.Serializable
 @SerialName(value = "WorkflowSchemeRequest")
 public data class WorkflowSchemeRequest(
   public val defaultWorkflow: Boolean? = null,
-  public val issueTypes: List<String> = emptyList(),
+  public val issueTypes: Set<String>? = emptySet(),
   public val workflow: String? = null,
 )

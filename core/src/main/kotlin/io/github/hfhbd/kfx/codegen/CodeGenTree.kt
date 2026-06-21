@@ -82,6 +82,9 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         data class ARRAY(val item: Type) : Type
 
         @Serializable
+        data class SET(val item: Type) : Type
+
+        @Serializable
         data class MAP(val key: Type, val value: Type) : Type
 
         @Serializable
