@@ -44,7 +44,7 @@ kotlin {
     explicitApi()
     compilerOptions {
         progressiveMode = true
-        optIn += "kotlin.uuid.ExperimentalUuidApi"
+        optIn.add("kotlin.uuid.ExperimentalUuidApi")
     }
 
     sourceSets {
