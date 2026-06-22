@@ -11,5 +11,5 @@ val sarifFiles = configurations.resolvable("sarifFiles") {
 
 tasks.register("mergeDetektSarif", ReportMergeTask::class) {
     input.from(sarifFiles)
-    output.set(layout.buildDirectory.file("reports/detekt/detekt.sarif"))
+    output = layout.buildDirectory.file("reports/detekt/detekt.sarif")
 }

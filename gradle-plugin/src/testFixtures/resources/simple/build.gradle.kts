@@ -11,7 +11,5 @@ dependencies {
 kfx.grip {
     files.from(file("grip.json"))
 
-    packageName.set(null)
-
     usingKotlinSourceSet(kotlin.sourceSets.main)
 }
