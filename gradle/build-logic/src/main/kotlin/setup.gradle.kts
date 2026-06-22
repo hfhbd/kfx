@@ -21,9 +21,9 @@ dokka {
         includes.from("README.md")
         val sourceSetName = name
         sourceLink {
-            localDirectory.set(file("src/$sourceSetName/kotlin"))
-            remoteUrl.set(uri("https://github.com/hfhbd/kfx/tree/main/$module/src/$sourceSetName/kotlin"))
-            remoteLineSuffix.set("#L")
+            localDirectory = file("src/$sourceSetName/kotlin")
+            remoteUrl = uri("https://github.com/hfhbd/kfx/tree/main/$module/src/$sourceSetName/kotlin")
+            remoteLineSuffix = "#L"
         }
         externalDocumentationLinks {
             register("kotlinx.coroutines") {
@@ -63,26 +63,29 @@ publishing {
     }
     publications.withType<MavenPublication>().configureEach {
         pom {
-            name.set("io.github.hfhbd KFX")
-            description.set("A OpenAPI/WSDL code generator")
-            url.set("https://github.com/hfhbd/kfx")
+            name = "io.github.hfhbd KFX"
+            description = "A OpenAPI/WSDL code generator"
+            url = "https://github.com/hfhbd/kfx"
             licenses {
                 license {
-                    name.set("Apache-2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    name = "Apache-2.0"
+                    url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
                 }
             }
             developers {
                 developer {
-                    id.set("hfhbd")
-                    name.set("Philip Wedemann")
-                    email.set("mybztg+mavencentral@icloud.com")
+                    id = "hfhbd"
+                    name = "Philip Wedemann"
+                    email = "mybztg+mavencentral@icloud.com"
                 }
             }
             scm {
-                connection.set("scm:git://github.com/hfhbd/kfx.git")
-                developerConnection.set("scm:git://github.com/hfhbd/kfx.git")
-                url.set("https://github.com/hfhbd/kfx")
+                connection = "scm:git://github.com/hfhbd/kfx.git"
+                developerConnection = "scm:git://github.com/hfhbd/kfx.git"
+                url = "https://github.com/hfhbd/kfx"
+            }
+            issueManagement {
+                url = "https://github.com/hfhbd/kfx/issues"
             }
         }
     }
@@ -99,7 +102,7 @@ signing {
 
 // https://github.com/sigstore/sigstore-java/issues/1146
 tasks.withType<SigstoreSignFilesTask>().configureEach {
-    launcher.set(serviceOf<JavaToolchainService>().launcherFor { })
+    launcher = serviceOf<JavaToolchainService>().launcherFor { }
 }
 
 detekt {

@@ -24,7 +24,7 @@ gradlePlugin.plugins.register("io.github.hfhbd.kfx-kotlin-features") {
 }
 
 tasks.validatePlugins {
-    enableStricterValidation.set(true)
+    enableStricterValidation = true
 }
 
 configurations.configureEach {
@@ -57,7 +57,7 @@ testing.suites {
 
         targets.configureEach {
             testTask {
-                javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
+                javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
             }
         }
     }

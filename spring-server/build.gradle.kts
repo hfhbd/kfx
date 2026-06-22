@@ -29,19 +29,19 @@ testing.suites {
 
         targets.configureEach {
             testTask {
-                javaLauncher.set(javaToolchains.launcherFor {
-                    languageVersion.set(JavaLanguageVersion.of(17))
-                })
+                javaLauncher = javaToolchains.launcherFor {
+                    languageVersion = JavaLanguageVersion.of(17)
+                }
             }
         }
         sources {
             tasks.named(compileJavaTaskName, JavaCompile::class) {
-                javaCompiler.set(javaToolchains.compilerFor {
-                    languageVersion.set(JavaLanguageVersion.of(17))
-                })
+                javaCompiler = javaToolchains.compilerFor {
+                    languageVersion = JavaLanguageVersion.of(17)
+                }
             }
             tasks.named("compile${name.replaceFirstChar { it.uppercaseChar() }}Kotlin", org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile::class) {
-                compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+                compilerOptions.jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
             }
         }
     }
