@@ -8,7 +8,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 
 fun xml(
     transformerSerializers: List<SerializersModule> = listOf(),
-): XML = XML(
+): XML = XML.v1(
     serializersModule = SerializersModule {
         include(Documentation.serializerModule())
         for (transformer in transformerSerializers) {
@@ -19,8 +19,7 @@ fun xml(
     repairNamespaces = false
     xmlVersion = XmlVersion.XML10
     xmlDeclMode = XmlDeclMode.Charset
-    autoPolymorphic = true
-    defaultPolicy {
+    policy {
         ignoreUnknownChildren()
     }
 }

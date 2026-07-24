@@ -180,11 +180,10 @@ class FooServiceTest {
             ),
             baz = true,
         )
-        val fooXml = XML {
+        val fooXml = XML.v1 {
             repairNamespaces = false
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
-            autoPolymorphic = true
             indentString = "    "
         }.encodeToString(Foo.serializer(), foo)
         assertEquals(
@@ -193,7 +192,7 @@ class FooServiceTest {
         )
         assertEquals(
             foo,
-            XML.decodeFromString(Foo.serializer(), fooXml),
+            XML.v1.decodeFromString(Foo.serializer(), fooXml),
         )
     }
 }
