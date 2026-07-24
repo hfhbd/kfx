@@ -17,7 +17,9 @@ import kotlin.test.assertEquals
 class SerializationTest {
     @Test
     fun serializeWithoutHeaders() {
-        val xml = XML
+        val xml = XML.v1 {
+            indentString = ""
+        }
         val someMessage = Envelope(
             header = null,
             body = Pair("foo", 42),
@@ -37,7 +39,7 @@ class SerializationTest {
         )
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Pair first="foo" second="42" /></Body></Envelope>""",
+            """<?xml version='1.1' ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Pair first="foo" second="42" /></Body></Envelope>""",
             someMessageXml,
         )
         assertEquals(
@@ -50,7 +52,7 @@ class SerializationTest {
 
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
+            """<?xml version='1.1' ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
             faultMessageXml,
         )
         assertEquals(
@@ -61,7 +63,7 @@ class SerializationTest {
 
     @Test
     fun faultExample() {
-        val xml = XML
+        val xml = XML.v1
 
         val faultMessage = Envelope(
             header = null,
@@ -89,13 +91,12 @@ class SerializationTest {
 
     @Test
     fun faultExampleWithStringDetails() {
-        val xml = XML(serializersModule = SerializersModule {
+        val xml = XML.v1(serializersModule = SerializersModule {
             include(Fault.serializerModule())
         }) {
             repairNamespaces = false
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
-            autoPolymorphic = true
 
             indentString = "    "
         }
@@ -151,7 +152,7 @@ class SerializationTest {
 
     @Test
     fun faultExampleWithTypedDetails() {
-        val xml = XML(
+        val xml = XML.v1(
             serializersModule = SerializersModule {
                 polymorphic(Any::class, FooString::class, FooString.serializer())
             }
@@ -159,7 +160,6 @@ class SerializationTest {
             repairNamespaces = false
             xmlVersion = XmlVersion.XML10
             xmlDeclMode = XmlDeclMode.Charset
-            autoPolymorphic = true
 
             indentString = "    "
         }
@@ -233,13 +233,15 @@ class SerializationTest {
 
     @Test
     fun serializeWithCustomHeaders() {
-        val xml = XML(
+        val xml = XML.v1(
             serializersModule = SerializersModule {
                 contextual(Header::class) {
                     MyHeader.serializer()
                 }
             },
-        )
+        ) {
+            indentString = ""
+        }
         val someMessage = Envelope(
             header = MyHeader(to = "to"),
             body = Pair("foo", 42),
@@ -259,7 +261,7 @@ class SerializationTest {
         )
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Pair first="foo" second="42" /></Body></Envelope>""",
+            """<?xml version='1.1' ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Pair first="foo" second="42" /></Body></Envelope>""",
             someMessageXml,
         )
         assertEquals(
@@ -272,7 +274,7 @@ class SerializationTest {
 
         // language=xml
         assertEquals(
-            """<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
+            """<?xml version='1.1' ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Header><to>to</to></Header><Body><Fault><faultcode xmlns="">soap:Server</faultcode><faultstring xmlns="">Some Error</faultstring></Fault></Body></Envelope>""",
             faultMessageXml,
         )
         assertEquals(

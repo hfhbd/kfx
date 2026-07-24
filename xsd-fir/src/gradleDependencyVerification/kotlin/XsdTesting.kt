@@ -10,7 +10,7 @@ class XsdTesting {
 
     @Test
     fun decodeGradleDependencyVerification() {
-        XML.decodeFromString(
+        XML.v1.decodeFromString(
             `verification-metadata`.serializer(),
             XsdTesting::class.java.getResource("/verification-metadata.xml")!!.readText()
         )
