@@ -346,6 +346,9 @@
                         "additionalProperties": {
                             "type": "object"
                         }
+                    },
+                    "intEnum": {
+                        "$ref": "#/components/schemas/com.example.TestEnumInt"
                     }
                 },
                 "description": "Foo input sample"
@@ -385,6 +388,13 @@
                     "A",
                     "B.B",
                     "C.1"
+                ]
+            },
+            "com.example.TestEnumInt": {
+                "type": "integer",
+                "enum": [
+                    1,
+                    2
                 ]
             }
         },

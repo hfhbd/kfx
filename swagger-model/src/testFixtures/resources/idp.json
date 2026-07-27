@@ -1964,9 +1964,9 @@
         },
         "userAttribute": {
           "description": "User attribute to take the value from",
-          "type": "string",
+          "type": "integer",
           "enum": [
-            "username"
+            42
           ]
         }
       }

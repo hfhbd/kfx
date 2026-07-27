@@ -2,9 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.handleAdditionalProperties: IRTree.Type</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.objectToIr: IRTree.Type</ID>
-    <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Definition.toIr: IRTree.Type</ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun Parameter.toParameter: Pair&lt;Parameter.Position?, IRTree.Operation.Parameter></ID>
     <ID>CyclomaticComplexMethod:GenerateSwagger.kt:private fun generate: IRTree.Operation</ID>
     <ID>LongMethod:GenerateSwagger.kt:private fun Definition.objectToIr: IRTree.Type</ID>

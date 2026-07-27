@@ -9,6 +9,7 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
@@ -23,7 +24,6 @@ import io.github.hfhbd.kfx.kotlin.toKdoc
 import io.github.hfhbd.kfx.kotlin.toKotlinPoet
 import io.github.hfhbd.kfx.kotlin.toPoetType
 import java.nio.file.Path
-import kotlin.collections.iterator
 
 @ServiceLoader(CodeGenerator::class)
 class KotlinClassesGenerator : KotlinPoetCodeGenerator {
@@ -312,33 +312,105 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
 
     private fun CodeGenTree.Enum.generate(): TypeSpec {
         val typeSpec = TypeSpec.enumBuilder(names.single())
+
         for (annotation in annotations) {
             typeSpec.addAnnotation(annotation.toAnno())
         }
-        for (value in values) {
-            typeSpec.addEnumConstant(
-                value.name,
-                TypeSpec.anonymousClassBuilder().apply {
-                    for (annotation in value.annotations) {
-                        addAnnotation(annotation.toAnno())
-                    }
-                    val documentation = value.documentation
-                    if (!documentation.isNullOrBlank()) {
-                        addKdoc(documentation.toKdoc())
-                    }
+
+        when (this) {
+            is CodeGenTree.StringEnum -> {
+                for (value in values) {
+                    typeSpec.addEnumConstant(
+                        value.name,
+                        TypeSpec.anonymousClassBuilder().apply {
+                            for (annotation in value.annotations) {
+                                addAnnotation(annotation.toAnno())
+                            }
+                            val documentation = value.documentation
+                            if (!documentation.isNullOrBlank()) {
+                                addKdoc(documentation.toKdoc())
+                            }
+                        }
+                            .build(),
+                    )
                 }
-                    .build(),
-            )
-        }
-        typeSpec.addFunction(
-            FunSpec.builder("toString")
-                .returns(STRING)
-                .addModifiers(KModifier.OVERRIDE)
-                .addCode(
-                    "return serializer().descriptor.getElementName(ordinal)",
+
+                typeSpec.addFunction(
+                    FunSpec.builder("toString")
+                        .returns(STRING)
+                        .addModifiers(KModifier.OVERRIDE)
+                        .addCode(
+                            "return serializer().descriptor.getElementName(ordinal)",
+                        )
+                        .build(),
                 )
-                .build(),
-        )
+            }
+
+            is CodeGenTree.LongEnum -> {
+                for (value in values) {
+                    typeSpec.addEnumConstant(
+                        "`${value.value}`",
+                        TypeSpec.anonymousClassBuilder().apply {
+                            for (annotation in value.annotations) {
+                                addAnnotation(annotation.toAnno())
+                            }
+                            val documentation = value.documentation
+                            if (!documentation.isNullOrBlank()) {
+                                addKdoc(documentation.toKdoc())
+                            }
+                        }
+                            .build(),
+                    )
+                }
+
+                typeSpec.addType(
+                    TypeSpec.companionObjectBuilder().apply {
+                        addSuperinterface(
+                            ClassName("kotlinx.serialization", "KSerializer")
+                                .parameterizedBy(
+                                    ClassName(packageName, names),
+                                ),
+                        )
+
+                        addProperty(
+                            PropertySpec.builder(
+                                "descriptor",
+                                ClassName("kotlinx.serialization.descriptors", "SerialDescriptor"),
+                            ).apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                initializer(
+                                    "%M(%S, %T)",
+                                    MemberName("kotlinx.serialization.descriptors", "PrimitiveSerialDescriptor"),
+                                    qualifiedName,
+                                    ClassName("kotlinx.serialization.descriptors", "PrimitiveKind", "INT"),
+                                )
+                            }.build(),
+                        )
+
+                        addFunction(
+                            FunSpec.builder("serialize").apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                addParameter("encoder", ClassName("kotlinx.serialization.encoding", "Encoder"))
+                                addParameter("value", ClassName(packageName, names))
+
+                                addStatement("encoder.encodeInt(value.name.toInt())")
+                            }.build(),
+                        )
+
+                        addFunction(
+                            FunSpec.builder("deserialize").apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                addParameter("decoder", ClassName("kotlinx.serialization.encoding", "Decoder"))
+                                returns(ClassName(packageName, names))
+
+                                addStatement("return valueOf(decoder.decodeInt().toString())")
+                            }.build(),
+                        )
+                    }.build(),
+                )
+            }
+        }
+
         return typeSpec.build()
     }
 }

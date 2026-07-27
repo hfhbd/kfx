@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonTransformingSerializer
 
 @Serializable
@@ -203,7 +204,7 @@ data class Swagger(
         val maxLength: Int? = null,
         val format: String? = null,
         val nullable: Boolean = false,
-        val enum: Set<String> = emptySet(),
+        val enum: Set<JsonPrimitive> = emptySet(),
         val minimum: Int? = null,
         val maximum: Int? = null,
         val minItems: Int? = null,

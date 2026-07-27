@@ -74,16 +74,37 @@ data object CodeGenCreator {
     }
 
     fun toCodeGen(ir: IRTree.Class): CodeGenTree.Class = when (ir) {
-        is IRTree.Enum -> toCodeGen(ir)
+        is IRTree.StringEnum -> toCodeGen(ir)
+        is IRTree.LongEnum -> toCodeGen(ir)
         is IRTree.NormalClass -> toCodeGen(ir)
     }
 
-    fun toCodeGen(ir: IRTree.Enum) = CodeGenTree.Enum(
+    fun toCodeGen(ir: IRTree.StringEnum) = CodeGenTree.StringEnum(
         packageName = ir.packageName + if (ir.packageNameSuffix != "") ".${ir.packageNameSuffix}" else "",
         names = listOf(ir.name),
         values = ir.values.map {
-            CodeGenTree.Enum.Value(
+            CodeGenTree.StringEnum.Value(
                 name = it.value.toPascalCaseEnumValue(),
+                documentation = it.documentation,
+                annotations = listOf(),
+                ir = it,
+            )
+        },
+        documentation = ir.documentation,
+        annotations = buildList {
+            if (ir.deprecated) {
+                add(DEPRECATED)
+            }
+        },
+        ir = ir,
+    )
+
+    fun toCodeGen(ir: IRTree.LongEnum) = CodeGenTree.LongEnum(
+        packageName = ir.packageName + if (ir.packageNameSuffix != "") ".${ir.packageNameSuffix}" else "",
+        names = listOf(ir.name),
+        values = ir.values.map {
+            CodeGenTree.LongEnum.Value(
+                value = it.value,
                 documentation = it.documentation,
                 annotations = listOf(),
                 ir = it,

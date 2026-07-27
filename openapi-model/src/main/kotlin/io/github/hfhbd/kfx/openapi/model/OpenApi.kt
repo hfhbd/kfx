@@ -1,12 +1,9 @@
-@file:OptIn(InternalSerializationApi::class)
-
 package io.github.hfhbd.kfx.openapi.model
 
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema.OBJECT.OneOf.Companion.emptyOneOf
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Components.Schema.OBJECT.Properties.Companion.emptyProperties
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.Response
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.KeepGeneratedSerializer
 import kotlinx.serialization.SerialName
@@ -239,10 +236,18 @@ public data class OpenApi(
                 val example: JsonElement? = null,
                 override val nullable: Boolean? = null,
                 val maxProperties: Int? = null,
-                val enum: List<String> = emptyList(),
+                val enum: List<String?>? = null,
                 override val deprecated: Boolean = false,
                 override val readOnly: Boolean = false,
             ) : Schema {
+                init {
+                    if (enum != null) {
+                        require(enum.isNotEmpty()) {
+                            "Enum must have at least 1 element"
+                        }
+                    }
+                }
+
                 val additionalPropertiesSchema: Schema?
                     get() = if (additionalProperties == null) {
                         null
@@ -300,7 +305,7 @@ public data class OpenApi(
                 val maxLength: Int? = null,
                 override val nullable: Boolean = false,
                 val default: String? = null,
-                val enum: List<String?> = emptyList(),
+                val enum: List<String?>? = null,
                 override val extensions: Map<String, JsonElement> = emptyMap(),
                 val example: String? = null,
                 val pattern: String? = null,
@@ -309,6 +314,14 @@ public data class OpenApi(
                 override val additionalProperties: JsonElement? = null,
                 val format: Format? = null,
             ) : Schema {
+                init {
+                    if (enum != null) {
+                        require(enum.isNotEmpty()) {
+                            "Enum must have at least 1 element"
+                        }
+                    }
+                }
+
                 internal object CustomSerializer : KSerializerWithExtensions<STRING>(
                     STRING.generatedSerializer(),
                     STRING::extensions,
@@ -327,6 +340,8 @@ public data class OpenApi(
                         val Password = Format("password")
                         val Duration = Format("duration")
                         val Uuid = Format("uuid")
+                        val Regex = Format("regex")
+                        val Char = Format("char")
                     }
                 }
             }
@@ -341,7 +356,7 @@ public data class OpenApi(
                 val default: Long? = null,
                 val minimum: Long? = null,
                 val maximum: Long? = null,
-                val enum: List<Long?> = emptyList(),
+                val enum: List<Long?>? = null,
                 override val extensions: Map<String, JsonElement> = emptyMap(),
                 val example: Long? = null,
                 override val deprecated: Boolean = false,
@@ -355,19 +370,23 @@ public data class OpenApi(
                     { copy(extensions = it) },
                 )
 
+                init {
+                    if (enum != null) {
+                        require(enum.isNotEmpty()) {
+                            "Enum must have at least 1 element"
+                        }
+                    }
+                }
+
                 @Serializable
-                enum class Format {
-                    @SerialName("int8")
-                    Int8,
-
-                    @SerialName("int16")
-                    Int16,
-
-                    @SerialName("int32")
-                    Int32,
-
-                    @SerialName("int64")
-                    Int64,
+                @JvmInline
+                value class Format(public val value: String) {
+                    companion object {
+                        val Int8 = Format("int8")
+                        val Int16 = Format("int16")
+                        val Int32 = Format("int32")
+                        val Int64 = Format("int64")
+                    }
                 }
             }
 
@@ -395,15 +414,13 @@ public data class OpenApi(
                 )
 
                 @Serializable
-                enum class Format {
-                    @SerialName("float")
-                    Float,
-
-                    @SerialName("double")
-                    Double,
-
-                    @SerialName("decimal")
-                    Decimal,
+                @JvmInline
+                value class Format(public val value: String) {
+                    companion object {
+                        val Float = Format("float")
+                        val Double = Format("double")
+                        val Decimal = Format("decimal")
+                    }
                 }
             }
 
@@ -447,7 +464,6 @@ public data class OpenApi(
                 override val title: String? = null,
                 override val additionalProperties: JsonElement? = null,
                 val uniqueItems: Boolean = false,
-                val required: List<String>? = null,
             ) : Schema {
                 internal object CustomSerializer : KSerializerWithExtensions<ARRAY>(
                     ARRAY.generatedSerializer(),
