@@ -47,9 +47,8 @@ class KfxFeature : Plugin<Project> {
         internal abstract class JvmTestApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationTestingExtension> {
-
-                @get:Inject
-                abstract val sourceSets: SourceSetContainer
+            @get:Inject
+            abstract val sourceSets: SourceSetContainer
 
             override fun apply(
                 context: ProjectFeatureApplicationContext,
