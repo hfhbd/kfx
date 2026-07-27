@@ -7,7 +7,6 @@
     <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun Schema.OBJECT.toIr: IRTree.Type</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun toAuth: List&lt;IRTree.Auth></ID>
-    <ID>LoopWithTooManyJumpStatements:GenerateOpenApi.kt:for</ID>
     <ID>TooManyFunctions:GenerateOpenApi.kt:io.github.hfhbd.kfx.openapi.fir.GenerateOpenApi.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -30,4 +30,5 @@ public data class FooInput(
   public val mapStringInt: Map<String, Int> = emptyMap(),
   public val mapStringObject: Map<String, TestEnum> = emptyMap(),
   public val unknownObject: JsonObject? = null,
+  public val intEnum: TestEnumInt? = null,
 )

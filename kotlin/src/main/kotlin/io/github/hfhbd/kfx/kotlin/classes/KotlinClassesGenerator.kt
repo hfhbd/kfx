@@ -365,48 +365,48 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
 
                 typeSpec.addType(
                     TypeSpec.companionObjectBuilder().apply {
-                    addSuperinterface(
-                        ClassName("kotlinx.serialization", "KSerializer")
-                            .parameterizedBy(
-                                ClassName(packageName, names),
-                            ),
-                    )
+                        addSuperinterface(
+                            ClassName("kotlinx.serialization", "KSerializer")
+                                .parameterizedBy(
+                                    ClassName(packageName, names),
+                                ),
+                        )
 
-                    addProperty(
-                        PropertySpec.builder(
-                            "descriptor",
-                            ClassName("kotlinx.serialization.descriptors", "SerialDescriptor"),
-                        ).apply {
-                            addModifiers(KModifier.OVERRIDE)
-                            initializer(
-                                "%M(%S, %T)",
-                                MemberName("kotlinx.serialization.descriptors", "PrimitiveSerialDescriptor"),
-                                qualifiedName,
-                                ClassName("kotlinx.serialization.descriptors", "PrimitiveKind", "INT"),
-                            )
-                        }.build(),
-                    )
+                        addProperty(
+                            PropertySpec.builder(
+                                "descriptor",
+                                ClassName("kotlinx.serialization.descriptors", "SerialDescriptor"),
+                            ).apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                initializer(
+                                    "%M(%S, %T)",
+                                    MemberName("kotlinx.serialization.descriptors", "PrimitiveSerialDescriptor"),
+                                    qualifiedName,
+                                    ClassName("kotlinx.serialization.descriptors", "PrimitiveKind", "INT"),
+                                )
+                            }.build(),
+                        )
 
-                    addFunction(
-                        FunSpec.builder("serialize").apply {
-                            addModifiers(KModifier.OVERRIDE)
-                            addParameter("encoder", ClassName("kotlinx.serialization.encoding", "Encoder"))
-                            addParameter("value", ClassName(packageName, names))
+                        addFunction(
+                            FunSpec.builder("serialize").apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                addParameter("encoder", ClassName("kotlinx.serialization.encoding", "Encoder"))
+                                addParameter("value", ClassName(packageName, names))
 
-                            addStatement("encoder.encodeInt(value.toString().toInt())")
-                        }.build(),
-                    )
+                                addStatement("encoder.encodeInt(value.toString().toInt())")
+                            }.build(),
+                        )
 
-                    addFunction(
-                        FunSpec.builder("deserialize").apply {
-                            addModifiers(KModifier.OVERRIDE)
-                            addParameter("decoder", ClassName("kotlinx.serialization.encoding", "Decoder"))
-                            returns(ClassName(packageName, names))
+                        addFunction(
+                            FunSpec.builder("deserialize").apply {
+                                addModifiers(KModifier.OVERRIDE)
+                                addParameter("decoder", ClassName("kotlinx.serialization.encoding", "Decoder"))
+                                returns(ClassName(packageName, names))
 
-                            addStatement("return valueOf(decoder.decodeInt().toString())")
-                        }.build(),
-                    )
-                }.build()
+                                addStatement("return valueOf(decoder.decodeInt().toString())")
+                            }.build(),
+                        )
+                    }.build(),
                 )
             }
         }

@@ -2,7 +2,9 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>CyclomaticComplexMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.Enum.generate: TypeSpec</ID>
     <ID>CyclomaticComplexMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generate: TypeSpec</ID>
+    <ID>LongMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.Enum.generate: TypeSpec</ID>
     <ID>LongMethod:KotlinClassesGenerator.kt:KotlinClassesGenerator$private fun CodeGenTree.NormalClass.generateValueClass: TypeSpec.Builder</ID>
     <ID>MixedConditionOperators:KotlinClassesGenerator.kt:KotlinClassesGenerator$isFault &amp;&amp; member.name == "message"</ID>
   </CurrentIssues>

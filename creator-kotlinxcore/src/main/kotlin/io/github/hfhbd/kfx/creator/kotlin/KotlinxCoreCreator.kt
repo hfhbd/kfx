@@ -76,8 +76,8 @@ fun serializable(
         emptyMap()
     } else {
         mapOf(
-        "with" to CodeGenTree.Expression.ClassLiteral(with),
-    )
+            "with" to CodeGenTree.Expression.ClassLiteral(with),
+        )
     },
 )
 
