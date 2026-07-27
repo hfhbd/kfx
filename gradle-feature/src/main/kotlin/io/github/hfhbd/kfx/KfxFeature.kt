@@ -2,15 +2,17 @@ package io.github.hfhbd.kfx
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
-import org.jetbrains.kotlin.gradle.declarative.common.buildtypes.JvmCompilationUnit
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationTestingExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import javax.inject.Inject
 
 @BindsProjectFeature(KfxFeature.Binding::class)
 class KfxFeature : Plugin<Project> {
@@ -18,13 +20,14 @@ class KfxFeature : Plugin<Project> {
 
     class Binding : ProjectFeatureBinding {
         override fun bind(builder: ProjectFeatureBindingBuilder) {
-            builder.bindProjectFeature("kfx", MainApplyAction::class)
+            builder.bindProjectFeature("kfx", JvmMainApplyAction::class)
                 .withUnsafeDefinition()
-            builder.bindProjectFeature("kfx", TestApplyAction::class)
+            builder.bindProjectFeature("kfx", JvmTestApplyAction::class)
                 .withUnsafeDefinition()
+                .withUnsafeApplyAction()
         }
 
-        internal abstract class MainApplyAction :
+        internal abstract class JvmMainApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationProjectType> {
             override fun apply(
@@ -41,18 +44,21 @@ class KfxFeature : Plugin<Project> {
             }
         }
 
-        internal abstract class TestApplyAction :
+        internal abstract class JvmTestApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationTestingExtension> {
+
+                @get:Inject
+                abstract val sourceSets: SourceSetContainer
+
             override fun apply(
                 context: ProjectFeatureApplicationContext,
                 definition: KfxDefinition,
                 buildModel: KfxBuildModel,
                 targetDefinition: JvmApplicationTestingExtension,
             ) {
-                val parentBuildModel = context.getBuildModel(targetDefinition)
-                val compilationUnit: JvmCompilationUnit = parentBuildModel.compilationUnit
-                val sourceDirectorySet = compilationUnit.sources
+                val sourceSet = sourceSets.getByName("test").extensions.getByName("kotlin") as KotlinSourceSet
+                val sourceDirectorySet = sourceSet.kotlin
 
                 apply(definition, sourceDirectorySet)
             }
