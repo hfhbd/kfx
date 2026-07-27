@@ -393,7 +393,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
                                 addParameter("encoder", ClassName("kotlinx.serialization.encoding", "Encoder"))
                                 addParameter("value", ClassName(packageName, names))
 
-                                addStatement("encoder.encodeInt(value.toString().toInt())")
+                                addStatement("encoder.encodeInt(value.name.toInt())")
                             }.build(),
                         )
 

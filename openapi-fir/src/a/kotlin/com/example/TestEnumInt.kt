@@ -19,7 +19,7 @@ public enum class TestEnumInt {
         PrimitiveSerialDescriptor("com.example.TestEnumInt", PrimitiveKind.INT)
 
     override fun serialize(encoder: Encoder, `value`: TestEnumInt) {
-      encoder.encodeInt(value.toString().toInt())
+      encoder.encodeInt(value.name.toInt())
     }
 
     override fun deserialize(decoder: Decoder): TestEnumInt = valueOf(decoder.decodeInt().toString())

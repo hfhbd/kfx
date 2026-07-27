@@ -22,6 +22,7 @@ import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 import java.io.InputStream
 import java.util.ServiceLoader
 
@@ -636,11 +637,11 @@ private fun Definition.toIr(
 
     Definition.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
 
-    Definition.Type.Integer -> when (format) {
-        null, "int32" -> IRTree.Type.Builtin.INT
-        "int64" -> IRTree.Type.Builtin.LONG
-        else -> error("Not supported $format")
-    }
+    Definition.Type.Integer -> intToIr(
+        parentQName,
+        name,
+        irTypes,
+    )
 
     Definition.Type.Number -> when (format) {
         null, "double" -> IRTree.Type.Builtin.DOUBLE
@@ -670,13 +671,39 @@ private fun Definition.stringToIr(
         documentation = description,
         deprecated = false,
         values = enum.map {
-            IRTree.StringEnum.Value(it, null, it)
+            IRTree.StringEnum.Value(it.content, null, it.content)
         },
     )
     irTypes[qname] = enum
     enum
 } else {
     IRTree.Type.Builtin.STRING
+}
+
+private fun Definition.intToIr(
+    parentQName: IRTree.ClassName?,
+    name: String?,
+    irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
+): IRTree.Type = if (enum.isNotEmpty()) {
+    val qname = toIRTreeClassName(parentQName, name)
+    val enum = IRTree.LongEnum(
+        name = qname.name,
+        packageName = qname.packageName,
+        packageNameSuffix = "",
+        documentation = description,
+        deprecated = false,
+        values = enum.map {
+            IRTree.LongEnum.Value(it.long, null)
+        },
+    )
+    irTypes[qname] = enum
+    enum
+} else {
+    when (format) {
+        null, "int32" -> IRTree.Type.Builtin.INT
+        "int64" -> IRTree.Type.Builtin.LONG
+        else -> error("Not supported $format")
+    }
 }
 
 private fun String.toIRTreeClassName(): IRTree.ClassName {
@@ -715,11 +742,7 @@ private fun Definition.handleAdditionalProperties(
 
     Definition.Type.Integer -> IRTree.Type.MAP(
         IRTree.Type.Builtin.STRING,
-        when (format) {
-            null, "int32" -> IRTree.Type.Builtin.INT
-            "int64" -> IRTree.Type.Builtin.LONG
-            else -> error("Not supported $format")
-        },
+        intToIr(parentQName, name, irTypes),
     )
 
     Definition.Type.Number -> IRTree.Type.MAP(
