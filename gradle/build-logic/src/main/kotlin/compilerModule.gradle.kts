@@ -12,7 +12,6 @@ kotlin {
     jvmToolchain(8)
 
     compilerOptions {
-        optIn.add("kotlin.uuid.ExperimentalUuidApi")
         freeCompilerArgs.add("-Xreturn-value-checker=full")
     }
 }

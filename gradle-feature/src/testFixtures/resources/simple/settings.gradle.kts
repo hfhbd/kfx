@@ -18,7 +18,7 @@ pluginManagement {
 
 plugins {
     id("org.jetbrains.ecosystem").version("0.117.0")
-    id("io.github.hfhbd.kfx-kotlin-features")
+    id("io.github.hfhbd.kfx.kotlin-features")
 }
 
 dependencyResolutionManagement {
