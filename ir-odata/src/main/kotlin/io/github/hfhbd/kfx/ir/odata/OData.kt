@@ -67,7 +67,8 @@ class OData : IrTransformer {
     )
 
     private fun IRTree.Class.transform(): IRTree.Class = when (this) {
-        is IRTree.Enum -> copy(name = name.transform())
+        is IRTree.StringEnum -> copy(name = name.transform())
+        is IRTree.LongEnum -> copy(name = name.transform())
         is IRTree.NormalClass -> transform()
     }
 }

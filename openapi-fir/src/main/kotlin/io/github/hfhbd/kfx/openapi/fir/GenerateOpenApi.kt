@@ -79,18 +79,22 @@ private fun OpenApi.toIr(
                 }
             }
 
-            is Schema.STRING if type.enum.isNotEmpty() -> {
-                type.toIr(null, name, irTypes)
+            is Schema.STRING if type.enum != null -> {
+                val enum = type.toIr(null, name, irTypes) as IRTree.StringEnum
+                irTypes[name] = enum
             }
-            is Schema.INT if type.enum.isNotEmpty() -> {
-                type.toIr(null, name, irTypes)
+
+            is Schema.INT if type.enum != null -> {
+                val enum = type.toIr(null, name, irTypes) as IRTree.LongEnum
+                irTypes[name] = enum
             }
 
             is Schema.ARRAY,
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
-            is Schema.STRING -> {
+            is Schema.STRING,
+            -> {
                 when (type.toIr(null, name, irTypes)) {
                     is IRTree.Enum -> error("Should be handled before!")
                     else -> continue
@@ -172,7 +176,8 @@ private fun OpenApi.Operation.toIr(
     )
     if (input != null && input is IRTree.Class && input.qName !in irTypes) {
         input = when (input) {
-            is IRTree.Enum -> input.copy(name = input.name + "Request")
+            is IRTree.StringEnum -> input.copy(name = input.name + "Request")
+            is IRTree.LongEnum -> input.copy(name = input.name + "Request")
             is IRTree.NormalClass -> input.copy(name = input.name + "Request")
         }
         irTypes[id + "Request"] = input
@@ -184,7 +189,8 @@ private fun OpenApi.Operation.toIr(
     )
     if (output != null && output is IRTree.Class && output.qName !in irTypes) {
         output = when (output) {
-            is IRTree.Enum -> output.copy(name = output.name + "Response")
+            is IRTree.StringEnum -> output.copy(name = output.name + "Response")
+            is IRTree.LongEnum -> output.copy(name = output.name + "Response")
             is IRTree.NormalClass -> output.copy(name = output.name + "Response")
         }
         irTypes[id + "Response"] = output
@@ -492,6 +498,7 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
         Schema.INT.Format.Int64 -> default?.let { LONG(it) }
         Schema.INT.Format.Int8 -> default?.let { BYTE(it.toByte()) }
         Schema.INT.Format.Int16 -> default?.let { SHORT(it.toShort()) }
+        else -> null
     }
 
     is Schema.BOOLEAN -> default?.let { BOOLEAN(it) }
@@ -504,6 +511,7 @@ private fun Schema.toIrDefault(): IRTree.Literal? = when (this) {
         Schema.NUMBER.Format.Float -> default?.let { FLOAT(it.toFloat()) }
         Schema.NUMBER.Format.Double -> default?.let { DOUBLE(it) }
         Schema.NUMBER.Format.Decimal -> default?.let { DOUBLE(it) }
+        else -> null
     }
 }
 
@@ -560,30 +568,31 @@ private fun Schema.INT.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type {
-    if (enum.isNotEmpty()) {
+    val enum = enum
+    if (!enum.isNullOrEmpty()) {
         val name = (parentName ?: "") + name!!.toCamelCase().replaceFirstChar {
             it.uppercaseChar()
         }
         val className = name.asClassName()
-        val enum = IRTree.Enum(
+        val enum = IRTree.LongEnum(
             name = className.name,
             packageName = className.packageName,
             packageNameSuffix = "",
             documentation = description,
             deprecated = deprecated,
             values = enum.filterNotNull().map {
-                IRTree.Enum.Value(it.toString(), null, it.toString())
+                IRTree.LongEnum.Value(it, null)
             },
         )
         irTypes[enum.name] = enum
         return enum
     } else {
-
         return when (format) {
             Schema.INT.Format.Int32 -> IRTree.Type.Builtin.INT
             Schema.INT.Format.Int64 -> IRTree.Type.Builtin.LONG
             Schema.INT.Format.Int8 -> IRTree.Type.Builtin.BYTE
             Schema.INT.Format.Int16 -> IRTree.Type.Builtin.SHORT
+            else -> IRTree.Type.Builtin.LONG
         }
     }
 }
@@ -592,25 +601,26 @@ private fun Schema.NUMBER.toIr() = when (format) {
     Schema.NUMBER.Format.Double -> IRTree.Type.Builtin.DOUBLE
     Schema.NUMBER.Format.Float -> IRTree.Type.Builtin.FLOAT
     Schema.NUMBER.Format.Decimal -> IRTree.Type.Builtin.DOUBLE
+    else -> IRTree.Type.Builtin.DOUBLE
 }
 
 private fun Schema.STRING.toIr(
     parentName: String?,
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
-): IRTree.Type = if (enum.isNotEmpty()) {
+): IRTree.Type = if (enum != null) {
     val name = (parentName ?: "") + name!!.toCamelCase().replaceFirstChar {
         it.uppercaseChar()
     }
     val className = name.asClassName()
-    val enum = IRTree.Enum(
+    val enum = IRTree.StringEnum(
         name = className.name,
         packageName = className.packageName,
         packageNameSuffix = "",
         documentation = description,
         deprecated = deprecated,
-        values = enum.filterNotNull().map {
-            IRTree.Enum.Value(it, null, it)
+        values = enum!!.filterNotNull().map {
+            IRTree.StringEnum.Value(it, null, it)
         },
     )
     irTypes[enum.name] = enum

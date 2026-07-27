@@ -2,6 +2,7 @@ package io.github.hfhbd.kfx.ir
 
 import io.github.hfhbd.kfx.ContentType
 import io.github.hfhbd.kfx.StatusCode
+import io.github.hfhbd.kfx.ir.IRTree.StringEnum.Value
 import kotlinx.datetime.LocalDate
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -116,15 +117,28 @@ data class IRTree(val classes: Set<Class>, val operations: Set<Operation>, val a
         CData,
     }
 
-    data class Enum(
+    sealed interface Enum : Class
+
+    data class StringEnum(
         override val packageName: String,
         override val packageNameSuffix: String,
         override val name: String,
         val values: List<Value>,
         override val documentation: String?,
         override val deprecated: Boolean,
-    ) : Class {
+    ) : Enum {
         data class Value(val value: String, val documentation: String?, val serialName: String?)
+    }
+
+    data class LongEnum(
+        override val packageName: String,
+        override val packageNameSuffix: String,
+        override val name: String,
+        val values: List<Value>,
+        override val documentation: String?,
+        override val deprecated: Boolean,
+    ) : Enum {
+        data class Value(val value: Long, val documentation: String?)
     }
 
     data class Operation(

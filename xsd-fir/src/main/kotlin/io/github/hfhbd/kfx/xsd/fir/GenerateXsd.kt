@@ -140,7 +140,7 @@ private fun toIr(
         if (simpleType.restriction.enumeration.isNotEmpty()) {
             val packageName = schema.targetNamespace.packageName
             val simpleTypeName = simpleType.name
-            var irClass: IRTree.Class = IRTree.Enum(
+            var irClass: IRTree.Class = IRTree.StringEnum(
                 packageName = schema.targetNamespace.packageName,
                 packageNameSuffix = "",
                 name = simpleTypeName!!,
@@ -151,7 +151,7 @@ private fun toIr(
                     } else {
                         v
                     }
-                    IRTree.Enum.Value(name, null, null)
+                    IRTree.StringEnum.Value(name, null, null)
                 },
                 documentation = null,
                 deprecated = false,

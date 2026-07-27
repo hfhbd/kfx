@@ -168,6 +168,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val documentation: String? = null,
         val annotations: List<Annotation> = emptyList(),
         val fileName: String? = null,
+        val override: Boolean = false,
     ) {
         @Serializable
         data class Parameter(
@@ -195,7 +196,10 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
     }
 
     @Serializable
-    data class Enum(
+    sealed interface Enum : Class
+
+    @Serializable
+    data class StringEnum(
         override val packageName: String,
         override val names: List<String>,
         val values: List<Value>,
@@ -206,13 +210,35 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
 
         @Transient
         val ir: IRTree.Enum? = null,
-    ) : Class {
+    ) : Enum {
         @Serializable
         data class Value(
             val name: String,
             val documentation: String? = null,
             val annotations: List<Annotation> = emptyList(),
-            @Transient val ir: IRTree.Enum.Value? = null,
+            @Transient val ir: IRTree.StringEnum.Value? = null,
+        )
+    }
+
+    @Serializable
+    data class LongEnum(
+        override val packageName: String,
+        override val names: List<String>,
+        val values: List<Value>,
+        override val documentation: String? = null,
+        override val annotations: List<Annotation> = emptyList(),
+        override val innerClasses: List<Class> = emptyList(),
+        override val provided: Boolean = false,
+
+        @Transient
+        val ir: IRTree.Enum? = null,
+    ) : Enum {
+        @Serializable
+        data class Value(
+            val value: Long,
+            val documentation: String? = null,
+            val annotations: List<Annotation> = emptyList(),
+            @Transient val ir: IRTree.LongEnum.Value? = null,
         )
     }
 

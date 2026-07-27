@@ -31,7 +31,11 @@ private fun IRTree.Type.changePackageName(packageName: String): IRTree.Type = wh
 
     is IRTree.Type.Unknown -> this
 
-    is IRTree.Enum -> copy(
+    is IRTree.StringEnum -> copy(
+        packageName = if (this.packageName == "") packageName else this.packageName,
+    )
+
+    is IRTree.LongEnum -> copy(
         packageName = if (this.packageName == "") packageName else this.packageName,
     )
 

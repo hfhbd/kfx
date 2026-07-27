@@ -10,8 +10,8 @@ class KotlinxCoreCreator : CodeGenTransformer {
     override fun invoke(codeGen: CodeGenTree): CodeGenTree = codeGen.copy(
         classes = codeGen.classes.mapTo(mutableSetOf()) {
             when (it) {
-                is CodeGenTree.Enum -> it.copy(
-                    annotations = it.annotations + SERIALIZABLE,
+                is CodeGenTree.StringEnum -> it.copy(
+                    annotations = it.annotations + serializable(),
                     values = it.values.map {
                         it.copy(
                             annotations = buildList {
@@ -25,11 +25,25 @@ class KotlinxCoreCreator : CodeGenTransformer {
                     },
                 )
 
+                is CodeGenTree.LongEnum -> it.copy(
+                    annotations = it.annotations + serializable(
+                        with = CodeGenTree.ClassName(
+                            packageName = it.packageName,
+                            names = it.names + "Companion",
+                        ),
+                    ),
+                    values = it.values.map {
+                        it.copy(
+                            annotations = it.annotations,
+                        )
+                    },
+                )
+
                 is CodeGenTree.NormalClass -> it.copy(
                     annotations = buildList {
                         addAll(it.annotations)
                         if (!it.isResultClass) {
-                            add(SERIALIZABLE)
+                            add(serializable())
                         }
                         val serialName = it.ir?.serialName
                         if (serialName != null) {
@@ -53,7 +67,19 @@ class KotlinxCoreCreator : CodeGenTransformer {
     )
 }
 
-val SERIALIZABLE = CodeGenTree.Annotation("kotlinx.serialization", listOf("Serializable"), emptyMap())
+fun serializable(
+    with: CodeGenTree.ClassName? = null,
+): CodeGenTree.Annotation = CodeGenTree.Annotation(
+    packageName = "kotlinx.serialization",
+    names = listOf("Serializable"),
+    values = if (with == null) {
+        emptyMap()
+    } else {
+        mapOf(
+        "with" to CodeGenTree.Expression.ClassLiteral(with),
+    )
+    },
+)
 
 fun serialName(value: String) = CodeGenTree.Annotation(
     "kotlinx.serialization",

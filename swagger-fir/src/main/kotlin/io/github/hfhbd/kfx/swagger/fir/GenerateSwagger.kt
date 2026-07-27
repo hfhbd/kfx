@@ -663,14 +663,14 @@ private fun Definition.stringToIr(
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
 ): IRTree.Type = if (enum.isNotEmpty()) {
     val qname = toIRTreeClassName(parentQName, name)
-    val enum = IRTree.Enum(
+    val enum = IRTree.StringEnum(
         name = qname.name,
         packageName = qname.packageName,
         packageNameSuffix = "",
         documentation = description,
         deprecated = false,
         values = enum.map {
-            IRTree.Enum.Value(it, null, it)
+            IRTree.StringEnum.Value(it, null, it)
         },
     )
     irTypes[qname] = enum
