@@ -17,7 +17,7 @@ dependencies {
     compileOnly(libs.kotlin.ecosystem)
 }
 
-gradlePlugin.plugins.register("io.github.hfhbd.kfx-kotlin-features") {
+gradlePlugin.plugins.register("io.github.hfhbd.kfx.kotlin-features") {
     implementationClass = "io.github.hfhbd.kfx.KfxFeaturesSettingsPlugin"
     displayName = "kfx Declarative Kotlin Features"
     description = "kfx Declarative Kotlin Features"

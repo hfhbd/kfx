@@ -7,8 +7,10 @@ plugins {
 kotlin {
     jvmToolchain(8)
     compilerOptions {
+        progressiveMode = true
         freeCompilerArgs.add("-Xreturn-value-checker=full")
     }
+    explicitApi()
 
     jvm()
     js {
@@ -40,12 +42,6 @@ kotlin {
     mingwX64()
     watchosDeviceArm64()
     iosX64()
-
-    explicitApi()
-    compilerOptions {
-        progressiveMode = true
-        optIn.add("kotlin.uuid.ExperimentalUuidApi")
-    }
 
     sourceSets {
         commonTest {
