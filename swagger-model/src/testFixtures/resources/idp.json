@@ -2802,6 +2802,30 @@
         }
       ],
       "x-go-name": "SamlClient"
+    },
+    "TopLevelArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SAMLUserAttributeMapper"
+      }
+    },
+    "TopLevelArrayInline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "foo"
+        ],
+        "properties": {
+          "foo": {
+            "description": "User attribute to take the value from",
+            "type": "integer",
+            "enum": [
+              42
+            ]
+          }
+        }
+      }
     }
   },
   "parameters": {
