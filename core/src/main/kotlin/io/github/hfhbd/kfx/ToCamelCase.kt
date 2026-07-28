@@ -29,10 +29,11 @@ fun String.toCamelCase(): String = "[_\\-/]\\w".toRegex().replace(this) {
         .uppercase()
 }
 
-fun String.operationIdToCamelCase() = "[_\\-]\\w".toRegex().replace(this) {
+fun String.operationIdToCamelCase() = "[_\\-/]\\w".toRegex().replace(this) {
     it.value
         .replace("_", "")
         .replace("-", "")
+        .replace("/", ".")
         .uppercase()
 }
 
