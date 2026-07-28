@@ -657,8 +657,19 @@ private fun Definition.arrayToIr(
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     definitions: Map<String, Definition>,
 ): IRTree.Type {
-    val irType = items?.toIr(parentQName, name, irTypes, definitions)
-        ?: irTypes.find(ref!!)
+    val ref = items!!.ref
+    val found = ref?.let { irTypes.findOrNull(it) }
+    val irType: IRTree.Type
+    if (found != null) {
+        irType = found
+    } else {
+        val new = items!!.toIr(parentQName, name + "Items", irTypes, definitions)
+        if (new is IRTree.Class) {
+            val className = (name + "Items").toIRTreeClassName()
+            irTypes[className] = new
+        }
+        irType = new
+    }
 
     if (parentQName != null) {
         return IRTree.Type.LIST(irType)
@@ -672,7 +683,7 @@ private fun Definition.arrayToIr(
             namespace = null,
             members = mapOf(
                 "value" to IRTree.Member(
-                    type = irType,
+                    type = IRTree.Type.LIST(irType),
                     nullable = false,
                     serialName = null,
                     namespace = null,
