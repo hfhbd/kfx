@@ -9,9 +9,13 @@ internal fun handleSealedClassMapping(irTree: IRTree, openapi: OpenApi): IRTree 
             is IRTree.Enum -> it
 
             is IRTree.NormalClass -> if (it.allOf != null) {
+                val allOfQname = it.allOf!!.qname
+                val allOf = openapi.components.schemas.entries.single {
+                    it.key.equals(allOfQname, ignoreCase = true)
+                }.value
                 handleSealedClassMapping(
                     it,
-                    openapi.components.schemas[it.allOf!!.qname]!! as OpenApi.Components.Schema.OBJECT,
+                    allOf as OpenApi.Components.Schema.OBJECT,
                 )
             } else {
                 it

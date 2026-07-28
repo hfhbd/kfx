@@ -59,8 +59,21 @@ class KotlinxJsonCreator : CodeGenTransformer {
         },
     )
 
-    private fun CodeGenTree.Type.replaceUnknown() = when (this) {
+    private fun CodeGenTree.Type.replaceUnknown(): CodeGenTree.Type = when (this) {
         CodeGenTree.Type.Unknown -> JsonObject
+
+        is CodeGenTree.Type.LIST -> copy(
+            item = item.replaceUnknown(),
+        )
+
+        is CodeGenTree.Type.SET -> copy(
+            item = item.replaceUnknown(),
+        )
+
+        is CodeGenTree.Type.MAP -> copy(
+            value = value.replaceUnknown(),
+        )
+
         else -> this
     }
 

@@ -8,6 +8,7 @@ enum class StatusCode(val value: Int) {
     Created(201),
     Accepted(202),
     NoContent(204),
+    ResetContent(205),
     BadRequest(400),
     Unauthorized(401),
     Forbidden(403),
@@ -22,6 +23,8 @@ enum class StatusCode(val value: Int) {
     ;
 
     companion object {
-        fun fromValue(value: Int) = entries.first { it.value == value }
+        fun fromValue(value: Int) = entries.firstOrNull { it.value == value } ?: throw IllegalArgumentException(
+            "Unknown status code: $value",
+        )
     }
 }

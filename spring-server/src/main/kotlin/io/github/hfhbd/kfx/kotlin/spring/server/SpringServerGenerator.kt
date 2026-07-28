@@ -53,6 +53,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         StatusCode.Created -> CodeBlock.of("created(location)")
         StatusCode.Accepted -> CodeBlock.of("accepted()")
         StatusCode.NoContent -> CodeBlock.of("noContent()")
+        StatusCode.ResetContent -> CodeBlock.of("status(205)")
         StatusCode.BadRequest -> CodeBlock.of("badRequest()")
         StatusCode.NotFound -> CodeBlock.of("notFound()")
         StatusCode.Unauthorized -> CodeBlock.of("status(401)")

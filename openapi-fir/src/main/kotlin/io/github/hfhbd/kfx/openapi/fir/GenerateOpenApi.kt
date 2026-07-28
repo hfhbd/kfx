@@ -76,6 +76,13 @@ private fun OpenApi.toIr(
                 val s = type.toIr(name, irTypes)
                 if (s is IRTree.Class) {
                     irTypes[name] = s
+                } else if (s is IRTree.Type.MAP) {
+                    irTypes[name] = wrapInValueClass(
+                        name.asClassName(),
+                        type = s,
+                        type.description,
+                        type.deprecated,
+                    )
                 }
             }
 
@@ -169,33 +176,40 @@ private fun Schema.ARRAY.generateTopLevelArray(name: String, irTypes: MutableMap
         }
     }
 
-    return IRTree.NormalClass(
-        packageName = className.packageName,
-        packageNameSuffix = "",
-        name = className.name,
-        serialName = null,
-        namespace = null,
-        members = mapOf(
-            "value" to IRTree.Member(
-                type = irListType,
-                nullable = false,
-                serialName = null,
-                namespace = null,
-                documentation = null,
-                xmlType = null,
-                requirements = emptyList(),
-                isOverride = false,
-                deprecated = false,
-            ),
-        ),
-        documentation = description,
-        isFault = false,
-        isValue = true,
-        discriminator = null,
-        allOf = null,
-        deprecated = deprecated,
-    )
+    return wrapInValueClass(className, irListType, description, deprecated)
 }
+
+private fun wrapInValueClass(
+    className: IRTree.ClassName,
+    type: IRTree.Type,
+    description: String?,
+    deprecated: Boolean,
+): IRTree.Class = IRTree.NormalClass(
+    packageName = className.packageName,
+    packageNameSuffix = "",
+    name = className.name,
+    serialName = null,
+    namespace = null,
+    members = mapOf(
+        "value" to IRTree.Member(
+            type = type,
+            nullable = false,
+            serialName = null,
+            namespace = null,
+            documentation = null,
+            xmlType = null,
+            requirements = emptyList(),
+            isOverride = false,
+            deprecated = false,
+        ),
+    ),
+    documentation = description,
+    isFault = false,
+    isValue = true,
+    discriminator = null,
+    allOf = null,
+    deprecated = deprecated,
+)
 
 private fun OpenApi.Operation.toIr(
     name: String,
@@ -697,8 +711,8 @@ private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName = (
     ) ?: name!!
     ).asClassName()
 
-private fun String.asClassName(): IRTree.ClassName = if ("." in this) {
-    val qName = split(".")
+private fun String.asClassName(): IRTree.ClassName = if ("." in this || "/" in this) {
+    val qName = split(".", "/")
     IRTree.ClassName(
         qName.dropLast(1).joinToString(".") {
             it.lowercase()
