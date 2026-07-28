@@ -2,7 +2,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class MappersList(
+public data class MappersListItems(
   /**
    * Uniquely identifies the mapper. Use this in the predefinedMappers-field of a client.
    */

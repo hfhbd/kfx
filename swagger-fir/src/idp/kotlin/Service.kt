@@ -18,6 +18,6 @@ public data class Service(
   public val name: String,
   public val plan_updateable: Boolean? = null,
   public val plans: List<Plan>,
-  public val requires: List<ServiceRequires> = emptyList(),
+  public val requires: List<ServiceRequiresItems> = emptyList(),
   public val tags: List<String> = emptyList(),
 )

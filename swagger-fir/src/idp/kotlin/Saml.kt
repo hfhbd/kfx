@@ -55,7 +55,7 @@ public data class Saml(
   /**
    * Default client scopes are always applied when issuing tokens for this client. Scope mappings are always applied regardless of value of used scope parameter in OIDC Authorization request.
    */
-  public val defaultClientScopes: List<SamlDefaultClientScopes> = emptyList(),
+  public val defaultClientScopes: List<SamlDefaultClientScopesItems> = emptyList(),
   /**
    * Should SAML assertions be encrypted with client's public key using AES?
    */
