@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "BuildAndDeployStatusD__metadata")
+@SerialName(value = "BuildAndDeployStatusDMetadata")
 public data class BuildAndDeployStatusDMetadata(
   public val id: String,
   public val uri: String,

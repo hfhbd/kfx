@@ -64,6 +64,7 @@ class OData : IrTransformer {
                 type = it.type.transform(),
             )
         },
+        serialName = name.transform(),
     )
 
     private fun IRTree.Class.transform(): IRTree.Class = when (this) {

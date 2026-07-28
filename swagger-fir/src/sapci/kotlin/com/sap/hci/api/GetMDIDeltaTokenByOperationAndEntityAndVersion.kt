@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "GetMDIDeltaToken(Operation='{Operation}',Entity='{Entity}',Version='{Version}')")
+@SerialName(value = "GetMDIDeltaTokenByOperationAndEntityAndVersion")
 public data class GetMDIDeltaTokenByOperationAndEntityAndVersion(
   public val d: MDIDeltaToken? = null,
 )

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ScriptCollectionDesigntimeArtifactResource-create")
+@SerialName(value = "ScriptCollectionDesigntimeArtifactResourceCreate")
 public data class ScriptCollectionDesigntimeArtifactResourceCreate(
   public val Name: String? = null,
   public val ResourceType: String? = null,

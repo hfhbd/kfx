@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "ValueMappingDesigntimeArtifact-create")
+@SerialName(value = "ValueMappingDesigntimeArtifactCreate")
 public data class ValueMappingDesigntimeArtifactCreate(
   public val Name: String? = null,
   public val Id: String? = null,

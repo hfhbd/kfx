@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "Configuration-update")
+@SerialName(value = "ConfigurationUpdate")
 public data class ConfigurationUpdate(
   public val ParameterValue: String? = null,
   public val DataType: String? = null,

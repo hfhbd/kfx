@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "IntegrationDesigntimeArtifact-update")
+@SerialName(value = "IntegrationDesigntimeArtifactUpdate")
 public data class IntegrationDesigntimeArtifactUpdate(
   public val Name: String? = null,
   public val ArtifactContent: String? = null,

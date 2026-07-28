@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "CustomTags-Update")
+@SerialName(value = "CustomTagsUpdate")
 public data class CustomTagsUpdate(
   public val Value: String? = null,
 )

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "MDIDeltaTokenD__metadata")
+@SerialName(value = "MDIDeltaTokenDMetadata")
 public data class MDIDeltaTokenDMetadata(
   public val id: String,
   public val uri: String,
