@@ -17,6 +17,7 @@
     <ID>MagicNumber:StatusCode.kt:StatusCode.NotAcceptable$406</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.NotFound$404</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.OK$200</ID>
+    <ID>MagicNumber:StatusCode.kt:StatusCode.ResetContent$205</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.TooManyRequests$429</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.Unauthorized$401</ID>
     <ID>MagicNumber:StatusCode.kt:StatusCode.UnprocessableEntity$422</ID>

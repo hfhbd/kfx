@@ -28,6 +28,7 @@ fun StatusCode.toHttpCode(): MemberName {
         StatusCode.Created -> MemberName(className, "Created")
         StatusCode.Accepted -> MemberName(className, "Accepted")
         StatusCode.NoContent -> MemberName(className, "NoContent")
+        StatusCode.ResetContent -> MemberName(className, "ResetContent")
         StatusCode.BadRequest -> MemberName(className, "BadRequest")
         StatusCode.NotFound -> MemberName(className, "NotFound")
         StatusCode.Unauthorized -> MemberName(className, "Unauthorized")
