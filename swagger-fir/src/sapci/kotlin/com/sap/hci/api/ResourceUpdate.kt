@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "Resource-update")
+@SerialName(value = "ResourceUpdate")
 public data class ResourceUpdate(
   public val ResourceContent: String? = null,
 )

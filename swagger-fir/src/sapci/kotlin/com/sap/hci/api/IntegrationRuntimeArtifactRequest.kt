@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "IntegrationRuntimeArtifact_Request")
+@SerialName(value = "IntegrationRuntimeArtifactRequest")
 public data class IntegrationRuntimeArtifactRequest(
   public val Id: String? = null,
   public val Version: String? = null,

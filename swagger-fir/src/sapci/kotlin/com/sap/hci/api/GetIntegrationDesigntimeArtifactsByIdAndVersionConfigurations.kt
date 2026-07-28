@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "GetIntegrationDesigntimeArtifacts(Id='{Id}',Version='{Version}')Configurations")
+@SerialName(value = "GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurations")
 public data class GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurations(
   public val d: GetIntegrationDesigntimeArtifactsByIdAndVersionConfigurationsD? = null,
 )

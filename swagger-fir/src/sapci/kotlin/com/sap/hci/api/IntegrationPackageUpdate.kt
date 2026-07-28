@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "IntegrationPackage-update")
+@SerialName(value = "IntegrationPackageUpdate")
 public data class IntegrationPackageUpdate(
   public val Name: String? = null,
   public val Description: String? = null,

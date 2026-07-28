@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "GetValueMappingDesigntimeArtifacts(Id='{Id}',Version='{Version}')ValMapSchema")
+@SerialName(value = "GetValueMappingDesigntimeArtifactsByIdAndVersionValMapSchema")
 public data class GetValueMappingDesigntimeArtifactsByIdAndVersionValMapSchema(
   public val `value`: ValMapSchema? = null,
 )

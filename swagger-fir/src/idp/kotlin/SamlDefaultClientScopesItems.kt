@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class SamlDefaultClientScopes {
+public enum class SamlDefaultClientScopesItems {
   @SerialName(value = "ad_saml")
   AdSaml,
   @SerialName(value = "role_list")

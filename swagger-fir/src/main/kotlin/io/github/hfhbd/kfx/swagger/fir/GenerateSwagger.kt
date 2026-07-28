@@ -218,14 +218,16 @@ private fun generate(
             position == Parameter.Position.Body
         }
         ).singleOrNull()
-        ?.toType(IRTree.ClassName("", name), irTypes, definitions)
+        ?.let {
+            it.schema?.toIr(IRTree.ClassName("", ""), name, irTypes, definitions) ?: irTypes.find(it.ref!!)
+        }
 
     val output = operation.responses[statusCodes.success]?.schema?.let {
         if (it.isUnit()) {
             IRTree.Type.Builtin.UNIT
         } else {
             it.toIr(
-                null,
+                IRTree.ClassName("", ""),
                 name,
                 irTypes,
                 definitions = definitions,
@@ -322,8 +324,8 @@ private fun generate(
                     irTypes.find(ref)
                 } else {
                     it.toIr(
-                        null,
-                        null,
+                        IRTree.ClassName("", name),
+                        name,
                         irTypes,
                         definitions,
                     )
@@ -548,7 +550,7 @@ private fun Parameter.toParameter(
             Parameter.Types.Array -> IRTree.Type.LIST(
                 list = items!!.toIr(
                     parentQName,
-                    name,
+                    name!!,
                     irTypes,
                     definitions,
                 ),
@@ -609,12 +611,6 @@ private fun Parameter.defaultValue(): IRTree.Literal? = when (val primitive = de
     }
 }
 
-private fun Parameter.toType(
-    parentQName: IRTree.ClassName?,
-    irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
-    definitions: Map<String, Definition>,
-): IRTree.Type = schema?.toIr(parentQName, null, irTypes, definitions) ?: irTypes.find(ref!!)
-
 private fun Map<IRTree.ClassName, IRTree.Class>.findOrNull(id: String): IRTree.Class? {
     val id = id.removePrefix("#/definitions/").toIRTreeClassName()
     return this[id]
@@ -626,14 +622,11 @@ private fun Map<IRTree.ClassName, IRTree.Class>.find(id: String): IRTree.Class =
 
 private fun Definition.toIr(
     parentQName: IRTree.ClassName?,
-    name: String?,
+    name: String,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     definitions: Map<String, Definition>,
 ): IRTree.Type = when (type) {
-    Definition.Type.Array -> IRTree.Type.LIST(
-        items?.toIr(parentQName, name, irTypes, definitions)
-            ?: irTypes.find(ref!!),
-    )
+    Definition.Type.Array -> arrayToIr(parentQName, name, irTypes, definitions)
 
     Definition.Type.Boolean -> IRTree.Type.Builtin.BOOLEAN
 
@@ -656,6 +649,59 @@ private fun Definition.toIr(
     Definition.Type.File -> IRTree.Type.Builtin.FILE
 
     Definition.Type.Null -> error("Not supported $this")
+}
+
+private fun Definition.arrayToIr(
+    parentQName: IRTree.ClassName?,
+    name: String,
+    irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
+    definitions: Map<String, Definition>,
+): IRTree.Type {
+    val ref = items!!.ref
+    val found = ref?.let { irTypes.findOrNull(it) }
+    val irType: IRTree.Type
+    if (found != null) {
+        irType = found
+    } else {
+        val new = items!!.toIr(parentQName, name + "Items", irTypes, definitions)
+        if (new is IRTree.Class) {
+            val className = (name + "Items").toIRTreeClassName()
+            irTypes[className] = new
+        }
+        irType = new
+    }
+
+    if (parentQName != null) {
+        return IRTree.Type.LIST(irType)
+    } else {
+        val className = name.toIRTreeClassName()
+        return IRTree.NormalClass(
+            packageName = className.packageName,
+            packageNameSuffix = "",
+            name = className.name,
+            serialName = null,
+            namespace = null,
+            members = mapOf(
+                "value" to IRTree.Member(
+                    type = IRTree.Type.LIST(irType),
+                    nullable = false,
+                    serialName = null,
+                    namespace = null,
+                    documentation = null,
+                    xmlType = null,
+                    requirements = emptyList(),
+                    isOverride = false,
+                    deprecated = false,
+                ),
+            ),
+            documentation = description,
+            isFault = false,
+            isValue = true,
+            discriminator = null,
+            allOf = null,
+            deprecated = false,
+        )
+    }
 }
 
 private fun Definition.stringToIr(
@@ -729,7 +775,7 @@ private fun toIRTreeClassName(parentQName: IRTree.ClassName?, name: String?): IR
 
 private fun Definition.handleAdditionalProperties(
     parentQName: IRTree.ClassName?,
-    name: String?,
+    name: String,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     definitions: Map<String, Definition>,
 ): IRTree.Type = when (additionalProperties!!.type) {
@@ -769,7 +815,7 @@ private fun Definition.handleAdditionalProperties(
 
 private fun Definition.objectToIr(
     parentQName: IRTree.ClassName?,
-    name: String?,
+    name: String,
     irTypes: MutableMap<IRTree.ClassName, IRTree.Class>,
     definitions: Map<String, Definition>,
 ): IRTree.Type {

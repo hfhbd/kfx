@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName(value = "CustomTagsConfiguration")
 public data class CustomTagsConfiguration(
-  public val customTagsConfiguration: CustomTagsConfigurationCustomTagsConfiguration,
+  public val customTagsConfiguration: CustomTagsConfigurationCustomTagsConfigurationItems,
 )

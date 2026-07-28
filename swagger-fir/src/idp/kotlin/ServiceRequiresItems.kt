@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class ServiceRequires {
+public enum class ServiceRequiresItems {
   @SerialName(value = "syslog_drain")
   SyslogDrain,
   @SerialName(value = "route_forwarding")

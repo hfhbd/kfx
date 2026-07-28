@@ -31,7 +31,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 import java.nio.file.Path
-import java.util.ServiceLoader
+import java.util.*
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -89,7 +89,11 @@ private fun OpenApi.toIr(
                 irTypes[name] = enum
             }
 
-            is Schema.ARRAY,
+            is Schema.ARRAY -> {
+                val wrapperClass = type.generateTopLevelArray(name, irTypes)
+                irTypes[name] = wrapperClass
+            }
+
             is Schema.BOOLEAN,
             is Schema.INT,
             is Schema.NUMBER,
@@ -145,6 +149,52 @@ private fun OpenApi.toIr(
         irTree = openapiTransformer(this, irTree)
     }
     return irTree
+}
+
+private fun Schema.ARRAY.generateTopLevelArray(name: String, irTypes: MutableMap<String, IRTree.Class>): IRTree.Class {
+    val className = name.asClassName()
+
+    val irListType = toIr(name, "Items", irTypes)
+    val irInnerTypeClassName = name + "Items"
+    if (irListType is IRTree.Type.LIST) {
+        val inner = irListType.list
+        if (inner is IRTree.Class) {
+            irTypes[irInnerTypeClassName] = inner
+        }
+    } else {
+        irListType as IRTree.Type.SET
+        val inner = irListType.set
+        if (inner is IRTree.Class) {
+            irTypes[irInnerTypeClassName] = inner
+        }
+    }
+
+    return IRTree.NormalClass(
+        packageName = className.packageName,
+        packageNameSuffix = "",
+        name = className.name,
+        serialName = null,
+        namespace = null,
+        members = mapOf(
+            "value" to IRTree.Member(
+                type = irListType,
+                nullable = false,
+                serialName = null,
+                namespace = null,
+                documentation = null,
+                xmlType = null,
+                requirements = emptyList(),
+                isOverride = false,
+                deprecated = false,
+            ),
+        ),
+        documentation = description,
+        isFault = false,
+        isValue = true,
+        discriminator = null,
+        allOf = null,
+        deprecated = deprecated,
+    )
 }
 
 private fun OpenApi.Operation.toIr(
@@ -527,7 +577,7 @@ private fun Schema.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type = when (this) {
-    is Schema.ARRAY -> toIr(parentName ?: "", name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
+    is Schema.ARRAY -> toIr(parentName, name, irTypes)
     is Schema.BOOLEAN -> toIr()
     is Schema.INT -> toIr(parentName, name, irTypes)
     is Schema.NUMBER -> toIr()
@@ -537,29 +587,29 @@ private fun Schema.toIr(
 
 private fun Schema.BOOLEAN.toIr() = IRTree.Type.Builtin.BOOLEAN
 
+@JvmName("arrayToIr")
+private fun Schema.ARRAY.toIr(parentName: String?, name: String?, irTypes: MutableMap<String, IRTree.Class>) =
+    toIr(parentName ?: "", name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
+
 private fun Schema.ARRAY.toIr(
     parentName: String,
     suffix: String,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type {
-    val items = items
+    val type = when (val items = items!!) {
+        is Schema.ARRAY -> items.toIr(parentName, suffix, irTypes)
 
-    if (uniqueItems) {
-        return IRTree.Type.SET(
-            if (items is Schema.ARRAY) {
-                items.toIr(parentName, suffix, irTypes)
-            } else {
-                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
-            },
-        )
+        is Schema.OBJECT if items.ref != null -> irTypes.findOrNull(
+            items.ref!!,
+        ) ?: items.toIr(null, parentName + suffix, irTypes)
+
+        else -> items.toIr(null, parentName + suffix, irTypes)
+    }
+
+    return if (uniqueItems) {
+        IRTree.Type.SET(type)
     } else {
-        return IRTree.Type.LIST(
-            if (items is Schema.ARRAY) {
-                items.toIr(parentName, suffix, irTypes)
-            } else {
-                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
-            },
-        )
+        IRTree.Type.LIST(type)
     }
 }
 

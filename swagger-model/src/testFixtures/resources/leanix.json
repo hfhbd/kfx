@@ -107,7 +107,9 @@
             "description": "successful operation",
             "schema": {
               "type": "array",
-              "$ref": "#/definitions/ProcessorConfiguration"
+              "items": {
+                "$ref": "#/definitions/ProcessorConfiguration"
+              }
             }
           },
           "403": {

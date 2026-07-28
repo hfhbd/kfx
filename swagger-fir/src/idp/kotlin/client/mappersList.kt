@@ -1,6 +1,6 @@
 package client
 
-import MappersList
+import MappersListItems
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -12,10 +12,10 @@ import kotlin.collections.List
 /**
  * @param protocol Protocol for which to retrieve the predefined mappers
  */
-public suspend fun HttpClient.mappersList(protocol: String, builder: suspend HttpRequestBuilder.() -> Unit = {}): List<MappersList> {
+public suspend fun HttpClient.mappersList(protocol: String, builder: suspend HttpRequestBuilder.() -> Unit = {}): List<MappersListItems> {
   val response = `get`(urlString = """api/v1/predefined-mappers/${protocol}""") {
     builder()
   }
-  val output = response.body<List<MappersList>>()
+  val output = response.body<List<MappersListItems>>()
   return output
 }

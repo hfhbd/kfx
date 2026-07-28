@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName(value = "CustomTagsConfiguration-create")
+@SerialName(value = "CustomTagsConfigurationCreate")
 public data class CustomTagsConfigurationCreate(
   public val customTagsConfiguration: String? = null,
 )
