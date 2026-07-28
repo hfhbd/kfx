@@ -128,72 +128,86 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
         val valueMember = members.single()
         val valueMemberType = valueMember.type.toPoetType()
 
-        val privateConstructor = FunSpec.constructorBuilder()
-        privateConstructor.addModifiers(KModifier.PRIVATE)
-        privateConstructor.addParameter(
-            name = valueMember.name,
-            type = valueMemberType,
-        )
-        typeSpec.primaryConstructor(privateConstructor.build())
-        typeSpec.addMember(valueMember, isFault = false) {
-            addModifiers(KModifier.PRIVATE)
-            initializer(valueMember.name)
-        }
+        val hasComputedProperties = computedProperties.isNotEmpty()
 
-        val constructor = FunSpec.constructorBuilder()
+        if (hasComputedProperties) {
+            val privateConstructor = FunSpec.constructorBuilder()
+            privateConstructor.addModifiers(KModifier.PRIVATE)
+            privateConstructor.addParameter(
+                name = valueMember.name,
+                type = valueMemberType,
+            )
+            typeSpec.primaryConstructor(privateConstructor.build())
+            typeSpec.addMember(valueMember, isFault = false) {
+                addModifiers(KModifier.PRIVATE)
+                initializer(valueMember.name)
+            }
 
-        for (member in computedProperties) {
-            val type = typeSpec.addMember(member, isFault = false) {
-                getter(
-                    FunSpec.getterBuilder().addStatement(
-                        "return ${valueMember.name}.${member.name}",
-                    ).build(),
+            val constructor = FunSpec.constructorBuilder()
+
+            for (member in computedProperties) {
+                val type = typeSpec.addMember(member, isFault = false) {
+                    getter(
+                        FunSpec.getterBuilder().addStatement(
+                            "return ${valueMember.name}.${member.name}",
+                        ).build(),
+                    )
+                }
+
+                constructor.addParameter(
+                    ParameterSpec.builder(member.name, type).apply {
+                        for (annotation in member.annotations) {
+                            addAnnotation(annotation.toAnno())
+                        }
+                        if (member.nullable) {
+                            when (member.type) {
+                                is CodeGenTree.Type.LIST -> defaultValue(
+                                    CodeBlock.of(
+                                        "%M()",
+                                        MemberName("kotlin.collections", "emptyList", isExtension = true),
+                                    ),
+                                )
+
+                                is CodeGenTree.Type.MAP -> defaultValue(
+                                    CodeBlock.of(
+                                        "%M()",
+                                        MemberName("kotlin.collections", "emptyMap", isExtension = true),
+                                    ),
+                                )
+
+                                else -> defaultValue("null")
+                            }
+                        }
+                    }.build(),
                 )
             }
 
-            constructor.addParameter(
-                ParameterSpec.builder(member.name, type).apply {
-                    for (annotation in member.annotations) {
-                        addAnnotation(annotation.toAnno())
-                    }
-                    if (member.nullable) {
-                        when (member.type) {
-                            is CodeGenTree.Type.LIST -> defaultValue(
-                                CodeBlock.of(
-                                    "%M()",
-                                    MemberName("kotlin.collections", "emptyList", isExtension = true),
-                                ),
-                            )
-
-                            is CodeGenTree.Type.MAP -> defaultValue(
-                                CodeBlock.of(
-                                    "%M()",
-                                    MemberName("kotlin.collections", "emptyMap", isExtension = true),
-                                ),
-                            )
-
-                            else -> defaultValue("null")
-                        }
-                    }
-                }.build(),
+            typeSpec.addFunction(
+                constructor
+                    .callThisConstructor(
+                        CodeBlock.of(
+                            "%T%L%L%L",
+                            valueMemberType,
+                            if (computedProperties.isEmpty()) "" else "(",
+                            computedProperties.map {
+                                CodeBlock.of(it.name)
+                            }.joinToCode(),
+                            if (computedProperties.isEmpty()) "" else ")",
+                        ),
+                    )
+                    .build(),
             )
+        } else {
+            val constructor = FunSpec.constructorBuilder()
+            constructor.addParameter(
+                name = valueMember.name,
+                type = valueMemberType,
+            )
+            typeSpec.primaryConstructor(constructor.build())
+            typeSpec.addMember(valueMember, isFault = false) {
+                initializer(valueMember.name)
+            }
         }
-
-        typeSpec.addFunction(
-            constructor
-                .callThisConstructor(
-                    CodeBlock.of(
-                        "%T%L%L%L",
-                        valueMemberType,
-                        if (computedProperties.isEmpty()) "" else "(",
-                        computedProperties.map {
-                            CodeBlock.of(it.name)
-                        }.joinToCode(),
-                        if (computedProperties.isEmpty()) "" else ")",
-                    ),
-                )
-                .build(),
-        )
 
         return typeSpec
     }

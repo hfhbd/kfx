@@ -127,9 +127,9 @@ data object CodeGenCreator {
         },
         computedProperties = if (ir.isValue) {
             val singleMember = ir.members[ir.members.keys.single()]!!
-            (singleMember.type as IRTree.NormalClass).members.map {
+            (singleMember.type as? IRTree.NormalClass)?.members?.map {
                 toCodeGen(it.value, name = it.key)
-            }
+            } ?: emptyList()
         } else {
             emptyList()
         },
