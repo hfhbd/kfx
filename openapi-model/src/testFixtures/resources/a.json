@@ -414,6 +414,28 @@
                 "items": {
                     "$ref": "#/components/schemas/com.example.TestEnumInt"
                 }
+            },
+            "com.example.TopArrayInline": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "byBar"
+                    ],
+                    "properties": {
+                        "byBar": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "a": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "securitySchemes": {

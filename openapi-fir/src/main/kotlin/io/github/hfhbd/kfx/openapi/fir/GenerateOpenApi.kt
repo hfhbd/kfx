@@ -154,7 +154,20 @@ private fun OpenApi.toIr(
 private fun Schema.ARRAY.generateTopLevelArray(name: String, irTypes: MutableMap<String, IRTree.Class>): IRTree.Class {
     val className = name.asClassName()
 
-    val irType = toIr(null, name, irTypes)
+    val irListType = toIr(name, "Items", irTypes)
+    val irInnerTypeClassName = name + "Items"
+    if (irListType is IRTree.Type.LIST) {
+        val inner = irListType.list
+        if (inner is IRTree.Class) {
+            irTypes[irInnerTypeClassName] = inner
+        }
+    } else {
+        irListType as IRTree.Type.SET
+        val inner = irListType.set
+        if (inner is IRTree.Class) {
+            irTypes[irInnerTypeClassName] = inner
+        }
+    }
 
     return IRTree.NormalClass(
         packageName = className.packageName,
@@ -164,7 +177,7 @@ private fun Schema.ARRAY.generateTopLevelArray(name: String, irTypes: MutableMap
         namespace = null,
         members = mapOf(
             "value" to IRTree.Member(
-                type = irType,
+                type = irListType,
                 nullable = false,
                 serialName = null,
                 namespace = null,
@@ -583,24 +596,20 @@ private fun Schema.ARRAY.toIr(
     suffix: String,
     irTypes: MutableMap<String, IRTree.Class>,
 ): IRTree.Type {
-    val items = items
+    val type = when (val items = items!!) {
+        is Schema.ARRAY -> items.toIr(parentName, suffix, irTypes)
 
-    if (uniqueItems) {
-        return IRTree.Type.SET(
-            if (items is Schema.ARRAY) {
-                items.toIr(parentName, suffix, irTypes)
-            } else {
-                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
-            },
-        )
+        is Schema.OBJECT if items.ref != null -> irTypes.findOrNull(
+            items.ref!!,
+        ) ?: items.toIr(null, parentName + suffix, irTypes)
+
+        else -> items.toIr(null, parentName + suffix, irTypes)
+    }
+
+    return if (uniqueItems) {
+        IRTree.Type.SET(type)
     } else {
-        return IRTree.Type.LIST(
-            if (items is Schema.ARRAY) {
-                items.toIr(parentName, suffix, irTypes)
-            } else {
-                items?.toIr(null, parentName + suffix, irTypes) ?: irTypes.find(ref!!)
-            },
-        )
+        IRTree.Type.LIST(type)
     }
 }
 

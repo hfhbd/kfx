@@ -452,8 +452,6 @@ public data class OpenApi(
                 val items: Schema? = null,
                 val maxItems: Int? = null,
                 override val description: String? = null,
-                @SerialName("\$ref")
-                val ref: String? = null,
                 override val extensions: Map<String, JsonElement> = emptyMap(),
                 val example: JsonElement? = null,
                 val minItems: Int? = null,
