@@ -151,13 +151,13 @@ private fun OpenApi.toIr(
         },
     )
 
-    irTree = handleSealedClassMapping(irTree, this)
     for (openapiTransformer in openapiTransformers) {
         irTree = openapiTransformer(this, irTree)
     }
     return irTree
 }
 
+context(openapi: OpenApi)
 private fun Schema.ARRAY.generateTopLevelArray(name: String, irTypes: MutableMap<String, IRTree.Class>): IRTree.Class {
     val className = name.asClassName()
 
@@ -211,6 +211,7 @@ private fun wrapInValueClass(
     deprecated = deprecated,
 )
 
+context(openapi: OpenApi)
 private fun OpenApi.Operation.toIr(
     name: String,
     path: String?,
@@ -259,9 +260,14 @@ private fun OpenApi.Operation.toIr(
         }
         irTypes[id + "Response"] = output
     }
+    val className = name.asClassName().let {
+        it.copy(
+            name = it.name.replaceFirstChar { it.lowercase() },
+        )
+    }
     return IRTree.Operation(
-        packageName = "",
-        name = name.replaceFirstChar { it.lowercase() },
+        packageName = className.packageName,
+        name = className.name,
         documentation = doc,
         method = method,
         location = null,
@@ -368,6 +374,7 @@ private fun OpenApi.Operation.toIr(
     )
 }
 
+context(openapi: OpenApi)
 private fun OpenApi.Operation.Response.toIr(
     name: String,
     responses: Map<String, OpenApi.Operation.Response>,
@@ -484,6 +491,7 @@ private val OAuth2Token = IRTree.NormalClass(
     deprecated = false,
 )
 
+context(openapi: OpenApi)
 private fun OpenApi.Parameter.toParameter(
     parameters: Map<String, OpenApi.Parameter>,
     irTypes: MutableMap<String, IRTree.Class>,
@@ -514,6 +522,7 @@ private fun OpenApi.Parameter.toParameter(
     }
 }
 
+context(openapi: OpenApi)
 private fun OpenApi.Operation.Header.toParameter(
     headerName: String,
     headers: Map<String, OpenApi.Operation.Header>,
@@ -586,6 +595,7 @@ private fun Map<String, IRTree.Class>.findOrNull(id: String): IRTree.Class? {
 
 private fun Map<String, IRTree.Class>.find(id: String): IRTree.Class = findOrNull(id) ?: error("$id not in $keys")
 
+context(openapi: OpenApi)
 private fun Schema.toIr(
     parentName: String?,
     name: String?,
@@ -602,9 +612,11 @@ private fun Schema.toIr(
 private fun Schema.BOOLEAN.toIr() = IRTree.Type.Builtin.BOOLEAN
 
 @JvmName("arrayToIr")
+context(openapi: OpenApi)
 private fun Schema.ARRAY.toIr(parentName: String?, name: String?, irTypes: MutableMap<String, IRTree.Class>) =
     toIr(parentName ?: "", name?.replaceFirstChar { it.uppercaseChar() } ?: "Items", irTypes)
 
+context(openapi: OpenApi)
 private fun Schema.ARRAY.toIr(
     parentName: String,
     suffix: String,
@@ -711,8 +723,8 @@ private fun Schema.OBJECT.asClassName(name: String?): IRTree.ClassName = (
     ) ?: name!!
     ).asClassName()
 
-private fun String.asClassName(): IRTree.ClassName = if ("." in this || "/" in this) {
-    val qName = split(".", "/")
+private fun String.asClassName(): IRTree.ClassName = if ("." in this || "/" in this || "-" in this) {
+    val qName = split(".", "/", "-")
     IRTree.ClassName(
         qName.dropLast(1).joinToString(".") {
             it.lowercase()
@@ -723,6 +735,7 @@ private fun String.asClassName(): IRTree.ClassName = if ("." in this || "/" in t
     IRTree.ClassName("", replaceFirstChar { it.uppercaseChar() })
 }
 
+context(openapi: OpenApi)
 private fun Schema.OBJECT.handleAdditionalProperties(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
@@ -781,6 +794,7 @@ private fun Schema.OBJECT.handleAdditionalProperties(
     return irType
 }
 
+context(openapi: OpenApi)
 private fun Schema.OBJECT.toIr(
     name: String?,
     irTypes: MutableMap<String, IRTree.Class>,
@@ -790,11 +804,24 @@ private fun Schema.OBJECT.toIr(
     if (additionalPropertiesSchema != null && properties.isEmpty()) {
         return handleAdditionalProperties(name, irTypes)
     } else {
+        val serialName = if (allOf.isNotEmpty() && name != null) {
+            val firstAllOf = allOf.first() as Schema.OBJECT
+            if (firstAllOf.ref == null) {
+                getSerialName(firstAllOf, name)
+            } else {
+                val found = openapi.components.schemas[firstAllOf.ref!!.removePrefix("#/components/schemas/")]
+                found as Schema.OBJECT
+                getSerialName(found, name)
+            }
+        } else {
+            null
+        }
+
         return IRTree.NormalClass(
             packageName = resolvedRef.packageName,
             packageNameSuffix = "",
             name = resolvedRef.name,
-            serialName = null,
+            serialName = serialName,
             namespace = null,
             members = buildMap {
                 putAll(
@@ -850,6 +877,12 @@ private fun Schema.OBJECT.toIr(
     }
 }
 
+private fun getSerialName(allOf: Schema.OBJECT, name: String) = allOf.discriminator?.mapping?.entries?.singleOrNull {
+    val s = "#/components/schemas/$name"
+    it.value == s
+}?.key
+
+context(openapi: OpenApi)
 private fun Map<String, Schema>.toMembers(
     name: String? = null,
     irTypes: MutableMap<String, IRTree.Class>,
@@ -931,4 +964,11 @@ private val Schema.hasNoRef: Boolean
         -> false
 
         is Schema.OBJECT -> ref == null
+    }
+
+private val IRTree.Class.qName: String
+    get() = if (packageName.isEmpty()) {
+        name
+    } else {
+        "$packageName.$name"
     }

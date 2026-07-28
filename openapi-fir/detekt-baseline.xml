@@ -2,12 +2,12 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:context(openapi: OpenApi) private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun OpenApi.toIr: IRTree</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Schema.toIrDefault: IRTree.Literal?</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:context(openapi: OpenApi) private fun OpenApi.Operation.toIr: IRTree.Operation</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:context(openapi: OpenApi) private fun Schema.OBJECT.toIr: IRTree.Type</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun OpenApi.toIr: IRTree</ID>
-    <ID>LongMethod:GenerateOpenApi.kt:private fun Schema.OBJECT.toIr: IRTree.Type</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun toAuth: List&lt;IRTree.Auth></ID>
     <ID>TooManyFunctions:GenerateOpenApi.kt:io.github.hfhbd.kfx.openapi.fir.GenerateOpenApi.kt</ID>
   </CurrentIssues>
