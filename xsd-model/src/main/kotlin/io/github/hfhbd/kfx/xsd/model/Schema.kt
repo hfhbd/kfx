@@ -218,7 +218,7 @@ data class Annotation(
     val appInfo: AppInfo? = null,
     @XmlElement
     @XmlSerialName("documentation", XSD_NAMESPACE)
-    val documentation: Documentation? = null,
+    val documentation: List<Documentation> = emptyList(),
 )
 
 @Serializable
