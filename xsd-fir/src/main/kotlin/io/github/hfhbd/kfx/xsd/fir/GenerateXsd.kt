@@ -339,11 +339,15 @@ private fun toIr(
     }
 }
 
-private fun Annotation.documentation(): String? {
-    return documentation?.values?.mapNotNull {
-        (it as? String)?.trimDocumentation() ?: return@mapNotNull null
-    }?.joinToString("")?.trim()
-}
+private fun Annotation.documentation(): String? = buildString {
+    for (documentation in documentation) {
+        for (value in documentation.values) {
+            if (value is String) {
+                appendLine(value.trimDocumentation())
+            }
+        }
+    }
+}.ifEmpty { null }
 
 fun String.trimDocumentation(): String {
     val docs = split("\n")

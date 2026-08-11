@@ -9,6 +9,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Bar details
+ * Foo details
  */
 @XmlSerialName(
   value = "BarType",

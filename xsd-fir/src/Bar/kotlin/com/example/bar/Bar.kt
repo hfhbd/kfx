@@ -9,6 +9,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 /**
  * Bar details
+ * Foo details
  */
 @JvmInline
 @XmlSerialName(
