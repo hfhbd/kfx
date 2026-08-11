@@ -14,7 +14,6 @@ testing.suites {
         dependencies {
             implementation(testFixtures(project()))
 
-            implementation(projects.kotlin)
             implementation(projects.creatorKotlinxjson)
             implementation(projects.ktorClient)
             implementation(projects.ktorServer)
@@ -29,19 +28,31 @@ testing.suites {
 
     register("a", JvmTestSuite::class) {
         dependencies {
+            implementation(projects.kotlin)
             implementation(projects.responseClasses)
             implementation(projects.validation)
         }
     }
-    register("sealed", JvmTestSuite::class)
+    register("results", JvmTestSuite::class) {
+        dependencies {
+            implementation(projects.responseClasses)
+        }
+    }
+    register("sealed", JvmTestSuite::class) {
+        dependencies{
+            implementation(projects.kotlin)
+        }
+    }
 
     register("jira", JvmTestSuite::class) {
         dependencies {
+            implementation(projects.kotlin)
             implementation(projects.irPackagename)
         }
     }
     register("central", JvmTestSuite::class) {
         dependencies {
+            implementation(projects.kotlin)
             implementation(projects.irPackagename)
         }
     }

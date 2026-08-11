@@ -1,6 +1,5 @@
-package io.github.hfhbd.kfx.kotlin.classes
+package io.github.hfhbd.kfx.kotlin
 
-import app.softwork.serviceloader.ServiceLoader
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -17,16 +16,10 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.joinToCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
-import io.github.hfhbd.kfx.codegen.CodeGenerator
-import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
-import io.github.hfhbd.kfx.kotlin.toCodeBlock
-import io.github.hfhbd.kfx.kotlin.toKdoc
-import io.github.hfhbd.kfx.kotlin.toKotlinPoet
-import io.github.hfhbd.kfx.kotlin.toPoetType
 import java.nio.file.Path
 
-@ServiceLoader(CodeGenerator::class)
-class KotlinClassesGenerator : KotlinPoetCodeGenerator {
+abstract class KotlinClassesGenerator(private val include: (CodeGenTree.Class) -> Boolean = { !it.provided }) :
+    KotlinPoetCodeGenerator {
     override fun generate(codeGenTree: CodeGenTree, outputDirectory: Path) {
         val files = generateFileSpec(codeGenTree)
         for (file in files) {
@@ -36,9 +29,7 @@ class KotlinClassesGenerator : KotlinPoetCodeGenerator {
 
     override fun generateFileSpec(codeGenTree: CodeGenTree): List<FileSpec> {
         val fileSpecs = mutableListOf<FileSpec>()
-        for (klass in codeGenTree.classes.filter {
-            !it.provided
-        }) {
+        for (klass in codeGenTree.classes.filter(include)) {
             when (klass) {
                 is CodeGenTree.Enum -> fileSpecs.add(klass.generateFile())
 
