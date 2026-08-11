@@ -215,7 +215,7 @@ data class Element(
 data class Annotation(
     @XmlElement
     @XmlSerialName("appinfo", XSD_NAMESPACE)
-    val appInfo: AppInfo? = null,
+    val appInfo: List<AppInfo> = emptyList(),
     @XmlElement
     @XmlSerialName("documentation", XSD_NAMESPACE)
     val documentation: List<Documentation> = emptyList(),
