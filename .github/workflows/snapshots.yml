@@ -91,7 +91,7 @@ jobs:
           build-scan-terms-of-use-agree: 'yes'
 
       - name: Release maven artifacts
-        run: ./gradlew publishAllPublicationsToMavenLocal -Pversion=${{ steps.version.outputs.version }}
+        run: ./gradlew publishToMavenLocal -Pversion=${{ steps.version.outputs.version }}
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
