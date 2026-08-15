@@ -19,10 +19,8 @@ public suspend fun HttpClient.getIssueLink(linkId: String, builder: suspend Http
   val response = `get`(urlString = """api/2/issueLink/${linkId}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueLinksResponse>()
   return output

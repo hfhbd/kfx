@@ -26,10 +26,8 @@ public suspend fun HttpClient.deleteIssueType(
     parameter("updateDraftIfNeeded", updateDraftIfNeeded)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

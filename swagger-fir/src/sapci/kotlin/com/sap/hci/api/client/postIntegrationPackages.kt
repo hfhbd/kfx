@@ -39,14 +39,11 @@ public suspend fun HttpClient.postIntegrationPackages(
     setBody(input)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-      val output = response.body<IntegrationPackage>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+    val output = response.body<IntegrationPackage>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

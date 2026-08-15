@@ -19,10 +19,8 @@ public suspend fun HttpClient.getAlternativeIssueTypes(id: String, builder: susp
   val response = `get`(urlString = """api/2/issuetype/${id}/alternatives""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueTypeJsonBean>()
   return output

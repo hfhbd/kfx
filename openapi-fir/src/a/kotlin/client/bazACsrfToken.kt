@@ -19,8 +19,8 @@ public suspend fun HttpClient.bazACsrfToken(X_CSRF_Token: String = "FETCH", buil
     `header`("X-CSRF-Token", X_CSRF_Token)
     builder()
   }
-  when {
-    response.status == OK -> {
+  when (response.status) {
+    OK -> {
       return BazACsrfTokenResult.Success(XCSRFToken = response.headers["X-CSRF-Token"]!!)
     }
     else -> {

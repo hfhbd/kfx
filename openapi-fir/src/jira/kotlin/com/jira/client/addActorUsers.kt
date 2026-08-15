@@ -29,10 +29,8 @@ public suspend fun HttpClient.addActorUsers(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ProjectRoleBean>()
   return output

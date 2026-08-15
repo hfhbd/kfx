@@ -23,17 +23,14 @@ public suspend fun HttpClient.getIntegrationPackagesByIdValue(id: String, builde
   val response = `get`(urlString = """IntegrationPackages('${id}')/${'$'}value""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
-    response.status.isSuccess() -> {
-      val output = response.body<Source>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status == NotFound) {
+    return null
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<Source>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

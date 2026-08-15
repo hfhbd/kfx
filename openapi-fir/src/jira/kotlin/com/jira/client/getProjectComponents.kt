@@ -17,10 +17,8 @@ public suspend fun HttpClient.getProjectComponents(projectIdOrKey: String, build
   val response = `get`(urlString = """api/2/project/${projectIdOrKey}/components""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ComponentBean>()
   return output

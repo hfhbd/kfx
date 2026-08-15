@@ -22,10 +22,8 @@ public suspend fun HttpClient.getProjectRole(
   val response = `get`(urlString = """api/2/project/${projectIdOrKey}/role/${id}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ProjectRoleBean>()
   return output

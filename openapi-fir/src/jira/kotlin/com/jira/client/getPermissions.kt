@@ -33,10 +33,8 @@ public suspend fun HttpClient.getPermissions(
     parameter("projectId", projectId)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<PermissionsJsonBean>()
   return output

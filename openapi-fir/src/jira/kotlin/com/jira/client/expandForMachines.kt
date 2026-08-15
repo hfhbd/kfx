@@ -19,10 +19,8 @@ public suspend fun HttpClient.expandForMachines(id: String, builder: suspend Htt
   val response = `get`(urlString = """api/2/attachment/${id}/expand/raw""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<AttachmentArchiveImpl>()
   return output

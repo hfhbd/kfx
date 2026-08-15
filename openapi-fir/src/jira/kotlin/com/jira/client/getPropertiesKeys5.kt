@@ -17,10 +17,8 @@ public suspend fun HttpClient.getPropertiesKeys5(projectIdOrKey: String, builder
   val response = `get`(urlString = """api/2/project/${projectIdOrKey}/properties""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<EntityPropertiesKeysBean>()
   return output

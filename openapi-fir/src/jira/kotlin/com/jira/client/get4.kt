@@ -19,10 +19,8 @@ public suspend fun HttpClient.get4(key: String, builder: suspend HttpRequestBuil
   val response = `get`(urlString = """api/2/applicationrole/${key}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ApplicationRoleBean>()
   return output

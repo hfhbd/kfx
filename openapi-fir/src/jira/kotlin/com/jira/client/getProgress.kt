@@ -17,10 +17,8 @@ public suspend fun HttpClient.getProgress(requestId: Long, builder: suspend Http
   val response = `get`(urlString = """api/2/reindex/request/${requestId}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ReindexRequestBean>()
   return output

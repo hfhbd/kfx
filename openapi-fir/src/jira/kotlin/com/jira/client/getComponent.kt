@@ -19,10 +19,8 @@ public suspend fun HttpClient.getComponent(id: String, builder: suspend HttpRequ
   val response = `get`(urlString = """api/2/component/${id}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ComponentBean>()
   return output

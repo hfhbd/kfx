@@ -19,10 +19,8 @@ public suspend fun HttpClient.getAttachment(id: String, builder: suspend HttpReq
   val response = `get`(urlString = """api/2/attachment/${id}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<AttachmentBean>()
   return output

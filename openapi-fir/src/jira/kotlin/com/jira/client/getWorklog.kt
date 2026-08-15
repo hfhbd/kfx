@@ -24,10 +24,8 @@ public suspend fun HttpClient.getWorklog(
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/worklog/${id}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorklogResponse>()
   return output

@@ -17,10 +17,8 @@ public suspend fun HttpClient.getStatus(idOrName: String, builder: suspend HttpR
   val response = `get`(urlString = """api/2/status/${idOrName}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<StatusJsonBean>()
   return output

@@ -23,12 +23,6 @@ testing.suites {
             implementation(libs.ktor.server.core)
             implementation(projects.oauth2Runtime)
             implementation(testFixtures(projects.openapiModel))
-
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.server.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktor.server.test.host)
-            implementation(libs.ktor.client.logging)
         }
     }
 

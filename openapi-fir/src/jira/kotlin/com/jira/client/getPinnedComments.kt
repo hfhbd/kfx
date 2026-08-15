@@ -19,10 +19,8 @@ public suspend fun HttpClient.getPinnedComments(issueIdOrKey: String, builder: s
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/pinned-comments""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<PinnedCommentJsonBean>()
   return output

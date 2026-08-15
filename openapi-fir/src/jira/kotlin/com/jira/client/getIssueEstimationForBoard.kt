@@ -27,10 +27,8 @@ public suspend fun HttpClient.getIssueEstimationForBoard(
     parameter("boardId", boardId)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<FieldValueBean>()
   return output

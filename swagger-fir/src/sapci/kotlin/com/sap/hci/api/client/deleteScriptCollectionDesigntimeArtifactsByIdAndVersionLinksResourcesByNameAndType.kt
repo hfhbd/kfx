@@ -45,12 +45,9 @@ public suspend fun HttpClient.deleteScriptCollectionDesigntimeArtifactsByIdAndVe
     parameter("referencedResourceType", referencedResourceType)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

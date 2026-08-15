@@ -21,14 +21,11 @@ public suspend fun HttpClient.utilSamlmetadata(input: String, builder: suspend H
     setBody(input)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-      val output = response.body<Saml>()
-      return output
-    }
-    else -> {
-      val output = response.body<APIError>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+    val output = response.body<Saml>()
+    return output
+  } else {
+    val output = response.body<APIError>()
+    throw output
   }
 }

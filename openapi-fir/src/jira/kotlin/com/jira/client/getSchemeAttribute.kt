@@ -22,10 +22,8 @@ public suspend fun HttpClient.getSchemeAttribute(
   val response = `get`(urlString = """api/2/permissionscheme/${permissionSchemeId}/attribute/${attributeKey}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<PermissionSchemeAttributeBean>()
   return output

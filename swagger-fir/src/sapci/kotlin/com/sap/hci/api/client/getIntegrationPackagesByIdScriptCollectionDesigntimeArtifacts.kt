@@ -23,17 +23,14 @@ public suspend fun HttpClient.getIntegrationPackagesByIdScriptCollectionDesignti
   val response = `get`(urlString = """IntegrationPackages('${id}')/ScriptCollectionDesigntimeArtifacts""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
-    response.status.isSuccess() -> {
-      val output = response.body<GetIntegrationPackagesByIdScriptCollectionDesigntimeArtifacts>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status == NotFound) {
+    return null
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<GetIntegrationPackagesByIdScriptCollectionDesigntimeArtifacts>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

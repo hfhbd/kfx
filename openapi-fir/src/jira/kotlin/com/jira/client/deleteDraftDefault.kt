@@ -17,10 +17,8 @@ public suspend fun HttpClient.deleteDraftDefault(id: Long, builder: suspend Http
   val response = delete(urlString = """api/2/workflowscheme/${id}/draft/default""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

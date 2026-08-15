@@ -33,8 +33,8 @@ public suspend fun HttpClient.bazA(
     setBody(input)
     builder()
   }
-  when {
-    response.status == OK -> {
+  when (response.status) {
+    OK -> {
       val output = response.body<String>()
       return BazAResult.Success(body = output, logid = response.headers["logid"])
     }

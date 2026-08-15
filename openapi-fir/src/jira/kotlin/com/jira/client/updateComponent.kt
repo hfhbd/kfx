@@ -27,10 +27,8 @@ public suspend fun HttpClient.updateComponent(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ComponentBean>()
   return output

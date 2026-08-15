@@ -19,10 +19,8 @@ public suspend fun HttpClient.getComponentRelatedIssues(id: String, builder: sus
   val response = `get`(urlString = """api/2/component/${id}/relatedIssueCounts""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ComponentIssueCountsBean>()
   return output

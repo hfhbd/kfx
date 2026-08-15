@@ -36,12 +36,9 @@ public suspend fun HttpClient.postDeployScriptCollectionDesigntimeArtifact(
     parameter("version", version)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

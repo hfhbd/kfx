@@ -36,10 +36,8 @@ public suspend fun HttpClient.serviceInstanceGet(
     parameter("plan_id", plan_id)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ServiceInstanceResource>()
   return output

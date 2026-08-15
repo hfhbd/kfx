@@ -24,10 +24,8 @@ public suspend fun HttpClient.getRemoteIssueLinkById(
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/remotelink/${linkId}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<RemoteIssueLinkBean>()
   return output

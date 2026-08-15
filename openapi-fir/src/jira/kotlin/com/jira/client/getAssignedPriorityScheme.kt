@@ -17,10 +17,8 @@ public suspend fun HttpClient.getAssignedPriorityScheme(projectKeyOrId: String, 
   val response = `get`(urlString = """api/2/project/${projectKeyOrId}/priorityscheme""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<PrioritySchemeBean>()
   return output

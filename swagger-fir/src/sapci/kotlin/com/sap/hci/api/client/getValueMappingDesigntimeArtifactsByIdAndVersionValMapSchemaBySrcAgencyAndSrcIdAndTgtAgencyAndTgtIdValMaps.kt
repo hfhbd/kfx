@@ -46,17 +46,14 @@ public suspend fun HttpClient.getValueMappingDesigntimeArtifactsByIdAndVersionVa
     parameter("filter", filter)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
-    response.status.isSuccess() -> {
-      val output = response.body<GetValueMappingDesigntimeArtifactsByIdAndVersionValMapSchemaBySrcAgencyAndSrcIdAndTgtAgencyAndTgtIdValMaps>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status == NotFound) {
+    return null
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<GetValueMappingDesigntimeArtifactsByIdAndVersionValMapSchemaBySrcAgencyAndSrcIdAndTgtAgencyAndTgtIdValMaps>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

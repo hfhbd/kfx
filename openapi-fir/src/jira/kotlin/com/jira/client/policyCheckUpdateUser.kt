@@ -28,10 +28,8 @@ public suspend fun HttpClient.policyCheckUpdateUser(input: PasswordPolicyUpdateU
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<String>()
   return output

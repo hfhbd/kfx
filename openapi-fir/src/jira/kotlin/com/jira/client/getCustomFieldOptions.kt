@@ -38,10 +38,8 @@ public suspend fun HttpClient.getCustomFieldOptions(
     parameter("projectIds", projectIds)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<CustomFieldOptionsBean>()
   return output

@@ -31,8 +31,8 @@ public suspend fun HttpClient.createFoo(input: Foo, builder: suspend HttpRequest
         )
     builder()
   }
-  when {
-    response.status == OK -> {
+  when (response.status) {
+    OK -> {
       val output = response.body<Envelope<Bar>>()
       return CreateFooResult.Success(body = output)
     }

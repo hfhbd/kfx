@@ -17,10 +17,8 @@ public suspend fun HttpClient.getIssueSecurityScheme1(projectKeyOrId: String, bu
   val response = `get`(urlString = """api/2/project/${projectKeyOrId}/issuesecuritylevelscheme""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<SecuritySchemeJsonBean>()
   return output

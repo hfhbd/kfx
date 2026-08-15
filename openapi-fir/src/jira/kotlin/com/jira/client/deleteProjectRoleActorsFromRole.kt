@@ -26,10 +26,8 @@ public suspend fun HttpClient.deleteProjectRoleActorsFromRole(
     parameter("group", group)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ProjectRoleActorsBean>()
   return output

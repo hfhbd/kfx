@@ -29,10 +29,8 @@ public suspend fun HttpClient.findUsersWithBrowsePermission(
     parameter("username", username)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<UserBean>()
   return output

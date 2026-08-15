@@ -19,10 +19,8 @@ public suspend fun HttpClient.defaultColumns(username: String? = null, builder: 
     parameter("username", username)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ColumnOptions>()
   return output

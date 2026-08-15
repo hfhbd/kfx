@@ -17,10 +17,8 @@ public suspend fun HttpClient.getAllStatuses(projectIdOrKey: String, builder: su
   val response = `get`(urlString = """api/2/project/${projectIdOrKey}/statuses""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueTypeWithStatusJsonBean>()
   return output

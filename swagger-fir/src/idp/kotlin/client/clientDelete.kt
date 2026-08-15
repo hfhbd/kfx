@@ -25,14 +25,11 @@ public suspend fun HttpClient.clientDelete(
   val response = delete(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}""") {
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-      val output = response.body<Unit>()
-      return output
-    }
-    else -> {
-      val output = response.body<APIError>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+    val output = response.body<Unit>()
+    return output
+  } else {
+    val output = response.body<APIError>()
+    throw output
   }
 }

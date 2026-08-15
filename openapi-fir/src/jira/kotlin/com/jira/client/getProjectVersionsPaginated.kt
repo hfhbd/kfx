@@ -31,10 +31,8 @@ public suspend fun HttpClient.getProjectVersionsPaginated(
     parameter("startAt", startAt)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<PageBean>()
   return output

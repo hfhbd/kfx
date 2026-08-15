@@ -31,10 +31,8 @@ public suspend fun HttpClient.storeTemporaryAvatarUsingMultiPart(id: String, bui
     contentType(FormData)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<AvatarCroppingBean>()
   return output

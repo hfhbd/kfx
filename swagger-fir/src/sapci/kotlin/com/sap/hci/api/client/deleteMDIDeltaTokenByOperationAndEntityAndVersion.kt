@@ -30,12 +30,9 @@ public suspend fun HttpClient.deleteMDIDeltaTokenByOperationAndEntityAndVersion(
   val response = delete(urlString = """MDIDeltaToken(Operation='${operation}',Entity='${entity}',Version='${version}')""") {
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

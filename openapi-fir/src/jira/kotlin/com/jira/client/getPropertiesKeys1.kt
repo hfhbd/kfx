@@ -17,10 +17,8 @@ public suspend fun HttpClient.getPropertiesKeys1(sprintId: String, builder: susp
   val response = `get`(urlString = """agile/1.0/sprint/${sprintId}/properties""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<EntityPropertiesKeysBean>()
   return output

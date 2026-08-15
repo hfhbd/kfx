@@ -19,10 +19,8 @@ public suspend fun HttpClient.getIntegrationPackagesById(id: String, builder: su
   val response = `get`(urlString = """IntegrationPackages('${id}')""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IntegrationPackage>()
   return output

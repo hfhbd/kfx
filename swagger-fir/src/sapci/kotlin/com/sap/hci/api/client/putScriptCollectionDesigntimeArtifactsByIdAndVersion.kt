@@ -39,12 +39,9 @@ public suspend fun HttpClient.putScriptCollectionDesigntimeArtifactsByIdAndVersi
     setBody(input)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

@@ -19,10 +19,8 @@ public suspend fun HttpClient.getIssueWorklog(issueIdOrKey: String, builder: sus
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/worklog""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorklogWithPaginationBean>()
   return output

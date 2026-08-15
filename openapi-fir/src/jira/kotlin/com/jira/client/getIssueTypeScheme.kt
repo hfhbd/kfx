@@ -19,10 +19,8 @@ public suspend fun HttpClient.getIssueTypeScheme(schemeId: String, builder: susp
   val response = `get`(urlString = """api/2/issuetypescheme/${schemeId}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueTypeSchemeBean>()
   return output

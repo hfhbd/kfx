@@ -19,10 +19,8 @@ public suspend fun HttpClient.getSubTasks(issueIdOrKey: String, builder: suspend
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/subtask""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueRefJsonBean>()
   return output

@@ -31,10 +31,8 @@ public suspend fun HttpClient.findAssignableUsers1(
     parameter("username", username)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<UserBean>()
   return output

@@ -21,10 +21,8 @@ public suspend fun HttpClient.updateProjectType(
   val response = put(urlString = """api/2/project/${projectIdOrKey}/type/${newProjectTypeKey}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ProjectBean>()
   return output

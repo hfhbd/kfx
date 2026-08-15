@@ -30,10 +30,8 @@ public suspend fun HttpClient.getMessageMappingDesigntimeArtifactsByIdAndVersion
     parameter("select", select)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<GetMessageMappingDesigntimeArtifactsByIdAndVersion>()
   return output

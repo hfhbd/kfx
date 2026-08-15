@@ -27,10 +27,8 @@ public suspend fun HttpClient.partialUpdateProjectRole(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ProjectRoleBean>()
   return output

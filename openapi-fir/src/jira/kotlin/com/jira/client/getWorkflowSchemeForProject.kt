@@ -17,10 +17,8 @@ public suspend fun HttpClient.getWorkflowSchemeForProject(projectKeyOrId: String
   val response = `get`(urlString = """api/2/project/${projectKeyOrId}/workflowscheme""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

@@ -17,10 +17,8 @@ public suspend fun HttpClient.getDraftById(id: Long, builder: suspend HttpReques
   val response = `get`(urlString = """api/2/workflowscheme/${id}/draft""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

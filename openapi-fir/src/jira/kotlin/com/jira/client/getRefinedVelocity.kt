@@ -17,10 +17,8 @@ public suspend fun HttpClient.getRefinedVelocity(boardId: Long, builder: suspend
   val response = `get`(urlString = """agile/1.0/board/${boardId}/settings/refined-velocity""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<BooleanSettingBean>()
   return output

@@ -32,14 +32,11 @@ public suspend fun HttpClient.clientPut(
     setBody(input)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-      val output = response.body<Unit>()
-      return output
-    }
-    else -> {
-      val output = response.body<APIError>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+    val output = response.body<Unit>()
+    return output
+  } else {
+    val output = response.body<APIError>()
+    throw output
   }
 }

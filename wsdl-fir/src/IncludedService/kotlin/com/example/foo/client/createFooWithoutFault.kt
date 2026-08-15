@@ -31,8 +31,8 @@ public suspend fun HttpClient.createFooWithoutFault(input: Foo, builder: suspend
         )
     builder()
   }
-  when {
-    response.status == OK -> {
+  when (response.status) {
+    OK -> {
       val output = response.body<Envelope<Bar>>()
       return CreateFooWithoutFaultResult.Success(body = output)
     }

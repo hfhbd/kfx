@@ -22,10 +22,8 @@ public suspend fun HttpClient.createSprint(input: SprintCreateBean, builder: sus
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<SprintBean>()
   return output

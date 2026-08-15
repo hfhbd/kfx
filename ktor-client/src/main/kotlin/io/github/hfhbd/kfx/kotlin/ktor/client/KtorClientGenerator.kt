@@ -335,21 +335,13 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
 
         val responseBranches = responseBranches
         if (responseBranches != null) {
-            function.beginControlFlow("when")
+            function.beginControlFlow("when (response.status)")
             val success = responseBranches.success
             if (success != null) {
-                val successStatusCode = success.statusCode
-                if (successStatusCode != null) {
-                    function.beginControlFlow(
-                        "response.status == %M ->",
-                        successStatusCode.toHttpCode(),
-                    )
-                } else {
-                    function.beginControlFlow(
-                        "response.status.%M() ->",
-                        MemberName("io.ktor.http", "isSuccess", isExtension = true),
-                    )
-                }
+                function.beginControlFlow(
+                    "%M ->",
+                    success.statusCode.toHttpCode(),
+                )
                 if (success.response != null) {
                     function.addStatement(
                         "val output = %L",
@@ -375,8 +367,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             val notFound = responseBranches.notFound
             if (notFound != null) {
                 function.beginControlFlow(
-                    "response.status == %M ->",
-                    notFound.statusCode!!.toHttpCode(),
+                    "%M ->",
+                    notFound.statusCode.toHttpCode(),
                 )
                 function.addStatement("return %T", notFound.isCondition.toPoetType())
                 function.endControlFlow()
@@ -411,28 +403,20 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             function.endControlFlow()
         } else {
             val nullableOutput = notFound
-
-            val writeWhen = if (output != null && nullableOutput) {
-                function.beginControlFlow("when")
+            if (output != null && nullableOutput) {
                 function.beginControlFlow(
-                    "response.status == %M ->",
+                    "if (response.status == %M)",
                     ClassName("io.ktor.http", "HttpStatusCode")
                         .nestedClass("Companion")
                         .member("NotFound"),
                 )
                 function.addStatement("return null")
                 function.endControlFlow()
-                true
-            } else {
-                false
             }
 
             if (fault != null) {
-                if (!writeWhen) {
-                    function.beginControlFlow("when")
-                }
                 function.beginControlFlow(
-                    "response.status.%M() ->",
+                    "if (response.status.%M())",
                     MemberName("io.ktor.http", "isSuccess", isExtension = true),
                 )
                 if (output != null) {
@@ -447,9 +431,8 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                         outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                     )
                 }
-                function.endControlFlow()
 
-                function.beginControlFlow("else ->")
+                function.nextControlFlow("else")
                 function.addStatement(
                     "val output = %L",
                     getOutput((faultWrapper ?: fault).toKtorPoetType(read = false)),
@@ -459,11 +442,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                 )
                 function.endControlFlow()
-                function.endControlFlow()
             } else if (output != null) {
-                if (writeWhen) {
-                    function.endControlFlow()
-                }
                 function.addStatement(
                     "val output = %L",
                     getOutput((outputWrapperType ?: output).toKtorPoetType(read = false)),

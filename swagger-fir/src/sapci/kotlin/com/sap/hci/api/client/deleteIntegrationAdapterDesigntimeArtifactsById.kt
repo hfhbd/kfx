@@ -30,12 +30,9 @@ public suspend fun HttpClient.deleteIntegrationAdapterDesigntimeArtifactsById(
     `header`("X-CSRF-Token", X_CSRF_Token)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

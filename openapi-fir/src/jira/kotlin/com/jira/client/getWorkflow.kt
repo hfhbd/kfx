@@ -27,10 +27,8 @@ public suspend fun HttpClient.getWorkflow(
     parameter("returnDraftIfExists", returnDraftIfExists)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

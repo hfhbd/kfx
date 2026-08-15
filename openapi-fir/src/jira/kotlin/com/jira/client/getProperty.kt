@@ -21,10 +21,8 @@ public suspend fun HttpClient.getProperty(
   val response = `get`(urlString = """agile/1.0/board/${boardId}/properties/${propertyKey}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<EntityPropertiesKeysBean>()
   return output

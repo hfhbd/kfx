@@ -35,17 +35,14 @@ public suspend fun HttpClient.postIntegrationAdapterDesigntimeArtifacts(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
-    response.status.isSuccess() -> {
-      val output = response.body<PostIntegrationAdapterDesigntimeArtifacts>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status == NotFound) {
+    return null
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<PostIntegrationAdapterDesigntimeArtifacts>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

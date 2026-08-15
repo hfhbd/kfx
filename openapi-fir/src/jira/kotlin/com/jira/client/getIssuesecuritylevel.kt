@@ -17,10 +17,8 @@ public suspend fun HttpClient.getIssuesecuritylevel(id: String, builder: suspend
   val response = `get`(urlString = """api/2/securitylevel/${id}""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<SecurityLevelJsonBean>()
   return output

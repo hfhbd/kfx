@@ -30,10 +30,8 @@ public suspend fun HttpClient.getIssue1(
     parameter("updateHistory", updateHistory)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueBean>()
   return output

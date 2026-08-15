@@ -26,10 +26,8 @@ public suspend fun HttpClient.getRemoteIssueLinks(
     parameter("globalId", globalId)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<RemoteIssueLinkBean>()
   return output

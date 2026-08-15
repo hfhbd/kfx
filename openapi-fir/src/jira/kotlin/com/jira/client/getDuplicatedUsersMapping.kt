@@ -25,10 +25,8 @@ public suspend fun HttpClient.getDuplicatedUsersMapping(flush: Boolean? = null, 
     parameter("flush", flush)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<AvatarBean>()
   return output

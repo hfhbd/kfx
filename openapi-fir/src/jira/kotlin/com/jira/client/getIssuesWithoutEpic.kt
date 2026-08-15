@@ -38,10 +38,8 @@ public suspend fun HttpClient.getIssuesWithoutEpic(
     parameter("startAt", startAt)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueBean>()
   return output

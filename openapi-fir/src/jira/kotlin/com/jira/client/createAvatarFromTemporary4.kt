@@ -29,10 +29,8 @@ public suspend fun HttpClient.createAvatarFromTemporary4(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<AvatarBean>()
   return output

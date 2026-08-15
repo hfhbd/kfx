@@ -32,10 +32,8 @@ public suspend fun HttpClient.getConfiguration(boardId: Long, builder: suspend H
   val response = `get`(urlString = """agile/1.0/board/${boardId}/configuration""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<BoardConfigBean>()
   return output

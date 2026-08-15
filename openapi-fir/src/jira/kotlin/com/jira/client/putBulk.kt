@@ -28,10 +28,8 @@ public suspend fun HttpClient.putBulk(
     setBody(input)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<ApplicationRoleBean>()
   return output

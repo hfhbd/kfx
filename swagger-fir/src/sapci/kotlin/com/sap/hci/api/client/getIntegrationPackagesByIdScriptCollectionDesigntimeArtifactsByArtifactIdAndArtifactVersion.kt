@@ -32,17 +32,14 @@ public suspend fun HttpClient.getIntegrationPackagesByIdScriptCollectionDesignti
   val response = `get`(urlString = """IntegrationPackages('${id}')/ScriptCollectionDesigntimeArtifacts(Id='${artifactId}',Version='${artifactVersion}')""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
-    response.status.isSuccess() -> {
-      val output = response.body<ScriptCollectionDesigntimeArtifact>()
-      return output
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status == NotFound) {
+    return null
+  }
+  if (response.status.isSuccess()) {
+    val output = response.body<ScriptCollectionDesigntimeArtifact>()
+    return output
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }

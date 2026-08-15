@@ -27,14 +27,11 @@ public suspend fun HttpClient.clientAvailableScopes(
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/available-scopes""") {
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-      val output = response.body<List<AvailableScopeListEntry>>()
-      return output
-    }
-    else -> {
-      val output = response.body<APIError>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+    val output = response.body<List<AvailableScopeListEntry>>()
+    return output
+  } else {
+    val output = response.body<APIError>()
+    throw output
   }
 }

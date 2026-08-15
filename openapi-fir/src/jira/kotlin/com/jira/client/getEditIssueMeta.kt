@@ -19,10 +19,8 @@ public suspend fun HttpClient.getEditIssueMeta(issueIdOrKey: String, builder: su
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/editmeta""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<EditMetaBean>()
   return output

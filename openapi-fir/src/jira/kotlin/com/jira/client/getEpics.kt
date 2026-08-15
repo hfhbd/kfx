@@ -29,10 +29,8 @@ public suspend fun HttpClient.getEpics(
     parameter("startAt", startAt)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<EpicBean>()
   return output

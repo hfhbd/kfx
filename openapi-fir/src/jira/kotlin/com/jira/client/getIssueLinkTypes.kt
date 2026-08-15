@@ -16,10 +16,8 @@ public suspend fun HttpClient.getIssueLinkTypes(builder: suspend HttpRequestBuil
   val response = `get`(urlString = """api/2/issueLinkType""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<IssueLinkTypesBean>()
   return output

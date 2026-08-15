@@ -41,10 +41,8 @@ public suspend fun HttpClient.serviceBindingLastOperationGet(
     parameter("operation", operation)
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<LastOperationResource>()
   return output

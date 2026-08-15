@@ -18,10 +18,8 @@ public suspend fun HttpClient.getSynchronizationRunResults(id: String, builder: 
   val response = `get`(urlString = """synchronizationRuns/${id}/results""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<LeanIxDataInterchangeFormat>()
   return output

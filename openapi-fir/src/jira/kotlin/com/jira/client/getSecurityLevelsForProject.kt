@@ -17,10 +17,8 @@ public suspend fun HttpClient.getSecurityLevelsForProject(projectKeyOrId: String
   val response = `get`(urlString = """api/2/project/${projectKeyOrId}/securitylevel""") {
     builder()
   }
-  when {
-    response.status == NotFound -> {
-      return null
-    }
+  if (response.status == NotFound) {
+    return null
   }
   val output = response.body<SecurityListLevelJsonBean>()
   return output

@@ -35,12 +35,9 @@ public suspend fun HttpClient.postMessageMappingDesigntimeArtifactSaveAsVersion(
     parameter("saveAsVersion", saveAsVersion)
     builder()
   }
-  when {
-    response.status.isSuccess() -> {
-    }
-    else -> {
-      val output = response.body<Error>()
-      throw output
-    }
+  if (response.status.isSuccess()) {
+  } else {
+    val output = response.body<Error>()
+    throw output
   }
 }
