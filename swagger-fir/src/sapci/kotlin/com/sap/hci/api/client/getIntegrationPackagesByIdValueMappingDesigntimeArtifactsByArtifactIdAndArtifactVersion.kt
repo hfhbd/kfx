@@ -28,8 +28,10 @@ public suspend fun HttpClient.getIntegrationPackagesByIdValueMappingDesigntimeAr
   val response = `get`(urlString = """IntegrationPackages('${id}')/ValueMappingDesigntimeArtifacts(Id='${artifactId}',Version='${artifactVersion}')""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ValueMappingDesigntimeArtifact>()
   return output

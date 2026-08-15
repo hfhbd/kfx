@@ -23,7 +23,9 @@ public fun Route.bazACsrfToken(action: suspend ApplicationCall.() -> BazACsrfTok
           call.respond(OK)
         }
         is BazACsrfTokenResult.Failure -> {
-          call.response.status(InternalServerError)
+          if (call.response.status() == null) {
+            call.response.status(InternalServerError)
+          }
           call.respond(response.body)
         }
       }

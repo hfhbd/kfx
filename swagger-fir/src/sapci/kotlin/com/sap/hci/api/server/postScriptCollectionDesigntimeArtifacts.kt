@@ -25,7 +25,9 @@ public fun Route.postScriptCollectionDesigntimeArtifacts(action: suspend Applica
         post {
           val body = call.receive<ScriptCollectionDesigntimeArtifactCreate>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

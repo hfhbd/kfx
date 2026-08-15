@@ -24,7 +24,9 @@ public fun Route.addWorklog(action: suspend ApplicationCall.(WorklogRequest) -> 
         post {
           val body = call.receive<WorklogRequest>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

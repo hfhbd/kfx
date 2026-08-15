@@ -22,8 +22,10 @@ public suspend fun HttpClient.getDraftIssueType(
   val response = `get`(urlString = """api/2/workflowscheme/${id}/draft/issuetype/${issueType}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<IssueTypeMappingBean>()
   return output

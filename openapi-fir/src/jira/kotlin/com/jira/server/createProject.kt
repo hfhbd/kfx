@@ -24,7 +24,9 @@ public fun Route.createProject(action: suspend ApplicationCall.(ProjectInputBean
         post {
           val body = call.receive<ProjectInputBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

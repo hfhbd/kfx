@@ -41,14 +41,17 @@ public suspend fun HttpClient.postScriptCollectionDesigntimeArtifactsByIdAndVers
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
-  }
-  if (response.status.isSuccess()) {
-    val output = response.body<PostScriptCollectionDesigntimeArtifactsByIdAndVersionResources>()
-    return output
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status == NotFound -> {
+      return null
+    }
+    response.status.isSuccess() -> {
+      val output = response.body<PostScriptCollectionDesigntimeArtifactsByIdAndVersionResources>()
+      return output
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

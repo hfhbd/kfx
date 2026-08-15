@@ -30,8 +30,10 @@ public suspend fun HttpClient.assignPermissionScheme(
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<PermissionSchemeBean>()
   return output

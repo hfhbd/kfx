@@ -77,8 +77,10 @@ public suspend fun HttpClient.getIssue(
     parameter("properties", properties)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<IssueBean>()
   return output

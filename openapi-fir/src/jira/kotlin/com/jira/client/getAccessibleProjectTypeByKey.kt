@@ -17,8 +17,10 @@ public suspend fun HttpClient.getAccessibleProjectTypeByKey(projectTypeKey: Stri
   val response = `get`(urlString = """api/2/project/type/${projectTypeKey}/accessible""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectTypeBean>()
   return output

@@ -24,7 +24,9 @@ public fun Route.createProjectCategory(action: suspend ApplicationCall.(ProjectC
         post {
           val body = call.receive<ProjectCategoryBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

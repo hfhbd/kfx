@@ -20,7 +20,9 @@ public fun Route.utilSamlmetadata(action: suspend ApplicationCall.(String) -> Sa
         put {
           val body = call.receive<String>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -20,7 +20,9 @@ public fun Route.serviceInstanceUpdate(action: suspend ApplicationCall.(ServiceI
         patch {
           val body = call.receive<ServiceInstanceUpdateRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

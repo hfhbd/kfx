@@ -24,7 +24,9 @@ public fun Route.assignPermissionScheme(action: suspend ApplicationCall.(IdBean)
         put {
           val body = call.receive<IdBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

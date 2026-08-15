@@ -19,7 +19,9 @@ public fun Route.defaultColumns1(action: suspend ApplicationCall.() -> ColumnLay
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

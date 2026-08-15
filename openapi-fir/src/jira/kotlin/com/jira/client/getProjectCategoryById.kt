@@ -17,8 +17,10 @@ public suspend fun HttpClient.getProjectCategoryById(id: Long, builder: suspend 
   val response = `get`(urlString = """api/2/projectCategory/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectCategoryJsonBean>()
   return output

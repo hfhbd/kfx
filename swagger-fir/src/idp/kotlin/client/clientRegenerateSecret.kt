@@ -25,11 +25,14 @@ public suspend fun HttpClient.clientRegenerateSecret(
   val response = put(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/regenerate-secret""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<Unit>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<Unit>()
+      return output
+    }
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

@@ -30,8 +30,10 @@ public suspend fun HttpClient.updateUser1(
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<UserWriteBean>()
   return output

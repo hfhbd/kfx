@@ -29,8 +29,10 @@ public suspend fun HttpClient.getTransitions(
     parameter("transitionId", transitionId)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<TransitionsMetaBean>()
   return output

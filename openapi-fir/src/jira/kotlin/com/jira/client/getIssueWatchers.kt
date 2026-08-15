@@ -19,8 +19,10 @@ public suspend fun HttpClient.getIssueWatchers(issueIdOrKey: String, builder: su
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/watchers""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<WatchersBean>()
   return output

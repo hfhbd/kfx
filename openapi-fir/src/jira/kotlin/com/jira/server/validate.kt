@@ -24,7 +24,9 @@ public fun Route.validate(action: suspend ApplicationCall.(String) -> LicenseVal
         post {
           val body = call.receive<String>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

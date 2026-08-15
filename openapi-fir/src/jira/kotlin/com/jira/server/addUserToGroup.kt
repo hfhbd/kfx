@@ -24,7 +24,9 @@ public fun Route.addUserToGroup(action: suspend ApplicationCall.(UpdateUserToGro
         post {
           val body = call.receive<UpdateUserToGroupBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

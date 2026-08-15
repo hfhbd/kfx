@@ -26,8 +26,10 @@ public suspend fun HttpClient.getProperty8(
   val response = `get`(urlString = """api/2/dashboard/${dashboardId}/items/${itemId}/properties/${propertyKey}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<EntityPropertyBean>()
   return output

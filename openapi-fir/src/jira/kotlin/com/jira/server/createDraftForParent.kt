@@ -19,7 +19,9 @@ public fun Route.createDraftForParent(action: suspend ApplicationCall.() -> Work
     accept(Json) {
       post {
         val response = call.action()
-        call.response.status(Created)
+        if (call.response.status() == null) {
+          call.response.status(Created)
+        }
         call.respond(response)
       }
     }

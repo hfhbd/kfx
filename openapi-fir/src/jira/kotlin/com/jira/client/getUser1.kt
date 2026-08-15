@@ -27,8 +27,10 @@ public suspend fun HttpClient.getUser1(
     parameter("username", username)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<UserBean>()
   return output

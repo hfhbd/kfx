@@ -24,7 +24,9 @@ public fun Route.updateProjectCategory(action: suspend ApplicationCall.(ProjectC
         put {
           val body = call.receive<ProjectCategoryBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

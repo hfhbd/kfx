@@ -24,7 +24,9 @@ public fun Route.updatePriorityScheme(action: suspend ApplicationCall.(PriorityS
         put {
           val body = call.receive<PrioritySchemeUpdateBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

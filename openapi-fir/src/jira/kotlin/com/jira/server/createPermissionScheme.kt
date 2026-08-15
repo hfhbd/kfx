@@ -23,7 +23,9 @@ public fun Route.createPermissionScheme(action: suspend ApplicationCall.(Permiss
         post {
           val body = call.receive<PermissionSchemeBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

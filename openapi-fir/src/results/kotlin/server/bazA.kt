@@ -30,14 +30,18 @@ public fun Route.bazA(action: suspend ApplicationCall.(FooInput) -> BazAResult) 
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
-              call.response.status(OK)
+              if (call.response.status() == null) {
+                call.response.status(OK)
+              }
               call.respond(response.body)
             }
             is BazAResult.Failure -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
-              call.response.status(InternalServerError)
+              if (call.response.status() == null) {
+                call.response.status(InternalServerError)
+              }
               call.respond(response.body)
             }
           }

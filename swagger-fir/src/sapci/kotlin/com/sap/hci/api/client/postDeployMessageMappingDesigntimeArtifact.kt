@@ -35,9 +35,12 @@ public suspend fun HttpClient.postDeployMessageMappingDesigntimeArtifact(
     parameter("version", version)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

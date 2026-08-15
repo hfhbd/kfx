@@ -17,8 +17,10 @@ public suspend fun HttpClient.getPriority(id: String, builder: suspend HttpReque
   val response = `get`(urlString = """api/2/priority/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<PriorityJsonBean>()
   return output

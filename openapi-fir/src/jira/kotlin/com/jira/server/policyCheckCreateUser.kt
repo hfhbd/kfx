@@ -31,7 +31,9 @@ public fun Route.policyCheckCreateUser(action: suspend ApplicationCall.(Password
         post {
           val body = call.receive<PasswordPolicyCreateUserBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

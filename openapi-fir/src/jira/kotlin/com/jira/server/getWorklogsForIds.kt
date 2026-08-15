@@ -24,7 +24,9 @@ public fun Route.getWorklogsForIds(action: suspend ApplicationCall.(WorklogIdsRe
         post {
           val body = call.receive<WorklogIdsRequestBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -20,7 +20,9 @@ public fun Route.serviceBindingBinding(action: suspend ApplicationCall.(ServiceB
         put {
           val body = call.receive<ServiceBindingRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

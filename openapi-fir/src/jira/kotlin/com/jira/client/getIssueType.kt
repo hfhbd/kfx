@@ -26,8 +26,10 @@ public suspend fun HttpClient.getIssueType(
     parameter("returnDraftIfExists", returnDraftIfExists)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<IssueTypeMappingBean>()
   return output

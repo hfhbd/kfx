@@ -22,7 +22,9 @@ public fun Route.getIssueEstimationForBoard(action: suspend ApplicationCall.() -
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

@@ -17,8 +17,10 @@ public suspend fun HttpClient.getTerminologyEntry(originalName: String, builder:
   val response = `get`(urlString = """api/2/terminology/entries/${originalName}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<TerminologyResponseBean>()
   return output

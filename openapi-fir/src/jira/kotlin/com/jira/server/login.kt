@@ -24,7 +24,9 @@ public fun Route.login(action: suspend ApplicationCall.(AuthParams) -> AuthSucce
         post {
           val body = call.receive<AuthParams>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

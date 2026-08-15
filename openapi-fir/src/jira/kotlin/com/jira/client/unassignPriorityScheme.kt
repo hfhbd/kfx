@@ -22,8 +22,10 @@ public suspend fun HttpClient.unassignPriorityScheme(
   val response = delete(urlString = """api/2/project/${projectKeyOrId}/priorityscheme/${schemeId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<PrioritySchemeBean>()
   return output

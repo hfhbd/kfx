@@ -23,7 +23,9 @@ public fun Route.renameTab(action: suspend ApplicationCall.(ScreenableTabBean) -
         put {
           val body = call.receive<ScreenableTabBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

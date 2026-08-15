@@ -30,7 +30,9 @@ public fun Route.policyCheckUpdateUser(action: suspend ApplicationCall.(Password
         post {
           val body = call.receive<PasswordPolicyUpdateUserBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

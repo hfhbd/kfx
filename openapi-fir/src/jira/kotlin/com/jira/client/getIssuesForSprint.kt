@@ -39,8 +39,10 @@ public suspend fun HttpClient.getIssuesForSprint(
     parameter("startAt", startAt)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<SprintBean>()
   return output

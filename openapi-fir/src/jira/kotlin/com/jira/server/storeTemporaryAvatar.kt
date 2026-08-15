@@ -19,7 +19,9 @@ public fun Route.storeTemporaryAvatar(action: suspend ApplicationCall.() -> Avat
     accept(Json) {
       post {
         val response = call.action()
-        call.response.status(Created)
+        if (call.response.status() == null) {
+          call.response.status(Created)
+        }
         call.respond(response)
       }
     }

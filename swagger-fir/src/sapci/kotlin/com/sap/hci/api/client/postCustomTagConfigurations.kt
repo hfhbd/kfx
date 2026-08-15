@@ -33,9 +33,12 @@ public suspend fun HttpClient.postCustomTagConfigurations(
     setBody(input)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

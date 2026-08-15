@@ -24,7 +24,9 @@ public fun Route.createAvatarFromTemporary4(action: suspend ApplicationCall.(Ava
         post {
           val body = call.receive<AvatarCroppingBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

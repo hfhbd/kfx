@@ -23,8 +23,10 @@ public suspend fun HttpClient.getProjectVersions(
     parameter("expand", expand)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<VersionBean>()
   return output

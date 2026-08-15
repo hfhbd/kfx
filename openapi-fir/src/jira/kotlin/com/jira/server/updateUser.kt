@@ -23,7 +23,9 @@ public fun Route.updateUser(action: suspend ApplicationCall.(UserWriteBean) -> U
         put {
           val body = call.receive<UserWriteBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }
