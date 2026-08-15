@@ -17,8 +17,10 @@ public suspend fun HttpClient.getResolution(id: String, builder: suspend HttpReq
   val response = `get`(urlString = """api/2/resolution/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ResolutionJsonBean>()
   return output

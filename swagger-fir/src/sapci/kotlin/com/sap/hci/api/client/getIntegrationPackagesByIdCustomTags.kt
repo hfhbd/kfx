@@ -36,9 +36,12 @@ public suspend fun HttpClient.getIntegrationPackagesByIdCustomTags(
     parameter("orderby", orderby)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

@@ -37,11 +37,14 @@ public suspend fun HttpClient.getValueMappingDesigntimeArtifacts(
     parameter("orderby", orderby)
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<GetValueMappingDesigntimeArtifacts>()
-    return output
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<GetValueMappingDesigntimeArtifacts>()
+      return output
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

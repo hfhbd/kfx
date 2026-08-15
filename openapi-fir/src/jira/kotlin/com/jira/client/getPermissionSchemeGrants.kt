@@ -24,8 +24,10 @@ public suspend fun HttpClient.getPermissionSchemeGrants(
     parameter("expand", expand)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<PermissionGrantsBean>()
   return output

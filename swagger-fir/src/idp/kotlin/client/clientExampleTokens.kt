@@ -26,11 +26,14 @@ public suspend fun HttpClient.clientExampleTokens(
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/example-tokens""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<OidcTokenExample>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<OidcTokenExample>()
+      return output
+    }
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

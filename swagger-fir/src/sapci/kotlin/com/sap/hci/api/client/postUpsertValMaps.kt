@@ -63,9 +63,12 @@ public suspend fun HttpClient.postUpsertValMaps(
     parameter("isConfigured", isConfigured)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

@@ -17,8 +17,10 @@ public suspend fun HttpClient.getStatusCategory(idOrKey: String, builder: suspen
   val response = `get`(urlString = """api/2/statuscategory/${idOrKey}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<StatusCategoryJsonBean>()
   return output

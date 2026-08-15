@@ -17,8 +17,10 @@ public suspend fun HttpClient.getVersionRelatedIssues(id: String, builder: suspe
   val response = `get`(urlString = """api/2/version/${id}/relatedIssueCounts""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<VersionIssueCountsBean>()
   return output

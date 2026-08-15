@@ -19,8 +19,10 @@ public suspend fun HttpClient.expandForHumans(id: String, builder: suspend HttpR
   val response = `get`(urlString = """api/2/attachment/${id}/expand/human""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<HumanReadableArchive>()
   return output

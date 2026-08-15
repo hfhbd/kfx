@@ -17,8 +17,10 @@ public suspend fun HttpClient.createDraftForParent(id: Long, builder: suspend Ht
   val response = post(urlString = """api/2/workflowscheme/${id}/createdraft""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

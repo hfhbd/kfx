@@ -58,9 +58,12 @@ public suspend fun HttpClient.postUpdateDefaultValMap(
     parameter("valMapId", valMapId)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

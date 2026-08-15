@@ -24,8 +24,10 @@ public suspend fun HttpClient.getSharePermission(
   val response = `get`(urlString = """api/2/filter/${id}/permission/${permissionId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<FilterPermissionBean>()
   return output

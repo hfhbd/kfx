@@ -18,8 +18,10 @@ public suspend fun HttpClient.getSynchronizationRunProgress(id: String, builder:
   val response = `get`(urlString = """synchronizationRuns/${id}/progress""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<SyncRunInboundProgressReport>()
   return output

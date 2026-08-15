@@ -35,8 +35,10 @@ public suspend fun HttpClient.getIntegrationDesigntimeArtifactsByIdAndVersion(
     parameter("select", select)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<GetIntegrationDesigntimeArtifactsByIdAndVersion>()
   return output

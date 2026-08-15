@@ -33,8 +33,8 @@ public suspend fun HttpClient.queryHttpFooBarBaz(
     setBody(input)
     builder()
   }
-  when (response.status) {
-    Created -> {
+  when {
+    response.status == Created -> {
       val output = response.body<String>()
       return QueryHttpFooBarBazResult.Success(body = output, logid = response.headers["logid"])
     }

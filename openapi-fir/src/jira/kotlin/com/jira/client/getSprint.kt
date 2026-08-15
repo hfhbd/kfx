@@ -17,8 +17,10 @@ public suspend fun HttpClient.getSprint(sprintId: Long, builder: suspend HttpReq
   val response = `get`(urlString = """agile/1.0/sprint/${sprintId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<SprintBean>()
   return output

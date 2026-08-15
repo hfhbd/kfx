@@ -27,8 +27,10 @@ public suspend fun HttpClient.getStatusCategories(
     parameter("uriInfo", uriInfo)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<StatusCategoryJsonBean>()
   return output

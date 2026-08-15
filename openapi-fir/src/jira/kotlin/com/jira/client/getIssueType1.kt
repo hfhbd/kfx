@@ -19,8 +19,10 @@ public suspend fun HttpClient.getIssueType1(id: String, builder: suspend HttpReq
   val response = `get`(urlString = """api/2/issuetype/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<IssueTypeJsonBean>()
   return output

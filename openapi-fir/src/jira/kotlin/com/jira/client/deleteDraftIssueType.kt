@@ -22,8 +22,10 @@ public suspend fun HttpClient.deleteDraftIssueType(
   val response = delete(urlString = """api/2/workflowscheme/${id}/draft/issuetype/${issueType}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

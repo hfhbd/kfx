@@ -19,8 +19,10 @@ public suspend fun HttpClient.getDashboard(id: String, builder: suspend HttpRequ
   val response = `get`(urlString = """api/2/dashboard/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<DashboardBean>()
   return output

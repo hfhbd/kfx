@@ -19,8 +19,10 @@ public suspend fun HttpClient.defaultColumns1(id: String, builder: suspend HttpR
   val response = `get`(urlString = """api/2/filter/${id}/columns""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ColumnLayout>()
   return output

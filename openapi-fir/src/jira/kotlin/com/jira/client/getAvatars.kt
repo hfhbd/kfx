@@ -21,8 +21,10 @@ public suspend fun HttpClient.getAvatars(
   val response = `get`(urlString = """api/2/universal_avatar/type/${type}/owner/${owningObjectId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<AvatarBean>()
   return output

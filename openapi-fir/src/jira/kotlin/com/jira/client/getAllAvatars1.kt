@@ -19,8 +19,10 @@ public suspend fun HttpClient.getAllAvatars1(username: String? = null, builder: 
     parameter("username", username)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<AvatarBean>()
   return output

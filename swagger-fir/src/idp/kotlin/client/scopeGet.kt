@@ -26,11 +26,14 @@ public suspend fun HttpClient.scopeGet(
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/scopes/${realm}/${scopeName}""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<Scope>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<Scope>()
+      return output
+    }
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

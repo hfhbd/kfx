@@ -17,8 +17,10 @@ public suspend fun HttpClient.getEpic(epicIdOrKey: String, builder: suspend Http
   val response = `get`(urlString = """agile/1.0/epic/${epicIdOrKey}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<EpicBean>()
   return output

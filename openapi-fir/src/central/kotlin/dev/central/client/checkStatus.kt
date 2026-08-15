@@ -20,8 +20,10 @@ public suspend fun HttpClient.checkStatus(id: String? = null, builder: suspend H
     parameter("id", id)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<CheckStatus>()
   return output

@@ -19,8 +19,10 @@ public suspend fun HttpClient.setPropertyViaRestfulTable(id: String, builder: su
   val response = put(urlString = """api/2/application-properties/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<Property>()
   return output

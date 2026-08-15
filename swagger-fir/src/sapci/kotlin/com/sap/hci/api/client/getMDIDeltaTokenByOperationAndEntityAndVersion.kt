@@ -32,14 +32,17 @@ public suspend fun HttpClient.getMDIDeltaTokenByOperationAndEntityAndVersion(
   val response = `get`(urlString = """MDIDeltaToken(Operation='${operation}',Entity='${entity}',Version='${version}')""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
-  }
-  if (response.status.isSuccess()) {
-    val output = response.body<GetMDIDeltaTokenByOperationAndEntityAndVersion>()
-    return output
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status == NotFound -> {
+      return null
+    }
+    response.status.isSuccess() -> {
+      val output = response.body<GetMDIDeltaTokenByOperationAndEntityAndVersion>()
+      return output
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

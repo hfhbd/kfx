@@ -19,8 +19,10 @@ public suspend fun HttpClient.getReindexInfo(taskId: Long? = null, builder: susp
     parameter("taskId", taskId)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ReindexBean>()
   return output

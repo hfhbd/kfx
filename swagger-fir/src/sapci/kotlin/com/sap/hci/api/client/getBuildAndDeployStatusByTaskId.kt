@@ -22,14 +22,17 @@ public suspend fun HttpClient.getBuildAndDeployStatusByTaskId(taskId: String, bu
   val response = `get`(urlString = """BuildAndDeployStatus(TaskId='${taskId}')""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
-  }
-  if (response.status.isSuccess()) {
-    val output = response.body<GetBuildAndDeployStatusByTaskId>()
-    return output
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status == NotFound -> {
+      return null
+    }
+    response.status.isSuccess() -> {
+      val output = response.body<GetBuildAndDeployStatusByTaskId>()
+      return output
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

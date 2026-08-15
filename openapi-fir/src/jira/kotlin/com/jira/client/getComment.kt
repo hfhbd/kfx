@@ -28,8 +28,10 @@ public suspend fun HttpClient.getComment(
     parameter("expand", expand)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<CommentJsonBean>()
   return output

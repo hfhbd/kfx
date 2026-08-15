@@ -17,8 +17,10 @@ public suspend fun HttpClient.getPriorityScheme(schemeId: Long, builder: suspend
   val response = `get`(urlString = """api/2/priorityschemes/${schemeId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<PrioritySchemeBean>()
   return output

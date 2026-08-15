@@ -30,8 +30,10 @@ public suspend fun HttpClient.getScriptCollectionDesigntimeArtifactsByIdAndVersi
     parameter("select", select)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<GetScriptCollectionDesigntimeArtifactsByIdAndVersion>()
   return output

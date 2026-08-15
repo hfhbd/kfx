@@ -18,8 +18,10 @@ public suspend fun HttpClient.getSynchronizationRunStatus(id: String, builder: s
   val response = `get`(urlString = """synchronizationRuns/${id}/status""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<StatusResponse>()
   return output

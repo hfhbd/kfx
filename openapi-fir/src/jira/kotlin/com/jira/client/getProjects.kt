@@ -26,8 +26,10 @@ public suspend fun HttpClient.getProjects(
     parameter("startAt", startAt)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectJsonBean>()
   return output

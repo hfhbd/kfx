@@ -23,8 +23,10 @@ public suspend fun HttpClient.getNotificationScheme1(
     parameter("expand", expand)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<NotificationSchemeBean>()
   return output

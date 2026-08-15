@@ -17,8 +17,10 @@ public suspend fun HttpClient.getDraftDefault(id: Long, builder: suspend HttpReq
   val response = `get`(urlString = """api/2/workflowscheme/${id}/draft/default""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

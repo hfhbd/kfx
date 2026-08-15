@@ -26,11 +26,14 @@ public suspend fun HttpClient.clientRoles(
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/roles""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<List<String>>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<List<String>>()
+      return output
+    }
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

@@ -38,8 +38,10 @@ public suspend fun HttpClient.serviceBindingGet(
     parameter("plan_id", plan_id)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ServiceBindingResource>()
   return output

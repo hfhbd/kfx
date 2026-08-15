@@ -21,8 +21,10 @@ public suspend fun HttpClient.createComponent(input: ComponentBean, builder: sus
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ComponentBean>()
   return output
