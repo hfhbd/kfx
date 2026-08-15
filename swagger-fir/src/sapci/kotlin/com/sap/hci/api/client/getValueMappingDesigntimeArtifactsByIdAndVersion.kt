@@ -29,14 +29,17 @@ public suspend fun HttpClient.getValueMappingDesigntimeArtifactsByIdAndVersion(
   val response = `get`(urlString = """ValueMappingDesigntimeArtifacts(Id='${id}',Version='${version}')""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
-  }
-  if (response.status.isSuccess()) {
-    val output = response.body<GetValueMappingDesigntimeArtifactsByIdAndVersion>()
-    return output
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status == NotFound -> {
+      return null
+    }
+    response.status.isSuccess() -> {
+      val output = response.body<GetValueMappingDesigntimeArtifactsByIdAndVersion>()
+      return output
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

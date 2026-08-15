@@ -28,9 +28,12 @@ public suspend fun HttpClient.startSynchronizationRun(
     parameter("test", test)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<ErrorResponse>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<ErrorResponse>()
+      throw output
+    }
   }
 }

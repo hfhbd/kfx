@@ -25,7 +25,9 @@ public fun Route.postIntegrationPackages(action: suspend ApplicationCall.(Integr
         post {
           val body = call.receive<IntegrationPackageCreate>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

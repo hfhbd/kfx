@@ -26,7 +26,6 @@ public suspend fun HttpClient.utilSamlmetadata(input: String, builder: suspend H
       val output = response.body<Saml>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

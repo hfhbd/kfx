@@ -30,7 +30,6 @@ public suspend fun HttpClient.clientRegenerateSecret(
       val output = response.body<Unit>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

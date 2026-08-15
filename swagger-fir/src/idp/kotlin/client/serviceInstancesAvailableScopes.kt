@@ -25,7 +25,6 @@ public suspend fun HttpClient.serviceInstancesAvailableScopes(serviceInstanceID:
       val output = response.body<List<AvailableScopeListEntry>>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

@@ -33,8 +33,8 @@ public suspend fun HttpClient.clientAvailableScopes(
       return output
     }
     else -> {
-        val output = response.body<APIError>()
-        throw output
-      }
+      val output = response.body<APIError>()
+      throw output
     }
+  }
 }

@@ -45,9 +45,12 @@ public suspend fun HttpClient.deleteIntegrationDesigntimeArtifactsByIdAndVersion
     parameter("referencedResourceType", referencedResourceType)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

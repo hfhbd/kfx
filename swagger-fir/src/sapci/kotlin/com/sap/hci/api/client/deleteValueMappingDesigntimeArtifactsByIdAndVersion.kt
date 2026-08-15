@@ -32,9 +32,12 @@ public suspend fun HttpClient.deleteValueMappingDesigntimeArtifactsByIdAndVersio
     `header`("X-CSRF-Token", X_CSRF_Token)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

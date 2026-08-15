@@ -31,7 +31,6 @@ public suspend fun HttpClient.clientRoles(
       val output = response.body<List<String>>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

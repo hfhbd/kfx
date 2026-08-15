@@ -31,7 +31,6 @@ public suspend fun HttpClient.clientStatistics(
       val output = response.body<ClientStatistics>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

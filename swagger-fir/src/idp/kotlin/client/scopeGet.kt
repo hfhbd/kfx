@@ -31,7 +31,6 @@ public suspend fun HttpClient.scopeGet(
       val output = response.body<Scope>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

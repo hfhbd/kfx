@@ -20,9 +20,12 @@ public suspend fun HttpClient.stopSynchronizationRun(id: String, builder: suspen
   val response = post(urlString = """synchronizationRuns/${id}/stop""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<ErrorResponse>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<ErrorResponse>()
+      throw output
+    }
   }
 }

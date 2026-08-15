@@ -31,7 +31,6 @@ public suspend fun HttpClient.clientExampleTokens(
       val output = response.body<OidcTokenExample>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

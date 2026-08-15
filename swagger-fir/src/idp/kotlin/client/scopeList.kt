@@ -25,7 +25,6 @@ public suspend fun HttpClient.scopeList(serviceInstanceID: String, builder: susp
       val output = response.body<List<Scope>>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

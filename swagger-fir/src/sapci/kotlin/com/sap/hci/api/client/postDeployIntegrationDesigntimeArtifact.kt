@@ -36,9 +36,12 @@ public suspend fun HttpClient.postDeployIntegrationDesigntimeArtifact(
     parameter("version", version)
     builder()
   }
-  if (response.status.isSuccess()) {
-  } else {
-    val output = response.body<Error>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+    }
+    else -> {
+      val output = response.body<Error>()
+      throw output
+    }
   }
 }

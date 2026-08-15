@@ -25,7 +25,6 @@ public suspend fun HttpClient.clientList(serviceInstanceID: String, builder: sus
       val output = response.body<List<Client>>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

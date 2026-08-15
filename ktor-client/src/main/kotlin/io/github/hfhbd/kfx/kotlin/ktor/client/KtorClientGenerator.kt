@@ -459,9 +459,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                 )
                 function.endControlFlow()
-                if (!writeWhen) {
-                    function.endControlFlow()
-                }
+                function.endControlFlow()
             } else if (output != null) {
                 if (writeWhen) {
                     function.endControlFlow()

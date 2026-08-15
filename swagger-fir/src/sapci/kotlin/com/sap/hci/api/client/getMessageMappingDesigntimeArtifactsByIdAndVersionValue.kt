@@ -24,8 +24,10 @@ public suspend fun HttpClient.getMessageMappingDesigntimeArtifactsByIdAndVersion
   val response = `get`(urlString = """MessageMappingDesigntimeArtifacts(Id='${id}',Version='${version}')/${'$'}value""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<Source>()
   return output

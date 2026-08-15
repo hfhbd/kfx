@@ -24,7 +24,9 @@ public fun Route.createSynchronizationRunWithConfig(action: suspend ApplicationC
         post {
           val body = call.receive<InputWithProcessorConfig>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

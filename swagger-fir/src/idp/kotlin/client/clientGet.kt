@@ -31,7 +31,6 @@ public suspend fun HttpClient.clientGet(
       val output = response.body<Client>()
       return output
     }
-
     else -> {
       val output = response.body<APIError>()
       throw output

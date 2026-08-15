@@ -23,7 +23,9 @@ public fun Route.createSynchronizationRunWithExecutionGroupAndUrlInput(action: s
         post {
           val body = call.receive<DataProvider>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }
