@@ -6,41 +6,38 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.`header`
-import io.ktor.client.request.post
+import io.ktor.client.request.delete
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlin.String
 import kotlin.Unit
-import results.BazAResult
+import results.DeleteHttpFooBarBazResult
 
 /**
- * Foo Bar API
- * @param X_CSRF_Token The CSRF Token fetched by executing BazA_CsrfToken first.
+ * Using 2XX and 4XX
  * @param B some Header
  */
-public suspend fun HttpClient.bazA(
+public suspend fun HttpClient.deleteHttpFooBarBaz(
   input: FooInput,
-  X_CSRF_Token: String,
   B: String? = null,
   builder: suspend HttpRequestBuilder.() -> Unit = {},
-): BazAResult {
-  val response = post(urlString = """http/foo/bar/baz""") {
-    `header`("X-CSRF-Token", X_CSRF_Token)
+): DeleteHttpFooBarBazResult {
+  val response = delete(urlString = """http/foo/bar/baz""") {
     `header`("B", B)
     contentType(Json)
     setBody(input)
     builder()
   }
   when {
-    response.status == OK -> {
+    response.status.isSuccess() -> {
       val output = response.body<String>()
-      return BazAResult.Success(body = output, logid = response.headers["logid"])
+      return DeleteHttpFooBarBazResult.Success(body = output, logid = response.headers["logid"])
     }
     else -> {
       val output = response.body<Fault>()
-      return BazAResult.Failure(body = output, logid = response.headers["logid"])
+      return DeleteHttpFooBarBazResult.Failure(body = output, logid = response.headers["logid"])
     }
   }
 }

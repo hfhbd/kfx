@@ -11,22 +11,22 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.accept
 import io.ktor.server.routing.contentType
-import io.ktor.server.routing.post
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.route
-import results.BazAResult
+import results.DeleteHttpFooBarBazResult
 
 /**
- * Foo Bar API
+ * Using 2XX and 4XX
  */
-public fun Route.bazA(action: suspend ApplicationCall.(FooInput) -> BazAResult) {
+public fun Route.deleteHttpFooBarBaz(action: suspend ApplicationCall.(FooInput) -> DeleteHttpFooBarBazResult) {
   route(path = """/http/foo/bar/baz""") {
     contentType(Json) {
       accept(Json) {
-        post {
+        delete {
           val body = call.receive<FooInput>()
           val response = call.action(body)
           when (response) {
-            is BazAResult.Success -> {
+            is DeleteHttpFooBarBazResult.Success -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
@@ -35,7 +35,7 @@ public fun Route.bazA(action: suspend ApplicationCall.(FooInput) -> BazAResult) 
               }
               call.respond(response.body)
             }
-            is BazAResult.Failure -> {
+            is DeleteHttpFooBarBazResult.Failure -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
