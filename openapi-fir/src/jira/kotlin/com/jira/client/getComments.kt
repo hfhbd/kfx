@@ -35,8 +35,10 @@ public suspend fun HttpClient.getComments(
     parameter("startAt", startAt)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<CommentsWithPaginationJsonBean>()
   return output

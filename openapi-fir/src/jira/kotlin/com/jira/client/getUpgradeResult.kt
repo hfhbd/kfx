@@ -16,8 +16,10 @@ public suspend fun HttpClient.getUpgradeResult(builder: suspend HttpRequestBuild
   val response = `get`(urlString = """api/2/upgrade""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<UpgradeResultBean>()
   return output

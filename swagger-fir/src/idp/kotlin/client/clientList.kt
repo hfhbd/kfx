@@ -20,11 +20,15 @@ public suspend fun HttpClient.clientList(serviceInstanceID: String, builder: sus
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<List<Client>>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<List<Client>>()
+      return output
+    }
+
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

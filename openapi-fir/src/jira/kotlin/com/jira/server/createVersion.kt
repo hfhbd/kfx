@@ -23,7 +23,9 @@ public fun Route.createVersion(action: suspend ApplicationCall.(VersionBean) -> 
         post {
           val body = call.receive<VersionBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

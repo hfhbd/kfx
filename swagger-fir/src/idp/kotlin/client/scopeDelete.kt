@@ -25,11 +25,15 @@ public suspend fun HttpClient.scopeDelete(
   val response = delete(urlString = """api/v1/instances/${serviceInstanceID}/scopes/${realm}/${scopeName}""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<Unit>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<Unit>()
+      return output
+    }
+
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

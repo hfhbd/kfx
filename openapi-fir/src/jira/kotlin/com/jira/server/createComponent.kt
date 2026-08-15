@@ -23,7 +23,9 @@ public fun Route.createComponent(action: suspend ApplicationCall.(ComponentBean)
         post {
           val body = call.receive<ComponentBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

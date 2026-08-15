@@ -34,7 +34,9 @@ public fun Route.getConfiguration(action: suspend ApplicationCall.() -> BoardCon
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

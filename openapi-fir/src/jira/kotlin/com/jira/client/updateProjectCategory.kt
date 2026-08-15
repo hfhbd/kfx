@@ -27,8 +27,10 @@ public suspend fun HttpClient.updateProjectCategory(
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectCategoryJsonBean>()
   return output

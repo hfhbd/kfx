@@ -23,7 +23,9 @@ public fun Route.createSealed(action: suspend ApplicationCall.(FooSealed) -> Str
         post {
           val body = call.receive<FooSealed>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -17,8 +17,10 @@ public suspend fun HttpClient.getProjectRoleActorsForRole(id: Long, builder: sus
   val response = `get`(urlString = """api/2/role/${id}/actors""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectRoleActorsBean>()
   return output

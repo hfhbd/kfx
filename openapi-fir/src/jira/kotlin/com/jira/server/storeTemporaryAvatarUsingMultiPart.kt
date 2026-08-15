@@ -31,7 +31,9 @@ public fun Route.storeTemporaryAvatarUsingMultiPart(action: suspend ApplicationC
       accept(ContentType.parse("text/html")) {
         post {
           val response = call.action()
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

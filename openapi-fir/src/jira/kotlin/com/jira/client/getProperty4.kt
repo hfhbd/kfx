@@ -33,8 +33,10 @@ public suspend fun HttpClient.getProperty4(
     parameter("key", key)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<Property>()
   return output

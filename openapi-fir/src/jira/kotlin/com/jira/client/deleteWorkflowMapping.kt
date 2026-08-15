@@ -27,8 +27,10 @@ public suspend fun HttpClient.deleteWorkflowMapping(
     parameter("workflowName", workflowName)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<WorkflowSchemeBean>()
   return output

@@ -23,7 +23,9 @@ public fun Route.createFilter(action: suspend ApplicationCall.(FilterBean) -> Fi
         post {
           val body = call.receive<FilterBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

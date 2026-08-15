@@ -24,7 +24,9 @@ public fun Route.createIssueTypeScheme(action: suspend ApplicationCall.(IssueTyp
         post {
           val body = call.receive<IssueTypeSchemeCreateUpdateBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

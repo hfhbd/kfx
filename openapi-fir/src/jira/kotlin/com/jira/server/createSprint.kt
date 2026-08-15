@@ -24,7 +24,9 @@ public fun Route.createSprint(action: suspend ApplicationCall.(SprintCreateBean)
         post {
           val body = call.receive<SprintCreateBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

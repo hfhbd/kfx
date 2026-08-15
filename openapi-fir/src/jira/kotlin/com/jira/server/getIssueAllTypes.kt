@@ -19,7 +19,9 @@ public fun Route.getIssueAllTypes(action: suspend ApplicationCall.() -> IssueTyp
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

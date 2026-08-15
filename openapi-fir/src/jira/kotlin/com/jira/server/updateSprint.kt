@@ -32,7 +32,9 @@ public fun Route.updateSprint(action: suspend ApplicationCall.(SprintBean) -> Sp
         put {
           val body = call.receive<SprintBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

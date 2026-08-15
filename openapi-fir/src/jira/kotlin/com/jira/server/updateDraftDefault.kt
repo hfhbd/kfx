@@ -24,7 +24,9 @@ public fun Route.updateDraftDefault(action: suspend ApplicationCall.(DefaultBean
         put {
           val body = call.receive<DefaultBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

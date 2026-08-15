@@ -17,8 +17,10 @@ public suspend fun HttpClient.getBoard(boardId: Long, builder: suspend HttpReque
   val response = `get`(urlString = """agile/1.0/board/${boardId}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<BoardBean>()
   return output

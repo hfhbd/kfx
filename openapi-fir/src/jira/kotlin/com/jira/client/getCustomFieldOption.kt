@@ -19,8 +19,10 @@ public suspend fun HttpClient.getCustomFieldOption(id: String, builder: suspend 
   val response = `get`(urlString = """api/2/customFieldOption/${id}""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<CustomFieldOptionBean>()
   return output

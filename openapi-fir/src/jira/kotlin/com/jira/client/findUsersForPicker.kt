@@ -31,8 +31,10 @@ public suspend fun HttpClient.findUsersForPicker(
     parameter("showAvatar", showAvatar)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<UserPickerResultsBean>()
   return output

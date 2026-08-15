@@ -11,6 +11,7 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.NameAllocator
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.UNIT
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
@@ -190,7 +191,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                     },
                 )
                 if (success != null) {
-                    function.beginControlFlow("if (call.response.status() == null))")
+                    function.beginControlFlow("if (call.response.status() == null)")
                     function.addStatement(
                         "call.response.status(%M)",
                         success.toHttpCode(),
@@ -207,11 +208,8 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                         CodeBlock.of("")
                     },
                 )
-                if (success == null) {
-                    function.addStatement("call.%M()", respond)
-                } else {
-                    function.addStatement("call.%M(%M)", respond, success.toHttpCode())
-                }
+
+                function.addStatement("call.%M(%M)", respond, (success ?: StatusCode.OK).toHttpCode())
             }
         }
 

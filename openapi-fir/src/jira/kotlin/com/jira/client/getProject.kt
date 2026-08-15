@@ -23,8 +23,10 @@ public suspend fun HttpClient.getProject(
     parameter("expand", expand)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<ProjectBean>()
   return output

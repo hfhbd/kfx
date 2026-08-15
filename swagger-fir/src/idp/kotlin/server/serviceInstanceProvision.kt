@@ -20,7 +20,9 @@ public fun Route.serviceInstanceProvision(action: suspend ApplicationCall.(Servi
         put {
           val body = call.receive<ServiceInstanceProvisionRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

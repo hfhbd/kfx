@@ -19,8 +19,10 @@ public suspend fun HttpClient.getRemoteVersionLinks(globalId: String? = null, bu
     parameter("globalId", globalId)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<RemoteEntityLinksJsonBean>()
   return output

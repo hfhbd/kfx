@@ -19,7 +19,9 @@ public fun Route.getProject1(action: suspend ApplicationCall.() -> ErrorCollecti
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

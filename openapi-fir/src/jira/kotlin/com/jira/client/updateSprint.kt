@@ -35,8 +35,10 @@ public suspend fun HttpClient.updateSprint(
     setBody(input)
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<SprintBean>()
   return output

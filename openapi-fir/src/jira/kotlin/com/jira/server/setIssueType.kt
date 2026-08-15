@@ -25,7 +25,9 @@ public fun Route.setIssueType(action: suspend ApplicationCall.(IssueTypeMappingB
         put {
           val body = call.receive<IssueTypeMappingBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

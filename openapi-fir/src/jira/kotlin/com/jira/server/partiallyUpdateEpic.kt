@@ -24,7 +24,9 @@ public fun Route.partiallyUpdateEpic(action: suspend ApplicationCall.(EpicUpdate
         post {
           val body = call.receive<EpicUpdateBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -19,8 +19,10 @@ public suspend fun HttpClient.getVotes(issueIdOrKey: String, builder: suspend Ht
   val response = `get`(urlString = """api/2/issue/${issueIdOrKey}/votes""") {
     builder()
   }
-  if (response.status == NotFound) {
-    return null
+  when {
+    response.status == NotFound -> {
+      return null
+    }
   }
   val output = response.body<VoteBean>()
   return output

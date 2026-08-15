@@ -24,7 +24,9 @@ public fun Route.addActorUsers(action: suspend ApplicationCall.(ActorsMap) -> Pr
         post {
           val body = call.receive<ActorsMap>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -29,7 +29,9 @@ public fun Route.estimateIssueForBoard(action: suspend ApplicationCall.(FieldEdi
         put {
           val body = call.receive<FieldEditBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

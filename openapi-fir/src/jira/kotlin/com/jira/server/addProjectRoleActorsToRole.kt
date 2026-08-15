@@ -24,7 +24,9 @@ public fun Route.addProjectRoleActorsToRole(action: suspend ApplicationCall.(Act
         post {
           val body = call.receive<ActorInputBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

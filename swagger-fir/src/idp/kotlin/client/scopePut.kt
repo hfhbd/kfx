@@ -32,11 +32,15 @@ public suspend fun HttpClient.scopePut(
     setBody(input)
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<Unit>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<Unit>()
+      return output
+    }
+
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

@@ -19,7 +19,9 @@ public fun Route.createIndexSnapshot(action: suspend ApplicationCall.() -> Index
     accept(Json) {
       post {
         val response = call.action()
-        call.response.status(Accepted)
+        if (call.response.status() == null) {
+          call.response.status(Accepted)
+        }
         call.respond(response)
       }
     }

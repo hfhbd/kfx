@@ -22,7 +22,9 @@ public fun Route.getTransitions(action: suspend ApplicationCall.() -> Transition
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

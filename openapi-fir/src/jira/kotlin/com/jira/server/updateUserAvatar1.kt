@@ -23,7 +23,9 @@ public fun Route.updateUserAvatar1(action: suspend ApplicationCall.(AvatarBean) 
         put {
           val body = call.receive<AvatarBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

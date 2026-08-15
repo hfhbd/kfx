@@ -23,7 +23,9 @@ public fun Route.addComment(action: suspend ApplicationCall.(CommentJsonBean) ->
         post {
           val body = call.receive<CommentJsonBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

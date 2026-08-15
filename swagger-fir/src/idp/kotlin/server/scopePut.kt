@@ -20,7 +20,9 @@ public fun Route.scopePut(action: suspend ApplicationCall.(Scope) -> Unit) {
         put {
           val body = call.receive<Scope>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

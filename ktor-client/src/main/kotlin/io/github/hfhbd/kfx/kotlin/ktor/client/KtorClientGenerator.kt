@@ -409,10 +409,11 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
 
             function.endControlFlow()
             function.endControlFlow()
-        } else if (output != null || fault != null) {
+        } else {
             val nullableOutput = notFound
-            function.beginControlFlow("when")
-            if (output != null && nullableOutput) {
+
+            val writeWhen = if (output != null && nullableOutput) {
+                function.beginControlFlow("when")
                 function.beginControlFlow(
                     "response.status == %M ->",
                     ClassName("io.ktor.http", "HttpStatusCode")
@@ -421,9 +422,15 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
                 function.addStatement("return null")
                 function.endControlFlow()
+                true
+            } else {
+                false
             }
 
             if (fault != null) {
+                if (!writeWhen) {
+                    function.beginControlFlow("when")
+                }
                 function.beginControlFlow(
                     "response.status.%M() ->",
                     MemberName("io.ktor.http", "isSuccess", isExtension = true),
@@ -453,7 +460,9 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 )
                 function.endControlFlow()
             } else if (output != null) {
-                function.endControlFlow()
+                if (writeWhen) {
+                    function.endControlFlow()
+                }
                 function.addStatement(
                     "val output = %L",
                     getOutput((outputWrapperType ?: output).toKtorPoetType(read = false)),

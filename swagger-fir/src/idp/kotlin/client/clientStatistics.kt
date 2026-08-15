@@ -26,11 +26,15 @@ public suspend fun HttpClient.clientStatistics(
   val response = `get`(urlString = """api/v1/instances/${serviceInstanceID}/clients/${realm}/${clientName}/statistics""") {
     builder()
   }
-  if (response.status.isSuccess()) {
-    val output = response.body<ClientStatistics>()
-    return output
-  } else {
-    val output = response.body<APIError>()
-    throw output
+  when {
+    response.status.isSuccess() -> {
+      val output = response.body<ClientStatistics>()
+      return output
+    }
+
+    else -> {
+      val output = response.body<APIError>()
+      throw output
+    }
   }
 }

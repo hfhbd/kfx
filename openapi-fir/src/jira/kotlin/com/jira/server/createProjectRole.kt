@@ -24,7 +24,9 @@ public fun Route.createProjectRole(action: suspend ApplicationCall.(CreateUpdate
         post {
           val body = call.receive<CreateUpdateRoleRequestBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }
