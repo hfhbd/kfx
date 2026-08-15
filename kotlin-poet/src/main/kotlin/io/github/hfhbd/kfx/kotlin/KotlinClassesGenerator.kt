@@ -119,60 +119,62 @@ abstract class KotlinClassesGenerator(private val include: (CodeGenTree.Class) -
         val valueMember = members.single()
         val valueMemberType = valueMember.type.toPoetType()
 
-        val hasComputedProperties = computedProperties.isNotEmpty()
-
-        if (hasComputedProperties) {
-            val privateConstructor = FunSpec.constructorBuilder()
+        val privateConstructor = FunSpec.constructorBuilder()
+        if (computedProperties.isNotEmpty()) {
             privateConstructor.addModifiers(KModifier.PRIVATE)
-            privateConstructor.addParameter(
-                name = valueMember.name,
-                type = valueMemberType,
-            )
-            typeSpec.primaryConstructor(privateConstructor.build())
-            typeSpec.addMember(valueMember, isFault = false) {
+        }
+        privateConstructor.addParameter(
+            name = valueMember.name,
+            type = valueMemberType,
+        )
+        typeSpec.primaryConstructor(privateConstructor.build())
+        typeSpec.addMember(valueMember, isFault = false) {
+            if (computedProperties.isNotEmpty()) {
                 addModifiers(KModifier.PRIVATE)
-                initializer(valueMember.name)
             }
+            initializer(valueMember.name)
+        }
 
-            val constructor = FunSpec.constructorBuilder()
+        val constructor = FunSpec.constructorBuilder()
 
-            for (member in computedProperties) {
-                val type = typeSpec.addMember(member, isFault = false) {
-                    getter(
-                        FunSpec.getterBuilder().addStatement(
-                            "return ${valueMember.name}.${member.name}",
-                        ).build(),
-                    )
-                }
-
-                constructor.addParameter(
-                    ParameterSpec.builder(member.name, type).apply {
-                        for (annotation in member.annotations) {
-                            addAnnotation(annotation.toAnno())
-                        }
-                        if (member.nullable) {
-                            when (member.type) {
-                                is CodeGenTree.Type.LIST -> defaultValue(
-                                    CodeBlock.of(
-                                        "%M()",
-                                        MemberName("kotlin.collections", "emptyList", isExtension = true),
-                                    ),
-                                )
-
-                                is CodeGenTree.Type.MAP -> defaultValue(
-                                    CodeBlock.of(
-                                        "%M()",
-                                        MemberName("kotlin.collections", "emptyMap", isExtension = true),
-                                    ),
-                                )
-
-                                else -> defaultValue("null")
-                            }
-                        }
-                    }.build(),
+        for (member in computedProperties) {
+            val type = typeSpec.addMember(member, isFault = false) {
+                getter(
+                    FunSpec.getterBuilder().addStatement(
+                        "return ${valueMember.name}.${member.name}",
+                    ).build(),
                 )
             }
 
+            constructor.addParameter(
+                ParameterSpec.builder(member.name, type).apply {
+                    for (annotation in member.annotations) {
+                        addAnnotation(annotation.toAnno())
+                    }
+                    if (member.nullable) {
+                        when (member.type) {
+                            is CodeGenTree.Type.LIST -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptyList", isExtension = true),
+                                ),
+                            )
+
+                            is CodeGenTree.Type.MAP -> defaultValue(
+                                CodeBlock.of(
+                                    "%M()",
+                                    MemberName("kotlin.collections", "emptyMap", isExtension = true),
+                                ),
+                            )
+
+                            else -> defaultValue("null")
+                        }
+                    }
+                }.build(),
+            )
+        }
+
+        if (valueMember.type is CodeGenTree.Class) {
             typeSpec.addFunction(
                 constructor
                     .callThisConstructor(
@@ -188,16 +190,6 @@ abstract class KotlinClassesGenerator(private val include: (CodeGenTree.Class) -
                     )
                     .build(),
             )
-        } else {
-            val constructor = FunSpec.constructorBuilder()
-            constructor.addParameter(
-                name = valueMember.name,
-                type = valueMemberType,
-            )
-            typeSpec.primaryConstructor(constructor.build())
-            typeSpec.addMember(valueMember, isFault = false) {
-                initializer(valueMember.name)
-            }
         }
 
         return typeSpec
