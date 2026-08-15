@@ -29,7 +29,6 @@ public suspend fun HttpClient.createSealed(input: FooSealed, builder: suspend Ht
       val output = response.body<String>()
       return output
     }
-
     else -> {
       val output = response.body<Fault>()
       throw output

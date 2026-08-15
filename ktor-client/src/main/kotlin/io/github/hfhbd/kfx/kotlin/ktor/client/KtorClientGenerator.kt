@@ -449,7 +449,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                 }
                 function.endControlFlow()
 
-                function.nextControlFlow("else ->")
+                function.beginControlFlow("else ->")
                 function.addStatement(
                     "val output = %L",
                     getOutput((faultWrapper ?: fault).toKtorPoetType(read = false)),
@@ -459,6 +459,9 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
                     outputMember?.toCodeBlock(nameAllocator) ?: CodeBlock.of("output"),
                 )
                 function.endControlFlow()
+                if (!writeWhen) {
+                    function.endControlFlow()
+                }
             } else if (output != null) {
                 if (writeWhen) {
                     function.endControlFlow()
