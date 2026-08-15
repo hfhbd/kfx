@@ -19,6 +19,7 @@ import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.joinToCode
 import io.github.hfhbd.kfx.ContentType
+import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenerator
 import io.github.hfhbd.kfx.kotlin.KotlinPoetCodeGenerator
@@ -340,7 +341,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             if (success != null) {
                 function.beginControlFlow(
                     "%M ->",
-                    success.statusCode.toHttpCode(),
+                    (success.statusCode ?: StatusCode.OK).toHttpCode(),
                 )
                 if (success.response != null) {
                     function.addStatement(
@@ -368,7 +369,7 @@ class KtorClientGenerator : KotlinPoetCodeGenerator {
             if (notFound != null) {
                 function.beginControlFlow(
                     "%M ->",
-                    notFound.statusCode.toHttpCode(),
+                    (notFound.statusCode ?: StatusCode.OK).toHttpCode(),
                 )
                 function.addStatement("return %T", notFound.isCondition.toPoetType())
                 function.endControlFlow()
