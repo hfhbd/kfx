@@ -258,7 +258,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
         val output: Type?,
         val outputHeaders: List<Parameter>,
         val returnType: Type?,
-        val success: StatusCode,
+        val success: StatusCode?,
         val notFound: Boolean,
         val fault: NormalClass?,
         val faultHeaders: List<Parameter>,
@@ -279,7 +279,7 @@ data class CodeGenTree(val classes: Set<Class>, val operations: Set<Operation>, 
             @Serializable
             data class Branch(
                 val isCondition: NormalClass,
-                val statusCode: StatusCode,
+                val statusCode: StatusCode?,
                 val response: Expression?,
                 val headers: Map<String, Pair<String, Boolean>>,
             )

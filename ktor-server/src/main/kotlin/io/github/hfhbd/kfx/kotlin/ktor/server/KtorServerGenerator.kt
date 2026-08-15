@@ -179,6 +179,7 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
             a(responseBranches.fault, function, nameAllocator)
             function.endControlFlow()
         } else {
+            val success = success
             if (output != null) {
                 function.addStatement(
                     "val response = call.action(%L)",
@@ -188,10 +189,14 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                         CodeBlock.of("")
                     },
                 )
-                function.addStatement(
-                    "call.response.status(%M)",
-                    success.toHttpCode(),
-                )
+                if (success != null) {
+                    function.beginControlFlow("if (call.response.status() == null))")
+                    function.addStatement(
+                        "call.response.status(%M)",
+                        success.toHttpCode(),
+                    )
+                    function.endControlFlow()
+                }
                 function.addStatement("call.%M(response)", respond)
             } else {
                 function.addStatement(
@@ -202,7 +207,11 @@ class KtorServerGenerator : KotlinPoetCodeGenerator {
                         CodeBlock.of("")
                     },
                 )
-                function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+                if (success == null) {
+                    function.addStatement("call.%M()", respond)
+                } else {
+                    function.addStatement("call.%M(%M)", respond, success.toHttpCode())
+                }
             }
         }
 
@@ -249,13 +258,18 @@ private fun a(
         }
     }
     if (response != null) {
-        function.addStatement(
-            "call.response.status(%M)",
-            responseBranch.statusCode.toHttpCode(),
-        )
+        val responseBranchStatusCode = responseBranch.statusCode
+        if (responseBranchStatusCode != null) {
+            function.beginControlFlow("if (call.response.status() == null)")
+            function.addStatement(
+                "call.response.status(%M)",
+                responseBranchStatusCode.toHttpCode(),
+            )
+            function.endControlFlow()
+        }
         function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
     } else {
-        function.addStatement("call.%M(%M)", respond, responseBranch.statusCode.toHttpCode())
+        function.addStatement("call.%M(%M)", respond, responseBranch.statusCode!!.toHttpCode())
     }
     function.endControlFlow()
 }

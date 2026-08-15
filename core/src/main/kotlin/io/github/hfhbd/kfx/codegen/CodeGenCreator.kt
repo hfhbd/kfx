@@ -1,6 +1,5 @@
 package io.github.hfhbd.kfx.codegen
 
-import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.BooleanLiteral
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.ByteLiteral
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.CharLiteral
@@ -188,7 +187,7 @@ data object CodeGenCreator {
         faultHeaders = ir.faultHeaders.map {
             it.toCodeGen(defaultNull = false)
         },
-        success = ir.success ?: StatusCode.OK,
+        success = ir.success,
         headers = ir.headers.map { it.toCodeGen(defaultNull = true) },
         deprecated = ir.deprecated,
         responseBranches = null,

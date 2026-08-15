@@ -3,7 +3,6 @@ package server
 import com.example.FooInput
 import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
-import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
 import io.ktor.server.response.`header`
@@ -29,9 +28,6 @@ public fun Route.deleteHttpFooBarBaz(action: suspend ApplicationCall.(FooInput) 
             is DeleteHttpFooBarBazResult.Success -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
-              }
-              if (call.response.status() == null) {
-                call.response.status(OK)
               }
               call.respond(response.body)
             }
