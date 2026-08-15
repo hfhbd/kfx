@@ -22,4 +22,6 @@
         </xsd:sequence>
         <xsd:attribute name="Baz" type="xsd:long" default="0"/>
     </xsd:complexType>
+    <xsd:element name="Empty" type="bar:EmptyType"/>
+    <xsd:complexType name="EmptyType"/>
 </xsd:schema>
