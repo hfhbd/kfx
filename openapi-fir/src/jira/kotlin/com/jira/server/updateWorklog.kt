@@ -28,7 +28,9 @@ public fun Route.updateWorklog(action: suspend ApplicationCall.(WorklogRequest) 
         put {
           val body = call.receive<WorklogRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

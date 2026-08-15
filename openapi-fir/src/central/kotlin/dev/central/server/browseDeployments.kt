@@ -23,7 +23,9 @@ public fun Route.browseDeployments(action: suspend ApplicationCall.(BrowseDeploy
         post {
           val body = call.receive<BrowseDeploymentsRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

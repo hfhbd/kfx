@@ -32,7 +32,9 @@ public fun Route.createIssue(action: suspend ApplicationCall.(IssueUpdateBean) -
         post {
           val body = call.receive<IssueUpdateBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

@@ -24,7 +24,9 @@ public fun Route.createSynchronizationFastRunWithConfig(action: suspend Applicat
         post {
           val body = call.receive<InputWithProcessorConfig>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -24,7 +24,9 @@ public fun Route.postValueMappingDesigntimeArtifacts(action: suspend Application
         post {
           val body = call.receive<ValueMappingDesigntimeArtifactCreate>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

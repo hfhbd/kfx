@@ -19,7 +19,9 @@ public fun Route.reindex(action: suspend ApplicationCall.() -> ReindexBean) {
     accept(Json) {
       post {
         val response = call.action()
-        call.response.status(Accepted)
+        if (call.response.status() == null) {
+          call.response.status(Accepted)
+        }
         call.respond(response)
       }
     }

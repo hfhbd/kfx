@@ -23,7 +23,9 @@ public fun Route.putBulk(action: suspend ApplicationCall.(ApplicationRoleBean) -
         put {
           val body = call.receive<ApplicationRoleBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

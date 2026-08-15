@@ -30,14 +30,18 @@ public fun Route.queryHttpFooBarBaz(action: suspend ApplicationCall.(FooInput) -
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
-              call.response.status(Created)
+              if (call.response.status() == null) {
+                call.response.status(Created)
+              }
               call.respond(response.body)
             }
             is QueryHttpFooBarBazResult.Failure -> {
               if (response.logid != null) {
                 call.response.`header`("logid", response.logid)
               }
-              call.response.status(InternalServerError)
+              if (call.response.status() == null) {
+                call.response.status(InternalServerError)
+              }
               call.respond(response.body)
             }
           }

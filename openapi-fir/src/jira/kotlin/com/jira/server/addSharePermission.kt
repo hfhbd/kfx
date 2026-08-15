@@ -24,7 +24,9 @@ public fun Route.addSharePermission(action: suspend ApplicationCall.(SharePermis
         post {
           val body = call.receive<SharePermissionInputBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

@@ -23,7 +23,9 @@ public fun Route.createUser(action: suspend ApplicationCall.(UserWriteBean) -> U
         post {
           val body = call.receive<UserWriteBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

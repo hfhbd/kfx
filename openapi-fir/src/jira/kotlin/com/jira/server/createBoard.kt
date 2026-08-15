@@ -31,7 +31,9 @@ public fun Route.createBoard(action: suspend ApplicationCall.(BoardCreateBean) -
         post {
           val body = call.receive<BoardCreateBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

@@ -23,7 +23,9 @@ public fun Route.archiveIssues(action: suspend ApplicationCall.(String) -> Strin
         post {
           val body = call.receive<String>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

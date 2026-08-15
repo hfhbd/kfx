@@ -24,7 +24,9 @@ public fun Route.createOrUpdateRemoteIssueLink(action: suspend ApplicationCall.(
         post {
           val body = call.receive<RemoteIssueLinkCreateOrUpdateRequest>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

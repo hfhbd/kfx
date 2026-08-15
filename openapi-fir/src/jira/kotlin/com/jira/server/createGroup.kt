@@ -24,7 +24,9 @@ public fun Route.createGroup(action: suspend ApplicationCall.(AddGroupBean) -> G
         post {
           val body = call.receive<AddGroupBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

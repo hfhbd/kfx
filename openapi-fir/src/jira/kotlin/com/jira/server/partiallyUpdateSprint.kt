@@ -32,7 +32,9 @@ public fun Route.partiallyUpdateSprint(action: suspend ApplicationCall.(SprintBe
         post {
           val body = call.receive<SprintBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

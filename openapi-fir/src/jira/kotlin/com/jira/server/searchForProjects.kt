@@ -25,7 +25,9 @@ public fun Route.searchForProjects(action: suspend ApplicationCall.() -> Project
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

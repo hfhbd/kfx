@@ -19,7 +19,9 @@ public fun Route.getSchemeAttribute(action: suspend ApplicationCall.() -> Permis
     accept(Json) {
       `get` {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

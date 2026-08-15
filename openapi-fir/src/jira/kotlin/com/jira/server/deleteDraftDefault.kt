@@ -19,7 +19,9 @@ public fun Route.deleteDraftDefault(action: suspend ApplicationCall.() -> Workfl
     accept(Json) {
       delete {
         val response = call.action()
-        call.response.status(OK)
+        if (call.response.status() == null) {
+          call.response.status(OK)
+        }
         call.respond(response)
       }
     }

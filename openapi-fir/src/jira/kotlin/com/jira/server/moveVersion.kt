@@ -27,7 +27,9 @@ public fun Route.moveVersion(action: suspend ApplicationCall.(VersionMoveBean) -
         post {
           val body = call.receive<VersionMoveBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

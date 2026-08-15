@@ -23,7 +23,9 @@ public fun Route.createPermissionGrant(action: suspend ApplicationCall.(Permissi
         post {
           val body = call.receive<PermissionGrantBean>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

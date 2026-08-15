@@ -20,7 +20,9 @@ public fun Route.clientPut(action: suspend ApplicationCall.(Client) -> Unit) {
         put {
           val body = call.receive<Client>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -23,7 +23,9 @@ public fun Route.editFilter(action: suspend ApplicationCall.(FilterBean) -> Filt
         put {
           val body = call.receive<FilterBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

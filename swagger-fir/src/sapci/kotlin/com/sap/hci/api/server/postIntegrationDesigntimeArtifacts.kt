@@ -25,7 +25,9 @@ public fun Route.postIntegrationDesigntimeArtifacts(action: suspend ApplicationC
         post {
           val body = call.receive<IntegrationDesigntimeArtifactCreate>()
           val response = call.action(body)
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

@@ -23,7 +23,9 @@ public fun Route.createSynchronizationRunWithUrlInput(action: suspend Applicatio
         post {
           val body = call.receive<DataProvider>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

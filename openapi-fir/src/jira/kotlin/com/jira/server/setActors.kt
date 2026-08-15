@@ -24,7 +24,9 @@ public fun Route.setActors(action: suspend ApplicationCall.(ProjectRoleActorsUpd
         put {
           val body = call.receive<ProjectRoleActorsUpdateBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

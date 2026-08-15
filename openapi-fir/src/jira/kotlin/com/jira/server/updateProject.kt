@@ -24,7 +24,9 @@ public fun Route.updateProject(action: suspend ApplicationCall.(ProjectUpdateBea
         put {
           val body = call.receive<ProjectUpdateBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

@@ -24,7 +24,9 @@ public fun Route.createSynchronizationRun(action: suspend ApplicationCall.(Input
         post {
           val body = call.receive<Input>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

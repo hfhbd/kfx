@@ -21,7 +21,9 @@ public fun Route.uploadComponents(action: suspend ApplicationCall.() -> String) 
       accept(Plain) {
         post {
           val response = call.action()
-          call.response.status(Created)
+          if (call.response.status() == null) {
+            call.response.status(Created)
+          }
           call.respond(response)
         }
       }

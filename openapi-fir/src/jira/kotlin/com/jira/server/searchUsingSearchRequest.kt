@@ -24,7 +24,9 @@ public fun Route.searchUsingSearchRequest(action: suspend ApplicationCall.(Searc
         post {
           val body = call.receive<SearchRequestBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }

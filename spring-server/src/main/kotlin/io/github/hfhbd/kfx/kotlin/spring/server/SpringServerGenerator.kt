@@ -265,7 +265,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         if (output != null) {
             function.addStatement(
                 "%L.%M(response)",
-                success.toHttpCode(),
+                (success ?: StatusCode.OK).toHttpCode(),
                 MemberName(
                     "org.springframework.web.reactive.function.server",
                     "bodyValueAndAwait",
@@ -275,7 +275,7 @@ class SpringServerGenerator : KotlinPoetCodeGenerator {
         } else {
             function.addStatement(
                 "%L.%M()",
-                success.toHttpCode(),
+                (success ?: StatusCode.OK).toHttpCode(),
                 MemberName(
                     "org.springframework.web.reactive.function.server",
                     "buildAndAwait",

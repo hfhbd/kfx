@@ -24,7 +24,9 @@ public fun Route.addField(action: suspend ApplicationCall.(AddFieldBean) -> Scre
         post {
           val body = call.receive<AddFieldBean>()
           val response = call.action(body)
-          call.response.status(OK)
+          if (call.response.status() == null) {
+            call.response.status(OK)
+          }
           call.respond(response)
         }
       }
