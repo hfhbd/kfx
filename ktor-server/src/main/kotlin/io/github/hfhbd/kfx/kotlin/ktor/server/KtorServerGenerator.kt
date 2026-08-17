@@ -267,7 +267,7 @@ private fun a(
         }
         function.addStatement("call.%M(%L)", respond, response.toCodeBlock(nameAllocator))
     } else {
-        function.addStatement("call.%M(%M)", respond, responseBranch.statusCode!!.toHttpCode())
+        function.addStatement("call.%M(%M)", respond, (responseBranch.statusCode ?: StatusCode.OK).toHttpCode())
     }
     function.endControlFlow()
 }
