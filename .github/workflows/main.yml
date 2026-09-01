@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew :mergeDetektSarif
         if: always()
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         if: always()
         with:
           sarif_file: build/reports/detekt/detekt.sarif
@@ -43,7 +43,7 @@ jobs:
       - name: Create baseline to upload suppressed code-smells to GitHub
         run: ./gradlew deleteDetektBaseline :mergeDetektSarif -PignoreDetektFailures=true
       - name: Upload detekt baseline to Github
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           category: detektBaseline
