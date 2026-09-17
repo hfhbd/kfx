@@ -4,8 +4,8 @@ plugins {
     id("setup")
     id("java-test-fixtures")
     id("jvm-test-suite")
-    id("app.softwork.serviceloader-compiler")
-    id("app.softwork.validation")
+    id("io.github.hfhbd.serviceloader")
+    id("io.github.hfhbd.validation")
 }
 
 kotlin {

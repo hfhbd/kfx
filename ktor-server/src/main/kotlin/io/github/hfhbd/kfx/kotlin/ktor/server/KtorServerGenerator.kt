@@ -1,6 +1,5 @@
 package io.github.hfhbd.kfx.kotlin.ktor.server
 
-import app.softwork.serviceloader.ServiceLoader
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -22,6 +21,7 @@ import io.github.hfhbd.kfx.kotlin.ktor.toKtorPoetType
 import io.github.hfhbd.kfx.kotlin.toCodeBlock
 import io.github.hfhbd.kfx.kotlin.toKdoc
 import io.github.hfhbd.kfx.kotlin.toPoetType
+import io.github.hfhbd.serviceloader.ServiceLoader
 import java.nio.file.Path
 
 @ServiceLoader(CodeGenerator::class)
