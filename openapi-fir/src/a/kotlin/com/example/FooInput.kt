@@ -1,7 +1,7 @@
 package com.example
 
-import app.softwork.validation.MaxLength
-import app.softwork.validation.MinLength
+import io.github.hfhbd.validation.MaxLength
+import io.github.hfhbd.validation.MinLength
 import kotlin.Deprecated
 import kotlin.Int
 import kotlin.String

@@ -1,4 +1,4 @@
-import app.softwork.serviceloader.ServiceLoader
+import io.github.hfhbd.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.ir.IrTransformer
 import io.github.hfhbd.kfx.plugins.packagename.PackageName
 
