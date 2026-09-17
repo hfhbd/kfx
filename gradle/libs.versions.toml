@@ -42,7 +42,7 @@ kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotl
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.6" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
-serviceloader = { id = "io.github.hfhbd.serviceloader", version = "0.0.26" }
+serviceloader = { id = "io.github.hfhbd.serviceloader", version = "0.0.27" }
 validation = { id = "io.github.hfhbd.validation", version = "0.0.19" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.26" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
