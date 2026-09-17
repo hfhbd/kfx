@@ -1,10 +1,10 @@
 package io.github.hfhbd.kfx.plugin.validation
 
-import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.IntLiteral
 import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @ServiceLoader(CodeGenTransformer::class)
 class MaxLengthAnnotations : CodeGenTransformer {
@@ -39,7 +39,7 @@ class MaxLengthAnnotations : CodeGenTransformer {
                         when (requirement) {
                             is IRTree.Member.Requirement.MinLength -> add(
                                 CodeGenTree.Annotation(
-                                    "app.softwork.validation",
+                                    "io.github.hfhbd.validation",
                                     listOf("MinLength"),
                                     mapOf(
                                         "inclusive" to IntLiteral(requirement.inclusive),
@@ -50,7 +50,7 @@ class MaxLengthAnnotations : CodeGenTransformer {
                             is IRTree.Member.Requirement.MaxLength ->
                                 add(
                                     CodeGenTree.Annotation(
-                                        "app.softwork.validation",
+                                        "io.github.hfhbd.validation",
                                         listOf("MaxLength"),
                                         mapOf(
                                             "inclusive" to IntLiteral(requirement.inclusive),

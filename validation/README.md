@@ -1,3 +1,3 @@
 # Module validation
 
-This module adds `app.softwork.validation` support.
+This module adds `io.github.hfhbd.validation` support.

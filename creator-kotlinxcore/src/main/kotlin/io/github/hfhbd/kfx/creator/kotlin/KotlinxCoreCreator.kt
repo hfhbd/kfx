@@ -1,9 +1,9 @@
 package io.github.hfhbd.kfx.creator.kotlin
 
-import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @ServiceLoader(CodeGenTransformer::class)
 class KotlinxCoreCreator : CodeGenTransformer {

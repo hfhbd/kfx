@@ -1,11 +1,11 @@
 package io.github.hfhbd.kfx.creator.xmlutil
 
-import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.StringLiteral
 import io.github.hfhbd.kfx.creator.kotlin.serialName
 import io.github.hfhbd.kfx.ir.IRTree
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @ServiceLoader(CodeGenTransformer::class)
 class XmlUtilCreator : CodeGenTransformer {

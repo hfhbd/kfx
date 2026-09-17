@@ -1,8 +1,8 @@
 package io.github.hfhbd.kfx.ir.odata
 
-import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.ir.IRTree
 import io.github.hfhbd.kfx.ir.IrTransformer
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @ServiceLoader(IrTransformer::class)
 class OData : IrTransformer {

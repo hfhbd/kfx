@@ -1,10 +1,10 @@
 package io.github.hfhbd.kfx.plugins.responseclasses
 
-import app.softwork.serviceloader.ServiceLoader
 import io.github.hfhbd.kfx.StatusCode
 import io.github.hfhbd.kfx.codegen.CodeGenTransformer
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.toCamelCase
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @ServiceLoader(CodeGenTransformer::class)
 class ResponseClasses : CodeGenTransformer {
