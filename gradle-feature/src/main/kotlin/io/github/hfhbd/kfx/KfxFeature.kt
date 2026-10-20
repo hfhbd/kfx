@@ -22,16 +22,28 @@ class KfxFeature : Plugin<Project> {
         override fun bind(builder: ProjectFeatureBindingBuilder) {
             builder.bindProjectFeature("kfx", JvmMainApplyAction::class)
                 .withUnsafeDefinition()
-                .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
-                .withNestedBuildModelImplementationType(SwaggerBuildModel::class.java, DefaultSwaggerBuildModel::class.java)
+                .withNestedBuildModelImplementationType(
+                    OpenApiBuildModel::class.java,
+                    DefaultOpenApiBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(
+                    SwaggerBuildModel::class.java,
+                    DefaultSwaggerBuildModel::class.java,
+                )
                 .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
                 .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
 
             builder.bindProjectFeature("kfx", JvmTestApplyAction::class)
                 .withUnsafeDefinition()
                 .withUnsafeApplyAction()
-                .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
-                .withNestedBuildModelImplementationType(SwaggerBuildModel::class.java, DefaultSwaggerBuildModel::class.java)
+                .withNestedBuildModelImplementationType(
+                    OpenApiBuildModel::class.java,
+                    DefaultOpenApiBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(
+                    SwaggerBuildModel::class.java,
+                    DefaultSwaggerBuildModel::class.java,
+                )
                 .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
                 .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
         }
@@ -39,7 +51,6 @@ class KfxFeature : Plugin<Project> {
         internal abstract class JvmMainApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationProjectType> {
-
             override fun apply(
                 context: ProjectFeatureApplicationContext,
                 definition: KfxDefinition,
@@ -57,7 +68,6 @@ class KfxFeature : Plugin<Project> {
         internal abstract class JvmTestApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationTestingExtension> {
-
             @get:Inject
             abstract val sourceSets: SourceSetContainer
 

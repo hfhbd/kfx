@@ -8,11 +8,15 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface Xsd : Kfx, Definition<XsdBuildModel> {
+interface Xsd :
+    Kfx,
+    Definition<XsdBuildModel> {
     val schemaFiles: ConfigurableFileCollection
 }
 
-interface XsdBuildModel : BuildModel, Named {
+interface XsdBuildModel :
+    BuildModel,
+    Named {
     val schemaFiles: ConfigurableFileCollection
 
     val compilerDependencies: NamedDomainObjectProvider<DependencyScopeConfiguration>

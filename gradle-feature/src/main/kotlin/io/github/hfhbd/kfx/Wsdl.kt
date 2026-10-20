@@ -8,12 +8,16 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface Wsdl : Kfx, Definition<WsdlBuildModel> {
+interface Wsdl :
+    Kfx,
+    Definition<WsdlBuildModel> {
     val wsdlFiles: ConfigurableFileCollection
     val schemaFiles: ConfigurableFileCollection
 }
 
-interface WsdlBuildModel : BuildModel, Named {
+interface WsdlBuildModel :
+    BuildModel,
+    Named {
     val wsdlFiles: ConfigurableFileCollection
     val schemaFiles: ConfigurableFileCollection
 

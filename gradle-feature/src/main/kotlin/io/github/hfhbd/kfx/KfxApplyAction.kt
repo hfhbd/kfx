@@ -36,7 +36,9 @@ abstract class KfxApplyAction {
                 it.extendsFrom(openApiBuildModel.compilerDependencies)
             }
 
-            openApiBuildModel.outputDirectory.convention(layout.contextBuildDirectory.map { it.dir("generated/kfx/openapi/${openApiBuildModel.name}/") })
+            openApiBuildModel.outputDirectory.convention(
+                layout.contextBuildDirectory.map { it.dir("generated/kfx/openapi/${openApiBuildModel.name}/") },
+            )
 
             val task = tasks.register("convertOpenApiFiles${openApiBuildModel.name}", ConvertOpenApiFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")
@@ -53,7 +55,9 @@ abstract class KfxApplyAction {
             openApiBuildModel as DefaultOpenApiBuildModel
             // Move to constructor after https://github.com/gradle/gradle/issues/38207
             openApiBuildModel.internalName = openApi.name
-            openApiBuildModel.compilerDependencies = configurations.dependencyScope("kfxOpenApi${openApiBuildModel.name}")
+            openApiBuildModel.compilerDependencies = configurations.dependencyScope(
+                "kfxOpenApi${openApiBuildModel.name}",
+            )
 
             openApiBuildModel.compilerDependencies.configure {
                 it.fromDependencyCollector(openApi.dependencies.compiler)
@@ -75,7 +79,9 @@ abstract class KfxApplyAction {
                 it.extendsFrom(swaggerBuildModel.compilerDependencies)
             }
 
-            swaggerBuildModel.outputDirectory.convention(layout.contextBuildDirectory.map { it.dir("generated/kfx/swagger/${swaggerBuildModel.name}/") })
+            swaggerBuildModel.outputDirectory.convention(
+                layout.contextBuildDirectory.map { it.dir("generated/kfx/swagger/${swaggerBuildModel.name}/") },
+            )
 
             val task = tasks.register("convertSwaggerFiles${swaggerBuildModel.name}", ConvertSwaggerFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")
@@ -92,7 +98,9 @@ abstract class KfxApplyAction {
             swaggerBuildModel as DefaultSwaggerBuildModel
             // Move to constructor after https://github.com/gradle/gradle/issues/38207
             swaggerBuildModel.internalName = swagger.name
-            swaggerBuildModel.compilerDependencies = configurations.dependencyScope("kfxSwagger${swaggerBuildModel.name}")
+            swaggerBuildModel.compilerDependencies = configurations.dependencyScope(
+                "kfxSwagger${swaggerBuildModel.name}",
+            )
 
             swaggerBuildModel.compilerDependencies.configure {
                 it.fromDependencyCollector(swagger.dependencies.compiler)
@@ -113,7 +121,9 @@ abstract class KfxApplyAction {
                 it.extendsFrom(wsdlBuildModel.compilerDependencies)
             }
 
-            wsdlBuildModel.outputDirectory.convention(layout.contextBuildDirectory.map { it.dir("generated/kfx/wsdl/${wsdlBuildModel.name}/") })
+            wsdlBuildModel.outputDirectory.convention(
+                layout.contextBuildDirectory.map { it.dir("generated/kfx/wsdl/${wsdlBuildModel.name}/") },
+            )
 
             val task = tasks.register("convertWsdlFiles${wsdlBuildModel.name}", ConvertWsdlFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")
@@ -151,7 +161,9 @@ abstract class KfxApplyAction {
                 it.extendsFrom(xsdBuildModel.compilerDependencies)
             }
 
-            xsdBuildModel.outputDirectory.convention(layout.contextBuildDirectory.map { it.dir("generated/kfx/xsd/${xsdBuildModel.name}/") })
+            xsdBuildModel.outputDirectory.convention(
+                layout.contextBuildDirectory.map { it.dir("generated/kfx/xsd/${xsdBuildModel.name}/") },
+            )
 
             val task = tasks.register("convertXsdFiles${xsdBuildModel.name}", ConvertWsdlFiles::class.java) {
                 @Suppress("INVISIBLE_REFERENCE")

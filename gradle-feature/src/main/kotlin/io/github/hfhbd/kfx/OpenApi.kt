@@ -9,13 +9,17 @@ import org.gradle.api.provider.Property
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface OpenApi : Kfx, Definition<OpenApiBuildModel> {
+interface OpenApi :
+    Kfx,
+    Definition<OpenApiBuildModel> {
     val files: ConfigurableFileCollection
 
     val packageName: Property<String>
 }
 
-interface OpenApiBuildModel : BuildModel, Named {
+interface OpenApiBuildModel :
+    BuildModel,
+    Named {
     val files: ConfigurableFileCollection
     val packageName: Property<String>
 
