@@ -9,8 +9,8 @@ dokka {
     }
 
     dependencies {
-        for (project in subprojects) {
-            dokka(project.path)
+        for (subproject in subprojects) {
+            dokka(project(subproject.path))
         }
         dokkaPlugin(libs.dokka.mermaid)
     }
