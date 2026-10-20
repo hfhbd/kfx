@@ -22,14 +22,18 @@ class KfxFeature : Plugin<Project> {
         override fun bind(builder: ProjectFeatureBindingBuilder) {
             builder.bindProjectFeature("kfx", JvmMainApplyAction::class)
                 .withUnsafeDefinition()
+                .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
+
             builder.bindProjectFeature("kfx", JvmTestApplyAction::class)
                 .withUnsafeDefinition()
                 .withUnsafeApplyAction()
+                .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
         }
 
         internal abstract class JvmMainApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationProjectType> {
+
             override fun apply(
                 context: ProjectFeatureApplicationContext,
                 definition: KfxDefinition,
@@ -40,13 +44,14 @@ class KfxFeature : Plugin<Project> {
                 val compilationUnits = parentBuildModel.compilationUnits
                 val sourceDirectorySet = compilationUnits.getByName("main").sources
 
-                apply(definition, sourceDirectorySet)
+                context.apply(definition, buildModel, sourceDirectorySet)
             }
         }
 
         internal abstract class JvmTestApplyAction :
             KfxApplyAction(),
             ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, JvmApplicationTestingExtension> {
+
             @get:Inject
             abstract val sourceSets: SourceSetContainer
 
@@ -59,7 +64,7 @@ class KfxFeature : Plugin<Project> {
                 val testSourceSet = sourceSets.getByName("test")
                 val sourceDirectorySet = testSourceSet.extensions.getByName("kotlin") as SourceDirectorySet
 
-                apply(definition, sourceDirectorySet)
+                context.apply(definition, buildModel, sourceDirectorySet)
             }
         }
     }
