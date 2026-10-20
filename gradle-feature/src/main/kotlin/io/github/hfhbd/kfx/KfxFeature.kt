@@ -23,11 +23,17 @@ class KfxFeature : Plugin<Project> {
             builder.bindProjectFeature("kfx", JvmMainApplyAction::class)
                 .withUnsafeDefinition()
                 .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
+                .withNestedBuildModelImplementationType(SwaggerBuildModel::class.java, DefaultSwaggerBuildModel::class.java)
+                .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
+                .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
 
             builder.bindProjectFeature("kfx", JvmTestApplyAction::class)
                 .withUnsafeDefinition()
                 .withUnsafeApplyAction()
                 .withNestedBuildModelImplementationType(OpenApiBuildModel::class.java, DefaultOpenApiBuildModel::class.java)
+                .withNestedBuildModelImplementationType(SwaggerBuildModel::class.java, DefaultSwaggerBuildModel::class.java)
+                .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
+                .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
         }
 
         internal abstract class JvmMainApplyAction :

@@ -12,6 +12,12 @@ class DeclarativeTest {
         build(projectDir, ":build")
     }
 
+    @Test
+    fun useBuildModelWorks() {
+        val projectDir = File("src/testFixtures/resources/use-buildmodel")
+        build(projectDir, ":build")
+    }
+
     private fun build(projectDir: File, vararg tasks: String): BuildResult {
         return GradleRunner.create()
             .withProjectDir(projectDir)
