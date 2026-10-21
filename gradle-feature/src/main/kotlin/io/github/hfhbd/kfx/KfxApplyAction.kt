@@ -12,7 +12,9 @@ import javax.inject.Inject
 
 abstract class KfxApplyAction {
     @get:Inject abstract val configurations: ConfigurationRegistrar
+
     @get:Inject abstract val tasks: TaskRegistrar
+
     @get:Inject abstract val layout: ProjectFeatureLayout
 
     fun ProjectFeatureApplicationContext.apply(
