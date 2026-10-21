@@ -1,8 +1,6 @@
 package io.github.hfhbd.kfx.swagger
 
-import io.github.hfhbd.kfx.GROUP
 import io.github.hfhbd.kfx.Kfx
-import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Property
@@ -24,8 +22,8 @@ abstract class Swagger : Kfx {
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
 
-        dependencies.compiler.add("$GROUP:swagger-fir:$VERSION")
-        dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
+        dependencies.compiler.add(dependencies.kfxModule("swagger-fir"))
+        dependencies.compiler.add(dependencies.kfxModule("ir-packagename"))
 
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
             it.fromDependencyCollector(this@Swagger.dependencies.compiler)

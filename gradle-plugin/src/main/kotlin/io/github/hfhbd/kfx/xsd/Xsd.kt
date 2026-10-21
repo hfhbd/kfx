@@ -1,8 +1,6 @@
 package io.github.hfhbd.kfx.xsd
 
-import io.github.hfhbd.kfx.GROUP
 import io.github.hfhbd.kfx.Kfx
-import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.TaskContainer
@@ -21,7 +19,7 @@ abstract class Xsd : Kfx {
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
 
-        dependencies.compiler.add("$GROUP:xsd-fir:$VERSION")
+        dependencies.compiler.add(dependencies.kfxModule("xsd-fir"))
 
         val kfxXsdClasspath = configurations.resolvable("kfxXsdClasspath$serviceName") {
             it.fromDependencyCollector(this@Xsd.dependencies.compiler)

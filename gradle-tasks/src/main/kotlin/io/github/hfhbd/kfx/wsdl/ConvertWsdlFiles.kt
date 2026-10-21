@@ -39,7 +39,7 @@ abstract class ConvertWsdlFiles : DefaultTask() {
     internal abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
-    internal abstract val classpath: ConfigurableFileCollection
+    abstract val classpath: ConfigurableFileCollection
 
     @TaskAction
     internal fun generate() {

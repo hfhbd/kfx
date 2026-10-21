@@ -1,8 +1,6 @@
 package io.github.hfhbd.kfx.openapi
 
-import io.github.hfhbd.kfx.GROUP
 import io.github.hfhbd.kfx.Kfx
-import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Property
@@ -24,8 +22,8 @@ abstract class OpenApi : Kfx {
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
 
-        dependencies.compiler.add("$GROUP:openapi-fir:$VERSION")
-        dependencies.compiler.add("$GROUP:ir-packagename:$VERSION")
+        dependencies.compiler.add(dependencies.kfxModule("openapi-fir"))
+        dependencies.compiler.add(dependencies.kfxModule("ir-packagename"))
 
         val kfxOpenApiClasspath = configurations.resolvable("kfxOpenApiClasspath$serviceName") {
             it.fromDependencyCollector(this@OpenApi.dependencies.compiler)

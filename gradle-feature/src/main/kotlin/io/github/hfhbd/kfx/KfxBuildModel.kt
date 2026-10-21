@@ -1,6 +1,7 @@
 package io.github.hfhbd.kfx
 
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 
 interface KfxBuildModel : BuildModel {
@@ -8,4 +9,7 @@ interface KfxBuildModel : BuildModel {
     val swagger: NamedDomainObjectContainer<SwaggerBuildModel>
     val wsdl: NamedDomainObjectContainer<WsdlBuildModel>
     val xsd: NamedDomainObjectContainer<XsdBuildModel>
+
+    @get:Nested
+    val moduleDependencies: KfxModuleDependencies
 }

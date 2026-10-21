@@ -14,11 +14,7 @@ java {
 
 dependencies {
     api(libs.kotlin.gradle.plugin.api)
-
-    compileOnly(projects.wsdlFir)
-    compileOnly(projects.swaggerFir)
-    compileOnly(projects.irPackagename)
-    compileOnly(projects.openapiFir)
+    api(projects.gradleTasks)
 }
 
 tasks.validatePlugins {
@@ -38,11 +34,6 @@ configurations.archives {
     attributes {
         attribute(Attribute.of("deprecated", String::class.java), "true")
     }
-}
-
-val storeVersion = tasks.register("storeVersion", StoreVersion::class)
-sourceSets.main {
-    kotlin.srcDir(storeVersion)
 }
 
 gradlePlugin.plugins.register("io.github.hfhbd.kfx") {
