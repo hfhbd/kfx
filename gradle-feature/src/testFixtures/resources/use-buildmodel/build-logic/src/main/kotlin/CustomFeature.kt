@@ -10,7 +10,6 @@ import javax.inject.Inject
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 import io.github.hfhbd.kfx.KfxDefinition
-import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.model.ObjectFactory
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
@@ -29,7 +28,6 @@ class CustomFeature : Plugin<Project> {
             ProjectFeatureApplyAction<CustomDefinition, BuildModel.None, KfxDefinition> {
 
             @get:Inject abstract val layout: ProjectFeatureLayout
-            @get:Inject abstract val dependencyFactory: DependencyFactory
             @get:Inject abstract val objectFactory: ObjectFactory
             @get:Inject abstract val configurations: ConfigurationRegistrar
 
@@ -52,10 +50,10 @@ class CustomFeature : Plugin<Project> {
 
                         @Suppress("INVISIBLE_REFERENCE")
                         compilerDependencies.configure {
-                            dependencies.add(dependencyFactory.create("io.github.hfhbd.kfx:ktor-client"))
-                            dependencies.add(dependencyFactory.create("io.github.hfhbd.kfx:creator-kotlinxjson"))
-                            dependencies.add(dependencyFactory.create("io.github.hfhbd.kfx:contextual-date"))
-                            dependencies.add(dependencyFactory.create("io.github.hfhbd.kfx:kotlin"))
+                            dependencies.add(parentBuildModel.moduleDependencies.ktorClient())
+                            dependencies.add(parentBuildModel.moduleDependencies.kotlinxJson())
+                            dependencies.add(parentBuildModel.moduleDependencies.contextualDate())
+                            dependencies.add(parentBuildModel.moduleDependencies.kotlinClasses())
                         }
                     }
                 )

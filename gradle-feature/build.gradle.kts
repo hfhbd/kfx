@@ -13,7 +13,7 @@ java {
 }
 
 dependencies {
-    implementation(projects.gradlePlugin)
+    api(projects.gradleTasks)
     compileOnly(libs.kotlin.ecosystem)
 }
 

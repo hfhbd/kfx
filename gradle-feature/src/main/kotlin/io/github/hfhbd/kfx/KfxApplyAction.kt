@@ -3,7 +3,6 @@ package io.github.hfhbd.kfx
 import io.github.hfhbd.kfx.openapi.ConvertOpenApiFiles
 import io.github.hfhbd.kfx.swagger.ConvertSwaggerFiles
 import io.github.hfhbd.kfx.wsdl.ConvertWsdlFiles
-import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.file.ProjectFeatureLayout
@@ -18,18 +17,15 @@ abstract class KfxApplyAction {
 
     @get:Inject abstract val layout: ProjectFeatureLayout
 
-    @get:Inject abstract val dependencyFactory: DependencyFactory
-
     fun ProjectFeatureApplicationContext.apply(
         definition: KfxDefinition,
         buildModel: KfxBuildModel,
         sourceDirectorySet: SourceDirectorySet,
     ) {
         buildModel.openApi.all { openApiBuildModel ->
-            @Suppress("INVISIBLE_REFERENCE")
             openApiBuildModel.compilerDependencies.configure {
-                it.dependencies.add(dependencyFactory.create("$GROUP:openapi-fir:$VERSION"))
-                it.dependencies.add(dependencyFactory.create("$GROUP:ir-packagename:$VERSION"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("openapi-fir"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("ir-packagename"))
             }
 
             val classpath = configurations.resolvable("kfxOpenApiClasspath${openApiBuildModel.name}") {
@@ -41,7 +37,6 @@ abstract class KfxApplyAction {
             )
 
             val task = tasks.register("convertOpenApiFiles${openApiBuildModel.name}", ConvertOpenApiFiles::class.java) {
-                @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(classpath)
                 it.openapiFiles.from(openApiBuildModel.files)
                 it.outputDirectory.convention(openApiBuildModel.outputDirectory)
@@ -69,10 +64,9 @@ abstract class KfxApplyAction {
         }
 
         buildModel.swagger.all { swaggerBuildModel ->
-            @Suppress("INVISIBLE_REFERENCE")
             swaggerBuildModel.compilerDependencies.configure {
-                it.dependencies.add(dependencyFactory.create("$GROUP:swagger-fir:$VERSION"))
-                it.dependencies.add(dependencyFactory.create("$GROUP:ir-packagename:$VERSION"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("swagger-fir"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("ir-packagename"))
             }
 
             val classpath = configurations.resolvable("kfxSwaggerClasspath${swaggerBuildModel.name}") {
@@ -84,7 +78,6 @@ abstract class KfxApplyAction {
             )
 
             val task = tasks.register("convertSwaggerFiles${swaggerBuildModel.name}", ConvertSwaggerFiles::class.java) {
-                @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(classpath)
                 it.swaggerFiles.from(swaggerBuildModel.files)
                 it.outputDirectory.convention(swaggerBuildModel.outputDirectory)
@@ -112,9 +105,8 @@ abstract class KfxApplyAction {
         }
 
         buildModel.wsdl.all { wsdlBuildModel ->
-            @Suppress("INVISIBLE_REFERENCE")
             wsdlBuildModel.compilerDependencies.configure {
-                it.dependencies.add(dependencyFactory.create("$GROUP:wsdl-fir:$VERSION"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("wsdl-fir"))
             }
 
             val classpath = configurations.resolvable("kfxWsdlClasspath${wsdlBuildModel.name}") {
@@ -126,7 +118,6 @@ abstract class KfxApplyAction {
             )
 
             val task = tasks.register("convertWsdlFiles${wsdlBuildModel.name}", ConvertWsdlFiles::class.java) {
-                @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(classpath)
                 it.wsdlFiles.from(wsdlBuildModel.wsdlFiles)
                 it.schemaFiles.from(wsdlBuildModel.schemaFiles)
@@ -152,9 +143,8 @@ abstract class KfxApplyAction {
         }
 
         buildModel.xsd.all { xsdBuildModel ->
-            @Suppress("INVISIBLE_REFERENCE")
             xsdBuildModel.compilerDependencies.configure {
-                it.dependencies.add(dependencyFactory.create("$GROUP:xsd-fir:$VERSION"))
+                it.dependencies.add(buildModel.moduleDependencies.kfxModule("xsd-fir"))
             }
 
             val classpath = configurations.resolvable("kfxXsdClasspath${xsdBuildModel.name}") {
@@ -166,7 +156,6 @@ abstract class KfxApplyAction {
             )
 
             val task = tasks.register("convertXsdFiles${xsdBuildModel.name}", ConvertWsdlFiles::class.java) {
-                @Suppress("INVISIBLE_REFERENCE")
                 it.classpath.from(classpath)
                 it.schemaFiles.from(xsdBuildModel.schemaFiles)
                 it.outputDirectory.convention(xsdBuildModel.outputDirectory)

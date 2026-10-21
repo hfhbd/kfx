@@ -38,6 +38,7 @@ include(":response-classes")
 
 include(":oauth2-runtime")
 
+include(":gradle-tasks")
 include(":gradle-plugin")
 include(":gradle-feature")
 

@@ -1,8 +1,6 @@
 package io.github.hfhbd.kfx.wsdl
 
-import io.github.hfhbd.kfx.GROUP
 import io.github.hfhbd.kfx.Kfx
-import io.github.hfhbd.kfx.VERSION
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.TaskContainer
@@ -22,7 +20,7 @@ abstract class Wsdl : Kfx {
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
 
-        dependencies.compiler.add("$GROUP:wsdl-fir:$VERSION")
+        dependencies.compiler.add(dependencies.kfxModule("wsdl-fir"))
 
         val kfxWsdlClasspath = configurations.resolvable("kfxWsdlClasspath$serviceName") {
             it.fromDependencyCollector(this@Wsdl.dependencies.compiler)
