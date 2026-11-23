@@ -12,6 +12,12 @@ java {
     withJavadocJar()
 }
 
+val dependencyConstraintFactory = objects.getDependencyConstraintFactory()
+
+configurations.api.configure {
+    addConstraints(dependencyConstraintFactory)
+}
+
 dependencies {
     api(projects.gradleTasks)
     compileOnly(libs.kotlin.ecosystem)

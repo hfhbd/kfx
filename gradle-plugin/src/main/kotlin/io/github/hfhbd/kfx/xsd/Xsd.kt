@@ -11,10 +11,10 @@ abstract class Xsd : Kfx {
     abstract val schemaFiles: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val configurations: ConfigurationContainer
+    protected abstract val configurations: ConfigurationContainer
 
     @get:Inject
-    internal abstract val tasks: TaskContainer
+    protected abstract val tasks: TaskContainer
 
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
@@ -22,13 +22,13 @@ abstract class Xsd : Kfx {
         dependencies.compiler.add(dependencies.kfxModule("xsd-fir"))
 
         val kfxXsdClasspath = configurations.resolvable("kfxXsdClasspath$serviceName") {
-            it.fromDependencyCollector(this@Xsd.dependencies.compiler)
+            it.fromDependencyCollector(dependencies.compiler)
         }
 
         kotlinSourceSet.kotlin.srcDir(
             tasks.register("convertXsdFiles$serviceName", ConvertXsdFiles::class.java) {
                 it.classpath.from(kfxXsdClasspath)
-                it.schemaFiles.from(this@Xsd.schemaFiles)
+                it.schemaFiles.from(schemaFiles)
                 it.outputDirectory.convention(it.project.layout.buildDirectory.dir("generated/kfx/xsd/$serviceName"))
             },
         )

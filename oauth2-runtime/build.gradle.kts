@@ -7,9 +7,11 @@ kotlin {
         nodejs()
     }
 
-    sourceSets.commonMain {
-        dependencies {
-            api(libs.serialization.json)
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(libs.serialization.json)
+            }
         }
     }
 }

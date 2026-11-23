@@ -38,15 +38,15 @@ abstract class ConvertOpenApiFiles : DefaultTask() {
     abstract val packageName: Property<String>
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     abstract val classpath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         val workQueue = workerExecutor.classLoaderIsolation {
-            it.classpath.from(this@ConvertOpenApiFiles.classpath)
+            it.classpath.from(classpath)
         }
         for (openapiFile in openapiFiles.asFileTree.files) {
             workQueue.submit(OpenApiGeneration::class.java) {

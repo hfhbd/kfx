@@ -14,10 +14,10 @@ abstract class OpenApi : Kfx {
     abstract val packageName: Property<String>
 
     @get:Inject
-    internal abstract val configurations: ConfigurationContainer
+    protected abstract val configurations: ConfigurationContainer
 
     @get:Inject
-    internal abstract val tasks: TaskContainer
+    protected abstract val tasks: TaskContainer
 
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
@@ -26,7 +26,7 @@ abstract class OpenApi : Kfx {
         dependencies.compiler.add(dependencies.kfxModule("ir-packagename"))
 
         val kfxOpenApiClasspath = configurations.resolvable("kfxOpenApiClasspath$serviceName") {
-            it.fromDependencyCollector(this@OpenApi.dependencies.compiler)
+            it.fromDependencyCollector(dependencies.compiler)
         }
 
         kotlinSourceSet.kotlin.srcDir(
@@ -36,7 +36,7 @@ abstract class OpenApi : Kfx {
                 it.outputDirectory.convention(
                     it.project.layout.buildDirectory.dir("generated/kfx/openapi/$serviceName/"),
                 )
-                it.packageName.set(packageName)
+                it.packageName.convention(packageName)
             },
         )
     }

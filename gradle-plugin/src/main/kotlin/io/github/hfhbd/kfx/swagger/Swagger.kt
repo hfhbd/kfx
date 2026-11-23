@@ -14,10 +14,10 @@ abstract class Swagger : Kfx {
     abstract val packageName: Property<String>
 
     @get:Inject
-    internal abstract val configurations: ConfigurationContainer
+    protected abstract val configurations: ConfigurationContainer
 
     @get:Inject
-    internal abstract val tasks: TaskContainer
+    protected abstract val tasks: TaskContainer
 
     override fun usingKotlinSourceSet(kotlinSourceSet: KotlinSourceSet) {
         val serviceName = name
@@ -26,7 +26,7 @@ abstract class Swagger : Kfx {
         dependencies.compiler.add(dependencies.kfxModule("ir-packagename"))
 
         val kfxSwaggerClasspath = configurations.resolvable("kfxSwaggerClasspath$serviceName") {
-            it.fromDependencyCollector(this@Swagger.dependencies.compiler)
+            it.fromDependencyCollector(dependencies.compiler)
         }
 
         kotlinSourceSet.kotlin.srcDir(

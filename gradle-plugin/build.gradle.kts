@@ -17,6 +17,13 @@ dependencies {
     api(projects.gradleTasks)
 }
 
+val dependencyConstraintFactory = objects.getDependencyConstraintFactory()
+
+configurations.api.configure {
+    addConstraints(dependencyConstraintFactory)
+}
+
+
 tasks.validatePlugins {
     enableStricterValidation = true
 }
