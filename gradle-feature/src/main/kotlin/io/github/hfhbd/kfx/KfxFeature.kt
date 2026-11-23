@@ -10,8 +10,12 @@ import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
+import org.jetbrains.kotlin.gradle.declarative.projecttypes.LibraryProjectType
+import org.jetbrains.kotlin.gradle.declarative.projecttypes.LibraryTestingExtension
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationTestingExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import javax.inject.Inject
 
 @BindsProjectFeature(KfxFeature.Binding::class)
@@ -34,6 +38,34 @@ class KfxFeature : Plugin<Project> {
                 .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
 
             builder.bindProjectFeature("kfx", JvmTestApplyAction::class)
+                .withUnsafeDefinition()
+                .withUnsafeApplyAction()
+                .withNestedBuildModelImplementationType(
+                    OpenApiBuildModel::class.java,
+                    DefaultOpenApiBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(
+                    SwaggerBuildModel::class.java,
+                    DefaultSwaggerBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
+                .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
+
+            builder.bindProjectFeature("kfx", KmpMainApplyAction::class)
+                .withUnsafeDefinition()
+                .withUnsafeApplyAction()
+                .withNestedBuildModelImplementationType(
+                    OpenApiBuildModel::class.java,
+                    DefaultOpenApiBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(
+                    SwaggerBuildModel::class.java,
+                    DefaultSwaggerBuildModel::class.java,
+                )
+                .withNestedBuildModelImplementationType(WsdlBuildModel::class.java, DefaultWsdlBuildModel::class.java)
+                .withNestedBuildModelImplementationType(XsdBuildModel::class.java, DefaultXsdBuildModel::class.java)
+
+            builder.bindProjectFeature("kfx", KmpTestApplyAction::class)
                 .withUnsafeDefinition()
                 .withUnsafeApplyAction()
                 .withNestedBuildModelImplementationType(
@@ -81,6 +113,48 @@ class KfxFeature : Plugin<Project> {
                 val sourceDirectorySet = testSourceSet.extensions.getByName("kotlin") as SourceDirectorySet
 
                 context.apply(definition, buildModel, sourceDirectorySet)
+            }
+        }
+
+        internal abstract class KmpMainApplyAction :
+            KfxApplyAction(),
+            ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, LibraryProjectType> {
+
+            @get:Inject
+            protected abstract val project: Project
+
+            override fun apply(
+                context: ProjectFeatureApplicationContext,
+                definition: KfxDefinition,
+                buildModel: KfxBuildModel,
+                targetDefinition: LibraryProjectType,
+            ) {
+
+                val kotlinExtension = project.extensions.getByName("kotlin") as KotlinMultiplatformExtension
+                val commonMainSourceSet =
+                    kotlinExtension.sourceSets.getByName(KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME)
+
+                context.apply(definition, buildModel, commonMainSourceSet.kotlin)
+            }
+        }
+
+        internal abstract class KmpTestApplyAction :
+            KfxApplyAction(),
+            ProjectFeatureApplyAction<KfxDefinition, KfxBuildModel, LibraryTestingExtension> {
+
+            @get:Inject
+            protected abstract val project: Project
+
+            override fun apply(
+                context: ProjectFeatureApplicationContext,
+                definition: KfxDefinition,
+                buildModel: KfxBuildModel,
+                targetDefinition: LibraryTestingExtension,
+            ) {
+                val kotlinExtension = project.extensions.getByName("kotlin") as KotlinMultiplatformExtension
+                val commonTestSourceSet = kotlinExtension.sourceSets.getByName(KotlinSourceSet.COMMON_TEST_SOURCE_SET_NAME)
+
+                context.apply(definition, buildModel, commonTestSourceSet.kotlin)
             }
         }
     }
