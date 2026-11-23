@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.kotlinPoet)
+    api(projects.kotlinPoet)
 }

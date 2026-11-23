@@ -72,3 +72,9 @@ plugins.withType<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin> {
 plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsPlugin> {
     the<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec>().downloadBaseUrl = null
 }
+
+val dependencyConstraintFactory = objects.getDependencyConstraintFactory()
+
+configurations.commonMainApi.configure {
+    addConstraints(dependencyConstraintFactory)
+}

@@ -39,3 +39,15 @@ publishing {
         from(components["java"])
     }
 }
+
+val dependencyConstraintFactory = objects.getDependencyConstraintFactory()
+
+configurations.api.configure {
+    addConstraints(dependencyConstraintFactory)
+}
+configurations.testFixturesApi.configure {
+    addConstraints(dependencyConstraintFactory)
+}
+configurations.testFixturesImplementation.configure {
+    addConstraints(dependencyConstraintFactory)
+}

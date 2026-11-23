@@ -11,11 +11,11 @@ import org.gradle.features.registration.TaskRegistrar
 import javax.inject.Inject
 
 abstract class KfxApplyAction {
-    @get:Inject abstract val configurations: ConfigurationRegistrar
+    @get:Inject protected abstract val configurations: ConfigurationRegistrar
 
-    @get:Inject abstract val tasks: TaskRegistrar
+    @get:Inject protected abstract val tasks: TaskRegistrar
 
-    @get:Inject abstract val layout: ProjectFeatureLayout
+    @get:Inject protected abstract val layout: ProjectFeatureLayout
 
     fun ProjectFeatureApplicationContext.apply(
         definition: KfxDefinition,
@@ -40,7 +40,7 @@ abstract class KfxApplyAction {
                 it.classpath.from(classpath)
                 it.openapiFiles.from(openApiBuildModel.files)
                 it.outputDirectory.convention(openApiBuildModel.outputDirectory)
-                it.packageName.set(openApiBuildModel.packageName)
+                it.packageName.convention(openApiBuildModel.packageName)
             }
             sourceDirectorySet.srcDir(task)
         }
@@ -81,7 +81,7 @@ abstract class KfxApplyAction {
                 it.classpath.from(classpath)
                 it.swaggerFiles.from(swaggerBuildModel.files)
                 it.outputDirectory.convention(swaggerBuildModel.outputDirectory)
-                it.packageName.set(swaggerBuildModel.packageName)
+                it.packageName.convention(swaggerBuildModel.packageName)
             }
             sourceDirectorySet.srcDir(task)
         }

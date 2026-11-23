@@ -4,8 +4,6 @@ plugins {
 
 dependencies {
     api(libs.serialization.json)
-
-    testImplementation(libs.serialization.json)
 }
 
 val testFixturesResources = layout.projectDirectory.dir("src/testFixtures/resources")

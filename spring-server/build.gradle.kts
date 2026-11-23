@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.kotlinPoet)
+    api(projects.kotlinPoet)
 
     testFixturesApi(testFixtures(projects.openapiFir))
 }
